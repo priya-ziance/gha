@@ -6,6 +6,7 @@ orbs:
   # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
   # Orbs reduce the amount of configuration required for common tasks. 
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
+  heroku: circleci/heroku@1.2.6
   node: circleci/node@4.1
   slack: circleci/slack@4.4.2
   
@@ -34,14 +35,10 @@ jobs:
           name: Run unit tests
           command: npm test
   deploy_staging:
-    docker:
-      - image: buildpack-deps:trusty
     steps:
       - checkout
-      - run:
-          name: Deploy Staging to Heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git staging:master
+      - heroku/deploy-via-git:
+          app-name: $HEROKU_STAGING_APP_NAME
       - slack/notify:
           event: fail
           template: basic_fail_1
@@ -64,5 +61,5 @@ workflows:
             - build_and_test
           filters:
             branches:
-              only: GHA-2
+              only: staging
 
