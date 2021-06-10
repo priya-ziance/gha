@@ -35,6 +35,8 @@ jobs:
           name: Run unit tests
           command: npm test
   deploy_staging:
+    docker:
+      - image: cimg/node:15.1
     steps:
       - checkout
       - heroku/deploy-via-git:
