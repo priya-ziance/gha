@@ -61,5 +61,7 @@ workflows:
             - build_and_test
           filters:
             branches:
-              only: staging
+              only:
+                  - staging
+                  - GHA-2
 
