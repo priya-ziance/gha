@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders Group Home Admin', () => {
+test('renders Authenticating', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Group Home Admin/i);
+  const linkElement = screen.getByText(/Authenticating/i);
   expect(linkElement).toBeInTheDocument();
 });
