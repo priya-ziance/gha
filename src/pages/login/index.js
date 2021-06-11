@@ -26,7 +26,7 @@ const Login = () =>  {
       <div className='login__info'>
         <div className='login__logo-container'>
           <img alt='Orderpad logo' className='login__logo' src={Logo} />
-          <h4> Group Home Admin </h4>
+          <h4>Group Home Admin</h4>
         </div>
 
         <div className='login__button-container'>
