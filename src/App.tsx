@@ -24,7 +24,7 @@ function App() {
         <Router>
           <Switch>
             <Route path="/" exact component={LoginPage} />
-            <Route path="/dashboard" exact component={DashboardPage} />
+            <Route path="/dashboard" component={DashboardPage} />
           </Switch>
         </Router>
         <ConnectivityListener />

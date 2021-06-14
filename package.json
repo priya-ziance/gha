@@ -6,6 +6,7 @@
     "@auth0/auth0-react": "^1.5.0",
     "@blueprintjs/core": "^3.45.0",
     "@blueprintjs/datetime": "^3.23.4",
+    "@blueprintjs/popover2": "^0.10.1",
     "@blueprintjs/table": "^3.8.33",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
