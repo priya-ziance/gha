@@ -1,9 +1,11 @@
-import { Card, CardProps } from '@blueprintjs/core';
+import { Card, CardProps as _CardProps } from '@blueprintjs/core';
 
-const CustomCard = (props: CardProps) => {
+const CustomCard = (props: _CardProps) => {
   return (
     <Card {...props} />
   )
 }
+
+export type CardProps = _CardProps;
 
 export default CustomCard;

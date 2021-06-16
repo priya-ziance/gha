@@ -1,9 +1,9 @@
-import { H1 } from '@blueprintjs/core';
+import { H2 } from '@blueprintjs/core';
 
-const CustomH1 = (props: any) => {
+const CustomH2 = (props: any) => {
   return (
-    <H1 {...props} />
+    <H2 {...props} />
   )
 }
 
-export default CustomH1;
+export default CustomH2;
