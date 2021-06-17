@@ -4,6 +4,7 @@ import Card, { CardProps } from '../Card';
 import Col from '../Col';
 import Row from '../Row';
 import H4 from '../H4';
+import Ellipsis from '../Ellipsis';
 
 import './index.scss';
 
@@ -33,7 +34,12 @@ const ModuleCard = (_props: CardProps) => {
         <Col className='gha__modulecard__info-col'>
           <H4>James Elujoba</H4>
           <p>
-            This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve
+            <Ellipsis
+              text='This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve'
+              breakpoints={{
+                sm: 30
+              }}
+            />
           </p>
         </Col>
       </Row>

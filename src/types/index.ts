@@ -6,3 +6,5 @@ export type CONFIG_TYPE = {
   NODE_ENV: string,
   ENV: string
 };
+
+export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
