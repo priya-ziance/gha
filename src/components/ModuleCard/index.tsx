@@ -8,7 +8,11 @@ import Ellipsis from '../Ellipsis';
 
 import './index.scss';
 
-const ModuleCard = (_props: CardProps) => {
+export interface ModuleCardProps {
+  title: string
+}
+
+const ModuleCard = (_props: CardProps & ModuleCardProps) => {
   const { className, ...props } = _props;
 
   let localClassName = 'gha__modulecard';
@@ -32,7 +36,7 @@ const ModuleCard = (_props: CardProps) => {
           />
         </Col>
         <Col className='gha__modulecard__info-col'>
-          <H4>James Elujoba</H4>
+          <H4>{props.title}</H4>
           <p>
             <Ellipsis
               text='This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve'

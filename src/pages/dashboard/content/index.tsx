@@ -9,6 +9,7 @@ const Content = () => {
     <div>
       <H1 intent='primary'>Dashboard</H1>
       <ModuleCard
+        title='James Elujoba'
         interactive
       />
     </div>

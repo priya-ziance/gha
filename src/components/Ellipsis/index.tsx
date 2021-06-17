@@ -2,13 +2,12 @@ import { useContext } from 'react';
 
 import DimensionsContext from '../../contexts/dimensions';
 
+import { DeviceType } from '../../types';
+
 interface EllipsisProps {
   breakpoints: {
-    md?: number;
-    sm?: number;
-    xs?: number;
+    [key in DeviceType]?: number;
   },
-  count: number,
   text: string
 }
 
@@ -23,13 +22,20 @@ const truncate = (text: string, count: number) => {
 const Ellipsis = (props: EllipsisProps) => {
   const { deviceType } = useContext(DimensionsContext);
 
+  let truncatedText = '';
   let count = 0;
 
   if (props.breakpoints) {
     count = props.breakpoints[deviceType] || 0;
   }
 
-  return truncate(props.text, count);
+  truncatedText = truncate(props.text, count);
+
+  return (
+    <>
+      {truncatedText}
+    </>
+  )
   
 };
 
