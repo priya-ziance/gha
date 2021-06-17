@@ -1,8 +1,8 @@
-const CustomRow = (props: any) => {
+import { Row, RowProps } from 'reactstrap';
+
+const CustomRow = (props: RowProps) => {
   return (
-    <div>
-      {props.children}
-    </div>
+    <Row {...props} />
   );
 };
 

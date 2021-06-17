@@ -1,3 +1,21 @@
+.gha__modulecard {
+  max-width: 350px;
+}
+
+.gha__modulecard__info-col {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+
+  h4 {
+    text-align: left;
+  }
+}
+
 .gha__modulecard__img {
   height: 120px;
+  width: 120px;
+  max-width: 100%;
+  border-radius: 7px;
 }

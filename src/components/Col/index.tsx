@@ -1,8 +1,8 @@
-const CustomCol = (props: any) => {
+import { Col, ColProps } from 'reactstrap';
+
+const CustomCol = (props: ColProps) => {
   return (
-    <div>
-      {props.children}
-    </div>
+    <Col {...props} />
   );
 };
 
