@@ -9,13 +9,21 @@ import Ellipsis from '../Ellipsis';
 import './index.scss';
 
 export interface ModuleCardProps {
-  title: string
+  title: string;
+  body?: string;
+  grow?: boolean;
+  link?: string;
+  image: string;
 }
 
 const ModuleCard = (_props: CardProps & ModuleCardProps) => {
-  const { className, ...props } = _props;
+  const { body, className, grow, image, link, title, ...props } = _props;
 
   let localClassName = 'gha__modulecard';
+
+  if (grow) {
+    localClassName += ' gha__modulecard--grow';
+  }
 
   if (className) {
     if (Array.isArray(className)) {
@@ -31,15 +39,15 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
         <Col>
           <img
             alt='module'
-            src='https://images.unsplash.com/photo-1593642634443-44adaa06623a?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1525&q=80'
+            src={image}
             className='gha__modulecard__img'
           />
         </Col>
         <Col className='gha__modulecard__info-col'>
-          <H4>{props.title}</H4>
+          <H4>{title}</H4>
           <p>
             <Ellipsis
-              text='This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve. This is the main test of your resolve'
+              text={body}
               breakpoints={{
                 sm: 30
               }}

@@ -1,17 +1,33 @@
 import urls from '../../../utils/urls';
 
-import { Button, ModuleCard, H1 } from '../../../components';
+import { ModuleCard, H1, Row } from '../../../components';
 
 import './index.scss';
 
 const Content = () => {
   return (
-    <div>
+    <div className='content'>
       <H1 intent='primary'>Dashboard</H1>
-      <ModuleCard
-        title='James Elujoba'
-        interactive
-      />
+      <div className='content__container'>
+        <Row>
+          <ModuleCard
+            title='Clients'
+            interactive
+            link='/dasboard/clients'
+            image=''
+          />
+          <ModuleCard
+            title='User Tasks List'
+            interactive
+            image=''
+          />
+          <ModuleCard
+            title='Reports'
+            interactive
+            image=''
+          />
+        </Row>
+      </div>
     </div>
   );
 }

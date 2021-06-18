@@ -8,10 +8,10 @@ interface EllipsisProps {
   breakpoints: {
     [key in DeviceType]?: number;
   },
-  text: string
+  text?: string
 }
 
-const truncate = (text: string, count: number) => {
+const truncate = (text: string = '', count: number) => {
   if (text.length <= count) {
     return text;
   }
@@ -24,6 +24,8 @@ const Ellipsis = (props: EllipsisProps) => {
 
   let truncatedText = '';
   let count = 0;
+
+  if (!props.text) return (<></>);
 
   if (props.breakpoints) {
     count = props.breakpoints[deviceType] || 0;

@@ -1,5 +1,12 @@
 .gha__modulecard {
-  max-width: 350px;
+  width: 311px !important;
+  height: 130px;
+  max-height: 130px;
+  overflow: hidden;
+}
+
+.gha__modulecard--grow {
+  flex-grow: 1;
 }
 
 .gha__modulecard__info-col {
