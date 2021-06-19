@@ -11,11 +11,12 @@ import * as config from '../../utils/config';
 import urls from '../../utils/urls';
 import client from '../../api/client';
 
-import { Button, H1 } from '../../components';
+import { Button } from '../../components';
 
 import Logo from '../../assets/img/logo.png';
 
 import ContentPage from './content';
+import ClientsPage from './clients';
 
 import './index.scss';
 
@@ -132,7 +133,9 @@ function Dashboard() {
     if (isAuthenticated) getToken();
   }, [getAccessTokenSilently, isAuthenticated]);
 
-  if (fetchingToken) return (<Spinner intent={Intent.PRIMARY} />)
+  if (fetchingToken) return (
+    <p>Authenticating</p>
+  )
 
   return (
     <div>
@@ -140,6 +143,7 @@ function Dashboard() {
       <div className='dashboard__container'>
         <Switch>
           <Route path="/dashboard" exact component={ContentPage} />
+          <Route path="/dashboard/clients" exact component={ClientsPage} />
         </Switch>
       </div>
     </div>

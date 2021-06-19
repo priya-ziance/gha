@@ -5,6 +5,7 @@ import H1 from './H1';
 import H2 from './H2';
 import H3 from './H3';
 import H4 from './H4';
+import LoadingView from './LoadingView';
 import ModuleCard from './ModuleCard';
 import Row from './Row';
 
@@ -16,6 +17,7 @@ export {
   H2,
   H3,
   H4,
+  LoadingView,
   ModuleCard,
   Row
 }

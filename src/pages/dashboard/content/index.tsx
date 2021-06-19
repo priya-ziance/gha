@@ -2,6 +2,10 @@ import urls from '../../../utils/urls';
 
 import { ModuleCard, H1, Row } from '../../../components';
 
+import ClientsImage from '../../../assets/svg/man-woman.svg';
+import ListImage from '../../../assets/svg/list.svg';
+import ReportImage from '../../../assets/svg/report.svg';
+
 import './index.scss';
 
 const Content = () => {
@@ -13,18 +17,18 @@ const Content = () => {
           <ModuleCard
             title='Clients'
             interactive
-            link='/dasboard/clients'
-            image=''
+            link='/dashboard/clients'
+            image={ClientsImage}
           />
           <ModuleCard
             title='User Tasks List'
             interactive
-            image=''
+            image={ListImage}
           />
           <ModuleCard
             title='Reports'
             interactive
-            image=''
+            image={ReportImage}
           />
         </Row>
       </div>

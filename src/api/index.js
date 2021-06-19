@@ -1,18 +1,21 @@
 import client from './client';
 
+import * as normalize from './normalize';
 
-//============================= USER API'S=============================
-function UsersApi() {}
+//============================= CLIENT API'S=============================
+function ClientsApi() {}
 
-UsersApi.prototype.getPublicOrder = function(id) {
-  return client.get(`/users/${id}`); 
+ClientsApi.prototype.getClients = async function(options = {}) {
+  const { page = 0 } = options;
+
+  const clientsResult = await client.get(`/clients?page=${page}`);
+
+  return normalize.clientArray(clientsResult.data.contents);
 }
 
 
 //========================================================================
 
 export default (() => ({
-  users: {
-    user: new UsersApi()
-  }
+  clients: new ClientsApi()
 }))()

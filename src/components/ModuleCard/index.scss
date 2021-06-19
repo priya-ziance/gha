@@ -3,6 +3,10 @@
   height: 130px;
   max-height: 130px;
   overflow: hidden;
+
+  *:hover {
+    text-decoration: none;
+  }
 }
 
 .gha__modulecard--grow {
@@ -22,6 +26,7 @@
 
 .gha__modulecard__img {
   height: 120px;
+  max-height: 90px;
   width: 120px;
   max-width: 100%;
   border-radius: 7px;

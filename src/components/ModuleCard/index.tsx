@@ -1,4 +1,5 @@
 import { Elevation } from '@blueprintjs/core';
+import { Link } from 'react-router-dom';
 
 import Card, { CardProps } from '../Card';
 import Col from '../Col';
@@ -35,26 +36,28 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
 
   return (
     <Card {...props} className={localClassName} elevation={Elevation.ONE}>
-      <Row>
-        <Col>
-          <img
-            alt='module'
-            src={image}
-            className='gha__modulecard__img'
-          />
-        </Col>
-        <Col className='gha__modulecard__info-col'>
-          <H4>{title}</H4>
-          <p>
-            <Ellipsis
-              text={body}
-              breakpoints={{
-                sm: 30
-              }}
+      <Link to={link || ''}>
+        <Row>
+          <Col>
+            <img
+              alt='module'
+              src={image}
+              className='gha__modulecard__img'
             />
-          </p>
-        </Col>
-      </Row>
+          </Col>
+          <Col className='gha__modulecard__info-col'>
+            <H4>{title}</H4>
+            <p>
+              <Ellipsis
+                text={body}
+                breakpoints={{
+                  sm: 30
+                }}
+              />
+            </p>
+          </Col>
+        </Row>
+      </Link>
     </Card>
   );
 };
