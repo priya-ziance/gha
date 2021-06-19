@@ -1,6 +1,4 @@
-import urls from '../../../utils/urls';
-
-import { ModuleCard, H1, Row } from '../../../components';
+import { ModuleCard, PageHeading, Row } from '../../../components';
 
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 import ListImage from '../../../assets/svg/list.svg';
@@ -11,7 +9,9 @@ import './index.scss';
 const Content = () => {
   return (
     <div className='content'>
-      <H1 intent='primary'>Dashboard</H1>
+      <PageHeading
+        title='Dashboard'
+      />
       <div className='content__container'>
         <Row>
           <ModuleCard

@@ -7,6 +7,7 @@ import H3 from './H3';
 import H4 from './H4';
 import LoadingView from './LoadingView';
 import ModuleCard from './ModuleCard';
+import PageHeading from './PageHeading';
 import Row from './Row';
 
 export {
@@ -19,5 +20,6 @@ export {
   H4,
   LoadingView,
   ModuleCard,
+  PageHeading,
   Row
 }

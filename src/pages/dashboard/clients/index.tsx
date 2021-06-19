@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
+import { BreadcrumbProps, Icon } from '@blueprintjs/core';
 
 import api from '../../../api';
 
-import { H1, LoadingView, ModuleCard, Row } from '../../../components';
+import { LoadingView, ModuleCard, PageHeading, Row } from '../../../components';
 
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 
 import './index.scss';
 import Client from '../../../models/client';
+
+
+const BREADCRUMBS: BreadcrumbProps[] = [
+  { href: '/dashboard', icon: "document", text: 'Dashboard'},
+  { text: "Clients" },
+];
 
 const Content = () => {
   const [clients, setClients] = useState<Client[] | []>([]);
@@ -33,7 +40,10 @@ const Content = () => {
   return (
     <LoadingView loading={loading}>
       <div className='clients'>
-        <H1 intent='primary'>Clients</H1>
+        <PageHeading
+          title='Clients'
+          breadCrumbs={BREADCRUMBS}
+        />
         <div className='clients__container'>
           <Row>
             {clients.map(client => {
