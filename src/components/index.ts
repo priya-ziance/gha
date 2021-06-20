@@ -1,3 +1,4 @@
+import AnchorButton from './AnchorButton';
 import Button from './Button';
 import Card from './Card';
 import Col from './Col';
@@ -11,6 +12,7 @@ import PageHeading from './PageHeading';
 import Row from './Row';
 
 export {
+  AnchorButton,
   Button,
   Card,
   Col,

@@ -1,9 +1,11 @@
-import { Button } from '@blueprintjs/core';
+import { Button, ButtonProps as _ButtonProps } from '@blueprintjs/core';
 
-const CustomButton = (props: any) => {
+const CustomButton = (props: _ButtonProps) => {
   return (
     <Button {...props} />
   )
 }
 
 export default CustomButton;
+
+export type ButtonProps = _ButtonProps;

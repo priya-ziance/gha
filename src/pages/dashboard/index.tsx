@@ -15,6 +15,7 @@ import { Button } from '../../components';
 
 import Logo from '../../assets/img/logo.png';
 
+import AddClientPage from './add-client';
 import ContentPage from './content';
 import ClientsPage from './clients';
 
@@ -144,6 +145,7 @@ function Dashboard() {
         <Switch>
           <Route path="/dashboard" exact component={ContentPage} />
           <Route path="/dashboard/clients" exact component={ClientsPage} />
+          <Route path="/dashboard/clients/add" exact component={AddClientPage} />
         </Switch>
       </div>
     </div>

@@ -14,10 +14,11 @@ import Client from '../../../models/client';
 
 const BREADCRUMBS: BreadcrumbProps[] = [
   { href: '/dashboard', icon: "document", text: 'Dashboard'},
-  { text: "Clients" },
+  { href: '/dashboard/clients', icon: 'document', text: "Clients" },
+  { text: 'Client' }
 ];
 
-const Content = () => {
+const AddClient = () => {
   const [clients, setClients] = useState<Client[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -36,50 +37,21 @@ const Content = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [])
-
-  const getAddButton = () => {
-    return (
-      <AnchorButton
-        buttonProps={{
-          intent: Intent.PRIMARY,
-          icon: IconNames.ADD
-        }}
-        linkProps={{
-          to: '/dashboard/clients/add'
-        }}
-      >
-        Add client
-      </AnchorButton>
-    );
-  }
+  }, []);
 
   return (
     <LoadingView loading={loading}>
-      <div className='clients'>
+      <div className='client'>
         <PageHeading
-          title='Clients'
+          title='Client Detail'
           breadCrumbs={BREADCRUMBS}
-          renderRight={getAddButton}
         />
-        <div className='clients__container'>
-          <Row>
-            {clients.map(client => {
-              return (
-                <ModuleCard
-                  key={client.id}
-                  title={client.name}
-                  interactive
-                  link='/dashboard/clients'
-                  image={ClientsImage}
-                />
-              );
-            })}
-          </Row>
+        <div className='client__container'>
+          
         </div>
       </div>
     </LoadingView>
   );
 }
 
-export default Content;
+export default AddClient;

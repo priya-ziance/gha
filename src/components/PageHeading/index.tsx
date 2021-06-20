@@ -1,11 +1,15 @@
 import { Breadcrumb, Breadcrumbs, BreadcrumbProps, Icon } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
+import { Col, Row } from '..';
 
 import H1 from '../H1';
 
+import './index.scss';
+
 interface PageHeadingProps {
   title: string;
-  breadCrumbs: BreadcrumbProps[]
+  breadCrumbs?: BreadcrumbProps[];
+  renderRight?: () => {}
 }
 
 
@@ -44,14 +48,23 @@ const transformBreadcumbs = (breadcrumbs: BreadcrumbProps[]) : BreadcrumbProps[]
 
 const PageHeading = (props: PageHeadingProps) => {
   return (
-    <div>
-      <H1>{props.title}</H1>
-      {props.breadCrumbs && props.breadCrumbs.length &&
-        <Breadcrumbs
-          currentBreadcrumbRenderer={renderCurrentBreadcrumb}
-          items={transformBreadcumbs(props.breadCrumbs)}
-        />
-      }
+    <div className='gha__page-heading'>
+      <Row>
+        <Col xs={9}>
+          <H1>{props.title}</H1>
+          {props.breadCrumbs && props.breadCrumbs.length &&
+            <Breadcrumbs
+              currentBreadcrumbRenderer={renderCurrentBreadcrumb}
+              items={transformBreadcumbs(props.breadCrumbs)}
+            />
+          }
+        </Col>
+        <Col xs={3} className='gha__page-heading__actions'>
+          <div>
+            {props.renderRight && props.renderRight()}
+          </div>
+        </Col>
+      </Row>
       <hr />
     </div>
   );
