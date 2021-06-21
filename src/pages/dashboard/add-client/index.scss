@@ -2,5 +2,9 @@
   .client__container {
     display: flex;
     align-items: center;
+
+    form {
+      width: 100%;
+    }
   }
 }

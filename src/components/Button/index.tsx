@@ -1,6 +1,11 @@
+import { ReactElement } from 'react';
 import { Button, ButtonProps as _ButtonProps } from '@blueprintjs/core';
 
-const CustomButton = (props: _ButtonProps) => {
+interface CustomButtonProps {
+  children: ReactElement | string
+}
+
+const CustomButton = (props: _ButtonProps | CustomButtonProps) => {
   return (
     <Button {...props} />
   )
@@ -8,4 +13,4 @@ const CustomButton = (props: _ButtonProps) => {
 
 export default CustomButton;
 
-export type ButtonProps = _ButtonProps;
+export type ButtonProps = _ButtonProps | CustomButtonProps;
