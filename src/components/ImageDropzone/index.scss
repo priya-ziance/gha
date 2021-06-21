@@ -1,0 +1,9 @@
+.image-dropzone {
+  max-width: 200px;
+  height: 200px;
+
+  .image-dropzone__images-container img {
+    max-height: 190px;
+    max-width: 190px;
+  }
+}

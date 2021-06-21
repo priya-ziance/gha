@@ -1,11 +1,31 @@
-import { useEffect, useState } from 'react';
-import { BreadcrumbProps, Intent } from '@blueprintjs/core';
+import { useState } from 'react';
+import { BreadcrumbProps, Intent , MenuItem} from '@blueprintjs/core';
 import { Formik } from 'formik';
-import { IconNames } from '@blueprintjs/icons';
+import moment from "moment";
+import { Select, IItemRendererProps } from "@blueprintjs/select";
 
 import api from '../../../api';
 
-import { AnchorButton, Button, Col, FormGroup, InputGroup, LoadingView, ModuleCard, PageHeading, Row } from '../../../components';
+import DateInput, { DateInputProps } from '../../../components/DateInput';
+import {
+  Button,
+  Col,
+  FormGroup,
+  ImageDropzone,
+  InputGroup,
+  LoadingView,
+  PageHeading,
+  Row,
+  Switch,
+  TextArea
+} from '../../../components';
+
+import {
+  FUNDS_METHODS_OPTIONS,
+  LEGAL_STATUS_OPTIONS,
+  PRIMARY_DIAGNOSIS_OPTIONS,
+  SEX_OPTIONS
+} from './constants';
 
 import './index.scss';
 
@@ -16,9 +36,34 @@ const BREADCRUMBS: BreadcrumbProps[] = [
   { text: 'Client' }
 ];
 
-const AddClient = () => {
+const getMomentFormatter = (format: string, placeholder = ''): DateInputProps => {
+  // note that locale argument comes from locale prop and may be undefined
+  return {
+      formatDate: (date) => moment(date).format(format),
+      parseDate: (str) => moment(str, format).toDate(),
+      placeholder,
+  }
+};
 
+const FormSelect = Select.ofType<string>();
+
+const AddClient = () => {
   const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState([]);
+
+  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
+    return (
+        <MenuItem
+            text={item}
+            // active={active}
+            onClick={props.handleClick}
+            shouldDismissPopover={false}
+        />
+    )
+  }
+  
+
+  const onFormSelectItemSelect = () => {}
 
   return (
     <LoadingView loading={loading}>
@@ -58,7 +103,9 @@ const AddClient = () => {
 
             }) => (
               <form onSubmit={handleSubmit}>
+                <ImageDropzone />
                 <Row>
+                  {/* ---------------------------COL 1------------------------------- */}
                   <Col>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -90,7 +137,7 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" placeholder=""/>
+                      <DateInput {...getMomentFormatter('LL')}/>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -106,7 +153,16 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" placeholder=""/>
+                      <FormSelect
+                          items={SEX_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectItemSelect}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={SEX_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                      </FormSelect>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -158,6 +214,14 @@ const AddClient = () => {
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
+                      label={"Mobile #"}
+                      labelFor="text-input"
+                      labelInfo={"(required)"}
+                    >
+                      <InputGroup id="text-input" placeholder=""/>
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
                       label={"SS #"}
                       labelFor="text-input"
                       labelInfo={"(required)"}
@@ -170,7 +234,7 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <TextArea id="text-input" />
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -178,25 +242,29 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <Switch id="text-input" />
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
                       label={"Signature"}
                       labelFor="text-input"
                     >
-                      <Button intent={Intent.PRIMARY}>Add Signature</Button>
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Add Signature</b>
+                      </Button>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
                       label={"Trainers"}
                       labelFor="text-input"
                     >
-                      <Button intent={Intent.PRIMARY}>Add Trainers</Button>
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Add Trainers</b>
+                      </Button>
                     </FormGroup>
                   </Col>
 
-                  {/* ---------------------------------------------------------- */}
+                  {/* ---------------------------COL 2------------------------------- */}
                   <Col>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -268,7 +336,41 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
+                      <FormSelect
+                          items={LEGAL_STATUS_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectItemSelect}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={LEGAL_STATUS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                      </FormSelect>
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={"Language"}
+                      labelFor="text-input"
+                      labelInfo={"(required)"}
+                    >
                       <InputGroup id="text-input" />
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={"Primary Diagnosis"}
+                      labelFor="text-input"
+                      labelInfo={"(required)"}
+                    >
+                      <FormSelect
+                          items={PRIMARY_DIAGNOSIS_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectItemSelect}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={PRIMARY_DIAGNOSIS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                      </FormSelect>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -296,6 +398,44 @@ const AddClient = () => {
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
+                      label={"Likes"}
+                      labelFor="text-input"
+                      labelInfo={"(required)"}
+                    >
+                      <TextArea id="text-input" />
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={"Definition of Abuse"}
+                      labelFor="text-input"
+                      labelInfo={"(required)"}
+                    >
+                      <TextArea id="text-input" />
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={"Witnessess"}
+                      labelFor="text-input"
+                    >
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Add Witnessess</b>
+                      </Button>
+                    </FormGroup>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={"Services"}
+                      labelFor="text-input"
+                    >
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Services</b>
+                      </Button>
+                    </FormGroup>
+                  </Col>
+
+                  {/* ---------------------------COL 3------------------------------- */}
+                  <Col>
+                    <FormGroup
+                      intent={Intent.PRIMARY}
                       label={"Health Insurance"}
                       labelFor="text-input"
                       labelInfo={"(required)"}
@@ -304,45 +444,11 @@ const AddClient = () => {
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
-                      label={"Likes"}
-                      labelFor="text-input"
-                      labelInfo={"(required)"}
-                    >
-                      <InputGroup id="text-input" />
-                    </FormGroup>
-                    <FormGroup
-                      intent={Intent.PRIMARY}
-                      label={"Definition of Abuse"}
-                      labelFor="text-input"
-                      labelInfo={"(required)"}
-                    >
-                      <InputGroup id="text-input" />
-                    </FormGroup>
-                    <FormGroup
-                      intent={Intent.PRIMARY}
-                      label={"Witnessess"}
-                      labelFor="text-input"
-                    >
-                      <Button intent={Intent.PRIMARY}>Add Witnessess</Button>
-                    </FormGroup>
-                    <FormGroup
-                      intent={Intent.PRIMARY}
-                      label={"Services"}
-                      labelFor="text-input"
-                    >
-                      <Button intent={Intent.PRIMARY}>Services</Button>
-                    </FormGroup>
-                  </Col>
-
-                  {/* ---------------------------------------------------------- */}
-                  <Col>
-                    <FormGroup
-                      intent={Intent.PRIMARY}
                       label={"Effective Date"}
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <DateInput {...getMomentFormatter('LL')}/>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -358,7 +464,16 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <FormSelect
+                          items={FUNDS_METHODS_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectItemSelect}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={FUNDS_METHODS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                      </FormSelect>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -398,7 +513,7 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <DateInput {...getMomentFormatter('LL')}/>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -406,7 +521,7 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <DateInput {...getMomentFormatter('LL')}/>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -446,7 +561,7 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <TextArea id="text-input" />
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
@@ -454,24 +569,35 @@ const AddClient = () => {
                       labelFor="text-input"
                       labelInfo={"(required)"}
                     >
-                      <InputGroup id="text-input" />
+                      <TextArea id="text-input" />
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
                       label={"Custom Forms"}
                       labelFor="text-input"
                     >
-                      <Button intent={Intent.PRIMARY}>Add Custom Forms</Button>
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Add Custom Forms</b>
+                      </Button>
                     </FormGroup>
                     <FormGroup
                       intent={Intent.PRIMARY}
                       label={"Level of Service"}
                       labelFor="text-input"
                     >
-                      <Button intent={Intent.PRIMARY}>Level of Service</Button>
+                      <Button intent={Intent.PRIMARY}>
+                        <b>Level of Service</b>
+                      </Button>
                     </FormGroup>
                   </Col>
                 </Row>
+                <FormGroup
+                  intent={Intent.PRIMARY}
+                  label={"Client History"}
+                  labelFor="text-input"
+                >
+                  <TextArea id="text-input" />
+                </FormGroup>
                 <Button type="submit" disabled={isSubmitting}>
                   Submit
                 </Button>
