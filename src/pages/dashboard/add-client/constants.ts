@@ -28,12 +28,12 @@ export const FIELDS = {
   email: {
     name: 'Email',
     default: '',
-    validation: yup.string().email().required(),
+    validation: yup.string().label('Email').email().required(),
   },
   first_name: {
     name: 'First Name',
     default: '',
-    validation: yup.string().required(),
+    validation: yup.string().label('First Name').required(),
   },
   middle_name: {
     name: 'Middle Name',
@@ -43,7 +43,7 @@ export const FIELDS = {
   last_name: {
     name: 'Last Name',
     default: '',
-    validation: yup.string().required(),
+    validation: yup.string().label('Last Name').required(),
   },
   date_of_birth: {
     name: 'Date Of Birth',
@@ -52,7 +52,7 @@ export const FIELDS = {
   },
   sex: {
     name: 'Sex',
-    default: '',
+    default: SEX_OPTIONS[0],
     validation: yup.string(),
   },
   address_line_1: {
@@ -137,7 +137,7 @@ export const FIELDS = {
   },
   legal_status: {
     name: 'Legal Status',
-    default: '',
+    default: LEGAL_STATUS_OPTIONS[0],
     validation: yup.string(),
   },
   language: {
@@ -147,7 +147,7 @@ export const FIELDS = {
   },
   primary_diagnosis: {
     name: 'Primary Diagnosis',
-    default: '',
+    default: PRIMARY_DIAGNOSIS_OPTIONS[0],
     validation: yup.string(),
   },
   secondary_diagnosis: {
@@ -182,7 +182,7 @@ export const FIELDS = {
   },
   funds_method: {
     name: 'Funds Method',
-    default: '',
+    default: FUNDS_METHODS_OPTIONS[0],
     validation: yup.string(),
   },
   special_equipments: {

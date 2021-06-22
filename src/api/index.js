@@ -13,6 +13,12 @@ ClientsApi.prototype.getClients = async function(options = {}) {
   return normalize.clientArray(clientsResult.data.contents);
 }
 
+ClientsApi.prototype.createClient = async function(body = {}) {
+  const clientsResult = await client.post('/clients', body);
+
+  return normalize.client(clientsResult.data);
+}
+
 
 //========================================================================
 

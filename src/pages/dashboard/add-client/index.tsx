@@ -30,6 +30,7 @@ import {
 import * as helpers from './helpers';
 
 import './index.scss';
+import moment from 'moment';
 
 
 const BREADCRUMBS: BreadcrumbProps[] = [
@@ -68,7 +69,14 @@ const AddClient = () => {
           <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
+              setSubmitting(true);
+
+              try {
+                await api.clients.createClient(values);
+              } catch(e) {}
+
+              setSubmitting(false);
             }}
             >
 
@@ -82,8 +90,12 @@ const AddClient = () => {
               isSubmitting,
               setFieldValue
             }) => {
+              const onFormSelectChange = (field: string) => (value: string) => {
+                setFieldValue(field, value);
+              }
+              
               const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, date);
+                setFieldValue(field, moment(date).toISOString());
               }
 
               const getInputFormGroup = (key: string) => (
@@ -109,7 +121,7 @@ const AddClient = () => {
                   helperText={errors[key]}
                 >
                   <DateInput
-                    value={values[key]}
+                    value={values[key] ? moment(values[key]).toDate() : null}
                     onChange={onFormDateChange(key)}
                     {...helpers.getMomentFormatter('LL')}
                   />
@@ -162,10 +174,10 @@ const AddClient = () => {
                             filterable={false}
                             itemRenderer={formSelectItemRenderer}
                             noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectItemSelect}
+                            onItemSelect={onFormSelectChange('sex')}
                         >
                             {/* children become the popover target; render value here */}
-                            <Button text={SEX_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                            <Button text={values.sex} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
 
@@ -187,12 +199,11 @@ const AddClient = () => {
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
-                        <Switch id="text-input" />
+                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('active')}/>
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Signature"}
-                        labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY}>
                           <b>Add Signature</b>
@@ -201,7 +212,6 @@ const AddClient = () => {
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Trainers"}
-                        labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY}>
                           <b>Add Trainers</b>
@@ -239,10 +249,10 @@ const AddClient = () => {
                             filterable={false}
                             itemRenderer={formSelectItemRenderer}
                             noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectItemSelect}
+                            onItemSelect={onFormSelectChange('legal_status')}
                         >
                             {/* children become the popover target; render value here */}
-                            <Button text={LEGAL_STATUS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                            <Button text={values.legal_status} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
 
@@ -259,10 +269,10 @@ const AddClient = () => {
                             filterable={false}
                             itemRenderer={formSelectItemRenderer}
                             noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectItemSelect}
+                            onItemSelect={onFormSelectChange('primary_diagnosis')}
                         >
                             {/* children become the popover target; render value here */}
-                            <Button text={PRIMARY_DIAGNOSIS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                            <Button text={values.primary_diagnosis} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
                       
@@ -326,10 +336,10 @@ const AddClient = () => {
                             filterable={false}
                             itemRenderer={formSelectItemRenderer}
                             noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectItemSelect}
+                            onItemSelect={onFormSelectChange('funds_method')}
                         >
                             {/* children become the popover target; render value here */}
-                            <Button text={FUNDS_METHODS_OPTIONS[0]} rightIcon="double-caret-vertical" />
+                            <Button text={values.funds_method} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
                       {getInputFormGroup('special_equipments')}
@@ -375,7 +385,7 @@ const AddClient = () => {
                   >
                     <TextArea id="text-input" />
                   </FormGroup>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
                     Submit
                   </Button>
                 </form>

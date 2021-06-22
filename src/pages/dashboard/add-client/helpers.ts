@@ -5,8 +5,6 @@ import { DateInputProps } from '../../../components/DateInput';
 
 import { FIELDS } from './constants';
 
-import './index.scss';
-
 const formFields = Object.keys(FIELDS);
 
 export const initialValues = Object.assign({}, ...formFields.map(formField => {
