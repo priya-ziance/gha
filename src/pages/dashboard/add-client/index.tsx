@@ -5,6 +5,7 @@ import { Select, IItemRendererProps } from "@blueprintjs/select";
 import moment from 'moment';
 
 import LevelsOfServiceDialog from './levelsOfService';
+import ClientCustomDialog from './clientCustomForm';
 
 import api from '../../../api';
 
@@ -25,12 +26,15 @@ import {
 } from '../../../components';
 
 import {
+  DIALOG_NAMES,
   FIELDS,
   FUNDS_METHODS_OPTIONS,
   LEGAL_STATUS_OPTIONS,
   PRIMARY_DIAGNOSIS_OPTIONS,
   SEX_OPTIONS
 } from './constants';
+
+import { CLIENT_FIELDS_TYPE } from '../../../types';
 
 import * as helpers from './helpers';
 
@@ -48,11 +52,12 @@ const FormSelect = Select.ofType<string>();
 const AddClient = () => {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
-  const [levelOfServiceOpen, setLevelOfServiceOpen] = useState(false);
+  const [currentDialog, setCurrentDialog] = useState('');
 
-  const handleLevelOfServiceClose = () => setLevelOfServiceOpen(false);
+  const handleDialogClose = () => setCurrentDialog('');
 
-  const onLevelOfService = () => setLevelOfServiceOpen(true);
+  const onLevelOfService = () => setCurrentDialog(DIALOG_NAMES.levelsOfService);
+  const onClientCustomForm = () => setCurrentDialog(DIALOG_NAMES.clientCustomForm);
 
   const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
     return (
@@ -105,7 +110,7 @@ const AddClient = () => {
                 setFieldValue(field, moment(date).toISOString());
               }
 
-              const getInputFormGroup = (key: string) => (
+              const getInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={FIELDS[key].name}
@@ -121,7 +126,7 @@ const AddClient = () => {
                 </FormGroup>
               )
 
-              const getDateInputFormGroup = (key: string) => (
+              const getDateInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={FIELDS[key].name}
@@ -135,7 +140,7 @@ const AddClient = () => {
                 </FormGroup>
               );
 
-              const getTextAreaInputFormGroup = (key: string) => (
+              const getTextAreaInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={FIELDS[key].name}
@@ -150,6 +155,9 @@ const AddClient = () => {
                   />
                 </FormGroup>
               )
+
+              const levelOfServiceOpen = currentDialog === DIALOG_NAMES.levelsOfService;
+              const clientCustomFormOpen = currentDialog === DIALOG_NAMES.clientCustomForm;
 
               return (
                 <form onSubmit={handleSubmit}>
@@ -370,7 +378,7 @@ const AddClient = () => {
                         label={"Custom Forms"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY}>
+                        <Button intent={Intent.PRIMARY} onClick={onClientCustomForm}>
                           <b>Add Custom Forms</b>
                         </Button>
                       </FormGroup>
@@ -396,7 +404,9 @@ const AddClient = () => {
                     Submit
                   </Button>
 
-                  <LevelsOfServiceDialog isOpen={levelOfServiceOpen} handleClose={handleLevelOfServiceClose} />
+                  <LevelsOfServiceDialog isOpen={levelOfServiceOpen} handleClose={handleDialogClose} />
+
+                  <ClientCustomDialog isOpen={clientCustomFormOpen} handleClose={handleDialogClose} />
                 </form>
               )
             }}

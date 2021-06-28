@@ -1,6 +1,10 @@
 import { InputGroup, InputGroupProps as _InputGroupProps } from '@blueprintjs/core';
 
-const CustomInputGroup = (props: _InputGroupProps) => {
+type CustomInputGroupProps = {
+  id?: string
+}
+
+const CustomInputGroup = (props: _InputGroupProps | CustomInputGroupProps) => {
   return (
     <InputGroup {...props} />
   )
@@ -8,4 +12,4 @@ const CustomInputGroup = (props: _InputGroupProps) => {
 
 export default CustomInputGroup;
 
-export type InputGroupProps = _InputGroupProps;
+export type InputGroupProps = _InputGroupProps | CustomInputGroupProps;

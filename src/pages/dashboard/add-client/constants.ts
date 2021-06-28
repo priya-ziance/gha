@@ -1,5 +1,39 @@
 import * as yup from 'yup';
 
+import { FIELDS_TYPE } from '../../../types';
+
+// Start: Add Client Custom Form Constants
+
+export const KEY_USE = [
+  'Agree and will follow theresponsibilities and want a copy of key',
+  'Decline having my personal copy of a key'
+];
+
+export const IMPLEMENTATION_PLAN = [
+  'Hand delivered',
+  'Faxed',
+  'Secured Email',
+  'Kept on Record',
+  'Refused'
+];
+
+export const ROOM_AND_BOARD = [
+  'Private',
+  'Semi-Private'
+];
+
+export const MEDICAL_RELEASE_FORM = [
+  'IS ALLOWED',
+  'IS NOT ALLOWED'
+];
+
+// End: Add Client Custom Form Constants
+
+export const DIALOG_NAMES = {
+  clientCustomForm: 'clientCustomForm',
+  levelsOfService: 'levelsOfService'
+}
+
 export const FUNDS_METHODS_OPTIONS = [
   'SSI',
   'SSA',
@@ -24,7 +58,7 @@ export const SEX_OPTIONS = [
   'Female'
 ];
 
-export const FIELDS = {
+export const FIELDS : FIELDS_TYPE= {
   email: {
     name: 'Email',
     default: '',
@@ -264,5 +298,5 @@ export const FIELDS = {
     name: 'Notes',
     default: '',
     validation: yup.string(),
-  } 
+  }
 }

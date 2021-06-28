@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
-import { Alignment, Classes, Intent, Navbar, NavbarGroup, Menu, MenuItem, NavbarHeading,  Spinner } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Alignment, Classes, IRef, Navbar, NavbarGroup, Menu, MenuItem, NavbarHeading } from '@blueprintjs/core';
+import { Popover2, Popover2Props } from '@blueprintjs/popover2';
 import {
   Switch,
   Route
@@ -16,11 +16,18 @@ import { Button } from '../../components';
 import Logo from '../../assets/img/logo.png';
 
 import AddClientPage from './add-client';
+import ClientLinksPage from './client-links';
 import ContentPage from './content';
 import ClientsPage from './clients';
 
+import ClientNavigation from './client-navigation';
+
 import './index.scss';
 
+
+type CustomPopoverType = {
+  ref: IRef<any>
+}
 
 const SettingsMenu = (props: any) => {
   return (
@@ -69,17 +76,21 @@ const MainNavbar = () => {
                 }
               }}
               content={<LocationMenu />}
-              renderTarget={({ isOpen, ref, ...targetProps }) => (
+              renderTarget={(props: Popover2Props & CustomPopoverType) => {
+                const { isOpen, ref, ...targetProps } = props;
+
+                return (
                   <Button
                     {...targetProps}
                     elementRef={ref}
                     className={Classes.MINIMAL}
                     icon="globe"
-                    style={{
-                      paddingBottom: 10
-                    }}
+                    // style={{
+                    //   paddingBottom: 10
+                    // }}
                   />
-              )}
+                )
+              }}
           />
           <Popover2
               interactionKind="click"
@@ -91,17 +102,21 @@ const MainNavbar = () => {
                 }
               }}
               content={<SettingsMenu handleLogout={handleLogout} />}
-              renderTarget={({ isOpen, ref, ...targetProps }) => (
+              renderTarget={(props: Popover2Props & CustomPopoverType) => {
+                const { isOpen, ref, ...targetProps } = props;
+
+                return (
                   <Button
                     {...targetProps}
                     elementRef={ref}
                     className={Classes.MINIMAL}
                     icon="cog"
-                    style={{
-                      paddingBottom: 10
-                    }}
+                    // style={{
+                    //   paddingBottom: 10
+                    // }}
                   />
-              )}
+                )
+              }}
           />
       </NavbarGroup>
     </Navbar>
@@ -146,6 +161,7 @@ function Dashboard() {
           <Route path="/dashboard" exact component={ContentPage} />
           <Route path="/dashboard/clients" exact component={ClientsPage} />
           <Route path="/dashboard/clients/add" exact component={AddClientPage} />
+          <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
         </Switch>
       </div>
     </div>

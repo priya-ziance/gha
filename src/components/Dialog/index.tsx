@@ -1,9 +1,9 @@
-import { ReactElement } from 'react';
+import { ReactChild } from 'react';
 
 import { Dialog, DialogProps as _DialogProps } from '@blueprintjs/core';
 
 interface CustomDialogProps {
-  children: ReactElement | string
+  children: ReactChild
 }
 
 const CustomDialog = (props: _DialogProps | CustomDialogProps) => {

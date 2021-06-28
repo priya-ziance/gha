@@ -13,6 +13,12 @@ ClientsApi.prototype.getClients = async function(options = {}) {
   return normalize.clientArray(clientsResult.data.contents);
 }
 
+ClientsApi.prototype.getClient = async function(clientId) {
+  const clientResult = await client.get(`/clients/${clientId}`);
+
+  return normalize.client(clientResult.data);
+}
+
 ClientsApi.prototype.createClient = async function(body = {}) {
   const clientsResult = await client.post('/clients', body);
 

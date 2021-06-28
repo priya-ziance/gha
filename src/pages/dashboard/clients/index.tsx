@@ -70,7 +70,7 @@ const Content = () => {
                   key={client.id}
                   title={client.name}
                   interactive
-                  link='/dashboard/clients'
+                  link={`/dashboard/clients/${client.id}/links`}
                   image={ClientsImage}
                 />
               );

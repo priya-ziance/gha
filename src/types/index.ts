@@ -1,8 +1,52 @@
-export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
-
-export interface IDimensionsContext {
-  deviceType: DeviceType
-}
+export type CLIENT_FIELDS_TYPE = 
+  'email' |
+  'first_name' |
+  'middle_name' |
+  'last_name' |
+  'date_of_birth' |
+  'sex' |
+  'address_line_1' |
+  'address_line_2' |
+  'city' |
+  'state' |
+  'zip_code' |
+  'phone' |
+  'mobile' |
+  'ssn' |
+  'florida_id' |
+  'medicaid' |
+  'medicare' |
+  'medicaid_waiver' |
+  'current_month_weight' |
+  'height' |
+  'eye_color' |
+  'hair_color' |
+  'legal_status' |
+  'language' |
+  'primary_diagnosis' |
+  'secondary_diagnosis' |
+  'allergies' |
+  'location' |
+  'health_insurance' |
+  'effective_date' |
+  'monthly_ssi_amount' |
+  'funds_method' |
+  'special_equipments' |
+  'bank_account_name' |
+  'bank_account_number' |
+  'race' |
+  'home_entry_date' |
+  'home_discharge_date' |
+  'religion' |
+  'vision' |
+  'hearing' |
+  'mobility' |
+  'behaviours' |
+  'likes' |
+  'dislikes' |
+  'active' |
+  'definition_of_abuse' |
+  'notes';
 
 export interface IClient {
   _id: string;
@@ -56,3 +100,39 @@ export interface IClient {
   notes?: string;
   creator?: string;
 }
+
+export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
+
+export type FIELDS_TYPE = {
+  [key in CLIENT_FIELDS_TYPE]: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export interface IDimensionsContext {
+  deviceType: DeviceType
+}
+
+export interface IClientContext {
+  client?: IClient;
+  id: string;
+  loading?: boolean;
+  name: string;
+  onSetClient?: (client: IClientModel) => void;
+  setLoadingClient?: (loading: boolean) => void
+}
+
+export interface IClientModel {
+  id: string;
+  name: string;
+  client: IClient;
+}
+
+export type PAGE_TYPES =
+  'add-clients' |
+  'dashboard' |
+  'clients' |
+  'client-links' |
+  'client-contacts'

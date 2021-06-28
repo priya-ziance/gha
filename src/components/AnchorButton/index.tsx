@@ -4,7 +4,7 @@ import { Link, LinkProps } from "react-router-dom";
 import Button, { ButtonProps } from '../Button';
 
 interface AnchorButtonProps {
-  linkProps?: LinkProps;
+  linkProps: LinkProps;
   buttonProps?: ButtonProps;
   children: ReactElement | string
 }
