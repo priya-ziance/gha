@@ -16,7 +16,6 @@ import { Button } from '../../components';
 import Logo from '../../assets/img/logo.png';
 
 import AddClientPage from './add-client';
-import ClientLinksPage from './client-links';
 import ContentPage from './content';
 import ClientsPage from './clients';
 
@@ -85,9 +84,6 @@ const MainNavbar = () => {
                     elementRef={ref}
                     className={Classes.MINIMAL}
                     icon="globe"
-                    // style={{
-                    //   paddingBottom: 10
-                    // }}
                   />
                 )
               }}
@@ -111,9 +107,6 @@ const MainNavbar = () => {
                     elementRef={ref}
                     className={Classes.MINIMAL}
                     icon="cog"
-                    // style={{
-                    //   paddingBottom: 10
-                    // }}
                   />
                 )
               }}

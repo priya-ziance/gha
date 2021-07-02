@@ -16,6 +16,7 @@ import ModuleCard from './ModuleCard';
 import PageHeading from './PageHeading';
 import Row from './Row';
 import Switch from './Switch';
+import Table from './Table';
 import TextArea from './TextArea';
 
 export {
@@ -37,5 +38,6 @@ export {
   PageHeading,
   Row,
   Switch,
+  Table,
   TextArea
 }

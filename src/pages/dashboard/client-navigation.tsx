@@ -11,6 +11,7 @@ import withPathId from '../../hoc/withPathId';
 
 import ClientLinksPage from './client-links';
 import ClientContactsPage from './client-contacts';
+import AddClientContactsPage from './add-client-contact';
 
 import api from '../../api';
 
@@ -43,16 +44,17 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
     })()
   }, [clientId]);
 
-  // if (loadingClient) {
-  //   return (
-  //     <p>Loading Client...</p>
-  //   )
-  // }
+  if (loadingClient) {
+    return (
+      <p>Loading Client...</p>
+    )
+  }
   
   return (
     <Switch>
       <Route path="/dashboard/clients/:clientId/links" exact component={ClientLinksPage} />
       <Route path="/dashboard/clients/:clientId/client_contacts" exact component={ClientContactsPage} />
+      <Route path="/dashboard/clients/:clientId/client_contacts/add" exact component={AddClientContactsPage} />
     </Switch>
   );
 }

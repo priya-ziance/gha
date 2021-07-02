@@ -132,6 +132,7 @@ export interface IClientModel {
 
 export type PAGE_TYPES =
   'add-clients' |
+  'add-client-contact' |
   'dashboard' |
   'clients' |
   'client-links' |

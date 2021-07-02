@@ -1,7 +1,8 @@
 import { useContext } from 'react';
-import { BreadcrumbProps } from '@blueprintjs/core';
+import { BreadcrumbProps, Intent } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 
-import { PageHeading } from '../../../components';
+import { AnchorButton, Col, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 
@@ -10,8 +11,10 @@ import URLS from '../../../utils/urls';
 import './index.scss';
 
 
-const Content = () => {
+const ClientContacts = () => {
   const { id: clientId } = useContext(ClientContext);
+
+  const tableData = ['test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test']
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
@@ -19,21 +22,57 @@ const Content = () => {
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
     { text: 'Client Contact' }
   ];
+
+  const getAddButton = () => {
+    return (
+      <AnchorButton
+        buttonProps={{
+          intent: Intent.PRIMARY,
+          icon: IconNames.ADD
+        }}
+        linkProps={{
+          to: `/dashboard/clients/${clientId}/client_contacts/add`
+        }}
+      >
+        Add client
+      </AnchorButton>
+    );
+  }
   
 
   return (
     <div>
       <div className='clients'>
         <PageHeading
-          title='Clients'
+          title='Client Contacts'
           breadCrumbs={BREADCRUMBS}
+          renderRight={getAddButton}
         />
         <div className='clients__container'>
-          <h1>CLient Contacts</h1>
+          <Col>
+            <Table
+              numRows={tableData.length}
+              columns={[
+                {
+                  title: 'Trial',
+                  cellRenderer: (data) => data
+                },
+                {
+                  title: 'Trial',
+                  cellRenderer: (data) => data
+                },
+                {
+                  title: 'Trial',
+                  cellRenderer: (data) => data
+                }
+              ]}
+              data={tableData}
+            />
+          </Col>
         </div>
       </div>
     </div>
   );
 }
 
-export default Content;
+export default ClientContacts;

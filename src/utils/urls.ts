@@ -15,6 +15,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `/dashboard/clients/${options.clientId}/links`;
     case 'client-contacts':
       return `/dashboard/clients/${options.clientId}/client_contacts`;
+    case 'add-client-contact':
+      return `/dashboard/clients/${options.clientId}/client_contacts/add`;
     default:
       return '';
   }
