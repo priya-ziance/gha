@@ -1,4 +1,6 @@
-import { Cell, CellProps, Column, ColumnProps, RegionCardinality, Table, TableProps } from "@blueprintjs/table";
+import { Cell, CellProps, Column, ColumnProps, SelectionModes, Table, TableProps } from "@blueprintjs/table";
+
+import './index.scss';
 
 type dataType = {
   [key: string]: any
@@ -17,7 +19,10 @@ interface CustomTableProps {
 }
 
 const CustomTable = (props: TableProps & CustomTableProps) => {
-  const { columns, data, ...tableProps } = props;
+  const { className, columns, data, ...tableProps } = props;
+  let customTableClass = 'gha__table';
+
+  if (className) customTableClass += ` ${className}`;
 
   const cellRenderer = (rowIndex: number, columnIndex: number) => {
     return (
@@ -31,7 +36,7 @@ const CustomTable = (props: TableProps & CustomTableProps) => {
 
 
   return (
-    <Table {...tableProps}>
+    <Table className={customTableClass} {...tableProps}>
       {columns.map(column => {
         return (
           <Column name={column.title} cellRenderer={cellRenderer}/>
@@ -43,7 +48,7 @@ const CustomTable = (props: TableProps & CustomTableProps) => {
 
 CustomTable.defaultProps = {
   numFrozenRows: 1,
-  selectionModes: RegionCardinality.CELLS
+  selectionModes: SelectionModes.COLUMNS_AND_CELLS
 }
 
 export default CustomTable;

@@ -52,10 +52,13 @@ const ClientContacts = () => {
           <Col>
             <Table
               numRows={tableData.length}
+              getCellClipboardData={(row, col) => {
+                return tableData[row]
+              }}
               columns={[
                 {
                   title: 'Trial',
-                  cellRenderer: (data) => data
+                  cellRenderer: (data) => (<p>{data}</p>)
                 },
                 {
                   title: 'Trial',
