@@ -1,5 +1,6 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { useToasts } from 'react-toast-notifications'
+import { Intent } from '@blueprintjs/core';
+import React, { Fragment, useEffect, useContext, useRef, useState } from 'react';
+import ToastsContext from '../../contexts/toasts';
 
 
 const ConnectivityListener = () => {
@@ -10,11 +11,11 @@ const ConnectivityListener = () => {
 export default ConnectivityListener ;
 
 export function useConnectivityListener() {
-  const { addToast, removeToast } = useToasts();
   const [isOnline, setOnline] = useState(
     window ? window.navigator.onLine : false
   );
   const toastId = useRef(null);
+  const { addToast, removeToast } = useContext(ToastsContext)
 
   useEffect(() => {
     const onlineHandler = () => setOnline(true);
@@ -42,22 +43,15 @@ export function useConnectivityListener() {
         </Fragment>
       );
 
-      // remove the existing offline notification if it exists, otherwise store
-      // the added toast id for use later
-      const callback = isOnline
-        ? () => {
-            removeToast(toastId.current);
-            toastId.current = null;
-          }
-        : id => {
-            toastId.current = id;
-          };
+      removeToast(toastId.current)
 
       // add the applicable toast
-      addToast(
-        content,
-        { appearance: 'info', autoDismiss: isOnline },
-        callback
+      toastId.current = addToast(
+        {
+          message: content,
+          timeout: isOnline ? 5000: 0, // 0 will deactivate timeout
+          intent: isOnline ? Intent.PRIMARY : Intent.WARNING
+        }
       );
     },
     [isOnline]

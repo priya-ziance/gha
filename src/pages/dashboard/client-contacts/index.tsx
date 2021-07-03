@@ -58,7 +58,8 @@ const ClientContacts = () => {
               columns={[
                 {
                   title: 'Trial',
-                  cellRenderer: (data) => (<p>{data}</p>)
+                  cellRenderer: (data) => (<p>{data}</p>),
+                  width: 100
                 },
                 {
                   title: 'Trial',

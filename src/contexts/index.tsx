@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
-import { ToastProvider } from 'react-toast-notifications';
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import { IResizeEntry, IToastProps, ResizeSensor, Toaster, Position } from "@blueprintjs/core";
 
 import { DimensionsProvider } from './dimensions';
 import { ClientProvider } from './client';
+import { ToastsProvider } from './toasts';
 
 import { IClientModel, IClientContext } from '../types';
 
 function handleResize(entries: IResizeEntry[]) {
   console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));
 }
+
+const AppToaster = Toaster.create({
+  className: "gha__toaster",
+  position: Position.TOP_RIGHT,
+});
+
 
 function Contexts(props: any) {
   const [loadingClient, setLoadingClient] = useState(false);
@@ -35,22 +41,35 @@ function Contexts(props: any) {
     client.setLoadingClient = setLoadingClient;
   }
 
+  const addToast = (toast: IToastProps) => {
+    return AppToaster.show(toast);
+  }
+
+  const removeToast = (toastId: string) => {
+    return AppToaster.dismiss(toastId);
+  }
+
   return (
-    <ToastProvider>
-      <DimensionsProvider
-        value={{
-          deviceType: 'sm'
-        }}
+    <DimensionsProvider
+      value={{
+        deviceType: 'sm'
+      }}
+    >
+      <ClientProvider
+        value={client}
       >
-        <ClientProvider
-          value={client}
+        <ToastsProvider
+          value={{
+            addToast,
+            removeToast
+          }}
         >
           <ResizeSensor onResize={handleResize}>
             {props.children}
           </ResizeSensor>
-        </ClientProvider>
-      </DimensionsProvider>
-    </ToastProvider> 
+        </ToastsProvider>
+      </ClientProvider>
+    </DimensionsProvider>
   );
 }
 

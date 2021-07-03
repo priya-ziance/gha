@@ -30,9 +30,9 @@ const Content = () => {
   ];
 
   return (
-    <div className='clients'>
+    <div className='add-client-contact'>
       <PageHeading
-        title='Clients'
+        title='Add Client Contact Detail'
         breadCrumbs={BREADCRUMBS}
       />
       <div className='clients__container'>

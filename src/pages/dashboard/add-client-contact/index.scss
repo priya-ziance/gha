@@ -1,5 +1,5 @@
-.clients {
-  .clients__container {
+.add-client-contact {
+  .add-client-contact__container {
     display: flex;
     align-items: center;
   
@@ -9,10 +9,6 @@
 
     .row--center {
       justify-content: center;
-    }
-  
-    .gha__modulecard {
-      margin: 15px;
     }
   }
 }

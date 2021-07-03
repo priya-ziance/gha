@@ -1,3 +1,5 @@
+import { IToasterProps, IToastProps } from '@blueprintjs/core';
+
 export type CLIENT_FIELDS_TYPE = 
   'email' |
   'first_name' |
@@ -128,6 +130,11 @@ export interface IClientModel {
   id: string;
   name: string;
   client: IClient;
+}
+
+export interface IToastsContext {
+  addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
+  removeToast?: (toastId: string) => void
 }
 
 export type PAGE_TYPES =
