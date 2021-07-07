@@ -3,6 +3,7 @@ import { BreadcrumbProps, Classes, Intent , MenuItem, RadioGroup, Radio } from '
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
 import moment from 'moment';
+import get from 'lodash/get';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
@@ -113,7 +114,7 @@ const AddClient = () => {
               const getInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
-                  label={FIELDS[key].name}
+                  label={get(FIELDS, key, { name: '' }).name}
                   labelFor={`text-input__${key}`}
                   helperText={errors[key]}
                 >
@@ -129,7 +130,7 @@ const AddClient = () => {
               const getDateInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
-                  label={FIELDS[key].name}
+                  label={get(FIELDS, key, { name: '' }).name}
                   helperText={errors[key]}
                 >
                   <DateInput
@@ -143,7 +144,7 @@ const AddClient = () => {
               const getTextAreaInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
-                  label={FIELDS[key].name}
+                  label={get(FIELDS, key, { name: '' }).name}
                   labelFor={`text-area__${key}`}
                   helperText={errors[key]}
                 >
@@ -180,7 +181,7 @@ const AddClient = () => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.sex.name}
+                        label={get(FIELDS, 'sex', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -210,7 +211,7 @@ const AddClient = () => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.active.name}
+                        label={get(FIELDS, 'active', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -243,7 +244,7 @@ const AddClient = () => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.current_month_weight.name}
+                        label={get(FIELDS, 'current_month_weight', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -255,7 +256,7 @@ const AddClient = () => {
                       {getInputFormGroup('hair_color')}
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.legal_status.name}
+                        label={get(FIELDS, 'legal_status', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -275,7 +276,7 @@ const AddClient = () => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.primary_diagnosis.name}
+                        label={get(FIELDS, 'primary_diagnosis', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -296,7 +297,7 @@ const AddClient = () => {
                       
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.location.name}
+                        label={get(FIELDS, 'location', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -331,7 +332,7 @@ const AddClient = () => {
                       {getInputFormGroup('health_insurance')}
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.effective_date.name}
+                        label={get(FIELDS, 'effective_date', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -342,7 +343,7 @@ const AddClient = () => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={FIELDS.funds_method.name}
+                        label={get(FIELDS, 'funds_method', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >

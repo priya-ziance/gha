@@ -1,3 +1,4 @@
+import URLS from '../../../utils/urls';
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 
 export const getLinks = (clientId: string) => {
@@ -6,13 +7,13 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Info',
       image: ClientsImage,
-      path: '/dashboard/clients'
+      path: URLS.getPagePath('clients')
     },
     {
       description: '',
       title: 'Client Contacts',
       image: ClientsImage,
-      path: `/dashboard/clients/${clientId}/client_contacts`
+      path: URLS.getPagePath('client-contacts', { clientId })
     },
     {
       description: '',
@@ -36,13 +37,13 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Case Notes',
       image: ClientsImage,
-      path: '/dashboard/clients'
+      path: URLS.getPagePath('client-case-notes', { clientId })
     },
     {
       description: '',
       title: 'Goals',
       image: ClientsImage,
-      path: '/dashboard/clients'
+      path: URLS.getPagePath('goals', { clientId })
     },
     {
       description: '',

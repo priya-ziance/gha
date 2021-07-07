@@ -1,5 +1,21 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
 
+export type CASE_NOTE_FIELDS_TYPE = ''
+
+export type CLIENT_CONTACT_FIELDS_TYPE = 
+  'active' |
+  'address' |
+  'company' |
+  'contact_type' |
+  'email' |
+  'fax' |
+  'first_name' |
+  'last_name' |
+  'mobile' |
+  'notes' |
+  'phone'
+
+
 export type CLIENT_FIELDS_TYPE = 
   'email' |
   'first_name' |
@@ -49,6 +65,106 @@ export type CLIENT_FIELDS_TYPE =
   'active' |
   'definition_of_abuse' |
   'notes';
+
+export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
+
+export type JOINED_FIELDS_TYPE = CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE;
+
+export type FIELDS_TYPE = {
+  [key in JOINED_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export interface IDimensionsContext {
+  deviceType: DeviceType
+}
+
+export interface IClientContext {
+  client?: IClient;
+  id: string;
+  loading?: boolean;
+  name: string;
+  onSetClient?: (client: IClientModel) => void;
+  setLoadingClient?: (loading: boolean) => void
+}
+
+export interface IClientModel {
+  id: string;
+  name: string;
+  client: IClient;
+}
+
+export interface IToastsContext {
+  addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
+  removeToast?: (toastId: string) => void
+}
+
+export type PAGE_TYPES =
+  'add-clients' |
+  'add-client-case-notes' |
+  'add-client-contact' |
+  'add-sp-goals' |
+  'dashboard' |
+  'clients' |
+  'client-case-notes' |
+  'client-links' |
+  'client-contacts' |
+  'goals' |
+  'sp-goals';
+
+
+/**
+ * API Models
+ */
+
+export interface IBehaviour {
+  _id: string;
+  client?: string;
+  creator?: string;
+  date?: string;
+  behaviour_type?: string;
+  frequency?: number;
+  uri?: string;
+  clients_involved?: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ICaseNote {
+  _id: string;
+  date?: string;
+  client?: string;
+  title?: string;
+  notes?: string;
+  significant_event_notes?: string;
+  significant_event?: false;
+  active?: false;
+}
+
+export interface IClientContact {
+  _id: string;
+  client?: string;
+  creator?: string;
+  loc?: {};
+  contact_type?: string;
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: string;
+  address?: string;
+  phone?: string;
+  mobile?: string;
+  fax?: string;
+  email?: string;
+  company?: string;
+  notes?: string;
+  active?: true;
+  created_at?: string;
+  updated_at?: string
+}
 
 export interface IClient {
   _id: string;
@@ -103,44 +219,13 @@ export interface IClient {
   creator?: string;
 }
 
-export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
-
-export type FIELDS_TYPE = {
-  [key in CLIENT_FIELDS_TYPE]: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
+export interface IFile {
+  _id: string;
+  client?: string;
+  creator?: string;
+  key?: string;
+  url?: string;
+  type?: string;
+  created_at?: string;
+  updated_at?: string
 }
-
-export interface IDimensionsContext {
-  deviceType: DeviceType
-}
-
-export interface IClientContext {
-  client?: IClient;
-  id: string;
-  loading?: boolean;
-  name: string;
-  onSetClient?: (client: IClientModel) => void;
-  setLoadingClient?: (loading: boolean) => void
-}
-
-export interface IClientModel {
-  id: string;
-  name: string;
-  client: IClient;
-}
-
-export interface IToastsContext {
-  addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
-  removeToast?: (toastId: string) => void
-}
-
-export type PAGE_TYPES =
-  'add-clients' |
-  'add-client-contact' |
-  'dashboard' |
-  'clients' |
-  'client-links' |
-  'client-contacts'

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent } from '@blueprintjs/core';
+import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Formik } from 'formik';
 import get from 'lodash/get';
@@ -33,17 +33,17 @@ const Content = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
     { href: URLS.getPagePath('clients'), icon: 'document', text: "Clients" },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
-    { href: URLS.getPagePath('client-contacts', { clientId }), icon: 'document', text: 'Client Contacts' },
-    { text: 'Add Client Contact' }
+    { href: URLS.getPagePath('client-case-notes', { clientId }), icon: 'document', text: 'Case Notes' },
+    { text: 'Add Client Case Note' }
   ];
 
   return (
-    <div className='add-client-contact'>
+    <div className='add-case-note'>
       <PageHeading
-        title='Add Client Contact Detail'
+        title='Add Case Note Detail'
         breadCrumbs={BREADCRUMBS}
       />
-      <div className='add-client-contact__container'>
+      <div className='add-case-note__container'>
         <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
@@ -113,6 +113,10 @@ const Content = () => {
                   {getInputFormGroup('email')}
                   {getInputFormGroup('company')}
                   {getTextAreaFormGroup('notes')}
+
+                  <Checkbox label='Significant Event' />
+
+                  <Checkbox label='Active' />
 
                   <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
                     Submit

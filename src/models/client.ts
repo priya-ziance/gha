@@ -9,6 +9,6 @@ export default class Client {
     this.id = client._id;
     this.name =  `${client.first_name} ${client.last_name}`
 
-   this.client = client;
+    this.client = client;
   }
 }

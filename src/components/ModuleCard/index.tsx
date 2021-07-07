@@ -38,7 +38,7 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
     <Card {...props} className={localClassName} elevation={Elevation.ONE}>
       <Link to={link || ''}>
         <Row>
-          <Col>
+          <Col xs={4}>
             <img
               alt='module'
               src={image}

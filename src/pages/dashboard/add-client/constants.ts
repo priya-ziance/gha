@@ -62,7 +62,7 @@ export const FIELDS : FIELDS_TYPE= {
   email: {
     name: 'Email',
     default: '',
-    validation: yup.string().label('Email').email().required(),
+    validation: yup.string().label('Email').email(),
   },
   first_name: {
     name: 'First Name',

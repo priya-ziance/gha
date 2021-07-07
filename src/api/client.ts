@@ -5,10 +5,10 @@ const client = (() => {
 
   return {
     defaults: {
-      setBaseUrl(url) {
+      setBaseUrl(url?: string) {
         axios.defaults.baseURL = `${url}/api/v1`;
       },
-      setToken(token) {
+      setToken(token?: string) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         hasToken = !!token;
       },
@@ -18,13 +18,16 @@ const client = (() => {
     hasToken() {
       return hasToken;
     },
-    get(url, params, options = {}) {
+    get(url: string, params?: any, options = {}) {
       return axios.get(url, { params, ...options })
     },
-    post(url, body, options = {}) {
+    patch(url: string, body?: any, options = {}) {
+      return axios.patch(url, body, options)
+    },
+    post(url: string, body?: any, options = {}) {
       return axios.post(url, body, options)
     },
-    put(url, body, options = {}) {
+    put(url: string, body?: any, options = {}) {
       return axios.put(url, body, options)
     }
   }
