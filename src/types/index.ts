@@ -1,4 +1,5 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
+import { Moment } from 'moment';
 
 export type CASE_NOTE_FIELDS_TYPE = ''
 
@@ -91,12 +92,6 @@ export interface IClientContext {
   setLoadingClient?: (loading: boolean) => void
 }
 
-export interface IClientModel {
-  id: string;
-  name: string;
-  client: IClient;
-}
-
 export interface IToastsContext {
   addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
   removeToast?: (toastId: string) => void
@@ -114,6 +109,41 @@ export type PAGE_TYPES =
   'client-contacts' |
   'goals' |
   'sp-goals';
+
+
+
+
+/**
+ * App Models
+ */
+
+ export interface IBehaviourModel {
+  id: string;
+  behaviour: IBehaviour;
+}
+
+ export interface IClientModel {
+  id: string;
+  name: string;
+  client: IClient;
+}
+
+export interface ICaseNoteModel {
+  id: string;
+  caseNote: ICaseNote;
+}
+
+export interface IClientContactModel {
+  active?: boolean;
+  id: string;
+  date?: Moment;
+  notes?: string;
+  significantEvent?: boolean;
+  significantEventNotes?: string;
+  title?: string;
+  caseNote: ICaseNote;
+  clientContact: IClientContact;
+}
 
 
 /**

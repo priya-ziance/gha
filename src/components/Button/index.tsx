@@ -7,7 +7,7 @@ interface CustomButtonProps {
 
 const CustomButton = (props: _ButtonProps | CustomButtonProps) => {
   return (
-    <Button {...props} />
+    <Button className='gha__button' {...props} />
   )
 }
 

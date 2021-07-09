@@ -5,10 +5,10 @@ export default class ClientContact {
   name: string;
   clientContact: IClientContact;
 
-  constructor(client: IClientContact) {
-    this.id = client._id;
-    this.name =  `${client.first_name} ${client.last_name}`
+  constructor(clientContact: IClientContact) {
+    this.id = clientContact._id;
+    this.name =  `${clientContact.first_name} ${clientContact.last_name}`
 
-   this.clientContact = client;
+   this.clientContact = clientContact;
   }
 }

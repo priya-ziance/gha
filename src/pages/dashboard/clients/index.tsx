@@ -4,12 +4,13 @@ import { IconNames } from '@blueprintjs/icons';
 
 import api from '../../../api';
 
+import Client from '../../../models/client';
+
 import { AnchorButton, Button, LoadingView, ModuleCard, PageHeading, Row } from '../../../components';
 
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 
 import './index.scss';
-import Client from '../../../models/client';
 
 
 const BREADCRUMBS: BreadcrumbProps[] = [

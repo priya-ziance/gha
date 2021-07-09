@@ -147,7 +147,7 @@ function Dashboard() {
   )
 
   return (
-    <div>
+    <div className='dashboard'>
       <MainNavbar />
       <div className='dashboard__container'>
         <Switch>
