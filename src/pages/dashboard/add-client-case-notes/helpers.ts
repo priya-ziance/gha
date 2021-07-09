@@ -13,7 +13,7 @@ const formFields: any = Object.keys(FIELDS);
 
 export const initialValues = Object.assign({}, ...formFields.map((formField: CLIENT_CONTACT_FIELDS_TYPE) => {
   return {
-    [formField]: get(FIELDS,formField, { default: '' }).default
+    [formField]: get(FIELDS, formField, { default: '' }).default
   }
 }))
 

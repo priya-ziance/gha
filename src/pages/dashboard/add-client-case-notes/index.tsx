@@ -10,7 +10,7 @@ import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, FormGroup, InputGroup, PageHeading, Row, TextArea } from '../../../components';
+import { Button, Col, FormGroup, InputGroup, PageHeading, Row, TextArea } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 
@@ -104,14 +104,36 @@ const Content = () => {
                 <form onSubmit={handleSubmit}>
 
                   {getInputFormGroup('contact_type')}
-                  {getInputFormGroup('first_name')}
-                  {getInputFormGroup('last_name')}
-                  {getTextAreaFormGroup('address')}
-                  {getInputFormGroup('phone')}
-                  {getInputFormGroup('mobile')}
-                  {getInputFormGroup('fax')}
-                  {getInputFormGroup('email')}
-                  {getInputFormGroup('company')}
+                  <Row>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('first_name')}
+                    </Col>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('last_name')}
+                    </Col>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('address')}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('phone')}
+                    </Col>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('mobile')}
+                    </Col>
+                    <Col xs={12} md={4}>
+                      {getInputFormGroup('fax')}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} md={6}>
+                      {getInputFormGroup('email')}
+                    </Col>
+                    <Col xs={12} md={6}>
+                      {getInputFormGroup('company')}
+                    </Col>
+                  </Row>
                   {getTextAreaFormGroup('notes')}
 
                   <Checkbox label='Significant Event' />

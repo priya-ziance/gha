@@ -30,7 +30,7 @@ export const FIELDS : FIELDS_TYPE = {
     validation: yup.string().label('First Name').required(),
   },
   fax: {
-    name: 'First Name',
+    name: 'Fax',
     default: '',
     validation: yup.string().label('Fax'),
   },
