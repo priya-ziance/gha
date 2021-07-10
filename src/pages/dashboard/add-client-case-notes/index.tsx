@@ -3,18 +3,19 @@ import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Formik } from 'formik';
 import get from 'lodash/get';
+import moment from 'moment';
 
-import { FIELDS_TYPE, JOINED_FIELDS_TYPE } from '../../../types';
+import { CASE_NOTE_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, Col, FormGroup, InputGroup, PageHeading, Row, TextArea } from '../../../components';
+import { Button, Col, DateInput, FormGroup, InputGroup, PageHeading, Switch, TextArea } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 
-import Client from '../../../models/client';
+import ToastsContext from '../../../contexts/toasts';
 
 import * as helpers from './helpers';
 
@@ -24,10 +25,8 @@ import './index.scss';
 
 
 const Content = () => {
-  const [clients, setClients] = useState<Client[] | []>([]);
-  const [loading, setLoading] = useState(false);
-
   const { id: clientId } = useContext(ClientContext);
+  const { addToast } = useContext(ToastsContext);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
@@ -47,12 +46,27 @@ const Content = () => {
         <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting, setValues }) => {
               setSubmitting(true);
 
+              values.client = clientId;
+
               try {
-                await api.clients.createClient(values);
-              } catch(e) {}
+                await api.caseNotes.createCaseNote(values);
+
+                addToast({
+                  message: 'Case Note Created',
+                  intent: 'primary'
+                })
+
+                // Reset the form
+                setValues(helpers.initialValues);
+              } catch(e) {
+                addToast({
+                  message: 'Something went wrong',
+                  intent: 'danger'
+                })
+              }
 
               setSubmitting(false);
             }}
@@ -68,7 +82,11 @@ const Content = () => {
               isSubmitting,
               setFieldValue
             }) => {
-              const getInputFormGroup = (key: JOINED_FIELDS_TYPE) => (
+              const onFormDateChange = (field: string) => (date: Date) => {
+                setFieldValue(field, moment(date).toISOString());
+              }
+
+              const getInputFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -84,7 +102,7 @@ const Content = () => {
                 </FormGroup>
               )
 
-              const getTextAreaFormGroup = (key: JOINED_FIELDS_TYPE) => (
+              const getTextAreaFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -100,49 +118,53 @@ const Content = () => {
                 </FormGroup>
               )
 
+              const getDateInputFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
+                <FormGroup
+                  intent={helpers.getFormIntent(errors[key])}
+                  label={get(FIELDS, key, { name: '' }).name}
+                  helperText={errors[key]}
+                >
+                  <DateInput
+                    value={values[key] ? moment(values[key]).toDate() : null}
+                    onChange={onFormDateChange(key)}
+                    maxDate={new Date()}
+                    {...helpers.getMomentFormatter('LL')}
+                  />
+                </FormGroup>
+              );
+
               return (
                 <form onSubmit={handleSubmit}>
 
-                  {getInputFormGroup('contact_type')}
-                  <Row>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('first_name')}
-                    </Col>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('last_name')}
-                    </Col>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('address')}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('phone')}
-                    </Col>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('mobile')}
-                    </Col>
-                    <Col xs={12} md={4}>
-                      {getInputFormGroup('fax')}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={12} md={6}>
-                      {getInputFormGroup('email')}
-                    </Col>
-                    <Col xs={12} md={6}>
-                      {getInputFormGroup('company')}
-                    </Col>
-                  </Row>
+                  {getInputFormGroup('title')}
+                  {getDateInputFormGroup('date')}
+                  {getTextAreaFormGroup('significant_event_notes')}
                   {getTextAreaFormGroup('notes')}
+                  
 
-                  <Checkbox label='Significant Event' />
+                  <Switch
+                    label='Significant Event'
+                    checked={values.significant_event}
+                    onChange={e => {
+                      setFieldValue('significant_event', get(e, 'target.checked'))
+                    }}
+                  />
 
-                  <Checkbox label='Active' />
+                  <Switch
+                    label='Active'
+                    checked={values.active}
+                    onChange={e => {
+                      setFieldValue('active', get(e, 'target.checked'))
+                    }}
+                  />
 
-                  <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-                    Submit
-                  </Button>
+                  <div className='add-client-case-note__submit-container'>
+                    <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
+                      <b>
+                        Submit
+                      </b>
+                    </Button>
+                  </div>
                 </form>
               )
             }}

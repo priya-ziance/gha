@@ -1,57 +1,36 @@
 import * as yup from 'yup';
 
-import { FIELDS_TYPE } from '../../../types';
+import { CASE_NOTE_FIELDS_FORM_TYPE } from '../../../types';
 
-
-export const FIELDS : FIELDS_TYPE = {
-  address: {
-    name: 'Address',
-    default: '',
-    validation: yup.string(),
+export const FIELDS : CASE_NOTE_FIELDS_FORM_TYPE = {
+  active: {
+    name: 'Active',
+    default: false,
+    validation: yup.bool(),
   },
-  company: {
-    name: 'Company',
-    default: '',
-    validation: yup.string(),
+  date: {
+    name: 'Date',
+    default: null,
+    validation: yup.string().label('Date').required().nullable(),
   },
-  contact_type: {
-    name: 'Contact Type',
+  title: {
+    name: 'Title',
     default: '',
-    validation: yup.string().label('Contact Type'),
+    validation: yup.string().label('Title').required(),
   },
-  email: {
-    name: 'Email',
-    default: '',
-    validation: yup.string().label('Email').email(),
+  significant_event: {
+    name: 'Significant Event',
+    default: false,
+    validation: yup.bool(),
   },
-  first_name: {
-    name: 'First Name',
-    default: '',
-    validation: yup.string().label('First Name').required(),
-  },
-  fax: {
-    name: 'Fax',
-    default: '',
-    validation: yup.string().label('Fax'),
-  },
-  last_name: {
-    name: 'Last Name',
-    default: '',
-    validation: yup.string().label('Last Name').required(),
-  },
-  phone: {
-    name: 'Phone #',
-    default: '',
-    validation: yup.string(),
-  },
-  mobile: {
-    name: 'Mobile #',
+  significant_event_notes: {
+    name: 'Significant Event Notes',
     default: '',
     validation: yup.string(),
   },
   notes: {
     name: 'Notes',
     default: '',
-    validation: yup.string(),
+    validation: yup.string().label('Notes').required(),
   }
 }

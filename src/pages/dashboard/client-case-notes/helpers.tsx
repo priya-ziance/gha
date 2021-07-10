@@ -3,28 +3,28 @@ import get from 'lodash/get';
 
 import { Button } from '../../../components';
 
-import { IClientContactModel } from '../../../types';
+import { ICaseNoteModel } from '../../../types';
 
 
-export const titleColumn = (data: IClientContactModel) => {
+export const titleColumn = (data: ICaseNoteModel) => {
   return (
     <p>{data.title}</p>
   )
 }
 
-export const descriptionColumn = (data: IClientContactModel) => {
+export const descriptionColumn = (data: ICaseNoteModel) => {
   return (
     <p className='bp3-table-truncated-cell'>{data.notes}</p>
   )
 }
 
-export const activeColumn = (data: IClientContactModel) => {
+export const activeColumn = (data: ICaseNoteModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateColumn = (data: IClientContactModel) => {
+export const dateColumn = (data: ICaseNoteModel) => {
   const date = get(data, 'date');
   
   if (date) {
@@ -36,7 +36,7 @@ export const dateColumn = (data: IClientContactModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: IClientContactModel) => {
+export const actionColumn = (data: ICaseNoteModel) => {
   return (
     <>
       <Button intent={Intent.PRIMARY} small>

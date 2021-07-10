@@ -124,11 +124,13 @@ const ClientContacts = () => {
                 },
                 {
                   title: 'Date',
-                  cellRenderer: dateColumn
+                  cellRenderer: dateColumn,
+                  width: 150
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn
+                  cellRenderer: actionColumn,
+                  width: 117
                 }
               ]}
               data={caseNotes}

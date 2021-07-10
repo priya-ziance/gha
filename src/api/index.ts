@@ -78,10 +78,10 @@ class CaseNotesApi {
     return this.normalizer.normalize(caseNoteResult.data);
   }
 
-  async createClient(body = {}) {
-    const clientsResult = await client.post('/case_notes', body);
+  async createCaseNote(body = {}) {
+    const caseNoteResult = await client.post('/case_notes', body);
   
-    return this.normalizer.normalize(clientsResult.data);
+    return this.normalizer.normalize(caseNoteResult.data);
   }
 
   async updateCaseNote(caseNoteId = '', body = {}) {

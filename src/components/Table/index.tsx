@@ -106,7 +106,6 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
 
 CustomTable.defaultProps = {
   defaultRowHeight: 40,
-  enableGhostCells: true,
   numFrozenRows: 1,
   selectionModes: SelectionModes.ROWS_AND_CELLS
 }

@@ -1,7 +1,13 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
 import { Moment } from 'moment';
 
-export type CASE_NOTE_FIELDS_TYPE = ''
+export type CASE_NOTE_FIELDS_TYPE =
+  'active' |
+  'date' |
+  'title' |
+  'notes' |
+  'significant_event' |
+  'significant_event_notes'
 
 export type CLIENT_CONTACT_FIELDS_TYPE = 
   'active' |
@@ -79,6 +85,14 @@ export type FIELDS_TYPE = {
   }
 }
 
+export type CASE_NOTE_FIELDS_FORM_TYPE = {
+  [key in CASE_NOTE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
 export interface IDimensionsContext {
   deviceType: DeviceType
 }
@@ -129,11 +143,6 @@ export type PAGE_TYPES =
 }
 
 export interface ICaseNoteModel {
-  id: string;
-  caseNote: ICaseNote;
-}
-
-export interface IClientContactModel {
   active?: boolean;
   id: string;
   date?: Moment;
@@ -141,7 +150,11 @@ export interface IClientContactModel {
   significantEvent?: boolean;
   significantEventNotes?: string;
   title?: string;
-  caseNote: ICaseNote;
+  caseNote: ICaseNote; 
+}
+
+export interface IClientContactModel {
+  id: string;
   clientContact: IClientContact;
 }
 
