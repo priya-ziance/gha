@@ -1,9 +1,14 @@
 import * as yup from 'yup';
 
-import { FIELDS_TYPE } from '../../../types';
+import { CLIENT_CONTACT_FIELDS_FORM_TYPE } from '../../../types';
 
 
-export const FIELDS : FIELDS_TYPE = {
+export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
+  active: {
+    name: 'Active',
+    default: false,
+    validation: yup.bool(),
+  },
   address: {
     name: 'Address',
     default: '',
@@ -17,7 +22,12 @@ export const FIELDS : FIELDS_TYPE = {
   contact_type: {
     name: 'Contact Type',
     default: '',
-    validation: yup.string().label('Contact Type'),
+    validation: yup.string().label('Contact Type').required(),
+  },
+  date_of_birth: {
+    name: 'Date Of Birth',
+    default: null,
+    validation: yup.string().label('Date Of Birth').required().nullable(),
   },
   email: {
     name: 'Email',
@@ -30,19 +40,19 @@ export const FIELDS : FIELDS_TYPE = {
     validation: yup.string().label('First Name').required(),
   },
   fax: {
-    name: 'First Name',
+    name: 'Fax',
     default: '',
     validation: yup.string().label('Fax'),
   },
   last_name: {
     name: 'Last Name',
     default: '',
-    validation: yup.string().label('Last Name').required(),
+    validation: yup.string().label('Last Name'),
   },
   phone: {
     name: 'Phone #',
     default: '',
-    validation: yup.string(),
+    validation: yup.string().required(),
   },
   mobile: {
     name: 'Mobile #',

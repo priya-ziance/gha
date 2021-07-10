@@ -22,7 +22,7 @@ import {
 
 import './index.scss';
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 10;
 
 const ClientContacts = () => {
   const [caseNotes, setCaseNotes] = useState<CaseNote[] | []>([]);
@@ -99,6 +99,7 @@ const ClientContacts = () => {
               loading={loading}
               numRows={caseNotes.length}
               getCellClipboardData={(row, col) => {
+
                 return caseNotes[row]
               }}
               columns={[

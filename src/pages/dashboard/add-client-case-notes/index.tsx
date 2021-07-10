@@ -14,7 +14,6 @@ import URLS from '../../../utils/urls';
 import { Button, Col, DateInput, FormGroup, InputGroup, PageHeading, Switch, TextArea } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
-
 import ToastsContext from '../../../contexts/toasts';
 
 import * as helpers from './helpers';
@@ -46,7 +45,7 @@ const Content = () => {
         <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
-            onSubmit={async (values, { setSubmitting, setValues }) => {
+            onSubmit={async (values, { resetForm, setSubmitting }) => {
               setSubmitting(true);
 
               values.client = clientId;
@@ -60,7 +59,7 @@ const Content = () => {
                 })
 
                 // Reset the form
-                setValues(helpers.initialValues);
+                resetForm();
               } catch(e) {
                 addToast({
                   message: 'Something went wrong',

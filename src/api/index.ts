@@ -7,7 +7,9 @@ import {
   ICaseNote,
   ICaseNoteModel,
   IClient,
-  IClientModel
+  IClientModel,
+  IClientContact,
+  IClientContactModel
 } from '../types';
 
 
@@ -91,10 +93,43 @@ class CaseNotesApi {
   }
 }
 
+//============================= CASE NOTE API'S=============================
+class ClientContactApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IClientContactModel, IClientContact>(Models.ClientContact)
+  }
+
+  async getClientContacts(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const clientContactsResult = await client.get(`/client_contacts`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(clientContactsResult.data.contents);
+  }
+
+  async createClientContact(body = {}) {
+    const clientContactResult = await client.post('/client_contacts', body);
+  
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+
+  async updateClientContact(clientContactId = '', body = {}) {
+    const clientContactResult = await client.patch(`/client_contacts/${clientContactId}`, body);
+  
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+}
+
 
 //========================================================================
 
 export default (() => ({
   clients: new ClientsApi(),
+  clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi()
 }))()

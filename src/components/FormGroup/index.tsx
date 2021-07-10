@@ -8,7 +8,7 @@ interface CustomFormGroupProps {
 
 const CustomFormGroup = (props: _FormGroupProps | CustomFormGroupProps) => {
   return (
-    <FormGroup {...props} />
+    <FormGroup className='gha__form-group' {...props} />
   )
 }
 

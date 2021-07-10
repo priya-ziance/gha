@@ -34,7 +34,7 @@ const ClientContacts = () => {
           to: `/dashboard/clients/${clientId}/client_contacts/add`
         }}
       >
-        Add client
+        Add client contact
       </AnchorButton>
     );
   }

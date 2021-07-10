@@ -1,8 +1,18 @@
 .add-client-contact {
   .add-client-contact__container {
-    display: flex;
-    align-items: center;
-  
+    .add-client-contact__submit-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .gha__form-group {
+      * {
+        width: 100%;
+      }
+    }
+
     .row {
       display: flex;
     }
