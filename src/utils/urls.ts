@@ -34,12 +34,40 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
   }
 }
 
+const getPagePathName = (page: PAGE_TYPES) => {
+  switch (page) {
+    case 'add-client-case-notes':
+      return `Add Client Case Note`;
+    case 'add-client-contact':
+      return `Add Client Contact`;
+    case 'add-sp-goals':
+      return `Add SP Goals`;
+    case 'dashboard':
+      return 'Dashboard';
+    case 'clients':
+      return 'Clients';
+    case 'client-case-notes':
+      return `Client Case Notes`;
+    case 'client-links':
+      return `Client Links`;
+    case 'client-contacts':
+      return `Client Contacts`;
+    case 'goals':
+      return `Client Goals`;
+    case 'sp-goals':
+      return `Client SP Goals`;
+    default:
+      return '';
+  }
+}
+
 const URLS = {
   dashboardUrl: '/dashboard',
   loginUrl: window.location.origin,
   logoutUrl: window.location.origin,
   redirectUrl: '/dashboard',
-  getPagePath
+  getPagePath,
+  getPagePathName
 }
 
 export default URLS;

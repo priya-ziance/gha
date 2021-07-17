@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Cell, CellProps, Column, ColumnProps, IRegion, Regions, SelectionModes, Table, TableLoadingOption, TableProps } from '@blueprintjs/table';
 
 import Pagination, { PaginationProps } from '../Pagination';
@@ -24,6 +24,7 @@ interface CustomTableProps {
   columns: columnType[];
   loading?: boolean
 }
+
 
 const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => {
   const [selectedRowRegions, setSelectedRowRegions] = useState<IRegion[] | undefined>(undefined);
@@ -61,7 +62,7 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
         }
         </div>
       </Cell>
-    );
+    )
   };
 
   const columnWidths = columns.map(column => column.width);

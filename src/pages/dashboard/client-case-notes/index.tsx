@@ -24,7 +24,7 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const ClientContacts = () => {
+const ClientCaseNotes = () => {
   const [caseNotes, setCaseNotes] = useState<CaseNote[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -62,10 +62,10 @@ const ClientContacts = () => {
   }
 
   const BREADCRUMBS: BreadcrumbProps[] = [
-    { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: "Clients" },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
-    { text: 'Case Notes' }
+    { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
+    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
+    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
+    { text: URLS.getPagePathName('client-case-notes') }
   ];
 
   const getAddButton = () => {
@@ -152,4 +152,4 @@ const ClientContacts = () => {
   );
 }
 
-export default ClientContacts;
+export default ClientCaseNotes;

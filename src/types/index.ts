@@ -164,6 +164,7 @@ export interface ICaseNoteModel {
 
 export interface IClientContactModel {
   active?: boolean;
+  address?: string;
   company?: string;
   contactType?: string;
   dateOfBirth?: Moment;

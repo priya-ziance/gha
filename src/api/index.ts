@@ -93,7 +93,7 @@ class CaseNotesApi {
   }
 }
 
-//============================= CASE NOTE API'S=============================
+//============================= CLIENT CONTACT API'S========================
 class ClientContactApi {
   normalizer;
 
