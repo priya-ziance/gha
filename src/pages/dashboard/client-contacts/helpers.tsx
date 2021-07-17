@@ -20,7 +20,7 @@ export const lastNameColumn = (data: IClientContactModel) => {
 
 export const addressColumn = (data: IClientContactModel) => {
   return (
-    <p className='bp3-table-truncated-cell'>{data.address}</p>
+    <>{data.address}</>
   )
 }
 
@@ -39,7 +39,7 @@ export const dateOfBirthColumn = (data: IClientContactModel) => {
     )
   }
 
-  return (<p></p>)
+  return (<></>)
 }
 
 export const actionColumn = (data: IClientContactModel) => {

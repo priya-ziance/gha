@@ -108,17 +108,17 @@ const ClientContacts = () => {
                 {
                   title: 'First Name',
                   cellRenderer: firstNameColumn,
-                  width: 200
+                  width: 180
                 },
                 {
                   title: 'Last Name',
                   cellRenderer: lastNameColumn,
-                  width: 250
+                  width: 180
                 },
                 {
-                  title: 'Date Of Birth',
+                  title: 'DOB',
                   cellRenderer: dateOfBirthColumn,
-                  width: 60
+                  width: 100
                 },
                 {
                   title: 'Active',
@@ -128,7 +128,7 @@ const ClientContacts = () => {
                 {
                   title: 'Address',
                   cellRenderer: addressColumn,
-                  width: 150
+                  width: 230
                 },
                 {
                   title: 'Actions',
