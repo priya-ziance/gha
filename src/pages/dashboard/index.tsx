@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Alignment, Classes, IRef, Navbar, NavbarGroup, Menu, MenuItem, NavbarHeading } from '@blueprintjs/core';
 import { Popover2, Popover2Props } from '@blueprintjs/popover2';
@@ -6,6 +6,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import get from 'lodash/get';
 
 import * as config from '../../utils/config';
 import urls from '../../utils/urls';
@@ -21,12 +22,23 @@ import ClientsPage from './clients';
 
 import ClientNavigation from './client-navigation';
 
+import LocationContext from '../../contexts/location';
+
+import { ILocationModel } from '../../types';
+
 import './index.scss';
 
 
 type CustomPopoverType = {
   ref: IRef<any>
 }
+
+type LocationMenuType = {
+  locations?: ILocationModel[],
+  selectedLocation?: string,
+  setLocation?: (locationId: string) => void
+}
+
 
 const SettingsMenu = (props: any) => {
   return (
@@ -38,17 +50,33 @@ const SettingsMenu = (props: any) => {
   );
 }
 
-const LocationMenu = () => {
+const LocationMenu = (props: LocationMenuType) => {
   return (
     <div>
       <Menu>
-        <MenuItem icon="tick" text="New York" />
+        {get(props, 'locations', []).map((location: ILocationModel) => {
+          const onClick = () => {
+            if (props.setLocation) {
+              props.setLocation(location.id)
+            }
+          }
+
+          return (
+            <MenuItem
+              key={location.id}
+              onClick={onClick}
+              icon={location.id === props.selectedLocation ? 'tick': 'dot'}
+              text={location.address}
+            />
+          )
+        })}
       </Menu>
     </div>
   );
 }
 
 const MainNavbar = () => {
+  const { locations, setLocation, id: selectedLocationId } = useContext(LocationContext)
   const { logout } = useAuth0();
 
   const handleLogout = () => {
@@ -74,7 +102,13 @@ const MainNavbar = () => {
                   enabled: false
                 }
               }}
-              content={<LocationMenu />}
+              content={
+                <LocationMenu
+                  locations={locations}
+                  setLocation={setLocation}
+                  selectedLocation={selectedLocationId}
+                />
+              }
               renderTarget={(props: Popover2Props & CustomPopoverType) => {
                 const { isOpen, ref, ...targetProps } = props;
 
@@ -120,7 +154,10 @@ const MainNavbar = () => {
 function Dashboard() {
   const [fetchingToken, setFetchingToken] = useState(true);
 
+  const { id: selectedLocationId } = useContext(LocationContext)
+
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  
 
   useEffect(() => {
     const getToken = async () => {
@@ -141,6 +178,10 @@ function Dashboard() {
 
     if (isAuthenticated) getToken();
   }, [getAccessTokenSilently, isAuthenticated]);
+
+  useEffect(() => {
+    client.defaults.setLocationHeader(selectedLocationId);
+  }, [selectedLocationId])
 
   if (fetchingToken) return (
     <p>Authenticating</p>

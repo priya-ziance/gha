@@ -70,7 +70,7 @@ const ClientContacts = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { text: URLS.getPagePathName('client-contacts') }
+    { text: URLS.getPagePathName('apd') }
   ];
 
   const getAddButton = () => {
@@ -81,10 +81,10 @@ const ClientContacts = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-client-contact', { clientId })
+          to: URLS.getPagePath('add-apd', { clientId })
         }}
       >
-        Add client contact
+        Add APD
       </AnchorButton>
     );
   }
@@ -99,6 +99,7 @@ const ClientContacts = () => {
           renderRight={getAddButton}
         />
         <div className='client-case-notes__container'>
+          <h1>CHANGE TO APD QUERY</h1>
           <Col>
             <Table
               loading={loading}

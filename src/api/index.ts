@@ -9,7 +9,9 @@ import {
   IClient,
   IClientModel,
   IClientContact,
-  IClientContactModel
+  IClientContactModel,
+  ILocation,
+  ILocationModel
 } from '../types';
 
 
@@ -125,11 +127,27 @@ class ClientContactApi {
   }
 }
 
+//============================= LOCATION API'S===========================
+class LocationApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
+  }
+
+  async getLocations() {
+    const locationsResult = await client.get('/locations');
+  
+    return this.normalizer.normalizeArray(locationsResult.data.contents);
+  }
+}
+
 
 //========================================================================
 
 export default (() => ({
   clients: new ClientsApi(),
   clientContacts: new ClientContactApi(),
-  caseNotes: new CaseNotesApi()
+  caseNotes: new CaseNotesApi(),
+  locations: new LocationApi()
 }))()

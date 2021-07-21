@@ -5,6 +5,8 @@ import Pagination, { PaginationProps } from '../Pagination';
 
 import ToastsContext from '../../contexts/toasts';
 
+import * as constants from '../../utils/constants';
+
 import './index.scss';
 
 type dataType = {
@@ -77,7 +79,7 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
   }
 
   return (
-    <div className='gha__table'>
+    <div className='gha__table' style={{ maxWidth: constants.TABLE_WIDTH }}>
       <Table
         loadingOptions={loading ? [TableLoadingOption.CELLS] : undefined}
         onCopy={onCopy}

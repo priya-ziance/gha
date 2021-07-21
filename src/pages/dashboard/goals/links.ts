@@ -7,7 +7,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'SP Goals',
       image: ClientsImage,
-      path: URLS.getPagePath('sp-goals')
+      path: URLS.getPagePath('sp-goals', { clientId })
     },
     {
       description: 'Collect data for client goals',

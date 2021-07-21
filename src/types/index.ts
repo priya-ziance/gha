@@ -115,16 +115,26 @@ export interface IClientContext {
   setLoadingClient?: (loading: boolean) => void
 }
 
+export interface ILocationContext {
+  address?: string;
+  id?: string;
+  setLocation?: (locationId: string) => void
+  loading?: boolean;
+  locations?: ILocationModel[]
+}
+
 export interface IToastsContext {
   addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
   removeToast?: (toastId: string) => void
 }
 
 export type PAGE_TYPES =
+  'add-apd' |
   'add-clients' |
   'add-client-case-notes' |
   'add-client-contact' |
   'add-sp-goals' |
+  'apd' |
   'dashboard' |
   'clients' |
   'client-case-notes' |
@@ -176,6 +186,16 @@ export interface IClientContactModel {
   mobile?: string;
   notes?: string;
   clientContact: IClientContact;
+}
+
+export interface ILocationModel {
+  address: string;
+  id: string;
+  city?: string;
+  country?: string;
+  coordinates?: [number, number]
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 
@@ -291,4 +311,16 @@ export interface IFile {
   type?: string;
   created_at?: string;
   updated_at?: string
+}
+
+export interface ILocation {
+  _id: string;
+  address: string;
+  city?: string;
+  country?: string;
+  loc?: {
+    coordinates? :[number, number]
+  },
+  created_at?: string;
+  updated_at?: string;
 }

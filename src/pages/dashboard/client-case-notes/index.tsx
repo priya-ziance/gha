@@ -5,12 +5,15 @@ import { IconNames } from '@blueprintjs/icons';
 import { AnchorButton, Col, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
+import LocationContext from '../../../contexts/location';
 
 import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
 import CaseNote from '../../../models/caseNote';
+
+import * as helpers from '../../../utils/helpers';
 
 import {
   actionColumn,
@@ -29,6 +32,7 @@ const ClientCaseNotes = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
+  const { id: selectedLocationId } = useContext(LocationContext)
 
   const hasNextPage = caseNotes.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
@@ -47,7 +51,7 @@ const ClientCaseNotes = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page]);
+  }, [clientId, page, selectedLocationId]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -106,32 +110,32 @@ const ClientCaseNotes = () => {
                 {
                   title: 'ID',
                   cellRenderer: (data) => (<p>{data.id}</p>),
-                  width: 90
+                  width: helpers.getTableWith(0.1)
                 },
                 {
                   title: 'Title',
                   cellRenderer: titleColumn,
-                  width: 200
+                  width: helpers.getTableWith(0.2)
                 },
                 {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: 250
+                  width: helpers.getTableWith(0.3)
                 },
                 {
                   title: 'Active',
                   cellRenderer: activeColumn,
-                  width: 60
+                  width: helpers.getTableWith(0.07)
                 },
                 {
                   title: 'Date',
                   cellRenderer: dateColumn,
-                  width: 150
+                  width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Actions',
                   cellRenderer: actionColumn,
-                  width: 117
+                  width: helpers.getTableWith(0.2)
                 }
               ]}
               data={caseNotes}

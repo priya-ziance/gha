@@ -9,26 +9,30 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
   const clientBase = `/dashboard/clients/${options.clientId}`;
 
   switch (page) {
+    case 'add-apd':
+      return `${clientBase}/apd/add`;
     case 'add-client-case-notes':
-      return `${clientBase}/client_case_notes/add`;
+      return `${clientBase}/client-case-notes/add`;
     case 'add-client-contact':
-      return `${clientBase}/client_contacts/add`;
+      return `${clientBase}/client-contacts/add`;
     case 'add-sp-goals':
-      return `${clientBase}/goals/sp_goals/add`;
+      return `${clientBase}/goals/sp-goals/add`;
+    case 'apd':
+      return `${clientBase}/apd`;
     case 'dashboard':
       return '/dashboard';
     case 'clients':
       return '/dashboard/clients';
     case 'client-case-notes':
-      return `${clientBase}/client_case_notes`;
+      return `${clientBase}/client-case-notes`;
     case 'client-links':
       return `${clientBase}/links`;
     case 'client-contacts':
-      return `${clientBase}/client_contacts`;
+      return `${clientBase}/client-contacts`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'sp-goals':
-      return `${clientBase}/goals/sp_goals`;
+      return `${clientBase}/goals/sp-goals`;
     default:
       return '';
   }
@@ -36,12 +40,16 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
 
 const getPagePathName = (page: PAGE_TYPES) => {
   switch (page) {
+    case 'add-apd':
+      return 'Add APD';
     case 'add-client-case-notes':
       return `Add Client Case Note`;
     case 'add-client-contact':
       return `Add Client Contact`;
     case 'add-sp-goals':
       return `Add SP Goals`;
+    case 'apd':
+      return 'APD';
     case 'dashboard':
       return 'Dashboard';
     case 'clients':

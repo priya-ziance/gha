@@ -12,6 +12,10 @@ const client = (() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         hasToken = !!token;
       },
+
+      setLocationHeader(locationId?: string) {
+        axios.defaults.headers.common['location'] = locationId;
+      },
       
       interceptors: axios.interceptors
     },

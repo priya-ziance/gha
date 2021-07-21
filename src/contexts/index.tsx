@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { IResizeEntry, IToastProps, ResizeSensor, Toaster, Position } from "@blueprintjs/core";
+import { IResizeEntry, IToastProps, ResizeSensor, Toaster, Position } from '@blueprintjs/core';
+import get from 'lodash/get';
 
 import { DimensionsProvider } from './dimensions';
 import { ClientProvider } from './client';
+import { LocationProvider } from './location';
 import { ToastsProvider } from './toasts';
 
-import { IClientModel, IClientContext } from '../types';
+import api from '../api';
+
+import { IClientModel, IClientContext, ILocationModel, ILocationContext } from '../types';
 
 function handleResize(entries: IResizeEntry[]) {
   console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));
@@ -19,14 +23,47 @@ const AppToaster = Toaster.create({
 
 function Contexts(props: any) {
   const [loadingClient, setLoadingClient] = useState(false);
+  const [loadingLocations, setLoadingLocations] = useState(false);
+  const [locations, setLocations] = useState<ILocationModel[] | []>([])
+  const [location, setLocation] = useState<ILocationModel | undefined>(undefined)
+  const [locationContext, setLocationContext] = useState<ILocationContext>({});
   const [client, setClient] = useState<IClientContext>({
     id: '',
     name: ''
   });
 
   useEffect(() => {
+    (async () => {
+      await loadLocations()
+    })()
+  }, [])
+
+  useEffect(() => {
+    setLocationContext({
+      address: get(location, 'address'),
+      id: get(location, 'id'),
+      locations
+    })
+  }, [locations, location])
+
+  useEffect(() => {
     setClient({ ...client, loading: loadingClient })
   }, [loadingClient]);
+
+  const loadLocations = async () => {
+    setLoadingLocations(true);
+
+    try {
+      setLocations(await api.locations.getLocations())
+    } catch(e) {}
+
+    setLoadingLocations(false);
+  }
+
+  const setLocationId = (locationId: string) => {
+    const location = locations.find(location => location.id === locationId);
+    setLocation(location);
+  }
   
   const onSetClient = (client: IClientModel) => {
     setClient({
@@ -49,6 +86,10 @@ function Contexts(props: any) {
     return AppToaster.dismiss(toastId);
   }
 
+
+  locationContext.loading = loadingLocations;
+  locationContext.setLocation = setLocationId;
+
   return (
     <DimensionsProvider
       value={{
@@ -65,7 +106,11 @@ function Contexts(props: any) {
           }}
         >
           <ResizeSensor onResize={handleResize}>
-            {props.children}
+            <LocationProvider
+              value={locationContext}
+            >
+              {props.children}
+            </LocationProvider>
           </ResizeSensor>
         </ToastsProvider>
       </ClientProvider>

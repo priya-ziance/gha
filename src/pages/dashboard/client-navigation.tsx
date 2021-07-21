@@ -17,6 +17,8 @@ import ClientContactsPage from './client-contacts';
 import GoalsPage from './goals';
 import SpGoalsPage from './sp-goals';
 import AddSpGoalsPage from './add-sp-goals';
+import APDPage from './apd';
+import AddAPDPage from './add-apd';
 
 import api from '../../api';
 
@@ -57,14 +59,16 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
   
   return (
     <Switch>
+      <Route path="/dashboard/clients/:clientId/apd" exact component={APDPage} />
+      <Route path="/dashboard/clients/:clientId/apd/add" exact component={AddAPDPage} />
       <Route path="/dashboard/clients/:clientId/links" exact component={ClientLinksPage} />
-      <Route path="/dashboard/clients/:clientId/client_case_notes" exact component={ClientCaseNotesPage} />
-      <Route path="/dashboard/clients/:clientId/client_case_notes/add" exact component={AddClientCaseNotesPage} />
-      <Route path="/dashboard/clients/:clientId/client_contacts" exact component={ClientContactsPage} />
-      <Route path="/dashboard/clients/:clientId/client_contacts/add" exact component={AddClientContactsPage} />
+      <Route path="/dashboard/clients/:clientId/client-case-notes" exact component={ClientCaseNotesPage} />
+      <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
+      <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
+      <Route path="/dashboard/clients/:clientId/client-contacts/add" exact component={AddClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
-      <Route path="/dashboard/clients/:clientId/goals/sp_goals" exact component={SpGoalsPage} />
-      <Route path="/dashboard/clients/:clientId/goals/sp_goals/add" exact component={AddSpGoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/sp-goals" exact component={SpGoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/sp-goals/add" exact component={AddSpGoalsPage} />
     </Switch>
   );
 }

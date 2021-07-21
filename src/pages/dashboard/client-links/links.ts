@@ -19,7 +19,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'APD',
       image: ClientsImage,
-      path: '/dashboard/clients'
+      path: URLS.getPagePath('apd', { clientId })
     },
     {
       description: '',
