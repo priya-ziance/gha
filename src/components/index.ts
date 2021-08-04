@@ -13,6 +13,7 @@ import ImageDropzone from './ImageDropzone';
 import InputGroup from './InputGroup';
 import LoadingView from './LoadingView';
 import ModuleCard from './ModuleCard';
+import NoLocation from './NoLocation';
 import PageHeading from './PageHeading';
 import Pagination from './Pagination';
 import Row from './Row';
@@ -36,6 +37,7 @@ export {
   InputGroup,
   LoadingView,
   ModuleCard,
+  NoLocation,
   PageHeading,
   Pagination,
   Row,

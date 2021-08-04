@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
@@ -6,7 +6,9 @@ import api from '../../../api';
 
 import Client from '../../../models/client';
 
-import { AnchorButton, Button, LoadingView, ModuleCard, PageHeading, Row } from '../../../components';
+import LocationContext from '../../../contexts/location';
+
+import { AnchorButton, LoadingView, ModuleCard, PageHeading, Row } from '../../../components';
 
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 
@@ -22,6 +24,8 @@ const Content = () => {
   const [clients, setClients] = useState<Client[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { id: selectedLocationId } = useContext(LocationContext)
+
 
   useEffect(() => {
     (async () => {
@@ -37,7 +41,7 @@ const Content = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [])
+  }, [selectedLocationId])
 
   const getAddButton = () => {
     return (

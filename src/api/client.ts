@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+class ClientError extends Error {
+  data: any;
+}
+
 const client = (() => {
   let hasToken = false;
 
@@ -23,16 +27,44 @@ const client = (() => {
       return hasToken;
     },
     get(url: string, params?: any, options = {}) {
-      return axios.get(url, { params, ...options })
+      return axios.get(url, { params, ...options }).catch(e => {
+        const err = new ClientError();
+        
+        err.message = e.response.data.message;
+        err.data = e.response.data;
+
+        throw err;
+      })
     },
     patch(url: string, body?: any, options = {}) {
-      return axios.patch(url, body, options)
+      return axios.patch(url, body, options).catch(e => {
+        const err = new ClientError();
+        
+        err.message = e.response.data.message;
+        err.data = e.response.data;
+
+        throw err;
+      })
     },
     post(url: string, body?: any, options = {}) {
-      return axios.post(url, body, options)
+      return axios.post(url, body, options).catch(e => {
+        const err = new ClientError();
+        
+        err.message = e.response.data.message;
+        err.data = e.response.data;
+
+        throw err;
+      })
     },
     put(url: string, body?: any, options = {}) {
-      return axios.put(url, body, options)
+      return axios.put(url, body, options).catch(e => {
+        const err = new ClientError();
+        
+        err.message = e.response.data.message;
+        err.data = e.response.data;
+
+        throw err;
+      })
     }
   }
 })()

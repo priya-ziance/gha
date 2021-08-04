@@ -127,7 +127,7 @@ export const FIELDS : FIELDS_TYPE= {
   ssn: {
     name: 'SS #',
     default: '',
-    validation: yup.string(),
+    validation: yup.string().required().label('SS #'),
   },
   florida_id: {
     name: 'Florida Id',
@@ -147,7 +147,7 @@ export const FIELDS : FIELDS_TYPE= {
   medicaid_waiver: {
     name: 'Medicaid Waiver #',
     default: '',
-    validation: yup.string(),
+    validation: yup.string().required().label('Medicaid Waiver #'),
   },
   current_month_weight: {
     name: ' Current Month Weight',
@@ -194,11 +194,6 @@ export const FIELDS : FIELDS_TYPE= {
     default: '',
     validation: yup.string(),
   },
-  location: {
-    name: 'Location',
-    default: '',
-    validation: yup.string(),
-  },
   health_insurance: {
     name: 'Health Insurance',
     default: '',
@@ -212,11 +207,6 @@ export const FIELDS : FIELDS_TYPE= {
   monthly_ssi_amount: {
     name: 'Monthly SSI Amount',
     default: '',
-    validation: yup.string(),
-  },
-  funds_method: {
-    name: 'Funds Method',
-    default: FUNDS_METHODS_OPTIONS[0],
     validation: yup.string(),
   },
   special_equipments: {

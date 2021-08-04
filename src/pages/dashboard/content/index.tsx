@@ -22,12 +22,10 @@ const Content = () => {
           />
           <ModuleCard
             title='User Tasks List'
-            interactive
             image={ListImage}
           />
           <ModuleCard
             title='Reports'
-            interactive
             image={ReportImage}
           />
         </Row>

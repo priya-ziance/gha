@@ -11,6 +11,9 @@ import api from '../api';
 
 import { IClientModel, IClientContext, ILocationModel, ILocationContext } from '../types';
 
+import './index.scss';
+
+
 function handleResize(entries: IResizeEntry[]) {
   console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));
 }

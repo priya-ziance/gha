@@ -3,6 +3,8 @@ import { BreadcrumbProps } from '@blueprintjs/core';
 
 import { ModuleCard, PageHeading, Row } from '../../../components';
 
+import URLS from '../../../utils/urls';
+
 import ClientContext from '../../../contexts/client';
 
 import { getLinks } from './links';
@@ -11,9 +13,9 @@ import './index.scss';
 
 
 const BREADCRUMBS: BreadcrumbProps[] = [
-  { href: '/dashboard', icon: 'document', text: 'Dashboard'},
-  { href: '/dashboard/clients', icon: 'document', text: "Clients" },
-  { text: 'Links' }
+  { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
+  { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
+  { text: URLS.getPagePathName('client-links') }
 ];
 
 
@@ -35,7 +37,7 @@ const Content = () => {
                 <ModuleCard
                   key={link.title}
                   title={link.title}
-                  interactive
+                  interactive={link.interactive}
                   link={link.path}
                   image={link.image}
                 />

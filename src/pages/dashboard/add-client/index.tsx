@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { BreadcrumbProps, Classes, Intent , MenuItem, RadioGroup, Radio } from '@blueprintjs/core';
+import { useContext, useState } from 'react';
+import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
 import moment from 'moment';
 import get from 'lodash/get';
+
+import ToastsContext from '../../../contexts/toasts';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
@@ -11,11 +13,9 @@ import ClientCustomDialog from './clientCustomForm';
 import api from '../../../api';
 
 import {
-  AnchorButton,
   Button,
   Col,
   DateInput,
-  Dialog,
   FormGroup,
   ImageDropzone,
   InputGroup,
@@ -29,7 +29,6 @@ import {
 import {
   DIALOG_NAMES,
   FIELDS,
-  FUNDS_METHODS_OPTIONS,
   LEGAL_STATUS_OPTIONS,
   PRIMARY_DIAGNOSIS_OPTIONS,
   SEX_OPTIONS
@@ -54,6 +53,7 @@ const AddClient = () => {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [currentDialog, setCurrentDialog] = useState('');
+  const { addToast } = useContext(ToastsContext);
 
   const handleDialogClose = () => setCurrentDialog('');
 
@@ -71,6 +71,26 @@ const AddClient = () => {
     )
   }
 
+  const getErrorToast = (message: string) => {
+    return (
+      <CreateClientErrorToast message={message} />
+    )
+  }
+
+  const CreateClientSuccessToast = (
+    <>
+      <strong>Success</strong>
+      <div> Client created successfully </div>
+    </>
+  );
+
+  const CreateClientErrorToast = (props: any) => (
+    <>
+      <strong>Error</strong>
+      <div> {props.message} </div>
+    </>
+  );
+
   return (
     <LoadingView loading={loading}>
       <div className='client'>
@@ -87,7 +107,24 @@ const AddClient = () => {
 
               try {
                 await api.clients.createClient(values);
-              } catch(e) {}
+
+                addToast(
+                  {
+                    message: CreateClientSuccessToast,
+                    timeout: 5000,
+                    intent:  Intent.SUCCESS
+                  }
+                );
+              } catch(e) {
+                console.log(e)
+                addToast(
+                  {
+                    message: getErrorToast(e.message),
+                    timeout: 5000,
+                    intent:  Intent.DANGER
+                  }
+                );
+              }
 
               setSubmitting(false);
             }}
@@ -295,15 +332,6 @@ const AddClient = () => {
                       {getInputFormGroup('secondary_diagnosis')}
                       {getInputFormGroup('allergies')}
                       
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'location', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <InputGroup id="text-input" />
-                      </FormGroup>
-                      
                       {getTextAreaInputFormGroup('likes')}
                       {getTextAreaInputFormGroup('definition_of_abuse')}
 
@@ -341,23 +369,6 @@ const AddClient = () => {
 
                       {getInputFormGroup('monthly_ssi_amount')}
 
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'funds_method', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <FormSelect
-                            items={FUNDS_METHODS_OPTIONS}
-                            filterable={false}
-                            itemRenderer={formSelectItemRenderer}
-                            noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectChange('funds_method')}
-                        >
-                            {/* children become the popover target; render value here */}
-                            <Button text={values.funds_method} rightIcon="double-caret-vertical" />
-                        </FormSelect>
-                      </FormGroup>
                       {getInputFormGroup('special_equipments')}
                       {getInputFormGroup('bank_account_name')}
                       {getInputFormGroup('bank_account_number')}

@@ -17,6 +17,18 @@ export interface ModuleCardProps {
   image: string;
 }
 
+const LinkWrapper = (props: any) => {
+  if (props.link) {
+    return (
+      <Link to={props.link || ''}>
+        {props.children}
+      </Link>
+    );
+  } else {
+    return props.children;
+  }
+}
+
 const ModuleCard = (_props: CardProps & ModuleCardProps) => {
   const { body, className, grow, image, link, title, ...props } = _props;
 
@@ -36,7 +48,7 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
 
   return (
     <Card {...props} className={localClassName} elevation={Elevation.ONE}>
-      <Link to={link || ''}>
+      <LinkWrapper link={link || ''}>
         <Row>
           <Col xs={4}>
             <img
@@ -57,7 +69,7 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
             </p>
           </Col>
         </Row>
-      </Link>
+      </LinkWrapper>
     </Card>
   );
 };

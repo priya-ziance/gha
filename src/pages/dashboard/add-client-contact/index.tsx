@@ -53,7 +53,7 @@ const AddClientContact = () => {
                 await api.clientContacts.createClientContact(values);
                 addToast({
                   message: 'Client Contact Created',
-                  intent: 'primary'
+                  intent: Intent.SUCCESS
                 })
 
                 // Reset the form
@@ -61,7 +61,7 @@ const AddClientContact = () => {
               } catch(e) {
                 addToast({
                   message: 'Something went wrong',
-                  intent: 'danger'
+                  intent: Intent.DANGER
                 })
               }
 
@@ -72,9 +72,7 @@ const AddClientContact = () => {
             {({
               values,
               errors,
-              touched,
               handleChange,
-              handleBlur,
               handleSubmit,
               isSubmitting,
               setFieldValue

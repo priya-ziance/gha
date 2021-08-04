@@ -38,6 +38,7 @@ ReactDOM.render(
       clientId={get(config, 'AUTH0_CLIENT_ID', '')}
       redirectUri={urls.loginUrl}
       onRedirectCallback={onRedirectCallback}
+      scope='read:current_user update:current_user_metadata'
     >
       <App />
     </Auth0Provider>    

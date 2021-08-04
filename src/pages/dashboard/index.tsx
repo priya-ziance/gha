@@ -5,14 +5,17 @@ import { Popover2, Popover2Props } from '@blueprintjs/popover2';
 import {
   Switch,
   Route
-} from "react-router-dom";
+} from 'react-router-dom';
 import get from 'lodash/get';
+import jwt from 'jwt-decode'
 
 import * as config from '../../utils/config';
 import urls from '../../utils/urls';
+import * as permissions from '../../utils/permissions';
+
 import client from '../../api/client';
 
-import { Button } from '../../components';
+import { Button, NoLocation } from '../../components';
 
 import Logo from '../../assets/img/logo.png';
 
@@ -156,7 +159,7 @@ function Dashboard() {
 
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
   
 
   useEffect(() => {
@@ -167,9 +170,10 @@ function Dashboard() {
         const token = await getAccessTokenSilently({
           audience: config.AUTH0_AUDIENCE
         });
+        const tokenPermissions: string[] = get(jwt(token), 'permissions');
 
         // TODO: Remove log
-        console.log('TOKEN:', token);
+        console.log('TOKEN:', token, permissions.compilePermissions(tokenPermissions));
         client.defaults.setToken(token)
       } catch(e) {}
 
@@ -191,12 +195,15 @@ function Dashboard() {
     <div className='dashboard'>
       <MainNavbar />
       <div className='dashboard__container'>
-        <Switch>
-          <Route path="/dashboard" exact component={ContentPage} />
-          <Route path="/dashboard/clients" exact component={ClientsPage} />
-          <Route path="/dashboard/clients/add" exact component={AddClientPage} />
-          <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
-        </Switch>
+        {!selectedLocationId ?
+          <NoLocation /> : 
+          <Switch>
+            <Route path="/dashboard" exact component={ContentPage} />
+            <Route path="/dashboard/clients" exact component={ClientsPage} />
+            <Route path="/dashboard/clients/add" exact component={AddClientPage} />
+            <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
+          </Switch>
+        }
       </div>
     </div>
   );

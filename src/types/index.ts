@@ -1,5 +1,5 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
 
 export type CASE_NOTE_FIELDS_TYPE =
   'active' |
@@ -324,3 +324,14 @@ export interface ILocation {
   created_at?: string;
   updated_at?: string;
 }
+
+
+/**
+ * Permissions
+ */
+
+export type PermissionsModuleType =
+  'case_notes' |
+  'client_contacts' |
+  'info';
+  
