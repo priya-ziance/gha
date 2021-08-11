@@ -6,10 +6,10 @@ export const getLinks = (clientId: string) => {
   return [
     {
       description: '',
-      title: 'Info',
+      title: 'Client Info',
       image: ClientsImage,
-      // path: URLS.getPagePath('clients'),
-      interactive: false
+      path: URLS.getPagePath('client-info', { clientId }),
+      interactive: true
     },
     {
       description: '',

@@ -92,13 +92,13 @@ const ClientContacts = () => {
 
   return (
     <div>
-      <div className='client-case-notes'>
+      <div className='client-contacts'>
         <PageHeading
-          title='Case Notes'
+          title='Client Contacts'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='client-case-notes__container'>
+        <div className='client-contacts__container'>
           <Col>
             <Table
               loading={loading}
@@ -148,6 +148,7 @@ const ClientContacts = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
+              emptyTableMessage="No Client Contacts Found"
             />
           </Col>
         </div>

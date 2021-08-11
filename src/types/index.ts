@@ -138,6 +138,7 @@ export type PAGE_TYPES =
   'dashboard' |
   'clients' |
   'client-case-notes' |
+  'client-info' |
   'client-links' |
   'client-contacts' |
   'goals' |

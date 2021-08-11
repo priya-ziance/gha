@@ -4,11 +4,14 @@ import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
 import moment from 'moment';
 import get from 'lodash/get';
+import pick from 'lodash/pick';
 
 import ToastsContext from '../../../contexts/toasts';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
+
+import IClientModel from '../../../models/client';
 
 import api from '../../../api';
 
@@ -49,11 +52,18 @@ const BREADCRUMBS: BreadcrumbProps[] = [
 
 const FormSelect = Select.ofType<string>();
 
-const AddClient = () => {
+interface AddClientProps {
+  client?: IClientModel | undefined;
+  update?: boolean;
+}
+
+
+const AddClient = (props: AddClientProps) => {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [currentDialog, setCurrentDialog] = useState('');
   const { addToast } = useContext(ToastsContext);
+  let initialValues;
 
   const handleDialogClose = () => setCurrentDialog('');
 
@@ -80,7 +90,13 @@ const AddClient = () => {
   const CreateClientSuccessToast = (
     <>
       <strong>Success</strong>
-      <div> Client created successfully </div>
+      <div>
+        {props.update ?
+          'Client updated successfully'
+          :
+          'Client created successfully'
+        }
+      </div>
     </>
   );
 
@@ -91,6 +107,20 @@ const AddClient = () => {
     </>
   );
 
+  /**
+   * This assigns the client's info as the initial values if a client
+   * is passed in
+   */
+  if (props.client) {
+    initialValues = Object.assign(
+      {},
+      helpers.initialValues,
+      pick(props.client.client, Object.keys(helpers.initialValues))
+    );
+  } else {
+    initialValues = helpers.initialValues;
+  }
+
   return (
     <LoadingView loading={loading}>
       <div className='client'>
@@ -100,13 +130,17 @@ const AddClient = () => {
         />
         <div className='client__container'>
           <Formik
-            initialValues={helpers.initialValues}
+            initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
 
               try {
-                await api.clients.createClient(values);
+                if (props.update) {
+                  await api.clients.updateClient(get(props, 'client.id', ''), values);
+                } else {
+                  await api.clients.createClient(values);
+                }
 
                 addToast(
                   {
@@ -412,8 +446,8 @@ const AddClient = () => {
                   >
                     <TextArea id="text-input" />
                   </FormGroup>
-                  <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-                    Submit
+                  <Button type="submit" disabled={isSubmitting} loading={isSubmitting} large intent={Intent.PRIMARY}>
+                    {props.update ? 'Update' : 'Submit'}
                   </Button>
 
                   <LevelsOfServiceDialog isOpen={levelOfServiceOpen} handleClose={handleDialogClose} />

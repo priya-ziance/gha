@@ -148,6 +148,7 @@ const ClientCaseNotes = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
+              emptyTableMessage="No Case Notes Found"
             />
           </Col>
         </div>

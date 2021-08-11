@@ -29,6 +29,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/links`;
     case 'client-contacts':
       return `${clientBase}/client-contacts`;
+    case 'client-info':
+      return `${clientBase}/client-info`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'sp-goals':
@@ -56,6 +58,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Clients';
     case 'client-case-notes':
       return `Client Case Notes`;
+    case 'client-info':
+      return 'Client Info';
     case 'client-links':
       return `Client Links`;
     case 'client-contacts':

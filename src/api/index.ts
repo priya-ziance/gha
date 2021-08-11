@@ -50,8 +50,8 @@ class ClientsApi {
     return this.normalizer.normalize(clientsResult.data);
   }
 
-  async updateClient(body = {}) {
-    const clientsResult = await client.patch('/clients', body);
+  async updateClient(clientId: string, body = {}) {
+    const clientsResult = await client.patch(`/clients/${clientId}`, body);
   
     return this.normalizer.normalize(clientsResult.data);
   }

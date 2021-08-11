@@ -24,7 +24,8 @@ interface CustomTableProps {
   cellProps?: CellProps;
   columnProps?: ColumnProps;
   columns: columnType[];
-  loading?: boolean
+  emptyTableMessage?: string;
+  loading?: boolean;
 }
 
 
@@ -32,7 +33,7 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
   const [selectedRowRegions, setSelectedRowRegions] = useState<IRegion[] | undefined>(undefined);
   const [hoveringRowIndex, setHoveringRowIndex] = useState<number | null>(null);
   const { addToast } = useContext(ToastsContext)
-  const { className, columns, data, loading, hasNextPage, hasPrevPage, onNextPage, onPrevPage, page, ...tableProps } = props;
+  const { className, columns, data, emptyTableMessage, loading, hasNextPage, hasPrevPage, onNextPage, onPrevPage, page, ...tableProps } = props;
   let customTableClass = 'gha__table__container';
 
   if (className) customTableClass += ` ${className}`;
@@ -78,22 +79,30 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
     }
   }
 
+  const isTableEmpty = !loading && data.length === 0;
+
   return (
     <div className='gha__table' style={{ maxWidth: constants.TABLE_WIDTH }}>
-      <Table
-        loadingOptions={loading ? [TableLoadingOption.CELLS] : undefined}
-        onCopy={onCopy}
-        columnWidths={columnWidths}
-        className={customTableClass}
-        selectedRegions={selectedRowRegions}
-        {...tableProps}
-      >
-        {columns.map(column => {
-          return (
-            <Column name={column.title} cellRenderer={cellRenderer}/>
-          );
-        })}
-      </Table>
+      {!isTableEmpty ?
+        <Table
+          loadingOptions={loading ? [TableLoadingOption.CELLS] : undefined}
+          onCopy={onCopy}
+          columnWidths={columnWidths}
+          className={customTableClass}
+          selectedRegions={selectedRowRegions}
+          {...tableProps}
+        >
+          {columns.map(column => {
+            return (
+              <Column name={column.title} cellRenderer={cellRenderer}/>
+            );
+          })}
+        </Table>
+        :
+        <h4>
+          {emptyTableMessage}
+        </h4>
+      }
       <div className='gha__table__pagination-container'>
         <Pagination
           hasNextPage={hasNextPage}
