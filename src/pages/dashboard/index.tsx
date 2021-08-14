@@ -159,7 +159,7 @@ function Dashboard() {
 
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   
 
   useEffect(() => {

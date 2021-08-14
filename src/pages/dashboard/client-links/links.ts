@@ -50,8 +50,8 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Goals',
       image: ClientsImage,
-      // path: URLS.getPagePath('goals', { clientId }),
-      interactive: false
+      path: URLS.getPagePath('goals', { clientId }),
+      interactive: true
     },
     {
       description: '',

@@ -1,1 +1,2 @@
 export const TABLE_WIDTH = 1008;
+export const LOCATION_STORAGE_KEY = 'CURRENT_LOCATION';

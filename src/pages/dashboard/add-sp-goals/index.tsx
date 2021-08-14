@@ -1,32 +1,45 @@
 import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { BreadcrumbProps, Intent, Checkbox, MenuItem } from '@blueprintjs/core';
+import { Select, IItemRendererProps } from "@blueprintjs/select";
 import { Formik } from 'formik';
 import get from 'lodash/get';
+import moment from 'moment';
 
-import { FIELDS_TYPE, JOINED_FIELDS_TYPE } from '../../../types';
+import { FIELDS_TYPE, SP_GOALS_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, FormGroup, InputGroup, PageHeading, Row, TextArea } from '../../../components';
+import { Button, DateInput, FormGroup, InputGroup, PageHeading, TextArea } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
+import ToastsContext from '../../../contexts/toasts';
 
 import Client from '../../../models/client';
 
 import * as helpers from './helpers';
 
-import { FIELDS } from './constants';
+import { FIELDS, GOALS } from './constants';
+
+import IGoalModel from '../../../models/goal';
+
 
 import './index.scss';
 
 
-const Content = () => {
+const FormSelect = Select.ofType<string>();
+
+interface AddGoalProps {
+  goal?: IGoalModel | undefined;
+  update?: boolean;
+}
+
+const Content = (props: AddGoalProps) => {
   const [clients, setClients] = useState<Client[] | []>([]);
   const [loading, setLoading] = useState(false);
 
+  const { addToast } = useContext(ToastsContext);
   const { id: clientId } = useContext(ClientContext);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
@@ -38,6 +51,42 @@ const Content = () => {
     { text: 'Add SP Goals' }
   ];
 
+  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
+    return (
+        <MenuItem
+            text={item}
+            // active={active}
+            onClick={props.handleClick}
+            shouldDismissPopover={false}
+        />
+    )
+  }
+
+
+  const SuccessToast = (
+    <>
+      <strong>Success</strong>
+      <div>
+        {props.update ?
+          'Goal updated successfully'
+          :
+          'Goal created successfully'
+        }
+      </div>
+    </>
+  );
+
+  const getErrorToast = (message: string) => {
+    return (
+      <CreateGoalErrorToast message={message} />
+    )
+  }
+  const CreateGoalErrorToast = (props: any) => (
+    <>
+      <strong>Error</strong>
+      <div> {props.message} </div>
+    </>
+  );
 
   return (
     <div className='add-case-note'>
@@ -53,8 +102,29 @@ const Content = () => {
               setSubmitting(true);
 
               try {
-                await api.clients.createClient(values);
-              } catch(e) {}
+                if (props.update) {
+                  await api.goals.updateGoal(get(props, 'client.id', ''), values);
+                } else {
+                  await api.goals.createGoal(values);
+                }
+
+                addToast(
+                  {
+                    message: SuccessToast,
+                    timeout: 5000,
+                    intent:  Intent.SUCCESS
+                  }
+                );
+              } catch(e) {
+                console.log(e)
+                addToast(
+                  {
+                    message: getErrorToast(e.message),
+                    timeout: 5000,
+                    intent:  Intent.DANGER
+                  }
+                );
+              }
 
               setSubmitting(false);
             }}
@@ -70,7 +140,15 @@ const Content = () => {
               isSubmitting,
               setFieldValue
             }) => {
-              const getInputFormGroup = (key: JOINED_FIELDS_TYPE) => (
+              const onFormDateChange = (field: string) => (date: Date) => {
+                setFieldValue(field, moment(date).toISOString());
+              }
+
+              const onFormSelectChange = (field: string) => (value: string) => {
+                setFieldValue(field, value);
+              }
+
+              const getInputFormGroup = (key: SP_GOALS_FIELDS_TYPE, inputProps: any = {}) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -82,11 +160,12 @@ const Content = () => {
                     intent={helpers.getFormIntent(errors[key])}
                     onChange={handleChange(key)}
                     value={values[key]}
+                    {...inputProps}
                   />
                 </FormGroup>
               )
 
-              const getTextAreaFormGroup = (key: JOINED_FIELDS_TYPE) => (
+              const getTextAreaFormGroup = (key: SP_GOALS_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -102,23 +181,61 @@ const Content = () => {
                 </FormGroup>
               )
 
+              const getDateInputFormGroup = (key: SP_GOALS_FIELDS_TYPE) => (
+                <FormGroup
+                  intent={helpers.getFormIntent(errors[key])}
+                  label={get(FIELDS, key, { name: '' }).name}
+                  helperText={errors[key]}
+                >
+                  <DateInput
+                    value={values[key] ? moment(values[key]).toDate() : null}
+                    onChange={onFormDateChange(key)}
+                    {...helpers.getMomentFormatter('LL')}
+                  />
+                </FormGroup>
+              );
+
+
               return (
                 <form onSubmit={handleSubmit}>
 
-                  {getInputFormGroup('contact_type')}
-                  {getInputFormGroup('first_name')}
-                  {getInputFormGroup('last_name')}
-                  {getTextAreaFormGroup('address')}
-                  {getInputFormGroup('phone')}
-                  {getInputFormGroup('mobile')}
-                  {getInputFormGroup('fax')}
-                  {getInputFormGroup('email')}
-                  {getInputFormGroup('company')}
+                  <FormGroup
+                    label={'Support Date'}
+                  >
+                    <InputGroup
+                      value={'Support'}
+                    />
+                  </FormGroup>
+                  <FormGroup
+                    label={'Client Name'}
+                  >
+                    <InputGroup
+                      value={'Support'}
+                    />
+                  </FormGroup>
+                  <FormGroup
+                    intent={Intent.PRIMARY}
+                    label={get(FIELDS, 'description', { name: '' }).name}
+                    labelFor="text-input"
+                  >
+                    <FormSelect
+                        items={GOALS}
+                        filterable={false}
+                        itemRenderer={formSelectItemRenderer}
+                        noResults={<MenuItem disabled={true} text="No results." />}
+                        onItemSelect={onFormSelectChange('description')}
+                    >
+                        {/* children become the popover target; render value here */}
+                        <Button text={values.description} rightIcon="double-caret-vertical" />
+                    </FormSelect>
+                  </FormGroup>
+                  {getInputFormGroup('entries')}
+                  {getDateInputFormGroup('start_date')}
+                  {getDateInputFormGroup('end_date')}
                   {getTextAreaFormGroup('notes')}
 
-                  <Checkbox label='Significant Event' />
+                  <Checkbox label='Active' onChange={handleChange('active')} checked={values.active} />
 
-                  <Checkbox label='Active' />
 
                   <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
                     Submit

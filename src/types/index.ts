@@ -74,9 +74,19 @@ export type CLIENT_FIELDS_TYPE =
   'definition_of_abuse' |
   'notes';
 
+export type SP_GOALS_FIELDS_TYPE =
+  'active' |
+  'description' |
+  'end_date' |
+  'entries' |
+  'notes' |
+  'start_date' |
+  'sub_goals'
+
+
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
-export type JOINED_FIELDS_TYPE = CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE;
+export type JOINED_FIELDS_TYPE = CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE;
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
@@ -187,6 +197,14 @@ export interface IClientContactModel {
   mobile?: string;
   notes?: string;
   clientContact: IClientContact;
+}
+
+export interface IGoalModel {
+  id: string;
+  client?: string;
+  endDate?: Moment;
+  startDate?: Moment;
+  goal: IGoal;
 }
 
 export interface ILocationModel {
@@ -312,6 +330,15 @@ export interface IFile {
   type?: string;
   created_at?: string;
   updated_at?: string
+}
+
+export interface IGoal {
+  _id: string;
+  description?: string;
+  end_date?: string;
+  start_date?: string;
+  notes?: string;
+  active?: false;
 }
 
 export interface ILocation {

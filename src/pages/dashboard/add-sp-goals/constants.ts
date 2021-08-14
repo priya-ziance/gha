@@ -3,49 +3,29 @@ import * as yup from 'yup';
 import { FIELDS_TYPE } from '../../../types';
 
 
+export const GOALS = [
+  'Chew smaller bites to prevent choking'
+]
+
+
 export const FIELDS : FIELDS_TYPE = {
-  address: {
-    name: 'Address',
-    default: '',
-    validation: yup.string(),
+  active: {
+    name: 'Active',
+    default: false,
+    validation: yup.bool(),
   },
-  company: {
-    name: 'Company',
-    default: '',
-    validation: yup.string(),
+  description: {
+    name: 'Goal',
+    default: GOALS[0],
+    validation: yup.string().required().label('Goal'),
   },
-  contact_type: {
-    name: 'Contact Type',
-    default: '',
-    validation: yup.string().label('Contact Type'),
+  end_date: {
+    name: 'End Date',
+    default: null,
+    validation: yup.string().nullable().required().label('End Date'),
   },
-  email: {
-    name: 'Email',
-    default: '',
-    validation: yup.string().label('Email').email(),
-  },
-  first_name: {
-    name: 'First Name',
-    default: '',
-    validation: yup.string().label('First Name').required(),
-  },
-  fax: {
-    name: 'First Name',
-    default: '',
-    validation: yup.string().label('Fax'),
-  },
-  last_name: {
-    name: 'Last Name',
-    default: '',
-    validation: yup.string().label('Last Name').required(),
-  },
-  phone: {
-    name: 'Phone #',
-    default: '',
-    validation: yup.string(),
-  },
-  mobile: {
-    name: 'Mobile #',
+  entries: {
+    name: 'Entries',
     default: '',
     validation: yup.string(),
   },
@@ -53,5 +33,10 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'Notes',
     default: '',
     validation: yup.string(),
+  },
+  start_date: {
+    name: 'Start Date',
+    default: null,
+    validation: yup.string().nullable().required().label('Start Date'),
   }
 }

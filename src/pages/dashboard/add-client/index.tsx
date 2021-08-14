@@ -15,6 +15,8 @@ import IClientModel from '../../../models/client';
 
 import api from '../../../api';
 
+import URLS from '../../../utils/urls'; 
+
 import {
   Button,
   Col,
@@ -44,12 +46,6 @@ import * as helpers from './helpers';
 import './index.scss';
 
 
-const BREADCRUMBS: BreadcrumbProps[] = [
-  { href: '/dashboard', icon: "document", text: 'Dashboard'},
-  { href: '/dashboard/clients', icon: 'document', text: "Clients" },
-  { text: 'Client' }
-];
-
 const FormSelect = Select.ofType<string>();
 
 interface AddClientProps {
@@ -64,6 +60,22 @@ const AddClient = (props: AddClientProps) => {
   const [currentDialog, setCurrentDialog] = useState('');
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+
+  const BREADCRUMBS: BreadcrumbProps[] = [
+    { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
+    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') }
+  ];
+
+  if (props.update) {
+    BREADCRUMBS.push({
+      href: URLS.getPagePath('client-links',
+      { clientId: props.client?.id }),
+      icon: 'document', text: URLS.getPagePathName('client-links') 
+    })
+    BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
+  } else {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
+  }
 
   const handleDialogClose = () => setCurrentDialog('');
 

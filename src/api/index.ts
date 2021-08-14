@@ -10,6 +10,8 @@ import {
   IClientModel,
   IClientContact,
   IClientContactModel,
+  IGoal,
+  IGoalModel,
   ILocation,
   ILocationModel
 } from '../types';
@@ -127,6 +129,44 @@ class ClientContactApi {
   }
 }
 
+//============================= GOAL API'S=============================
+class GoalsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IGoalModel, IGoal>(Models.Goal)
+  }
+
+  async getGoals(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const goalsResult = await client.get(`/goals`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(goalsResult.data.contents);
+  }
+
+  async getGoal(goalId: string) {
+    const goalResult = await client.get(`/goal/${goalId}`);
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async createGoal(body = {}) {
+    const goalResult = await client.post('/goal', body);
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async updateGoal(goalId = '', body = {}) {
+    const goalResult = await client.patch(`/goal/${goalId}`, body);
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+}
+
 //============================= LOCATION API'S===========================
 class LocationApi {
   normalizer;
@@ -149,5 +189,6 @@ export default (() => ({
   clients: new ClientsApi(),
   clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi(),
+  goals: new GoalsApi(),
   locations: new LocationApi()
 }))()

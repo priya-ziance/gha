@@ -7,11 +7,17 @@ import { ClientProvider } from './client';
 import { LocationProvider } from './location';
 import { ToastsProvider } from './toasts';
 
+import Storage from '../utils/storage';
+
+import { LOCATION_STORAGE_KEY } from '../utils/constants';
+
 import api from '../api';
 
 import { IClientModel, IClientContext, ILocationModel, ILocationContext } from '../types';
 
 import './index.scss';
+
+const storage = new Storage();
 
 
 function handleResize(entries: IResizeEntry[]) {
@@ -42,9 +48,16 @@ function Contexts(props: any) {
   }, [])
 
   useEffect(() => {
+    const storedId = storage.get(LOCATION_STORAGE_KEY);
+    let _location = location;
+
+    if (!location && storedId) {
+      _location = locations.find(location => location.id === storedId); 
+    } 
+
     setLocationContext({
-      address: get(location, 'address'),
-      id: get(location, 'id'),
+      address: get(_location, 'address'),
+      id: get(_location, 'id'),
       locations
     })
   }, [locations, location])
@@ -64,6 +77,7 @@ function Contexts(props: any) {
   }
 
   const setLocationId = (locationId: string) => {
+    storage.set(LOCATION_STORAGE_KEY, locationId);
     const location = locations.find(location => location.id === locationId);
     setLocation(location);
   }
