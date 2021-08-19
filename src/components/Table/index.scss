@@ -1,0 +1,27 @@
+.gha__table {
+  .gha__table__pagination-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .gha__table__container {
+    *  {
+      box-shadow: none !important;
+    }
+  
+    .gha__table__cell {
+      cursor: pointer !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1 );
+    }
+  
+    .gha__table__cell--hover {
+      background: rgba(125, 188, 255, 0.6);
+    }
+  }
+  
+  .gha__table__container:focus {
+    outline: none;
+  }
+}

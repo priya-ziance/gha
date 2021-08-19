@@ -1,0 +1,21 @@
+@media (min-width: 1200px) {
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  } 
+}
+
+.dashboard__container {
+  padding: 2% 5%;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.navbar__logo {
+  height: 32px;
+}
+
+.navbar__popover {
+  margin-top: 10px;
+}

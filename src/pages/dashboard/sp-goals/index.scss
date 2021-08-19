@@ -1,0 +1,22 @@
+.client-contacts {
+  .client-contacts__container {
+    display: flex;
+    align-items: center;
+
+    .client-contacts__table__cell {
+      height: 100%; 
+    }
+  
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  
+    .gha__modulecard {
+      margin: 15px;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.gha__modulecard {
+  width: 311px !important;
+  height: 130px;
+  max-height: 130px;
+  overflow: hidden;
+
+  *:hover {
+    text-decoration: none;
+  }
+}
+
+.gha__modulecard--grow {
+  flex-grow: 1;
+}
+
+.gha__modulecard__info-col {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+
+  h4 {
+    text-align: left;
+  }
+}
+
+.gha__modulecard__img {
+  height: 120px;
+  max-height: 90px;
+  width: 120px;
+  max-width: 100%;
+  border-radius: 7px;
+}

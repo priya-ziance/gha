@@ -1,0 +1,36 @@
+.client {
+  .bp3-form-content {
+    .bp3-popover-wrapper {
+      width: 100%;
+
+      .bp3-popover-target {
+        width: 100%;
+
+        *:not(.bp3-icon) {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .image-dropzone {
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .client__container {
+    display: flex;
+    align-items: center;
+
+    form {
+      width: 100%;
+    }
+  }
+}
+
+.add-client__levelsOfService > div { 
+  margin-bottom: 30px;
+}
