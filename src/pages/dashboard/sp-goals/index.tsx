@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
@@ -8,20 +8,71 @@ import ClientContext from '../../../contexts/client';
 
 import URLS from '../../../utils/urls';
 
+import api from '../../../api';
+
+import * as helpers from '../../../utils/helpers';
+
+import { IGoalModel } from '../../../types';
+
+import {
+  actionColumn,
+  activeColumn,
+  dateOfBirthColumn,
+  addressColumn,
+  firstNameColumn,
+  lastNameColumn,
+} from './helpers';
+
 import './index.scss';
 
+const PAGE_SIZE = 10;
 
 const ClientContacts = () => {
+  const [goals, setGoals] = useState<IGoalModel[] | []>([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
 
-  const tableData = ['test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test']
+  const hasNextPage = goals.length === PAGE_SIZE;
+  const hasPrevPage = page > 0;
+
+  console.log(goals)
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        setGoals(
+          await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
+        )
+      } catch(e){}
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 200)
+    })()
+  }, [clientId, page]);
+
+  const onNextPage = () => {
+    if (hasNextPage) {
+      setPage(page => page + 1)
+    }
+  }
+
+  const onPrevPage = () => {
+    if (hasPrevPage) {
+      setPage(page => page - 1)
+    }
+  }
 
   const BREADCRUMBS: BreadcrumbProps[] = [
-    { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: "Clients" },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
-    { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: 'Goals' },
-    { text: 'SP Goals' }
+    { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
+    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
+    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
+    { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
+    { text: URLS.getPagePathName('sp-goals') }
+    
   ];
 
   const getAddButton = () => {
@@ -35,7 +86,7 @@ const ClientContacts = () => {
           to: URLS.getPagePath('add-sp-goals', { clientId })
         }}
       >
-        Add Sp Goal
+        Add client contact
       </AnchorButton>
     );
   }
@@ -43,35 +94,63 @@ const ClientContacts = () => {
 
   return (
     <div>
-      <div className='clients'>
+      <div className='client-contacts'>
         <PageHeading
-          title='Client Contacts'
+          title={URLS.getPagePathName('sp-goals')}
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='clients__container'>
+        <div className='client-contacts__container'>
           <Col>
             <Table
-              numRows={tableData.length}
+              loading={loading}
+              numRows={goals.length}
               getCellClipboardData={(row, col) => {
-                return tableData[row]
+                return goals[row]
               }}
               columns={[
                 {
-                  title: 'Trial',
-                  cellRenderer: (data) => (<p>{data}</p>),
-                  width: 100
+                  title: 'First Name',
+                  cellRenderer: firstNameColumn,
+                  width: helpers.getTableWith(0.15)
                 },
                 {
-                  title: 'Trial',
-                  cellRenderer: (data) => data
+                  title: 'Last Name',
+                  cellRenderer: lastNameColumn,
+                  width: helpers.getTableWith(0.15)
                 },
                 {
-                  title: 'Trial',
-                  cellRenderer: (data) => data
+                  title: 'DOB',
+                  cellRenderer: dateOfBirthColumn,
+                  width: helpers.getTableWith(0.13)
+                },
+                {
+                  title: 'Active',
+                  cellRenderer: activeColumn,
+                  width: helpers.getTableWith(0.07)
+                },
+                {
+                  title: 'Address',
+                  cellRenderer: addressColumn,
+                  width: helpers.getTableWith(0.3)
+                },
+                {
+                  title: 'Actions',
+                  cellRenderer: actionColumn,
+                  width: helpers.getTableWith(0.2)
                 }
               ]}
-              data={tableData}
+              data={goals}
+              enableRowHeader={false}
+              onSelection={(focusedCell) => {
+                console.log(focusedCell)
+              }}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              onNextPage={onNextPage}
+              onPrevPage={onPrevPage}
+              page={page}
+              emptyTableMessage="No SP Goals Found"
             />
           </Col>
         </div>

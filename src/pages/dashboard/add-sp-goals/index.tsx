@@ -1,17 +1,19 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent, Checkbox, MenuItem } from '@blueprintjs/core';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
 import { Formik } from 'formik';
 import get from 'lodash/get';
 import moment from 'moment';
 
-import { FIELDS_TYPE, SP_GOALS_FIELDS_TYPE } from '../../../types';
+import { SP_GOALS_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
 import { Button, DateInput, FormGroup, InputGroup, PageHeading, TextArea } from '../../../components';
+
+import LoadingWrapper from '../../../wrappers/loading';
 
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
@@ -36,8 +38,8 @@ interface AddGoalProps {
 }
 
 const Content = (props: AddGoalProps) => {
-  const [clients, setClients] = useState<Client[] | []>([]);
-  const [loading, setLoading] = useState(false);
+  const [client, setClient] = useState<Client | {}>({});
+  const [loadingClient, setLoadingClient] = useState(false);
 
   const { addToast } = useContext(ToastsContext);
   const { id: clientId } = useContext(ClientContext);
@@ -50,6 +52,20 @@ const Content = (props: AddGoalProps) => {
     { href: URLS.getPagePath('sp-goals', { clientId }), icon: 'document', text: 'SP Goals' },
     { text: 'Add SP Goals' }
   ];
+
+  useEffect(() => {
+    (async () => {
+      setLoadingClient(true);
+
+      if (clientId) {
+        try {
+          setClient(await api.clients.getClient(clientId))
+        } catch(e) {}
+      }
+
+      setLoadingClient(false);
+    })()
+  }, [clientId])
 
   const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
     return (
@@ -89,7 +105,8 @@ const Content = (props: AddGoalProps) => {
   );
 
   return (
-    <div className='add-case-note'>
+    <LoadingWrapper loading={loadingClient}>
+      <div className='add-case-note'>
       <PageHeading
         title='Add SP Goal Detail'
         breadCrumbs={BREADCRUMBS}
@@ -210,7 +227,8 @@ const Content = (props: AddGoalProps) => {
                     label={'Client Name'}
                   >
                     <InputGroup
-                      value={'Support'}
+                      value={get(client, 'name')}
+                      disabled
                     />
                   </FormGroup>
                   <FormGroup
@@ -246,6 +264,7 @@ const Content = (props: AddGoalProps) => {
         </Formik>
       </div>
     </div>
+    </LoadingWrapper>
   );
 }
 
