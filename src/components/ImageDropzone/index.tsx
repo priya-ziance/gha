@@ -1,8 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import get from 'lodash/get';
 
 import './index.scss';
+
+export interface ImageDropzoneProps {
+  files: File[] | [];
+  imagesUrls?: string[] | [];
+  setFiles: (files: File[]) => void;
+}
+
 
 const baseStyle = {
   flex: 1,
@@ -34,8 +41,9 @@ const rejectStyle = {
   borderColor: '#ff1744'
 };
 
-const ImageDropzone = (props: any) => {
-  const [files, setFiles] = useState<File[] | null>(null);
+const ImageDropzone = (props: ImageDropzoneProps) => {
+  const { files, imagesUrls, setFiles } = props;
+
   const {
     getRootProps,
     getInputProps,
@@ -73,9 +81,9 @@ const ImageDropzone = (props: any) => {
     isDragAccept
   ]);
 
-  let thumbs;
+  let thumbs: any = [];
 
-  if (files) {
+  if (files && files.length) {
     thumbs = files.map((file: any) => (
       <div key={file.name}>
         <div>
@@ -86,13 +94,24 @@ const ImageDropzone = (props: any) => {
         </div>
       </div>
     ));
+  } else if (imagesUrls && imagesUrls.length) {
+    thumbs = imagesUrls.map((url: any) => (
+      <div key={url}>
+        <div>
+          <img
+            alt={url}
+            src={url}
+          />
+        </div>
+      </div>
+    ));
   }
 
   return (
     <div className="image-dropzone">
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
-        {files && !files.length ?
+        {files && !files.length && imagesUrls && !imagesUrls.length ?
           <p>Drag 'n' drop some files here, or click to select files</p>
           :
           <div className='image-dropzone__images-container'>

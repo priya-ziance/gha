@@ -170,6 +170,7 @@ export type PAGE_TYPES =
   id: string;
   name: string;
   client: IClient;
+  profilePicture?: IFileModel;
 }
 
 export interface ICaseNoteModel {
@@ -200,8 +201,13 @@ export interface IClientContactModel {
 }
 
 export interface IFileModel {
+  createdAt?: string;
   id: string;
   file: IFile;
+  publicUrl?: string;
+  url?: string;
+  loadFile: () => Promise<void>
+  updatedAt?: string;
 }
 
 export interface IGoalModel {
@@ -324,6 +330,7 @@ export interface IClient {
   definition_of_abuse?: string;
   notes?: string;
   creator?: string;
+  profile_picture?: IFile;
 }
 
 export interface IFile {

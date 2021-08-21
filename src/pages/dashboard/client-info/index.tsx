@@ -22,6 +22,10 @@ const ClientInfo = () => {
       
       try {
         const fetchedClient = await api.clients.getClient(clientId);
+        
+        if (fetchedClient.profilePicture) {
+          await fetchedClient.profilePicture.loadFile();
+        }
 
         setClient(fetchedClient);
       } catch(e) {}

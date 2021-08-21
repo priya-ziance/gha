@@ -174,13 +174,21 @@ class FileApi {
   normalizer;
 
   constructor() {
-    this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
+    this.normalizer = new Normalizer<IFileModel, IFile>(Models.File)
   }
 
-  async getLocations() {
-    const locationsResult = await client.get('/locations');
+  async uploadFile(clientId: string, type: string, file: File) {
+    const formData = new FormData();
+    formData.append('image', file);
+    const fileResult = await client.post(`/files/upload/${clientId}?type=${type}`, formData);
   
-    return this.normalizer.normalizeArray(locationsResult.data.contents);
+    return this.normalizer.normalize(fileResult.data);
+  }
+
+  async getFile(fileId: string) {
+    const fileResult = await client.get(`/files/presignedurl/${fileId}`);
+  
+    return this.normalizer.normalize(fileResult.data);
   }
 }
 
@@ -190,7 +198,7 @@ class LocationApi {
   normalizer;
 
   constructor() {
-    this.normalizer = new Normalizer<IFileModel, IFile>(Models.File)
+    this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
   }
 
   async getLocations() {
@@ -207,6 +215,7 @@ export default (() => ({
   clients: new ClientsApi(),
   clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi(),
+  files: new FileApi(),
   goals: new GoalsApi(),
   locations: new LocationApi()
 }))()

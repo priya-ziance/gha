@@ -59,6 +59,8 @@ const Content = () => {
     );
   }
 
+  console.log('CLIENTS:', clients)
+
   return (
     <LoadingView loading={loading}>
       <div className='clients'>

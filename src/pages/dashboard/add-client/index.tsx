@@ -56,7 +56,7 @@ interface AddClientProps {
 
 const AddClient = (props: AddClientProps) => {
   const [loading, setLoading] = useState(false);
-  const [files, setFiles] = useState([]);
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const [currentDialog, setCurrentDialog] = useState('');
   const { addToast } = useContext(ToastsContext);
   let initialValues;
@@ -81,6 +81,13 @@ const AddClient = (props: AddClientProps) => {
 
   const onLevelOfService = () => setCurrentDialog(DIALOG_NAMES.levelsOfService);
   const onClientCustomForm = () => setCurrentDialog(DIALOG_NAMES.clientCustomForm);
+
+
+  const uploadProfilePicture = async () => {
+    if (profilePictureFile) {
+      return api.files.uploadFile(get(props, 'client.id'), 'image', profilePictureFile);
+    }
+  }
 
   const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
     return (
@@ -119,6 +126,10 @@ const AddClient = (props: AddClientProps) => {
     </>
   );
 
+  const setProfilePicture = (files: File[]) => {
+    setProfilePictureFile(files[0]);
+  }
+
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
@@ -147,6 +158,11 @@ const AddClient = (props: AddClientProps) => {
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
 
+              if (profilePictureFile) {
+                let file = await uploadProfilePicture();
+                values.profile_picture = file?.id;
+              }
+
               try {
                 if (props.update) {
                   await api.clients.updateClient(get(props, 'client.id', ''), values);
@@ -162,7 +178,6 @@ const AddClient = (props: AddClientProps) => {
                   }
                 );
               } catch(e) {
-                console.log(e)
                 addToast(
                   {
                     message: getErrorToast(e.message),
@@ -243,13 +258,19 @@ const AddClient = (props: AddClientProps) => {
               const levelOfServiceOpen = currentDialog === DIALOG_NAMES.levelsOfService;
               const clientCustomFormOpen = currentDialog === DIALOG_NAMES.clientCustomForm;
 
+              const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
+
               return (
                 <form onSubmit={handleSubmit}>
                   <FormGroup
                     intent={Intent.PRIMARY}
                     label={'User Image'}
                   >
-                    <ImageDropzone />
+                    <ImageDropzone
+                      files={profilePictureFile ? [profilePictureFile]: []}
+                      setFiles={setProfilePicture}
+                      imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
+                    />
                   </FormGroup>
                   <Row>
                     {/* ---------------------------COL 1------------------------------- */}
