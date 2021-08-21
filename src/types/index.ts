@@ -199,6 +199,11 @@ export interface IClientContactModel {
   clientContact: IClientContact;
 }
 
+export interface IFileModel {
+  id: string;
+  file: IFile;
+}
+
 export interface IGoalModel {
   id: string;
   client?: string;

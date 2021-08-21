@@ -10,6 +10,8 @@ import {
   IClientModel,
   IClientContact,
   IClientContactModel,
+  IFile,
+  IFileModel,
   IGoal,
   IGoalModel,
   ILocation,
@@ -129,7 +131,7 @@ class ClientContactApi {
   }
 }
 
-//============================= GOAL API'S=============================
+//============================= GOAL API'S==================================
 class GoalsApi {
   normalizer;
 
@@ -167,12 +169,28 @@ class GoalsApi {
   }
 }
 
+//============================= FILE API'S===================================
+class FileApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
+  }
+
+  async getLocations() {
+    const locationsResult = await client.get('/locations');
+  
+    return this.normalizer.normalizeArray(locationsResult.data.contents);
+  }
+}
+
+
 //============================= LOCATION API'S===========================
 class LocationApi {
   normalizer;
 
   constructor() {
-    this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
+    this.normalizer = new Normalizer<IFileModel, IFile>(Models.File)
   }
 
   async getLocations() {
