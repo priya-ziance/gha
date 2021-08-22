@@ -27,6 +27,10 @@ const ClientInfo = () => {
           await fetchedClient.profilePicture.loadFile();
         }
 
+        if (fetchedClient.signature) {
+          await fetchedClient.signature.loadFile();
+        }
+
         setClient(fetchedClient);
       } catch(e) {}
 

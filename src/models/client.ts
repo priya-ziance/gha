@@ -6,6 +6,7 @@ export default class Client {
   name: string;
   client: IClient;
   profilePicture?: IFileModel;
+  signature?: IFileModel;
 
   constructor(client: IClient) {
     this.id = client._id;
@@ -14,6 +15,11 @@ export default class Client {
     if (client.profile_picture) {
       this.profilePicture = new models.File(client.profile_picture);
     }
+
+    if (client.signature) {
+      this.signature = new models.File(client.signature);
+    }
+
 
     this.client = client;
   }

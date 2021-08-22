@@ -1,4 +1,5 @@
-import { Elevation } from '@blueprintjs/core';
+import { useEffect, useState } from 'react';
+import { Elevation, Spinner } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
 import Card, { CardProps } from '../Card';
@@ -8,13 +9,15 @@ import H4 from '../H4';
 import Ellipsis from '../Ellipsis';
 
 import './index.scss';
+import { IFileModel } from '../../types';
 
 export interface ModuleCardProps {
   title: string;
   body?: string;
   grow?: boolean;
   link?: string;
-  image: string;
+  image?: string;
+  imageFile?: IFileModel
 }
 
 const LinkWrapper = (props: any) => {
@@ -30,7 +33,24 @@ const LinkWrapper = (props: any) => {
 }
 
 const ModuleCard = (_props: CardProps & ModuleCardProps) => {
-  const { body, className, grow, image, link, title, ...props } = _props;
+  const { body, className, grow, image, link, title, imageFile, ...props } = _props;
+  const [imageLoading, setImageLoading] = useState(false);
+  const [cardImage, setCardImage] = useState(image);
+
+  useEffect(() => {
+    (async () => {
+      if (imageFile) {
+        setImageLoading(true)
+
+        try {
+          await imageFile.loadFile();
+          setCardImage(imageFile.publicUrl);
+        } catch(e) {}
+
+        setImageLoading(false)
+      }
+    })()
+  }, [imageFile])
 
   let localClassName = 'gha__modulecard';
 
@@ -46,16 +66,21 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
     }
   }
 
+  console.log('MOODULE', cardImage)
   return (
     <Card {...props} className={localClassName} elevation={Elevation.ONE}>
       <LinkWrapper link={link || ''}>
         <Row>
           <Col xs={4}>
-            <img
-              alt='module'
-              src={image}
-              className='gha__modulecard__img'
-            />
+            {imageLoading ?
+              <Spinner />
+              :
+              <img
+                alt='module'
+                src={cardImage}
+                className='gha__modulecard__img'
+              />
+            }
           </Col>
           <Col className='gha__modulecard__info-col'>
             <H4>{title}</H4>

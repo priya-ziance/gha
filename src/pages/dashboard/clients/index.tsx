@@ -59,8 +59,6 @@ const Content = () => {
     );
   }
 
-  console.log('CLIENTS:', clients)
-
   return (
     <LoadingView loading={loading}>
       <div className='clients'>
@@ -78,6 +76,7 @@ const Content = () => {
                   title={client.name}
                   interactive
                   link={`/dashboard/clients/${client.id}/links`}
+                  imageFile={client.profilePicture}
                   image={ClientsImage}
                 />
               );

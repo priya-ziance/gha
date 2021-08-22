@@ -177,7 +177,7 @@ class FileApi {
     this.normalizer = new Normalizer<IFileModel, IFile>(Models.File)
   }
 
-  async uploadFile(clientId: string, type: string, file: File) {
+  async uploadFile(clientId: string, type: string, file: Blob) {
     const formData = new FormData();
     formData.append('image', file);
     const fileResult = await client.post(`/files/upload/${clientId}?type=${type}`, formData);

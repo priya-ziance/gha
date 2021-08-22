@@ -10,12 +10,14 @@ import ToastsContext from '../../../contexts/toasts';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
+import Signature from './signature';
 
 import IClientModel from '../../../models/client';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls'; 
+import { dataURItoBlob } from '../../../utils/helpers';
 
 import {
   Button,
@@ -56,8 +58,10 @@ interface AddClientProps {
 
 const AddClient = (props: AddClientProps) => {
   const [loading, setLoading] = useState(false);
+  const [signatureOpen, setSignatureOpen] = useState(false);
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const [currentDialog, setCurrentDialog] = useState('');
+  const [signatureDataURL, setSignatureDataURL] = useState('');
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
@@ -86,6 +90,12 @@ const AddClient = (props: AddClientProps) => {
   const uploadProfilePicture = async () => {
     if (profilePictureFile) {
       return api.files.uploadFile(get(props, 'client.id'), 'image', profilePictureFile);
+    }
+  }
+
+  const uploadSignature = async () => {
+    if (signatureDataURL) {
+      return api.files.uploadFile(get(props, 'client.id'), 'image', dataURItoBlob(signatureDataURL));
     }
   }
 
@@ -161,6 +171,12 @@ const AddClient = (props: AddClientProps) => {
               if (profilePictureFile) {
                 let file = await uploadProfilePicture();
                 values.profile_picture = file?.id;
+              }
+
+              console.log('DATA URL:', signatureDataURL)
+              if (signatureDataURL) { 
+                let signatureFile = await uploadSignature();
+                values.signature = signatureFile?.id;
               }
 
               try {
@@ -255,6 +271,9 @@ const AddClient = (props: AddClientProps) => {
                 </FormGroup>
               )
 
+              const onAddSignature = () => setSignatureOpen(true);
+              const onCloseSignature = () => setSignatureOpen(false);
+
               const levelOfServiceOpen = currentDialog === DIALOG_NAMES.levelsOfService;
               const clientCustomFormOpen = currentDialog === DIALOG_NAMES.clientCustomForm;
 
@@ -325,9 +344,16 @@ const AddClient = (props: AddClientProps) => {
                         intent={Intent.PRIMARY}
                         label={"Signature"}
                       >
-                        <Button intent={Intent.PRIMARY}>
-                          <b>Add Signature</b>
-                        </Button>
+                        <div style={{ maxWidth: 200 }}>
+                          <img
+                            style={{ width: '100%' }}
+                            alt='client signature'
+                            src={signatureDataURL || props.client?.signature?.publicUrl}
+                          />
+                          <Button intent={Intent.PRIMARY} onClick={onAddSignature}>
+                            <b>Add Signature</b>
+                          </Button>
+                        </div>
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}
@@ -486,6 +512,8 @@ const AddClient = (props: AddClientProps) => {
                   <LevelsOfServiceDialog isOpen={levelOfServiceOpen} handleClose={handleDialogClose} />
 
                   <ClientCustomDialog isOpen={clientCustomFormOpen} handleClose={handleDialogClose} />
+
+                  <Signature isOpen={signatureOpen} onClose={onCloseSignature} onSave={setSignatureDataURL} />
                 </form>
               )
             }}

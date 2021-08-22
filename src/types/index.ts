@@ -171,6 +171,7 @@ export type PAGE_TYPES =
   name: string;
   client: IClient;
   profilePicture?: IFileModel;
+  signature?: IFileModel;
 }
 
 export interface ICaseNoteModel {
@@ -331,6 +332,7 @@ export interface IClient {
   notes?: string;
   creator?: string;
   profile_picture?: IFile;
+  signature?: IFile;
 }
 
 export interface IFile {

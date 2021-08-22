@@ -17,6 +17,7 @@ import NoLocation from './NoLocation';
 import PageHeading from './PageHeading';
 import Pagination from './Pagination';
 import Row from './Row';
+import SignaturePad from './SignaturePad';
 import Switch from './Switch';
 import Table from './Table';
 import TextArea from './TextArea';
@@ -41,6 +42,7 @@ export {
   PageHeading,
   Pagination,
   Row,
+  SignaturePad,
   Switch,
   Table,
   TextArea
