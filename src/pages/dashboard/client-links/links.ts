@@ -22,7 +22,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'APD',
       image: ClientsImage,
-      // path: URLS.getPagePath('apd', { clientId }),
+      path: URLS.getPagePath('apd', { clientId }),
       interactive: false
     },
     {

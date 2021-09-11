@@ -1,6 +1,9 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
 import { Moment } from 'moment';
 
+export type APD_FIELDS_TYPE =
+  'incident_date_time'
+
 export type CASE_NOTE_FIELDS_TYPE =
   'active' |
   'date' |
@@ -86,7 +89,7 @@ export type SP_GOALS_FIELDS_TYPE =
 
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
-export type JOINED_FIELDS_TYPE = CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE;
+export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE | CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE;
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {

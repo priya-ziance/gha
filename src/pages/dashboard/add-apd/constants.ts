@@ -13,12 +13,7 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'Company',
     default: '',
     validation: yup.string(),
-  },
-  contact_type: {
-    name: 'Contact Type',
-    default: '',
-    validation: yup.string().label('Contact Type'),
-  },
+  },  
   email: {
     name: 'Email',
     default: '',
@@ -33,6 +28,11 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'First Name',
     default: '',
     validation: yup.string().label('Fax'),
+  },
+  incident_date_time: {
+    name: 'Incident Date and Time',
+    default: null,
+    validation: yup.string().nullable(),
   },
   last_name: {
     name: 'Last Name',

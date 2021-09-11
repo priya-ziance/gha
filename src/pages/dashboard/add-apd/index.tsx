@@ -1,5 +1,7 @@
 import { useContext, useState } from 'react';
+import moment from 'moment';
 import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
+import { TimePrecision } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import { Formik } from 'formik';
 import get from 'lodash/get';
@@ -10,7 +12,19 @@ import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, FormGroup, InputGroup, PageHeading, Row, TextArea } from '../../../components';
+import {
+  Button,
+  Col,
+  DateInput,
+  FormGroup,
+  ImageDropzone,
+  InputGroup,
+  LoadingView,
+  PageHeading,
+  Row,
+  Switch,
+  TextArea
+} from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 
@@ -69,6 +83,10 @@ const Content = () => {
               isSubmitting,
               setFieldValue
             }) => {
+              const onFormDateChange = (field: string) => (date: Date) => {
+                setFieldValue(field, moment(date).toISOString());
+              }
+
               const getInputFormGroup = (key: JOINED_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
@@ -100,11 +118,29 @@ const Content = () => {
                   />
                 </FormGroup>
               )
+              
+              const getDateInputFormGroup = (key: JOINED_FIELDS_TYPE) => (
+                <FormGroup
+                  intent={helpers.getFormIntent(errors[key])}
+                  label={get(FIELDS, key, { name: '' }).name}
+                  helperText={errors[key]}
+                >
+                  <DateInput
+                    value={values[key] ? moment(values[key]).toDate() : null}
+                    onChange={onFormDateChange(key)}
+                    timePrecision={TimePrecision.MINUTE}
+                    timePickerProps={{
+                      useAmPm: true
+                    }} 
+                    {...helpers.getMomentFormatter('MMMM Do YYYY, h:mm:ss a')}
+                  />
+                </FormGroup>
+              );
 
               return (
                 <form onSubmit={handleSubmit}>
 
-                  {getInputFormGroup('contact_type')}
+                  {getDateInputFormGroup('incident_date_time')}
                   {getInputFormGroup('first_name')}
                   {getInputFormGroup('last_name')}
                   {getTextAreaFormGroup('address')}
