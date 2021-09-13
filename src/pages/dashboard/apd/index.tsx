@@ -36,8 +36,6 @@ const ClientContacts = () => {
   const hasNextPage = clientContacts.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  console.log(clientContacts)
-
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -99,7 +97,6 @@ const ClientContacts = () => {
           renderRight={getAddButton}
         />
         <div className='client-case-notes__container'>
-          <h1>CHANGE TO APD QUERY</h1>
           <Col>
             <Table
               loading={loading}

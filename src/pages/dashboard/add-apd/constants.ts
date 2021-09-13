@@ -3,55 +3,40 @@ import * as yup from 'yup';
 import { FIELDS_TYPE } from '../../../types';
 
 
+export const CRITICAL_INCIDENTS_OPTIONS = [
+  'Yes',
+  'No'
+]
+
+export const REPORTABLE_INCIDENTS_OPTIONS = [
+  'Yes',
+  'No'
+]
+
 export const FIELDS : FIELDS_TYPE = {
-  address: {
-    name: 'Address',
+  county: {
+    name: 'County',
     default: '',
     validation: yup.string(),
-  },
-  company: {
-    name: 'Company',
-    default: '',
-    validation: yup.string(),
-  },  
-  email: {
-    name: 'Email',
-    default: '',
-    validation: yup.string().label('Email').email(),
-  },
-  first_name: {
-    name: 'First Name',
-    default: '',
-    validation: yup.string().label('First Name').required(),
-  },
-  fax: {
-    name: 'First Name',
-    default: '',
-    validation: yup.string().label('Fax'),
   },
   incident_date_time: {
     name: 'Incident Date and Time',
     default: null,
     validation: yup.string().nullable(),
   },
-  last_name: {
-    name: 'Last Name',
-    default: '',
-    validation: yup.string().label('Last Name').required(),
-  },
-  phone: {
-    name: 'Phone #',
-    default: '',
-    validation: yup.string(),
-  },
-  mobile: {
-    name: 'Mobile #',
-    default: '',
-    validation: yup.string(),
-  },
   notes: {
     name: 'Notes',
     default: '',
     validation: yup.string(),
-  }
+  },
+  critical_incident: {
+    name: 'Was it a critical incident',
+    default: CRITICAL_INCIDENTS_OPTIONS[0],
+    validation: yup.string(),
+  },
+  reportable_incident: {
+    name: 'Was it a reportable incident',
+    default: REPORTABLE_INCIDENTS_OPTIONS[0],
+    validation: yup.string(),
+  },
 }

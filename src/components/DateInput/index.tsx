@@ -1,6 +1,10 @@
 import { DateInput, DateInputProps as _DateInputProps } from '@blueprintjs/datetime';
 
-const CustomDateInput = (props: _DateInputProps) => {
+type CustomDateInputProps = {
+  style: any
+}
+
+const CustomDateInput = (props: _DateInputProps | CustomDateInputProps) => {
   return (
     <DateInput {...props} />
   )

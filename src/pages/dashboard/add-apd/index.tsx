@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react';
 import moment from 'moment';
-import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
+import { BreadcrumbProps, Intent, Checkbox, MenuItem } from '@blueprintjs/core';
 import { TimePrecision } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
+import { Select, IItemRendererProps } from "@blueprintjs/select";
 import { Formik } from 'formik';
 import get from 'lodash/get';
 
@@ -17,6 +18,7 @@ import {
   Col,
   DateInput,
   FormGroup,
+  H3,
   ImageDropzone,
   InputGroup,
   LoadingView,
@@ -32,9 +34,24 @@ import Client from '../../../models/client';
 
 import * as helpers from './helpers';
 
-import { FIELDS } from './constants';
+import {
+  CRITICAL_INCIDENTS_OPTIONS,
+  FIELDS,
+  REPORTABLE_INCIDENTS_OPTIONS
+} from './constants';
 
 import './index.scss';
+
+const FormSelect = Select.ofType<string>();
+
+
+const SectionWrapper = (props: any) => (
+  <div>
+    {props.children}
+
+    <br />
+  </div>
+)
 
 
 const Content = () => {
@@ -50,6 +67,17 @@ const Content = () => {
     { href: URLS.getPagePath('apd', { clientId }), icon: 'document', text: URLS.getPagePathName('apd') },
     { text: URLS.getPagePathName('add-apd') }
   ];
+
+  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
+    return (
+        <MenuItem
+            text={item}
+            // active={active}
+            onClick={props.handleClick}
+            shouldDismissPopover={false}
+        />
+    )
+  }
 
 
   return (
@@ -85,6 +113,10 @@ const Content = () => {
             }) => {
               const onFormDateChange = (field: string) => (date: Date) => {
                 setFieldValue(field, moment(date).toISOString());
+              }
+
+              const onFormSelectChange = (field: string) => (value: string) => {
+                setFieldValue(field, value);
               }
 
               const getInputFormGroup = (key: JOINED_FIELDS_TYPE) => (
@@ -126,6 +158,9 @@ const Content = () => {
                   helperText={errors[key]}
                 >
                   <DateInput
+                    style={{
+                      width: '100%'
+                    }}
                     value={values[key] ? moment(values[key]).toDate() : null}
                     onChange={onFormDateChange(key)}
                     timePrecision={TimePrecision.MINUTE}
@@ -139,19 +174,158 @@ const Content = () => {
 
               return (
                 <form onSubmit={handleSubmit}>
+                  <SectionWrapper>
+                    <Row>
+                      <Col>
+                        {getDateInputFormGroup('incident_date_time')}
+                      </Col>
+                      <Col>
+                        {getInputFormGroup('county')}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Hotline Called' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Law Enforcement Involved' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='SDCF Notified (if in DCF custody)' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='ROM/ Designee Notified' />
+                      </Col>
+                    </Row>
+                  </SectionWrapper>
 
-                  {getDateInputFormGroup('incident_date_time')}
-                  {getInputFormGroup('first_name')}
-                  {getInputFormGroup('last_name')}
-                  {getTextAreaFormGroup('address')}
-                  {getInputFormGroup('phone')}
-                  {getInputFormGroup('mobile')}
-                  {getInputFormGroup('fax')}
-                  {getInputFormGroup('email')}
-                  {getInputFormGroup('company')}
-                  {getTextAreaFormGroup('notes')}
 
-                  <Checkbox label='Significant Event' />
+                  <SectionWrapper>
+                    <H3> Critical Incident - Must be reported immediately </H3>
+
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={get(FIELDS, 'critical_incident', { name: '' }).name}
+                      labelFor="text-input"
+                    >
+                      <FormSelect
+                          items={CRITICAL_INCIDENTS_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectChange('sex')}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={values.sex} rightIcon="double-caret-vertical" />
+                      </FormSelect>
+                    </FormGroup>
+
+                    <Row>
+                      <Col>
+                        <Checkbox label='Unexpected Client Death' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Media Involvement' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Sexual Misconduct' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Life Threatening Injury' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Missing Child / Incompetent Adult' />
+                      </Col>
+                    </Row>
+                  </SectionWrapper>
+
+                  <SectionWrapper>
+                    <H3> Reportable Incident - Must be reported by next business day </H3>
+
+                    <FormGroup
+                      intent={Intent.PRIMARY}
+                      label={get(FIELDS, 'reportable_incident', { name: '' }).name}
+                      labelFor="text-input"
+                    >
+                      <FormSelect
+                          items={REPORTABLE_INCIDENTS_OPTIONS}
+                          filterable={false}
+                          itemRenderer={formSelectItemRenderer}
+                          noResults={<MenuItem disabled={true} text="No results." />}
+                          onItemSelect={onFormSelectChange('sex')}
+                      >
+                          {/* children become the popover target; render value here */}
+                          <Button text={values.sex} rightIcon="double-caret-vertical" />
+                      </FormSelect>
+                    </FormGroup>
+
+                    <Row>
+                      <Col>
+                        <Checkbox label='Unexpected Client Death' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Media Involvement' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Sexual Misconduct' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Life Threatening Injury' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Missing Child / Incompetent Adult' />
+                      </Col>
+                    </Row>
+                  </SectionWrapper>
+
+                  <SectionWrapper>
+                    <H3> Incident Location </H3>
+
+                    <Row>
+                      <Col>
+                        <Checkbox label='Licensed Home' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Community Based Service' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='Supported Living' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='DDDP' />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Checkbox label='School' />
+                      </Col>
+                      <Col>
+                        <Checkbox label='Other' />
+                      </Col>
+                    </Row>
+                  </SectionWrapper>
+
+                  <SectionWrapper>
+                    <H3> Provider Information <br />  Complete information with no abbreviations </H3>
+                  </SectionWrapper>
+
+                  <SectionWrapper>
+                    <H3> Description of event </H3>
+
+                    {getTextAreaFormGroup('last_name')}
+                  </SectionWrapper>
 
                   <Checkbox label='Active' />
 

@@ -2,7 +2,10 @@ import { IToasterProps, IToastProps } from '@blueprintjs/core';
 import { Moment } from 'moment';
 
 export type APD_FIELDS_TYPE =
-  'incident_date_time'
+  'critical_incident' |
+  'county' |
+  'incident_date_time' |
+  'reportable_incident'
 
 export type CASE_NOTE_FIELDS_TYPE =
   'active' |
