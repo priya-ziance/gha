@@ -21,10 +21,8 @@ import {
   H3,
   ImageDropzone,
   InputGroup,
-  LoadingView,
   PageHeading,
   Row,
-  Switch,
   TextArea
 } from '../../../components';
 
@@ -81,12 +79,12 @@ const Content = () => {
 
 
   return (
-    <div className='add-case-note'>
+    <div className='add-apd'>
       <PageHeading
         title='Add APD'
         breadCrumbs={BREADCRUMBS}
       />
-      <div className='add-case-note__container'>
+      <div className='add-apd__container'>
         <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
@@ -201,6 +199,7 @@ const Content = () => {
                     </Row>
                   </SectionWrapper>
 
+                  <hr />
 
                   <SectionWrapper>
                     <H3> Critical Incident - Must be reported immediately </H3>
@@ -245,6 +244,8 @@ const Content = () => {
                     </Row>
                   </SectionWrapper>
 
+                  <hr />
+
                   <SectionWrapper>
                     <H3> Reportable Incident - Must be reported by next business day </H3>
 
@@ -288,6 +289,8 @@ const Content = () => {
                     </Row>
                   </SectionWrapper>
 
+                  <hr />
+
                   <SectionWrapper>
                     <H3> Incident Location </H3>
 
@@ -317,9 +320,45 @@ const Content = () => {
                     </Row>
                   </SectionWrapper>
 
+                  <hr />
+                  
                   <SectionWrapper>
                     <H3> Provider Information <br />  Complete information with no abbreviations </H3>
+
+                    <Row>
+                      <Col>
+                        <FormGroup
+                          intent={Intent.PRIMARY}
+                          label={get(FIELDS, 'reportable_incident', { name: '' }).name}
+                          labelFor="text-input"
+                        >
+                          <FormSelect
+                              items={REPORTABLE_INCIDENTS_OPTIONS}
+                              filterable={false}
+                              itemRenderer={formSelectItemRenderer}
+                              noResults={<MenuItem disabled={true} text="No results." />}
+                              onItemSelect={onFormSelectChange('sex')}
+                          >
+                              {/* children become the popover target; render value here */}
+                              <Button text={values.sex} rightIcon="double-caret-vertical" />
+                          </FormSelect>
+                        </FormGroup>
+                      </Col>
+                      <Col>
+                        {getInputFormGroup('county')}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        {getInputFormGroup('county')}
+                      </Col>
+                      <Col>
+                        {getDateInputFormGroup('incident_date_time')}
+                      </Col>
+                    </Row>
                   </SectionWrapper>
+
+                  <hr />
 
                   <SectionWrapper>
                     <H3> Description of event </H3>

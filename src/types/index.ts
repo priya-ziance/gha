@@ -158,6 +158,11 @@ export type PAGE_TYPES =
   'client-links' |
   'client-contacts' |
   'goals' |
+  'life-skills' |
+  'logs' |
+  'personal-support' |
+  'reshab-logs' |
+  'respite-logs' |
   'sp-goals';
 
 

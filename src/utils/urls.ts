@@ -33,6 +33,16 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-info`;
     case 'goals':
       return `${clientBase}/goals`;
+    case 'life-skills':
+      return `${clientBase}/logs/life-skills`;
+    case 'logs':
+      return `${clientBase}/logs`;
+    case 'personal-support':
+      return `${clientBase}/logs/personal-support`;
+    case 'reshab-logs':
+      return `${clientBase}/logs/reshab-logs`;
+    case 'respite-logs':
+      return `${clientBase}/logs/respite-logs`;
     case 'sp-goals':
       return `${clientBase}/goals/sp-goals`;
     default:
@@ -66,6 +76,16 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Contacts`;
     case 'goals':
       return `Client Goals`;
+    case 'life-skills':
+      return 'Life Skills';
+    case 'logs':
+      return 'Logs';
+    case 'personal-support':
+      return 'Personal Support';
+    case 'reshab-logs':
+      return 'Reshab Logs';
+    case 'respite-logs':
+      return 'Respite Logs';
     case 'sp-goals':
       return `Client SP Goals`;
     default:
