@@ -1,7 +1,30 @@
-.clients {
-  .clients__container {
+.reshab-logs {
+  .reshab-logs__container {
     display: flex;
     align-items: center;
+
+    > .col {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .reshab-logs__form {
+      textarea {
+        width: 100%;
+      }
+    }
+
+    .reshab-logs__form__row {
+      margin-top: 60px;
+
+      > .col-md-6 {
+        margin-bottom: 10px;
+      }
+    }
+
+    .reshab-logs__table__cell {
+      height: 100%; 
+    }
   
     .row {
       display: flex;
@@ -14,5 +37,20 @@
     .gha__modulecard {
       margin: 15px;
     }
+  }
+}
+
+.reshab-logs__month-log__dialog {
+  width: 90% !important;
+  
+  .reshab-logs__month-log__dialog__body {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  .gha__table {
+    width: 100%;
+    max-width: 1390px !important;
   }
 }

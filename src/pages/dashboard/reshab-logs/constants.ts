@@ -1,0 +1,1 @@
+export const TEMP_ANSWERS = ['Yes', 'No']

@@ -173,7 +173,10 @@ const AddClient = (props: AddClientProps) => {
                 values.profile_picture = file?.id;
               }
 
-              console.log('DATA URL:', signatureDataURL)
+              /**
+               * signatureDataURL should only be available if a new signature was
+               * added
+               */
               if (signatureDataURL) { 
                 let signatureFile = await uploadSignature();
                 values.signature = signatureFile?.id;

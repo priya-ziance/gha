@@ -24,8 +24,10 @@ interface CustomTableProps {
   cellProps?: CellProps;
   columnProps?: ColumnProps;
   columns: columnType[];
+  disablePagination?: boolean;
   emptyTableMessage?: string;
   loading?: boolean;
+  enableMinHeight?: boolean;
 }
 
 
@@ -33,10 +35,12 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
   const [selectedRowRegions, setSelectedRowRegions] = useState<IRegion[] | undefined>(undefined);
   const [hoveringRowIndex, setHoveringRowIndex] = useState<number | null>(null);
   const { addToast } = useContext(ToastsContext)
-  const { className, columns, data, emptyTableMessage, loading, hasNextPage, hasPrevPage, onNextPage, onPrevPage, page, ...tableProps } = props;
+  const { className, columns, data, disablePagination, emptyTableMessage, enableMinHeight, loading, hasNextPage, hasPrevPage, onNextPage, onPrevPage, page, ...tableProps } = props;
   let customTableClass = 'gha__table__container';
 
   if (className) customTableClass += ` ${className}`;
+
+  if (enableMinHeight) customTableClass += ' gha__table__container--min-height';
 
   const cellRenderer = (rowIndex: number, columnIndex: number) => {
     let hoveringClass = '';
@@ -89,6 +93,7 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
           onCopy={onCopy}
           columnWidths={columnWidths}
           className={customTableClass}
+        
           selectedRegions={selectedRowRegions}
           {...tableProps}
         >
@@ -103,15 +108,18 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
           {emptyTableMessage}
         </h4>
       }
-      <div className='gha__table__pagination-container'>
-        <Pagination
-          hasNextPage={hasNextPage}
-          hasPrevPage={hasPrevPage}
-          onNextPage={onNextPage}
-          onPrevPage={onPrevPage}
-          page={page}
-        />
-      </div>
+
+      {!disablePagination &&
+        <div className='gha__table__pagination-container'>
+          <Pagination
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            onNextPage={onNextPage}
+            onPrevPage={onPrevPage}
+            page={page}
+          />
+        </div>
+      }
     </div>
   )
 };

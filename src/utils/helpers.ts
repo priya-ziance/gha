@@ -1,4 +1,6 @@
-import { TABLE_WIDTH } from "./constants";
+import moment from 'moment';
+
+import { TABLE_WIDTH } from './constants';
 
 export const getTableWith = function(widthDecimal: number) {
   return widthDecimal * TABLE_WIDTH;
@@ -28,3 +30,12 @@ export function dataURItoBlob(dataURI: string) {
   //New Code
   return new Blob([ab], {type: mimeString});
 }
+
+export const getMomentFormatter = (format: string, placeholder = '') => {
+  // note that locale argument comes from locale prop and may be undefined
+  return {
+      formatDate: (date: any) => moment(date).format(format),
+      parseDate: (str: string) => moment(str, format).toDate(),
+      placeholder,
+  }
+};
