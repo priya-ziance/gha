@@ -178,8 +178,10 @@ const AddClient = (props: AddClientProps) => {
                * added
                */
               if (signatureDataURL) { 
-                let signatureFile = await uploadSignature();
-                values.signature = signatureFile?.id;
+                try {
+                  let signatureFile = await uploadSignature();
+                  values.signature = signatureFile?.id;
+                } catch(e) {}
               }
 
               try {
