@@ -15,9 +15,13 @@ import ClientLinksPage from './client-links';
 import ClientCaseNotesPage from './client-case-notes';
 import ClientContactsPage from './client-contacts';
 import ClientInfo from './client-info';
+
 import GoalsPage from './goals';
+import GoalsDataCollectionPage from './goals-data-collection';
+import GoalsDatabasePage from './goals-database';
 import SpGoalsPage from './sp-goals';
 import AddSpGoalsPage from './add-sp-goals';
+
 import APDPage from './apd';
 import AddAPDPage from './add-apd';
 import LogsPage from './logs';
@@ -77,6 +81,8 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/client-contacts/add" exact component={AddClientContactsPage} />
       
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />
+      <Route path="/dashboard/clients/:clientId/goals/database" exact component={GoalsDatabasePage} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals" exact component={SpGoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals/add" exact component={AddSpGoalsPage} />
 
