@@ -15,10 +15,18 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-case-notes/add`;
     case 'add-client-contact':
       return `${clientBase}/client-contacts/add`;
+    case 'add-database-goal':
+      return `${clientBase}/goals/database/goals/add`;
+    case 'add-database-subgoal':
+      return `${clientBase}/goals/database/subgoals/add`;
     case 'add-sp-goals':
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
       return `${clientBase}/apd`;
+    case 'behaviours':
+      return `${clientBase}/behaviours`;
+    case 'behaviours-assign':
+      return `${clientBase}/behaviours/assign`;
     case 'dashboard':
       return '/dashboard';
     case 'clients':
@@ -37,6 +45,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/data-collection`;
     case 'goals-database':
       return `${clientBase}/goals/database`;
+    case 'goals-database-goals':
+      return `${clientBase}/goals/database/goals`;
+    case 'goals-database-subgoals':
+      return `${clientBase}/goals/database/subgoals`;
     case 'life-skills':
       return `${clientBase}/logs/life-skills`;
     case 'logs':
@@ -62,10 +74,18 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Add Client Case Note`;
     case 'add-client-contact':
       return `Add Client Contact`;
+    case 'add-database-goal':
+      return 'Add Database Goal';
+    case 'add-database-subgoal':
+      return 'Add Database Sugboal';
     case 'add-sp-goals':
       return `Add SP Goals`;
     case 'apd':
       return 'APD';
+    case 'behaviours':
+      return 'Behaviours';
+    case 'behaviours-assign':
+      return 'Behaviours Assign';
     case 'dashboard':
       return 'Dashboard';
     case 'clients':
@@ -84,6 +104,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Goals Data Collection'
     case 'goals-database':
       return 'Goals Database'
+    case 'goals-database-goals':
+      return 'Goals Database Goals'
+    case 'goals-database-subgoals':
+      return 'Goals Database Subgoals'
     case 'life-skills':
       return 'Life Skills';
     case 'logs':

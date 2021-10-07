@@ -149,8 +149,12 @@ export type PAGE_TYPES =
   'add-clients' |
   'add-client-case-notes' |
   'add-client-contact' |
+  'add-database-goal' |
+  'add-database-subgoal' |
   'add-sp-goals' |
   'apd' |
+  'behaviours' |
+  'behaviours-assign' |
   'dashboard' |
   'clients' |
   'client-case-notes' |
@@ -160,6 +164,8 @@ export type PAGE_TYPES =
   'goals' |
   'goals-data-collection' |
   'goals-database' |
+  'goals-database-goals' |
+  'goals-database-subgoals' |
   'life-skills' |
   'logs' |
   'personal-support' |

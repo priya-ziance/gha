@@ -16,11 +16,18 @@ import ClientCaseNotesPage from './client-case-notes';
 import ClientContactsPage from './client-contacts';
 import ClientInfo from './client-info';
 
+import BehavioursPage from './behaviours';
+import BehavioursAssignPage from './behaviours-assign';
+
+import AddSpGoalsPage from './add-sp-goals';
+import AddDatabaseGoal from './add-database-goal';
+import AddDatabaseSubgoal from './add-database-subgoal';
 import GoalsPage from './goals';
 import GoalsDataCollectionPage from './goals-data-collection';
 import GoalsDatabasePage from './goals-database';
+import GoalsDatabaseSubgoalsPage from './goals-database-subgoals'
+import GoalsDatabaseGoalsPage from './goals-database-goals';
 import SpGoalsPage from './sp-goals';
-import AddSpGoalsPage from './add-sp-goals';
 
 import APDPage from './apd';
 import AddAPDPage from './add-apd';
@@ -73,6 +80,9 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/apd/add" exact component={AddAPDPage} />
       <Route path="/dashboard/clients/:clientId/links" exact component={ClientLinksPage} />
       
+      <Route path="/dashboard/clients/:clientId/behaviours" exact component={BehavioursPage} />
+      <Route path="/dashboard/clients/:clientId/behaviours/assign" exact component={BehavioursAssignPage} />
+      
       <Route path="/dashboard/clients/:clientId/client-case-notes" exact component={ClientCaseNotesPage} />
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
       
@@ -83,6 +93,10 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />
       <Route path="/dashboard/clients/:clientId/goals/database" exact component={GoalsDatabasePage} />
+      <Route path="/dashboard/clients/:clientId/goals/database/goals" exact component={GoalsDatabaseGoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/database/subgoals" exact component={GoalsDatabaseSubgoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/database/goals/add" exact component={AddDatabaseGoal} />
+      <Route path="/dashboard/clients/:clientId/goals/database/subgoals/add" exact component={AddDatabaseSubgoal} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals" exact component={SpGoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals/add" exact component={AddSpGoalsPage} />
 

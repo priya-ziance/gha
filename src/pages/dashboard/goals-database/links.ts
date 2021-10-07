@@ -8,14 +8,14 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Goals',
       image: ClientsImage,
-      path: URLS.getPagePath('client-info', { clientId }),
+      path: URLS.getPagePath('goals-database-goals', { clientId }),
       interactive: true
     },
     {
       description: '',
       title: 'Sub Goals',
       image: ClientContactImage,
-      path: URLS.getPagePath('client-contacts', { clientId }),
+      path: URLS.getPagePath('goals-database-subgoals', { clientId }),
       interactive: true
     },
     {

@@ -5,46 +5,45 @@ import { IconNames } from '@blueprintjs/icons';
 import { AnchorButton, Col, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
+import LocationContext from '../../../contexts/location';
 
 import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import * as helpers from '../../../utils/helpers';
+import CaseNote from '../../../models/caseNote';
 
-import { IGoalModel } from '../../../types';
+import * as helpers from '../../../utils/helpers';
 
 import {
   actionColumn,
   activeColumn,
-  dateOfBirthColumn,
-  addressColumn,
-  firstNameColumn,
-  lastNameColumn,
+  dateColumn,
+  descriptionColumn,
+  titleColumn,
 } from './helpers';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const ClientContacts = () => {
-  const [goals, setGoals] = useState<IGoalModel[] | []>([]);
+const ClientCaseNotes = () => {
+  const [caseNotes, setCaseNotes] = useState<CaseNote[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
+  const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = goals.length === PAGE_SIZE;
+  const hasNextPage = caseNotes.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
-
-  console.log(goals)
 
   useEffect(() => {
     (async () => {
       setLoading(true);
 
       try {
-        setGoals(
-          await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
+        setCaseNotes(
+          await api.caseNotes.getCaseNotes(clientId, { page, pageSize: PAGE_SIZE })
         )
       } catch(e){}
 
@@ -52,7 +51,7 @@ const ClientContacts = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page]);
+  }, [clientId, page, selectedLocationId]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -71,9 +70,10 @@ const ClientContacts = () => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
-    { text: URLS.getPagePathName('sp-goals') }
-    
+    { href: URLS.getPagePath('goals-database', { clientId }), icon: 'document', text: URLS.getPagePathName('goals-database') },
+    { text: URLS.getPagePathName('goals-database-goals') }
   ];
+
 
   const getAddButton = () => {
     return (
@@ -83,10 +83,10 @@ const ClientContacts = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-sp-goals', { clientId })
+          to: URLS.getPagePath('add-database-subgoal', { clientId })
         }}
       >
-        Add SP Goal
+        Add Subgoal
       </AnchorButton>
     );
   }
@@ -94,35 +94,36 @@ const ClientContacts = () => {
 
   return (
     <div>
-      <div className='client-contacts'>
+      <div className='client-case-notes'>
         <PageHeading
-          title={URLS.getPagePathName('sp-goals')}
+          title='Database Subgoals'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='client-contacts__container'>
+        <div className='client-case-notes__container'>
           <Col>
             <Table
               loading={loading}
-              numRows={goals.length}
+              numRows={caseNotes.length}
               getCellClipboardData={(row, col) => {
-                return goals[row]
+
+                return caseNotes[row]
               }}
               columns={[
                 {
-                  title: 'First Name',
-                  cellRenderer: firstNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  title: 'ID',
+                  cellRenderer: (data) => (<p>{data.id}</p>),
+                  width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Last Name',
-                  cellRenderer: lastNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  title: 'Title',
+                  cellRenderer: titleColumn,
+                  width: helpers.getTableWith(0.2)
                 },
                 {
-                  title: 'DOB',
-                  cellRenderer: dateOfBirthColumn,
-                  width: helpers.getTableWith(0.13)
+                  title: 'Description',
+                  cellRenderer: descriptionColumn,
+                  width: helpers.getTableWith(0.3)
                 },
                 {
                   title: 'Active',
@@ -130,9 +131,9 @@ const ClientContacts = () => {
                   width: helpers.getTableWith(0.07)
                 },
                 {
-                  title: 'Address',
-                  cellRenderer: addressColumn,
-                  width: helpers.getTableWith(0.3)
+                  title: 'Date',
+                  cellRenderer: dateColumn,
+                  width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Actions',
@@ -140,7 +141,7 @@ const ClientContacts = () => {
                   width: helpers.getTableWith(0.2)
                 }
               ]}
-              data={goals}
+              data={caseNotes}
               enableRowHeader={false}
               onSelection={(focusedCell) => {
                 console.log(focusedCell)
@@ -150,7 +151,7 @@ const ClientContacts = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No SP Goals Found"
+              emptyTableMessage="No Case Notes Found"
             />
           </Col>
         </div>
@@ -159,4 +160,4 @@ const ClientContacts = () => {
   );
 }
 
-export default ClientContacts;
+export default ClientCaseNotes;
