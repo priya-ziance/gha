@@ -11,7 +11,7 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import CaseNote from '../../../models/caseNote';
+import Goal from '../../../models/goal';
 
 import * as helpers from '../../../utils/helpers';
 
@@ -20,21 +20,20 @@ import {
   activeColumn,
   dateColumn,
   descriptionColumn,
-  titleColumn,
 } from './helpers';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const ClientCaseNotes = () => {
-  const [caseNotes, setCaseNotes] = useState<CaseNote[] | []>([]);
+const DatabaseGoals = () => {
+  const [goals, setGoals] = useState<Goal[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = caseNotes.length === PAGE_SIZE;
+  const hasNextPage = goals.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -42,8 +41,8 @@ const ClientCaseNotes = () => {
       setLoading(true);
 
       try {
-        setCaseNotes(
-          await api.caseNotes.getCaseNotes(clientId, { page, pageSize: PAGE_SIZE })
+        setGoals(
+          await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
         )
       } catch(e){}
 
@@ -89,24 +88,28 @@ const ClientCaseNotes = () => {
       </AnchorButton>
     );
   }
+
+  const onView = (goalId: string) => {
+
+  }
   
 
   return (
     <div>
-      <div className='client-case-notes'>
+      <div className='goals-database-goals'>
         <PageHeading
           title='Database Goals'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='client-case-notes__container'>
+        <div className='goals-database-goals__container'>
           <Col>
             <Table
               loading={loading}
-              numRows={caseNotes.length}
+              numRows={goals.length}
               getCellClipboardData={(row, col) => {
 
-                return caseNotes[row]
+                return goals[row]
               }}
               columns={[
                 {
@@ -115,14 +118,9 @@ const ClientCaseNotes = () => {
                   width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Title',
-                  cellRenderer: titleColumn,
-                  width: helpers.getTableWith(0.2)
-                },
-                {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.4)
                 },
                 {
                   title: 'Active',
@@ -130,17 +128,26 @@ const ClientCaseNotes = () => {
                   width: helpers.getTableWith(0.07)
                 },
                 {
-                  title: 'Date',
+                  title: 'Created At',
                   cellRenderer: dateColumn,
                   width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-database-goal',
+                          { clientId, goalId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.3)
                 }
               ]}
-              data={caseNotes}
+              data={goals}
               enableRowHeader={false}
               onSelection={(focusedCell) => {
                 console.log(focusedCell)
@@ -150,7 +157,7 @@ const ClientCaseNotes = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Case Notes Found"
+              emptyTableMessage="No Goals Found"
             />
           </Col>
         </div>
@@ -159,4 +166,4 @@ const ClientCaseNotes = () => {
   );
 }
 
-export default ClientCaseNotes;
+export default DatabaseGoals;

@@ -156,14 +156,14 @@ class GoalsApi {
     return this.normalizer.normalize(goalResult.data);
   }
 
-  async createGoal(body = {}) {
-    const goalResult = await client.post('/goal', body);
+  async createGoal(body = {}, params = {}) {
+    const goalResult = await client.post('/goal', body, { params });
   
     return this.normalizer.normalize(goalResult.data);
   }
 
-  async updateGoal(goalId = '', body = {}) {
-    const goalResult = await client.patch(`/goal/${goalId}`, body);
+  async updateGoal(goalId = '', body = {}, params = {}) {
+    const goalResult = await client.patch(`/goal/${goalId}`, body, { params });
   
     return this.normalizer.normalize(goalResult.data);
   }

@@ -1,31 +1,25 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { Button } from '../../../components';
+import { AnchorButton, Button } from '../../../components';
 
-import { ICaseNoteModel } from '../../../types';
+import { IGoalModel } from '../../../types';
 
 
-export const titleColumn = (data: ICaseNoteModel) => {
+export const descriptionColumn = (data: IGoalModel) => {
   return (
-    <p>{data.title}</p>
+    <p className='bp3-table-truncated-cell'>{data.description}</p>
   )
 }
 
-export const descriptionColumn = (data: ICaseNoteModel) => {
-  return (
-    <p className='bp3-table-truncated-cell'>{data.notes}</p>
-  )
-}
-
-export const activeColumn = (data: ICaseNoteModel) => {
+export const activeColumn = (data: IGoalModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateColumn = (data: ICaseNoteModel) => {
-  const date = get(data, 'date');
+export const dateColumn = (data: IGoalModel) => {
+  const date = get(data, 'createdAt');
   
   if (date) {
     return (
@@ -36,12 +30,19 @@ export const dateColumn = (data: ICaseNoteModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: ICaseNoteModel) => {
+export const actionColumn = (data: IGoalModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

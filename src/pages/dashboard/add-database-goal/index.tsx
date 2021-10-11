@@ -1,20 +1,21 @@
-import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { useContext } from 'react';
+import { BreadcrumbProps, Intent} from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
-import moment from 'moment';
+import pick from 'lodash/pick';
 
-import { CASE_NOTE_FIELDS_TYPE } from '../../../types';
+import { GOAL_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, Col, DateInput, FormGroup, InputGroup, PageHeading, Switch, TextArea } from '../../../components';
+import { Button, FormGroup, PageHeading, Switch, TextArea } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
+
+import { IGoalModel } from '../../../types';
 
 import * as helpers from './helpers';
 
@@ -23,9 +24,18 @@ import { FIELDS } from './constants';
 import './index.scss';
 
 
-const Content = () => {
+interface AddGoalProps {
+  goal?: IGoalModel | undefined;
+  update?: boolean;
+}
+
+
+const Content = (props: AddGoalProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
+  const { goal, update } = props;
+  let initialValues;
+
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
@@ -34,30 +44,57 @@ const Content = () => {
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
     { href: URLS.getPagePath('goals-database', { clientId }), icon: 'document', text: URLS.getPagePathName('goals-database') },
     { href: URLS.getPagePath('goals-database-goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals-database-goals') },
-    { text: URLS.getPagePathName('add-database-goal') }
   ];
+
+  if (update) {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('edit-database-goal') })
+  } else {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('add-database-goal') })
+  }
+
+  /**
+   * This assigns the goal's info as the initial values if a goal
+   * is passed in
+   */
+   if (props.goal) {
+    initialValues = Object.assign(
+      {},
+      helpers.initialValues,
+      pick(props.goal.goal, Object.keys(helpers.initialValues))
+    );
+  } else {
+    initialValues = helpers.initialValues;
+  }
+
   return (
-    <div className='add-case-note'>
+    <div className='database-goal'>
       <PageHeading
         title='Add Database Goal'
         breadCrumbs={BREADCRUMBS}
       />
-      <div className='add-case-note__container'>
+      <div className='database-goal__container'>
         <Formik
-            initialValues={helpers.initialValues}
+            initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
               setSubmitting(true);
 
-              values.client = clientId;
-
               try {
-                await api.caseNotes.createCaseNote(values);
+                if (update) {
+                  await api.goals.updateGoal(goal?.id, values, { clientId });
 
-                addToast({
-                  message: 'Case Note Created',
-                  intent: 'primary'
-                })
+                  addToast({
+                    message: 'Goal Updated',
+                    intent: 'primary'
+                  })
+                } else {
+                  await api.goals.createGoal(values, { clientId });
+
+                  addToast({
+                    message: 'Goal Created',
+                    intent: 'primary'
+                  })
+                }
 
                 // Reset the form
                 resetForm();
@@ -82,27 +119,7 @@ const Content = () => {
               isSubmitting,
               setFieldValue
             }) => {
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
-              }
-
-              const getInputFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getTextAreaFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
+              const getTextAreaFormGroup = (key: GOAL_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -118,37 +135,10 @@ const Content = () => {
                 </FormGroup>
               )
 
-              const getDateInputFormGroup = (key: CASE_NOTE_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    maxDate={new Date()}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
               return (
                 <form onSubmit={handleSubmit}>
 
-                  {getInputFormGroup('title')}
-                  {getDateInputFormGroup('date')}
-                  {getTextAreaFormGroup('significant_event_notes')}
-                  {getTextAreaFormGroup('notes')}
-                  
-
-                  <Switch
-                    label='Significant Event'
-                    checked={values.significant_event}
-                    onChange={e => {
-                      setFieldValue('significant_event', get(e, 'target.checked'))
-                    }}
-                  />
+                  {getTextAreaFormGroup('description')}
 
                   <Switch
                     label='Active'
@@ -158,10 +148,10 @@ const Content = () => {
                     }}
                   />
 
-                  <div className='add-client-case-note__submit-container'>
+                  <div className='database-goal__submit-container'>
                     <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
                       <b>
-                        Submit
+                        { update ? 'Update' : 'Submit' }
                       </b>
                     </Button>
                   </div>

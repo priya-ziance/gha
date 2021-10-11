@@ -2,7 +2,8 @@ import { PAGE_TYPES } from '../types';
 
 
 type OPTIONS_TYPE = {
-  clientId?: string
+  clientId?: string,
+  goalId?: string
 }
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -39,6 +40,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-contacts`;
     case 'client-info':
       return `${clientBase}/client-info`;
+    case 'edit-database-goal':
+      return `${clientBase}/goals/database/goals/${options.goalId}/edit`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'goals-data-collection':
@@ -98,6 +101,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Links`;
     case 'client-contacts':
       return `Client Contacts`;
+    case 'edit-database-goal':
+      return 'Edit Goal';
     case 'goals':
       return `Client Goals`;
     case 'goals-data-collection':

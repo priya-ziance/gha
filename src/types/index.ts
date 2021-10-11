@@ -80,6 +80,10 @@ export type CLIENT_FIELDS_TYPE =
   'definition_of_abuse' |
   'notes';
 
+export type GOAL_FIELDS_TYPE =
+  'active' |
+  'description'
+
 export type SP_GOALS_FIELDS_TYPE =
   'active' |
   'description' |
@@ -92,7 +96,7 @@ export type SP_GOALS_FIELDS_TYPE =
 
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
-export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE | CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE;
+export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE | CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE | GOAL_FIELDS_TYPE;
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
@@ -104,6 +108,14 @@ export type FIELDS_TYPE = {
 
 export type CASE_NOTE_FIELDS_FORM_TYPE = {
   [key in CASE_NOTE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type GOAL_FIELDS_FORM_TYPE = {
+  [key in GOAL_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -161,6 +173,7 @@ export type PAGE_TYPES =
   'client-info' |
   'client-links' |
   'client-contacts' |
+  'edit-database-goal' |
   'goals' |
   'goals-data-collection' |
   'goals-database' |
@@ -232,10 +245,19 @@ export interface IFileModel {
 
 export interface IGoalModel {
   id: string;
+  active: boolean;
+  createdAt: Moment;
+  description: string;
+  goal: IGoal;
+}
+
+export interface ISpGoalModel {
+  id: string;
   client?: string;
   endDate?: Moment;
   startDate?: Moment;
-  goal: IGoal;
+  spGoal: ISpGoal;
+  goal: IGoalModel;
 }
 
 export interface ILocationModel {
@@ -367,8 +389,16 @@ export interface IFile {
 
 export interface IGoal {
   _id: string;
+  created_at: Moment;
+  description: string; 
+  active: false;
+}
+
+export interface ISpGoal {
+  _id: string;
   description?: string;
   end_date?: string;
+  goal: string;
   start_date?: string;
   notes?: string;
   active?: false;
