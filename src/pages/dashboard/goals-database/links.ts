@@ -22,7 +22,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Tasks List',
       image: ClientsImage,
-      path: URLS.getPagePath('apd', { clientId }),
+      path: URLS.getPagePath('goals-database-tasks', { clientId }),
       interactive: true
     }
   ]

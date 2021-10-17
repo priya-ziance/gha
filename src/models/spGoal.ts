@@ -1,6 +1,5 @@
 import moment, { Moment } from 'moment';
 import { ISpGoal } from '../types'
-import Goal from './goal';
 
 export default class SpGoal {
   address?: string;

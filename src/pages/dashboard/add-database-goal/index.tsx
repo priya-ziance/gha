@@ -69,7 +69,9 @@ const Content = (props: AddGoalProps) => {
   return (
     <div className='database-goal'>
       <PageHeading
-        title='Add Database Goal'
+        title={
+          update ? 'Update Database Goal' : 'Add Database Goal'
+        }
         breadCrumbs={BREADCRUMBS}
       />
       <div className='database-goal__container'>

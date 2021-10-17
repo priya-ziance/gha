@@ -89,11 +89,6 @@ const DatabaseGoals = () => {
     );
   }
 
-  const onView = (goalId: string) => {
-
-  }
-  
-
   return (
     <div>
       <div className='goals-database-goals'>

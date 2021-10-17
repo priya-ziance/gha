@@ -15,7 +15,11 @@ import {
   IGoal,
   IGoalModel,
   ILocation,
-  ILocationModel
+  ILocationModel,
+  ISubGoalModel,
+  ISubGoal,
+  ITaskModel,
+  ITask
 } from '../types';
 
 
@@ -208,6 +212,85 @@ class LocationApi {
   }
 }
 
+//============================= SUBGOAL API'S==================================
+class SubGoalsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ISubGoalModel, ISubGoal>(Models.SubGoal)
+  }
+
+  async getSubGoals(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const goalsResult = await client.get(`/subgoals`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(goalsResult.data.contents);
+  }
+
+  async getSubGoal(goalId: string) {
+    const goalResult = await client.get(`/subgoal/${goalId}`);
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async createSubGoal(body = {}, params = {}) {
+    const goalResult = await client.post('/subgoal', body, { params });
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async updateSubGoal(goalId = '', body = {}, params = {}) {
+    const goalResult = await client.patch(`/subgoal/${goalId}`, body, { params });
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+}
+
+
+//============================= TASK API'S==================================
+class TasksApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ITaskModel, ITask>(Models.Task)
+  }
+
+  async getTasks(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const tasksResult = await client.get(`/tasks`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(tasksResult.data.contents);
+  }
+
+  async getTask(taskId: string) {
+    const taskResult = await client.get(`/task/${taskId}`);
+  
+    return this.normalizer.normalize(taskResult.data);
+  }
+
+  async createTask(body = {}, params = {}) {
+    const taskResult = await client.post('/task', body, { params });
+  
+    return this.normalizer.normalize(taskResult.data);
+  }
+
+  async updateTask(taskId = '', body = {}, params = {}) {
+    const taskResult = await client.patch(`/task/${taskId}`, body, { params });
+  
+    return this.normalizer.normalize(taskResult.data);
+  }
+}
+
+
+
 
 //========================================================================
 
@@ -217,5 +300,7 @@ export default (() => ({
   caseNotes: new CaseNotesApi(),
   files: new FileApi(),
   goals: new GoalsApi(),
+  subgoals: new SubGoalsApi(),
+  tasks: new TasksApi(),
   locations: new LocationApi()
 }))()

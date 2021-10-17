@@ -84,6 +84,11 @@ export type GOAL_FIELDS_TYPE =
   'active' |
   'description'
 
+export type SUBGOAL_FIELDS_TYPE =
+  'active' |
+  'description' |
+  'goal'
+
 export type SP_GOALS_FIELDS_TYPE =
   'active' |
   'description' |
@@ -96,7 +101,13 @@ export type SP_GOALS_FIELDS_TYPE =
 
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
-export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE | CLIENT_CONTACT_FIELDS_TYPE | CLIENT_FIELDS_TYPE | CASE_NOTE_FIELDS_TYPE | SP_GOALS_FIELDS_TYPE | GOAL_FIELDS_TYPE;
+export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE |
+  CLIENT_CONTACT_FIELDS_TYPE |
+  CLIENT_FIELDS_TYPE |
+  CASE_NOTE_FIELDS_TYPE |
+  SP_GOALS_FIELDS_TYPE |
+  GOAL_FIELDS_TYPE |
+  SUBGOAL_FIELDS_TYPE;
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
@@ -108,6 +119,14 @@ export type FIELDS_TYPE = {
 
 export type CASE_NOTE_FIELDS_FORM_TYPE = {
   [key in CASE_NOTE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type SUBGOAL_FIELDS_FORM_TYPE = {
+  [key in SUBGOAL_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -174,11 +193,14 @@ export type PAGE_TYPES =
   'client-links' |
   'client-contacts' |
   'edit-database-goal' |
+  'edit-database-subgoal' |
+  'edit-database-task' |
   'goals' |
   'goals-data-collection' |
   'goals-database' |
   'goals-database-goals' |
   'goals-database-subgoals' |
+  'goals-database-tasks' |
   'life-skills' |
   'logs' |
   'personal-support' |
@@ -251,6 +273,15 @@ export interface IGoalModel {
   goal: IGoal;
 }
 
+export interface ISubGoalModel {
+  id: string;
+  active: boolean;
+  createdAt: Moment;
+  description: string;
+  goal: IGoalModel;
+  subGoal: ISubGoal
+}
+
 export interface ISpGoalModel {
   id: string;
   client?: string;
@@ -268,6 +299,25 @@ export interface ILocationModel {
   coordinates?: [number, number]
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface IInstructionModel {
+  id: string,
+  description: string,
+  active: boolean,
+  task?: ITaskModel,
+  createdAt: Moment
+}
+
+export interface ITaskModel {
+  instructions: IInstructionModel[],
+  id: string,
+  description: string,
+  active: boolean,
+  goal: IGoalModel,
+  subGoal?: ISubGoalModel,
+  task: ITask,
+  createdAt: Moment
 }
 
 
@@ -394,6 +444,14 @@ export interface IGoal {
   active: false;
 }
 
+export interface ISubGoal {
+  _id: string;
+  created_at: Moment;
+  description: string;
+  goal: IGoal;
+  active: false;
+}
+
 export interface ISpGoal {
   _id: string;
   description?: string;
@@ -416,6 +474,24 @@ export interface ILocation {
   updated_at?: string;
 }
 
+export interface ITask {
+  instructions: IInstruction[],
+  _id: string,
+  description: string,
+  active: boolean,
+  goal: IGoal,
+  sub_goal: ISubGoal,
+  created_at: string
+}
+
+export interface IInstruction {
+  _id: string;
+  active: boolean;
+  description: string;
+  task?: ITask;
+  created_at: string;
+  updated_at?: string;
+}
 
 /**
  * Permissions
@@ -425,4 +501,3 @@ export type PermissionsModuleType =
   'case_notes' |
   'client_contacts' |
   'info';
-  

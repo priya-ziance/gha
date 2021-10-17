@@ -23,11 +23,13 @@ import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
 import AddDatabaseSubgoal from './add-database-subgoal';
 import EditDatabaseGoal from './edit-database-goal';
+import EditDatabaseSubGoal from './edit-database-subgoal';
 import GoalsPage from './goals';
 import GoalsDataCollectionPage from './goals-data-collection';
 import GoalsDatabasePage from './goals-database';
 import GoalsDatabaseSubgoalsPage from './goals-database-subgoals'
 import GoalsDatabaseGoalsPage from './goals-database-goals';
+import GoalsDatabaseTasksPage from './goals-database-tasks';
 import SpGoalsPage from './sp-goals';
 
 import APDPage from './apd';
@@ -96,6 +98,8 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/goals/database" exact component={GoalsDatabasePage} />
       <Route path="/dashboard/clients/:clientId/goals/database/goals" exact component={GoalsDatabaseGoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/database/subgoals" exact component={GoalsDatabaseSubgoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/database/tasks" exact component={GoalsDatabaseTasksPage} />
+      <Route path="/dashboard/clients/:clientId/goals/database/subgoals/:subGoalId/edit" exact component={EditDatabaseSubGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/goals/:goalId/edit" exact component={EditDatabaseGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/goals/add" exact component={AddDatabaseGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/subgoals/add" exact component={AddDatabaseSubgoal} />
