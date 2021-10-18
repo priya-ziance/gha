@@ -1,8 +1,9 @@
+import IBaseModel from './_baseModel';
 import { IFile } from '../types'
 
 import api from '../api';
 
-export default class File {
+export default class File implements IBaseModel {
   createdAt?: string;
   id: string;
   file: IFile;

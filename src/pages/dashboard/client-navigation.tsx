@@ -22,6 +22,7 @@ import BehavioursAssignPage from './behaviours-assign';
 import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
 import AddDatabaseSubgoal from './add-database-subgoal';
+import AddDatabaseTask from './add-database-task';
 import EditDatabaseGoal from './edit-database-goal';
 import EditDatabaseSubGoal from './edit-database-subgoal';
 import GoalsPage from './goals';
@@ -103,6 +104,7 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/goals/database/goals/:goalId/edit" exact component={EditDatabaseGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/goals/add" exact component={AddDatabaseGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/subgoals/add" exact component={AddDatabaseSubgoal} />
+      <Route path="/dashboard/clients/:clientId/goals/database/tasks/add" exact component={AddDatabaseTask} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals" exact component={SpGoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals/add" exact component={AddSpGoalsPage} />
 

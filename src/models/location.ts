@@ -1,6 +1,7 @@
+import IBaseModel from './_baseModel';
 import { ILocation } from '../types'
 
-export default class Client {
+export default class Client implements IBaseModel {
   createdAt?: string;
   id: string;
   address: string;

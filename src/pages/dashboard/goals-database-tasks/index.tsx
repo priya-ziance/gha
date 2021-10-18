@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
 
-import { AnchorButton, Col, PageHeading, Table } from '../../../components';
+import { AnchorButton, Col, FormItemSelect, PageHeading, Row, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';
@@ -11,6 +13,8 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
+import Task from '../../../models/task';
+import Goal from '../../../models/goal';
 import SubGoal from '../../../models/subGoal';
 
 import * as helpers from '../../../utils/helpers';
@@ -26,23 +30,59 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const DatabaseSubGoals = () => {
+const DatabaseTasks = () => {
+  const [tasks, setTasks] = useState<Task[] | []>([]);
+  const [goals, setGoals] = useState<Goal[] | []>([]);
   const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
+  const [selectedGoal, setSelectedGoal] = useState<string>('')
+  const [selectedSubGoal, setSelectedSubGoal] = useState<string>('')
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
+  
+  const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
+  const subGoalsObject: any = useMemo(() => groupBy(subGoals, g => g.id), [subGoals]);
 
-  const hasNextPage = subGoals.length === PAGE_SIZE;
+  const hasNextPage = tasks.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setGoals(await api.goals.getGoals(clientId))
+      } catch(e) {
+        // TODO: Show error message
+      }
+    })()
+  }, [clientId]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setSubGoals(await api.subgoals.getSubGoals(clientId))
+      } catch(e) {
+        // TODO: Show error message
+      }
+    })()
+  }, [clientId]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
 
       try {
-        setSubGoals(
-          await api.subgoals.getSubGoals(clientId, { page, pageSize: PAGE_SIZE })
+        setTasks(
+          await api.tasks.getTasks(
+            clientId,
+            {
+              page,
+              pageSize: PAGE_SIZE,
+              params: {
+                goalId: selectedGoal,
+                subGoalId: selectedSubGoal
+              }
+            })
         )
       } catch(e){}
 
@@ -50,7 +90,7 @@ const DatabaseSubGoals = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page, selectedLocationId]);
+  }, [clientId, page, selectedLocationId, selectedGoal, selectedSubGoal]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -70,7 +110,7 @@ const DatabaseSubGoals = () => {
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
     { href: URLS.getPagePath('goals-database', { clientId }), icon: 'document', text: URLS.getPagePathName('goals-database') },
-    { text: URLS.getPagePathName('goals-database-subgoals') }
+    { text: URLS.getPagePathName('goals-database-tasks') }
   ];
 
   const getAddButton = () => {
@@ -81,30 +121,52 @@ const DatabaseSubGoals = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-database-subgoal', { clientId })
+          to: URLS.getPagePath('add-database-task', { clientId })
         }}
       >
-        Add subGoal
+        Add Task
       </AnchorButton>
     );
   }
 
   return (
     <div>
-      <div className='subGoals-database-subGoals'>
+      <div className='goals-database-tasks'>
         <PageHeading
-          title='Database SubsubGoals'
+          title='Database Tasks'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='subGoals-database-subGoals__container'>
+        <div className='goals-database-tasks__container'>
+          <Row className='goals-database-tasks__container__select-row'>
+            <Col>
+              <FormItemSelect
+                buttonText={goalsObject[selectedGoal] ? goalsObject[selectedGoal][0].description : ''}
+                intent={Intent.PRIMARY}
+                items={goals}
+                label={'Goal'}
+                menuRenderer={item => item.description}
+                onFormSelectChange={(item => setSelectedGoal(item.id))}
+              />
+            </Col>
+            <Col>
+              <FormItemSelect
+                buttonText={subGoalsObject[selectedSubGoal] ? subGoalsObject[selectedSubGoal][0].description : ''}
+                intent={Intent.PRIMARY}
+                items={subGoals}
+                label={'SubGoal'}
+                menuRenderer={item => item.description}
+                onFormSelectChange={(item => setSelectedSubGoal(item.id))}
+              />
+            </Col>
+          </Row>
           <Col>
             <Table
               loading={loading}
-              numRows={subGoals.length}
+              numRows={tasks.length}
               getCellClipboardData={(row, col) => {
 
-                return subGoals[row]
+                return tasks[row]
               }}
               columns={[
                 {
@@ -134,25 +196,22 @@ const DatabaseSubGoals = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-database-subgoal',
-                          { clientId, subGoalId: data.id })
+                          'edit-database-task',
+                          { clientId, taskId: data.id })
                       }
                     )
                   },
                   width: helpers.getTableWith(0.3)
                 }
               ]}
-              data={subGoals}
+              data={tasks}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Goals Found"
+              emptyTableMessage="No Tasks Found"
             />
           </Col>
         </div>
@@ -161,4 +220,4 @@ const DatabaseSubGoals = () => {
   );
 }
 
-export default DatabaseSubGoals;
+export default DatabaseTasks;

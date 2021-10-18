@@ -1,7 +1,8 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { ICaseNote } from '../types'
 
-export default class CaseNote {
+export default class CaseNote implements IBaseModel {
   active?: boolean;
   date?: Moment;
   id: string;

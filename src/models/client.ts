@@ -1,7 +1,8 @@
+import IBaseModel from './_baseModel';
 import { IClient, IFileModel } from '../types'
 import models from '../models';
 
-export default class Client {
+export default class Client implements IBaseModel {
   id: string;
   name: string;
   client: IClient;

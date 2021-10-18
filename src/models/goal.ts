@@ -1,7 +1,8 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { IGoal } from '../types'
 
-export default class Goal {
+export default class Goal implements IBaseModel {
   id: string;
   active: boolean;
   createdAt: Moment;

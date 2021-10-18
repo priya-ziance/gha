@@ -4,7 +4,8 @@ import { PAGE_TYPES } from '../types';
 type OPTIONS_TYPE = {
   clientId?: string,
   goalId?: string,
-  subGoalId?: string
+  subGoalId?: string,
+  taskId?: string
 }
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -21,6 +22,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/goals/add`;
     case 'add-database-subgoal':
       return `${clientBase}/goals/database/subgoals/add`;
+    case 'add-database-task':
+      return `${clientBase}/goals/database/tasks/add`;
     case 'add-sp-goals':
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
@@ -86,6 +89,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Database Goal';
     case 'add-database-subgoal':
       return 'Add Database Sugboal';
+    case 'add-database-task':
+      return 'Add Database Tasks';
     case 'add-sp-goals':
       return `Add SP Goals`;
     case 'apd':

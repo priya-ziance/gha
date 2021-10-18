@@ -5,6 +5,7 @@ import Col from './Col';
 import DateInput from './DateInput';
 import Dialog from './Dialog';
 import FormGroup from './FormGroup';
+import FormItemSelect from './FormItemSelect';
 import H1 from './H1';
 import H2 from './H2';
 import H3 from './H3';
@@ -30,6 +31,7 @@ export {
   DateInput,
   Dialog,
   FormGroup,
+  FormItemSelect,
   H1,
   H2,
   H3,

@@ -1,10 +1,11 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { IGoalModel, IInstructionModel, ISubGoalModel, ITask } from '../types';
 import Goal from '../models/goal';
 import SubGoal from '../models/subGoal';
 import Instruction from '../models/instruction';
 
-export default class Task {
+export default class Task implements IBaseModel {
   id: string;
   active: boolean;
   createdAt: Moment;

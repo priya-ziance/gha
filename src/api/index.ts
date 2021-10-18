@@ -28,6 +28,7 @@ import Normalizer from './normalizer';
 type OPTIONS_TYPE = {
   page?: number;
   pageSize?: number;
+  params?: {} 
 }
 
 //============================= CLIENT API'S=============================
@@ -261,10 +262,12 @@ class TasksApi {
 
   async getTasks(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
   
     const tasksResult = await client.get(`/tasks`, {
       clientId,
-      page
+      page,
+      ...params
     });
   
     return this.normalizer.normalizeArray(tasksResult.data.contents);
@@ -277,9 +280,10 @@ class TasksApi {
   }
 
   async createTask(body = {}, params = {}) {
-    const taskResult = await client.post('/task', body, { params });
+    await client.post('/task', body, { params });
+    // const taskResult = await client.post('/task', body, { params });
   
-    return this.normalizer.normalize(taskResult.data);
+    // return this.normalizer.normalize(taskResult.data);
   }
 
   async updateTask(taskId = '', body = {}, params = {}) {

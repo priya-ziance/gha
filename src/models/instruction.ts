@@ -1,8 +1,9 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { IInstruction, IInstructionModel, ITaskModel } from '../types'
 import ITask from '../models/task';
 
-export default class Instruction {
+export default class Instruction implements IBaseModel {
   active: boolean;
   createdAt: Moment;
   description: string;

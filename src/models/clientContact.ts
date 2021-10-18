@@ -1,7 +1,8 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { IClientContact } from '../types'
 
-export default class ClientContact {
+export default class ClientContact implements IBaseModel {
   address?: string;
   id: string;
   dateOfBirth?: Moment;

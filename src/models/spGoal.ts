@@ -1,7 +1,8 @@
+import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
 import { ISpGoal } from '../types'
 
-export default class SpGoal {
+export default class SpGoal implements IBaseModel {
   address?: string;
   id: string;
   endDate?: Moment;

@@ -89,6 +89,12 @@ export type SUBGOAL_FIELDS_TYPE =
   'description' |
   'goal'
 
+export type TASK_FIELDS_TYPE =
+  'active' |
+  'description' |
+  'goal' |
+  'sub_goal'
+
 export type SP_GOALS_FIELDS_TYPE =
   'active' |
   'description' |
@@ -127,6 +133,14 @@ export type CASE_NOTE_FIELDS_FORM_TYPE = {
 
 export type SUBGOAL_FIELDS_FORM_TYPE = {
   [key in SUBGOAL_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type TASK_FIELDS_FORM_TYPE = {
+  [key in TASK_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -182,6 +196,7 @@ export type PAGE_TYPES =
   'add-client-contact' |
   'add-database-goal' |
   'add-database-subgoal' |
+  'add-database-task' |
   'add-sp-goals' |
   'apd' |
   'behaviours' |

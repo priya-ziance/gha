@@ -1,9 +1,14 @@
-.goals-database-goals {
-  .goals-database-goals__container {
+.goals-database-tasks {
+  .goals-database-tasks__container {
     display: flex;
     align-items: center;
+    flex-direction: column;
 
-    .goals-database-goals__table__cell {
+    .goals-database-tasks__container__select-row {
+      width: 100%;
+    }
+
+    .goals-database-tasks__table__cell {
       height: 100%; 
     }
   
