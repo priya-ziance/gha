@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
-import { TASK_FIELDS_FORM_TYPE } from '../../../types';
+import { TASK_FIELDS_FORM_TYPE, INSTRUCTION_FIELDS_FORM_TYPE } from '../../../types';
 
-export const FIELDS : TASK_FIELDS_FORM_TYPE = {
+export const FIELDS : TASK_FIELDS_FORM_TYPE | INSTRUCTION_FIELDS_FORM_TYPE = {
   active: {
     name: 'Active',
     default: false,

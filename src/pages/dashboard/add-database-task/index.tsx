@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 import pick from 'lodash/pick';
 
-import { TASK_FIELDS_TYPE } from '../../../types';
+import { IGoalModel, ISubGoalModel, TASK_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
@@ -16,35 +16,54 @@ import { Button, FormGroup, FormItemSelect, PageHeading, Switch, TextArea } from
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
 
-import { ITaskModel } from '../../../types';
+import { IInstructionModel, ITaskModel } from '../../../types';
 
 import Goal from '../../../models/goal';
 import SubGoal from '../../../models/subGoal';
 
 import * as helpers from './helpers';
-
 import { FIELDS } from './constants';
+
+import InstructionsDialog from './instructionsDialog';
+import AddInstructionsDialog from './addInstructionsDialog';
 
 import './index.scss';
 
 
 interface AddGoalProps {
+  goal?: IGoalModel;
+  subGoal?: ISubGoalModel;
   task?: ITaskModel | undefined;
   update?: boolean;
 }
 
 
 const Content = (props: AddGoalProps) => {
+  const { task, update, goal, subGoal } = props;
+  
   const [goals, setGoals] = useState<Goal[] | []>([]);
   const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
+  const [instructionToEdit, setInstructionToEdit] = useState<IInstructionModel | undefined>(undefined);
+  const [updateInstruction, setUpdateInstruction] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showAddInstructions, setShowAddInstructions] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
 
   const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
   const subGoalsObject: any = useMemo(() => groupBy(subGoals, g => g.id), [subGoals]);
 
-  const { task, update } = props;
   let initialValues;
+
+  useEffect(() => {
+    if (goal) {
+      setGoals([...goals, goal])
+    }
+
+    if (subGoal) {
+      setSubGoals([...subGoals, subGoal])
+    }
+  }, [goal, subGoal])
 
   useEffect(() => {
     (async () => {
@@ -65,6 +84,27 @@ const Content = (props: AddGoalProps) => {
       }
     })()
   }, [clientId]);
+
+
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
+  const onInstructions = () => setShowInstructions(true);
+  const onCloseInstructions = () => setShowInstructions(false);
+  const onAddInstructions = () => setShowAddInstructions(true);
+  const onCloseAddInstructions = () => {
+    setShowAddInstructions(false);
+    setInstructionToEdit(undefined);
+    setUpdateInstruction(false);
+  }
+
+  const onEditInstruction = (instruction: IInstructionModel) => {
+    setShowInstructions(false);
+    setInstructionToEdit(instruction);
+    setShowAddInstructions(true);
+    setUpdateInstruction(true);
+  }
 
 
   const BREADCRUMBS: BreadcrumbProps[] = [
@@ -92,6 +132,14 @@ const Content = (props: AddGoalProps) => {
       helpers.initialValues,
       pick(props.task.task, Object.keys(helpers.initialValues))
     );
+
+    if (goal) {
+      initialValues.goal = goal.id
+    }
+
+    if (subGoal) {
+      initialValues.sub_goal = subGoal.id
+    }
   } else {
     initialValues = helpers.initialValues;
   }
@@ -116,9 +164,11 @@ const Content = (props: AddGoalProps) => {
                   await api.tasks.updateTask(task?.id, values, { clientId });
 
                   addToast({
-                    message: 'SubGoal Updated',
+                    message: 'Task Updated',
                     intent: 'primary'
                   })
+
+                  refreshPage()
                 } else {
                   await api.tasks.createTask(values, { clientId });
 
@@ -150,6 +200,7 @@ const Content = (props: AddGoalProps) => {
               isSubmitting,
               setFieldValue
             }) => {
+
               const onFormSelectChange = (field: string) => (value: any) => {
                 setFieldValue(field, value.id);
               }
@@ -202,6 +253,26 @@ const Content = (props: AddGoalProps) => {
                     }}
                   />
 
+                  {update &&
+                    <div className='database-task__instructions-container'>
+                      <Button
+                        disabled={isSubmitting}
+                        intent={Intent.PRIMARY}
+                        onClick={onInstructions}
+                      >
+                        Instrutions
+                      </Button>
+
+                      <Button
+                        disabled={isSubmitting}
+                        intent={Intent.PRIMARY}
+                        onClick={onAddInstructions}
+                      >
+                        Add Instrutions
+                      </Button>
+                    </div>
+                  }
+
                   <div className='database-task__submit-container'>
                     <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
                       <b>
@@ -213,6 +284,19 @@ const Content = (props: AddGoalProps) => {
               )
             }}
         </Formik>
+
+        {update && task &&
+          <InstructionsDialog isOpen={showInstructions} onClose={onCloseInstructions} onEditInstruction={onEditInstruction} />
+        }
+        {update && task &&
+          <AddInstructionsDialog
+            isOpen={showAddInstructions}
+            onClose={onCloseAddInstructions}
+            taskId={get(task, 'id', '')}
+            instruction={instructionToEdit}
+            update={updateInstruction}
+          />
+        }
       </div>
     </div>
   );

@@ -14,4 +14,4 @@ const CustomDialog = (props: _DialogProps | CustomDialogProps) => {
 
 export default CustomDialog;
 
-export type DialogProps = _DialogProps | CustomDialogProps;
+export type DialogProps = _DialogProps & CustomDialogProps;

@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import groupBy from 'lodash/groupBy';
 
-import { AnchorButton, Col, PageHeading, Table } from '../../../components';
+import { AnchorButton, Col, FormItemSelect, PageHeading, Row, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';
@@ -11,6 +12,7 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
+import Goal from '../../../models/goal';
 import SubGoal from '../../../models/subGoal';
 
 import * as helpers from '../../../utils/helpers';
@@ -27,14 +29,28 @@ import './index.scss';
 const PAGE_SIZE = 10;
 
 const DatabaseSubGoals = () => {
+  const [goals, setGoals] = useState<Goal[] | []>([]);
   const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
+  const [selectedGoal, setSelectedGoal] = useState<string>('')
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
+  
+  const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
 
   const hasNextPage = subGoals.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setGoals(await api.goals.getGoals(clientId))
+      } catch(e) {
+        // TODO: Show error message
+      }
+    })()
+  }, [clientId]);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +58,16 @@ const DatabaseSubGoals = () => {
 
       try {
         setSubGoals(
-          await api.subgoals.getSubGoals(clientId, { page, pageSize: PAGE_SIZE })
+          await api.subgoals.getSubGoals(
+            clientId,
+            {
+              page,
+              pageSize: PAGE_SIZE,
+              params: {
+                goalId: selectedGoal
+              }
+            }
+          )
         )
       } catch(e){}
 
@@ -50,7 +75,7 @@ const DatabaseSubGoals = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page, selectedLocationId]);
+  }, [clientId, page, selectedLocationId, selectedGoal]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -91,14 +116,22 @@ const DatabaseSubGoals = () => {
 
   return (
     <div>
-      <div className='subGoals-database-subGoals'>
+      <div className='goals-database-subGoals'>
         <PageHeading
           title='Database SubsubGoals'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='subGoals-database-subGoals__container'>
+        <div className='goals-database-subGoals__container'>
           <Col>
+            <FormItemSelect
+              buttonText={goalsObject[selectedGoal] ? goalsObject[selectedGoal][0].description : ''}
+              intent={Intent.PRIMARY}
+              items={goals}
+              label={'Goal'}
+              menuRenderer={item => item.description}
+              onFormSelectChange={(item => setSelectedGoal(item.id))}
+            />
             <Table
               loading={loading}
               numRows={subGoals.length}
@@ -152,7 +185,7 @@ const DatabaseSubGoals = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Goals Found"
+              emptyTableMessage="No SubGoals Found"
             />
           </Col>
         </div>

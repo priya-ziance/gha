@@ -1,7 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 
 import { AnchorButton, Col, FormItemSelect, PageHeading, Row, Table } from '../../../components';
@@ -177,7 +176,7 @@ const DatabaseTasks = () => {
                 {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.4)
+                  width: helpers.getTableWith(0.6)
                 },
                 {
                   title: 'Active',
@@ -201,7 +200,7 @@ const DatabaseTasks = () => {
                       }
                     )
                   },
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={tasks}

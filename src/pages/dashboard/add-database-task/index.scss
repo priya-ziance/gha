@@ -1,6 +1,12 @@
 .database-task {
   .database-task__container {
 
+    .database-task__instructions-container {
+      button:nth-child(1) {
+        margin-right: 10px;
+      }
+    }
+
     .database-task__submit-container {
       width: 100%;
       display: flex;
@@ -21,4 +27,14 @@
       justify-content: center;
     }
   }
+}
+
+.database-task__instructions__add-instruction {
+  textarea {
+    width: 100%
+  }
+}
+
+.database-task__instructions__instructions {
+  min-width: 85%;
 }

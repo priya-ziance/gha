@@ -14,6 +14,8 @@ import {
   IFileModel,
   IGoal,
   IGoalModel,
+  IInstruction,
+  IInstructionModel,
   ILocation,
   ILocationModel,
   ISubGoalModel,
@@ -223,10 +225,12 @@ class SubGoalsApi {
 
   async getSubGoals(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
   
     const goalsResult = await client.get(`/subgoals`, {
       clientId,
-      page
+      page,
+      ...params
     });
   
     return this.normalizer.normalizeArray(goalsResult.data.contents);
@@ -273,8 +277,10 @@ class TasksApi {
     return this.normalizer.normalizeArray(tasksResult.data.contents);
   }
 
-  async getTask(taskId: string) {
-    const taskResult = await client.get(`/task/${taskId}`);
+  async getTask(taskId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const taskResult = await client.get(`/task/${taskId}`, params);
   
     return this.normalizer.normalize(taskResult.data);
   }
@@ -287,9 +293,54 @@ class TasksApi {
   }
 
   async updateTask(taskId = '', body = {}, params = {}) {
-    const taskResult = await client.patch(`/task/${taskId}`, body, { params });
+    await client.patch(`/task/${taskId}`, body, { params });
+    // const taskResult = await client.patch(`/task/${taskId}`, body, { params });
   
-    return this.normalizer.normalize(taskResult.data);
+    // return this.normalizer.normalize(taskResult.data);
+  }
+}
+
+//============================= TASK API'S==================================
+class InstructionsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IInstructionModel, IInstruction>(Models.Instruction)
+  }
+
+  async getInstructions(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const instructionsResult = await client.get(`/instructions`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(instructionsResult.data.contents);
+  }
+
+  async getInstruction(instructionId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const instructionResult = await client.get(`/instruction/${instructionId}`, params);
+  
+    return this.normalizer.normalize(instructionResult.data);
+  }
+
+  async createInstruction(body = {}, params = {}) {
+    await client.post('/instruction', body, { params });
+    // const instructionResult = await client.post('/instruction', body, { params });
+  
+    // return this.normalizer.normalize(instructionResult.data);
+  }
+
+  async updateInstruction(instructionId = '', body = {}, params = {}) {
+    await client.patch(`/instruction/${instructionId}`, body, { params });
+    // const instructionResult = await client.patch(`/instruction/${instructionId}`, body, { params });
+  
+    // return this.normalizer.normalize(instructionResult.data);
   }
 }
 
@@ -304,7 +355,8 @@ export default (() => ({
   caseNotes: new CaseNotesApi(),
   files: new FileApi(),
   goals: new GoalsApi(),
+  instructions: new InstructionsApi(),
+  locations: new LocationApi(),
   subgoals: new SubGoalsApi(),
   tasks: new TasksApi(),
-  locations: new LocationApi()
 }))()

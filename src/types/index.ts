@@ -95,6 +95,11 @@ export type TASK_FIELDS_TYPE =
   'goal' |
   'sub_goal'
 
+export type INSTRUCTION_FIELDS_TYPE =
+  'active' |
+  'description' |
+  'task'
+
 export type SP_GOALS_FIELDS_TYPE =
   'active' |
   'description' |
@@ -141,6 +146,14 @@ export type SUBGOAL_FIELDS_FORM_TYPE = {
 
 export type TASK_FIELDS_FORM_TYPE = {
   [key in TASK_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type INSTRUCTION_FIELDS_FORM_TYPE = {
+  [key in INSTRUCTION_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -320,6 +333,7 @@ export interface IInstructionModel {
   id: string,
   description: string,
   active: boolean,
+  instruction: IInstruction,
   task?: ITaskModel,
   createdAt: Moment
 }

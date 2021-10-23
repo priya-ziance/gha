@@ -3,22 +3,22 @@ import get from 'lodash/get';
 
 import { AnchorButton, Button } from '../../../components';
 
-import { IGoalModel } from '../../../types';
+import { ITaskModel } from '../../../types';
 
 
-export const descriptionColumn = (data: IGoalModel) => {
+export const descriptionColumn = (data: ITaskModel) => {
   return (
     <p className='bp3-table-truncated-cell'>{data.description}</p>
   )
 }
 
-export const activeColumn = (data: IGoalModel) => {
+export const activeColumn = (data: ITaskModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateColumn = (data: IGoalModel) => {
+export const dateColumn = (data: ITaskModel) => {
   const date = get(data, 'createdAt');
   
   if (date) {
@@ -30,7 +30,7 @@ export const dateColumn = (data: IGoalModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: IGoalModel, { viewLink }: any) => {
+export const actionColumn = (data: ITaskModel, { viewLink }: any) => {
   return (
     <>
       <AnchorButton

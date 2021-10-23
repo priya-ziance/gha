@@ -48,6 +48,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/goals/${options.goalId}/edit`;
     case 'edit-database-subgoal':
       return `${clientBase}/goals/database/subgoals/${options.subGoalId}/edit`;
+    case 'edit-database-task':
+      return `${clientBase}/goals/database/tasks/${options.taskId}/edit`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'goals-data-collection':
@@ -115,6 +117,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit Goal';
     case 'edit-database-subgoal':
       return 'Edit SubGoal';
+    case 'edit-database-task':
+      return 'Edit Task';
     case 'goals':
       return `Client Goals`;
     case 'goals-data-collection':

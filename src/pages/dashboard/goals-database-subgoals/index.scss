@@ -1,9 +1,9 @@
-.goals-database-goals {
-  .goals-database-goals__container {
+.goals-database-subGoals {
+  .goals-database-subGoals__container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
 
-    .goals-database-goals__table__cell {
+    .goals-database-subGoals__table__cell {
       height: 100%; 
     }
   
@@ -14,7 +14,7 @@
     .row--center {
       justify-content: center;
     }
-  
+
     .gha__modulecard {
       margin: 15px;
     }
