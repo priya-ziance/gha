@@ -3,6 +3,7 @@ import { BreadcrumbProps, Intent, Checkbox, MenuItem } from '@blueprintjs/core';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
 import { Formik } from 'formik';
 import get from 'lodash/get';
+
 import moment from 'moment';
 
 import { SP_GOALS_FIELDS_TYPE } from '../../../types';
@@ -11,7 +12,7 @@ import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, DateInput, FormGroup, InputGroup, PageHeading, TextArea } from '../../../components';
+import { Button, DateInput, FormGroup, H4, InputGroup, PageHeading, TextArea } from '../../../components';
 
 import LoadingWrapper from '../../../wrappers/loading';
 
@@ -25,6 +26,7 @@ import * as helpers from './helpers';
 import { FIELDS, GOALS } from './constants';
 
 import IGoalModel from '../../../models/goal';
+import SubGoal from '../../../models/subGoal';
 
 
 import './index.scss';
@@ -39,6 +41,8 @@ interface AddGoalProps {
 
 const Content = (props: AddGoalProps) => {
   const [client, setClient] = useState<Client | {}>({});
+  const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
+  const [selectedSubGoals, setSelectedSubgoals] = useState<{ [key: string]: boolean }>({});
   const [loadingClient, setLoadingClient] = useState(false);
 
   const { addToast } = useContext(ToastsContext);
@@ -66,6 +70,16 @@ const Content = (props: AddGoalProps) => {
       setLoadingClient(false);
     })()
   }, [clientId])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setSubGoals(await api.subgoals.getSubGoals(clientId))
+      } catch(e) {
+        // TODO: Show error message
+      }
+    })()
+  }, [clientId]);
 
   const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
     return (
@@ -106,23 +120,25 @@ const Content = (props: AddGoalProps) => {
 
   return (
     <LoadingWrapper loading={loadingClient}>
-      <div className='add-case-note'>
+      <div className='add-sp-goal'>
       <PageHeading
         title='Add SP Goal Detail'
         breadCrumbs={BREADCRUMBS}
       />
-      <div className='add-case-note__container'>
+      <div className='add-sp-goal__container'>
         <Formik
             initialValues={helpers.initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
 
+              values.sub_goals = Object.keys(selectedSubGoals);
+
               try {
                 if (props.update) {
-                  await api.goals.updateGoal(get(props, 'client.id', ''), values);
+                  await api.spGoals.updateSpGoal(get(props, 'client.id', ''), values);
                 } else {
-                  await api.goals.createGoal(values);
+                  await api.spGoals.createSpGoal(values, { clientId });
                 }
 
                 addToast(
@@ -150,9 +166,7 @@ const Content = (props: AddGoalProps) => {
             {({
               values,
               errors,
-              touched,
               handleChange,
-              handleBlur,
               handleSubmit,
               isSubmitting,
               setFieldValue
@@ -247,13 +261,41 @@ const Content = (props: AddGoalProps) => {
                         <Button text={values.description} rightIcon="double-caret-vertical" />
                     </FormSelect>
                   </FormGroup>
+
                   {getInputFormGroup('entries')}
                   {getDateInputFormGroup('start_date')}
                   {getDateInputFormGroup('end_date')}
-                  {getTextAreaFormGroup('notes')}
 
                   <Checkbox label='Active' onChange={handleChange('active')} checked={values.active} />
 
+                  {getTextAreaFormGroup('notes')}
+
+                  <div>
+                    <H4>Subgoals</H4>
+                    {subGoals.map(subGoal => {
+                      const isSelected = selectedSubGoals[subGoal.id]
+
+                      const onChange = () => {
+                        if (!isSelected) {
+                          setSelectedSubgoals((select: any) => {
+                            select[subGoal.id] = true;
+
+                            return Object.assign({}, select);
+                          })
+                        } else {
+                          setSelectedSubgoals((select: any) => {
+                            delete select[subGoal.id];
+
+                            return Object.assign({}, select);
+                          })
+                        }
+                      }
+                      
+                      return (
+                        <Checkbox label={subGoal.description} onChange={onChange} checked={isSelected} />
+                      )
+                    })}
+                  </div>
 
                   <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
                     Submit

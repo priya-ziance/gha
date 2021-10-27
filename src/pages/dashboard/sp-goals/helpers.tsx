@@ -1,53 +1,48 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { Button } from '../../../components';
+import { AnchorButton, Button } from '../../../components';
 
-import { IClientContactModel } from '../../../types';
+import { IGoalModel } from '../../../types';
 
 
-export const firstNameColumn = (data: IClientContactModel) => {
+export const descriptionColumn = (data: IGoalModel) => {
   return (
-    <>{data.firstName}</>
+    <p className='bp3-table-truncated-cell'>{data.description}</p>
   )
 }
 
-export const lastNameColumn = (data: IClientContactModel) => {
-  return (
-    <>{data.lastName}</>
-  )
-}
-
-export const addressColumn = (data: IClientContactModel) => {
-  return (
-    <>{data.address}</>
-  )
-}
-
-export const activeColumn = (data: IClientContactModel) => {
+export const activeColumn = (data: IGoalModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateOfBirthColumn = (data: IClientContactModel) => {
-  const date = get(data, 'dateOfBirth');
+export const dateColumn = (data: IGoalModel) => {
+  const date = get(data, 'createdAt');
   
   if (date) {
     return (
-      <>{date.format('MMMM Do YYYY')}</>
+      <p>{date.format('MMMM Do YYYY')}</p>
     )
   }
 
-  return (<></>)
+  return (<p></p>)
 }
 
-export const actionColumn = (data: IClientContactModel) => {
+export const actionColumn = (data: IGoalModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

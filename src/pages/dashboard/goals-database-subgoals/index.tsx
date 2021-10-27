@@ -118,7 +118,7 @@ const DatabaseSubGoals = () => {
     <div>
       <div className='goals-database-subGoals'>
         <PageHeading
-          title='Database SubsubGoals'
+          title='Database SubGoals'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
@@ -148,7 +148,7 @@ const DatabaseSubGoals = () => {
                 {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.4)
+                  width: helpers.getTableWith(0.6)
                 },
                 {
                   title: 'Active',
@@ -172,7 +172,7 @@ const DatabaseSubGoals = () => {
                       }
                     )
                   },
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={subGoals}

@@ -18,6 +18,8 @@ import {
   IInstructionModel,
   ILocation,
   ILocationModel,
+  ISpGoal,
+  ISpGoalModel,
   ISubGoalModel,
   ISubGoal,
   ITaskModel,
@@ -157,8 +159,10 @@ class GoalsApi {
     return this.normalizer.normalizeArray(goalsResult.data.contents);
   }
 
-  async getGoal(goalId: string) {
-    const goalResult = await client.get(`/goal/${goalId}`);
+  async getGoal(goalId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const goalResult = await client.get(`/goal/${goalId}`, params);
   
     return this.normalizer.normalize(goalResult.data);
   }
@@ -236,8 +240,10 @@ class SubGoalsApi {
     return this.normalizer.normalizeArray(goalsResult.data.contents);
   }
 
-  async getSubGoal(goalId: string) {
-    const goalResult = await client.get(`/subgoal/${goalId}`);
+  async getSubGoal(goalId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const goalResult = await client.get(`/subgoal/${goalId}`, params);
   
     return this.normalizer.normalize(goalResult.data);
   }
@@ -300,7 +306,7 @@ class TasksApi {
   }
 }
 
-//============================= TASK API'S==================================
+//============================= INSTRUCTION API'S===========================
 class InstructionsApi {
   normalizer;
 
@@ -345,6 +351,47 @@ class InstructionsApi {
 }
 
 
+//============================= GOAL API'S==================================
+class SpGoalsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ISpGoalModel, ISpGoal>(Models.SpGoal)
+  }
+
+  async getSpGoals(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const goalsResult = await client.get(`/sp_goals`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(goalsResult.data.contents);
+  }
+
+  async getSpGoal(goalId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const goalResult = await client.get(`/sp_goal/${goalId}`, params);
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async createSpGoal(body = {}, params = {}) {
+    const goalResult = await client.post('/sp_goal', body, { params });
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+
+  async updateSpGoal(goalId = '', body = {}, params = {}) {
+    const goalResult = await client.patch(`/sp_goal/${goalId}`, body, { params });
+  
+    return this.normalizer.normalize(goalResult.data);
+  }
+}
+
+
 
 
 //========================================================================
@@ -357,6 +404,7 @@ export default (() => ({
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),
   locations: new LocationApi(),
+  spGoals: new SpGoalsApi(),
   subgoals: new SubGoalsApi(),
   tasks: new TasksApi(),
 }))()

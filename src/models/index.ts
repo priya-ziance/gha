@@ -5,6 +5,7 @@ import File from './file';
 import Goal from './goal';
 import Instruction from './instruction';
 import Location from './location';
+import SpGoal from './spGoal';
 import SubGoal from './subGoal';
 import Task from './task';
 
@@ -16,6 +17,7 @@ const Exports = {
   Goal,
   Instruction,
   Location,
+  SpGoal,
   SubGoal,
   Task
 }

@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Spinner } from '@blueprintjs/core';
 
 import AddDatabaseGoal from '../add-database-goal';
 
 import api from '../../../api';
+
+import ClientContext from '../../../contexts/client';
 
 import IGoalModel from '../../../models/goal';
 
@@ -18,6 +20,7 @@ interface GoalPathType {
 const GoalInfo = (props: GoalPathType) => {
   const [loading, setLoading] = useState(true);
   const [client, setClient] = useState<IGoalModel | undefined>(undefined);
+  const { id: clientId } = useContext(ClientContext);
 
   const { goalId } = props;
 
@@ -26,14 +29,14 @@ const GoalInfo = (props: GoalPathType) => {
       setLoading(true);
       
       try {
-        const fetchedGoal = await api.goals.getGoal(goalId);
+        const fetchedGoal = await api.goals.getGoal(goalId, { params: { clientId } });
 
         setClient(fetchedGoal);
       } catch(e) {}
 
       setLoading(false);
     })()
-  }, [goalId]);
+  }, [clientId, goalId]);
 
   if (loading) {
     return ( <Spinner /> )

@@ -5,38 +5,36 @@ import { IconNames } from '@blueprintjs/icons';
 import { AnchorButton, Col, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
+import LocationContext from '../../../contexts/location';
 
 import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import * as helpers from '../../../utils/helpers';
+import Goal from '../../../models/goal';
 
-import { IGoalModel } from '../../../types';
+import * as helpers from '../../../utils/helpers';
 
 import {
   actionColumn,
   activeColumn,
-  dateOfBirthColumn,
-  addressColumn,
-  firstNameColumn,
-  lastNameColumn,
+  dateColumn,
+  descriptionColumn,
 } from './helpers';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const ClientContacts = () => {
-  const [goals, setGoals] = useState<IGoalModel[] | []>([]);
+const DatabaseGoals = () => {
+  const [goals, setGoals] = useState<Goal[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
+  const { id: selectedLocationId } = useContext(LocationContext)
 
   const hasNextPage = goals.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
-
-  console.log(goals)
 
   useEffect(() => {
     (async () => {
@@ -52,7 +50,7 @@ const ClientContacts = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page]);
+  }, [clientId, page, selectedLocationId]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -72,7 +70,6 @@ const ClientContacts = () => {
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
     { text: URLS.getPagePathName('sp-goals') }
-    
   ];
 
   const getAddButton = () => {
@@ -90,39 +87,34 @@ const ClientContacts = () => {
       </AnchorButton>
     );
   }
-  
 
   return (
     <div>
-      <div className='client-contacts'>
+      <div className='goals-database-goals'>
         <PageHeading
-          title={URLS.getPagePathName('sp-goals')}
+          title='SP Goals'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='client-contacts__container'>
+        <div className='goals-database-goals__container'>
           <Col>
             <Table
               loading={loading}
               numRows={goals.length}
               getCellClipboardData={(row, col) => {
+
                 return goals[row]
               }}
               columns={[
                 {
-                  title: 'First Name',
-                  cellRenderer: firstNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  title: 'ID',
+                  cellRenderer: (data) => (<p>{data.id}</p>),
+                  width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Last Name',
-                  cellRenderer: lastNameColumn,
-                  width: helpers.getTableWith(0.15)
-                },
-                {
-                  title: 'DOB',
-                  cellRenderer: dateOfBirthColumn,
-                  width: helpers.getTableWith(0.13)
+                  title: 'Description',
+                  cellRenderer: descriptionColumn,
+                  width: helpers.getTableWith(0.4)
                 },
                 {
                   title: 'Active',
@@ -130,14 +122,23 @@ const ClientContacts = () => {
                   width: helpers.getTableWith(0.07)
                 },
                 {
-                  title: 'Address',
-                  cellRenderer: addressColumn,
-                  width: helpers.getTableWith(0.3)
+                  title: 'Created At',
+                  cellRenderer: dateColumn,
+                  width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-database-goal',
+                          { clientId, goalId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.3)
                 }
               ]}
               data={goals}
@@ -150,7 +151,7 @@ const ClientContacts = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No SP Goals Found"
+              emptyTableMessage="No Goals Found"
             />
           </Col>
         </div>
@@ -159,4 +160,4 @@ const ClientContacts = () => {
   );
 }
 
-export default ClientContacts;
+export default DatabaseGoals;

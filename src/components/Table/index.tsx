@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Cell, CellProps, Column, ColumnProps, IRegion, Regions, SelectionModes, Table, TableLoadingOption, TableProps } from '@blueprintjs/table';
 
 import Pagination, { PaginationProps } from '../Pagination';
@@ -33,7 +33,6 @@ interface CustomTableProps {
 
 const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => {
   const [selectedRowRegions, setSelectedRowRegions] = useState<IRegion[] | undefined>(undefined);
-  const [hoveringRowIndex, setHoveringRowIndex] = useState<number | null>(null);
   const { addToast } = useContext(ToastsContext)
   const { className, columns, data, disablePagination, emptyTableMessage, enableMinHeight, loading, hasNextPage, hasPrevPage, onNextPage, onPrevPage, page, ...tableProps } = props;
   let customTableClass = 'gha__table__container';
@@ -44,10 +43,6 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
 
   const cellRenderer = (rowIndex: number, columnIndex: number) => {
     let hoveringClass = '';
-
-    if (hoveringRowIndex === rowIndex) {
-      hoveringClass = 'gha__table__cell--hover'
-    }
 
     return (
       <Cell className={`gha__table__cell ${hoveringClass}`}>
@@ -61,8 +56,6 @@ const CustomTable = (props: TableProps & CustomTableProps & PaginationProps) => 
             paddingTop: 5,
             paddingBottom: 5
           }}
-          onMouseEnter={() => setHoveringRowIndex(rowIndex)}
-          onMouseLeave={() => setHoveringRowIndex(null)}
         >
         {
           columns[columnIndex].cellRenderer(data[rowIndex])

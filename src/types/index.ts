@@ -485,7 +485,7 @@ export interface ISpGoal {
   _id: string;
   description?: string;
   end_date?: string;
-  goal: string;
+  goal: IGoal;
   start_date?: string;
   notes?: string;
   active?: false;
