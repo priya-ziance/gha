@@ -16,8 +16,12 @@ import ClientCaseNotesPage from './client-case-notes';
 import ClientContactsPage from './client-contacts';
 import ClientInfo from './client-info';
 
+import AddDatabaseBehaviourPage from './add-database-behaviour';
+import EditDatabaseBehaviourPage from './edit-database-behaviour';
 import BehavioursPage from './behaviours';
+import BehavioursProblemsPage from './behaviours-problems';
 import BehavioursAssignPage from './behaviours-assign';
+import BehavioursDatabasePage from './behaviours-database';
 
 import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
@@ -86,7 +90,11 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/links" exact component={ClientLinksPage} />
       
       <Route path="/dashboard/clients/:clientId/behaviours" exact component={BehavioursPage} />
+      <Route path="/dashboard/clients/:clientId/behaviours/behaviours-problems" exact component={BehavioursProblemsPage} />
       <Route path="/dashboard/clients/:clientId/behaviours/assign" exact component={BehavioursAssignPage} />
+      <Route path="/dashboard/clients/:clientId/behaviours/database" exact component={BehavioursDatabasePage} />
+      <Route path="/dashboard/clients/:clientId/behaviours/database/add" exact component={AddDatabaseBehaviourPage} />
+      <Route path="/dashboard/clients/:clientId/behaviours/database/:behaviourId/edit" exact component={EditDatabaseBehaviourPage} />
       
       <Route path="/dashboard/clients/:clientId/client-case-notes" exact component={ClientCaseNotesPage} />
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />

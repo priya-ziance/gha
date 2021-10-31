@@ -1,137 +1,148 @@
-import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
+import { useContext, useEffect, useState } from 'react';
+import { BreadcrumbProps, Checkbox, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Formik } from 'formik';
 import get from 'lodash/get';
-import moment from 'moment';
 
-import api from '../../../api';
+import { AnchorButton, Button, PageHeading, Row } from '../../../components';
+
+import LoadingWrapper from '../../../wrappers/loading';
+
+import ClientContext from '../../../contexts/client';
+import LocationContext from '../../../contexts/location';
+import ToastsContext from '../../../contexts/toasts';
 
 import URLS from '../../../utils/urls';
 
-import { Button, Col, DateInput, FormGroup, InputGroup, PageHeading, Row, Switch, TextArea } from '../../../components';
+import api from '../../../api';
 
-import ClientContext from '../../../contexts/client';
-import ToastsContext from '../../../contexts/toasts';
-
-import * as helpers from './helpers';
+import Behaviour from '../../../models/behaviour';
 
 import './index.scss';
 
+const PAGE_SIZE = 10;
 
-const Content = () => {
+const BehavioursAssign = () => {
+  const [behaviours, setBehaviours] = useState<Behaviour[] | []>([]);
+  const [selectedBehaviours, setSelectedBehaviours] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-  const { addToast } = useContext(ToastsContext);
+  const { id: selectedLocationId } = useContext(LocationContext);
+  const { addToast } = useContext(ToastsContext)
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        setBehaviours(
+          await api.behaviours.getBehaviours(clientId, { pageSize: PAGE_SIZE })
+        )
+      } catch(e){}
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 200)
+    })()
+  }, [clientId, selectedLocationId]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const clientBehaviours = await api.clientBehaviours.getClientBehaviours(clientId, { pageSize: PAGE_SIZE })
+        setSelectedBehaviours(
+          clientBehaviours.map(clientBehaviour => get(clientBehaviour, 'behaviour.id', ''))
+        )
+      } catch(e){}
+    })()
+  }, []);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links'), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { href: URLS.getPagePath('behaviours'), icon: 'document', text: URLS.getPagePathName('behaviours') },
-    { text: URLS.getPagePathName('behaviours-assign') }
+    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
+    { href: URLS.getPagePath('behaviours', { clientId }), icon: 'document', text: URLS.getPagePathName('behaviours') },
+    { text: URLS.getPagePathName('behaviours-assign') },
   ];
 
+  const getAddButton = () => {
+    return (
+      <AnchorButton
+        buttonProps={{
+          intent: Intent.PRIMARY,
+          icon: IconNames.ADD
+        }}
+        linkProps={{
+          to: URLS.getPagePath('add-database-behaviour', { clientId })
+        }}
+      >
+        Add behaviour
+      </AnchorButton>
+    );
+  }
+
+  const onSubmit = async () => {
+    setSubmitting(true);
+    
+    try {
+      await api.clientBehaviours.assignBehaviours(selectedBehaviours, { clientId })
+
+      addToast({
+        message: 'Successfully assigned behaviours',
+        intent: 'primary'
+      })
+    } catch(e) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setSubmitting(false);
+  }
+
   return (
-    <div className='behaviours-assign'>
-      <PageHeading
-        title='Assign Behaviour'
-        breadCrumbs={BREADCRUMBS}
-      />
-      <div className='behaviours-assign__container'>
-        <Formik
-            initialValues={helpers.initialValues}
-            validationSchema={helpers.validationSchema}
-            onSubmit={async (values, { resetForm, setSubmitting }) => {
-              setSubmitting(true);
+    <div>
+      <div className='behaviours-assign'>
+        <PageHeading
+          title='Assign Behaviours'
+          breadCrumbs={BREADCRUMBS}
+          renderRight={getAddButton}
+        />
+        <LoadingWrapper loading={loading}>
+          <div className='behaviours-assign__container'>
+            <Row>
+              {behaviours.map(behaviour => {
+                const isSelected = selectedBehaviours.includes(behaviour.id);
 
-              values.client = clientId;
+                const handleChange = () => {
+                  if (isSelected) {
+                    setSelectedBehaviours(behaviours => {
+                      return [
+                        ...behaviours.filter(b => b !== behaviour.id)
+                      ]
+                    })
+                  } else {
+                    setSelectedBehaviours(behaviours => {
+                      return [...behaviours, behaviour.id];
+                    })
+                  }
+                }
+                
+                return (
+                  <Checkbox label={behaviour.behaviourType} onChange={handleChange} checked={isSelected} />
+                )
+              })}
+            </Row>
 
-              try {
-                // await api.caseNotes.createCaseNote(values);
-
-                addToast({
-                  message: 'Case Note Created',
-                  intent: 'primary'
-                })
-
-                // Reset the form
-                resetForm();
-              } catch(e) {
-                addToast({
-                  message: 'Something went wrong',
-                  intent: 'danger'
-                })
-              }
-
-              setSubmitting(false);
-            }}
-            >
-
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
-            }) => {
-              return (
-                <form onSubmit={handleSubmit}>
-                  <Row className=''>
-                    <Switch
-                      label='Active'
-                      checked={values.active}
-                      onChange={e => {
-                        setFieldValue('active', get(e, 'target.checked'))
-                      }}
-                    />
-                    <Switch
-                      label='Active'
-                      checked={values.active}
-                      onChange={e => {
-                        setFieldValue('active', get(e, 'target.checked'))
-                      }}
-                    />
-                    <Switch
-                      label='Active'
-                      checked={values.active}
-                      onChange={e => {
-                        setFieldValue('active', get(e, 'target.checked'))
-                      }}
-                    />
-                    <Switch
-                      label='Active'
-                      checked={values.active}
-                      onChange={e => {
-                        setFieldValue('active', get(e, 'target.checked'))
-                      }}
-                    />
-                    <Switch
-                      label='Active'
-                      checked={values.active}
-                      onChange={e => {
-                        setFieldValue('active', get(e, 'target.checked'))
-                      }}
-                    />
-                  </Row>
-
-
-                  <div className='add-client-case-note__submit-container'>
-                    <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
-                      <b>
-                        Submit
-                      </b>
-                    </Button>
-                  </div>
-                </form>
-              )
-            }}
-        </Formik>
+            <Button intent={Intent.PRIMARY} large onClick={onSubmit} disabled={submitting} loading={submitting}>
+              Submit
+            </Button>
+          </div>
+        </LoadingWrapper>
       </div>
     </div>
   );
 }
 
-export default Content;
+export default BehavioursAssign;

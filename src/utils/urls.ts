@@ -3,6 +3,7 @@ import { PAGE_TYPES } from '../types';
 
 type OPTIONS_TYPE = {
   clientId?: string,
+  behaviourId?: string,
   goalId?: string,
   subGoalId?: string,
   taskId?: string
@@ -18,6 +19,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-case-notes/add`;
     case 'add-client-contact':
       return `${clientBase}/client-contacts/add`;
+    case 'add-database-behaviour':
+      return `${clientBase}/behaviours/database/add`;
     case 'add-database-goal':
       return `${clientBase}/goals/database/goals/add`;
     case 'add-database-subgoal':
@@ -32,6 +35,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/behaviours`;
     case 'behaviours-assign':
       return `${clientBase}/behaviours/assign`;
+    case 'behaviours-database':
+      return `${clientBase}/behaviours/database`;
+    case 'behaviours-problems':
+      return `${clientBase}/behaviours/behaviours-problems`;
     case 'dashboard':
       return '/dashboard';
     case 'clients':
@@ -44,6 +51,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-contacts`;
     case 'client-info':
       return `${clientBase}/client-info`;
+    case 'edit-database-behaviour':
+      return `${clientBase}/behaviours/database/${options.behaviourId}/edit`;
     case 'edit-database-goal':
       return `${clientBase}/goals/database/goals/${options.goalId}/edit`;
     case 'edit-database-subgoal':
@@ -85,6 +94,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add APD';
     case 'add-client-case-notes':
       return `Add Client Case Note`;
+    case 'add-database-behaviour':
+      return 'Add Database Behaviour';
     case 'add-client-contact':
       return `Add Client Contact`;
     case 'add-database-goal':
@@ -101,6 +112,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Behaviours';
     case 'behaviours-assign':
       return 'Behaviours Assign';
+    case 'behaviours-database':
+      return 'Behaviours Database';
+    case 'behaviours-problems':
+      return 'Behaviour Problems';
     case 'dashboard':
       return 'Dashboard';
     case 'clients':
@@ -113,6 +128,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Links`;
     case 'client-contacts':
       return `Client Contacts`;
+    case 'edit-database-behaviour':
+      return 'Edit Behaviour';
     case 'edit-database-goal':
       return 'Edit Goal';
     case 'edit-database-subgoal':

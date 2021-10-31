@@ -1,0 +1,32 @@
+.behaviours-problems {
+  .behaviours-problems__container {
+    display: flex;
+    align-items: center;
+
+    .behaviours-problems__table__cell {
+      height: 100%; 
+    }
+  
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  
+    .gha__modulecard {
+      margin: 15px;
+    }
+  }
+}
+
+.behaviours__behaviours-problems {
+  textarea {
+    width: 100%
+  }
+
+  .bp3-input-group {
+    width: 93%;
+  }
+}

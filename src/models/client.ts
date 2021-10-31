@@ -1,5 +1,5 @@
 import IBaseModel from './_baseModel';
-import { IClient, IFileModel } from '../types'
+import { IClient, IClientModel, IFileModel } from '../types'
 import models from '../models';
 
 export default class Client implements IBaseModel {
@@ -21,7 +21,10 @@ export default class Client implements IBaseModel {
       this.signature = new models.File(client.signature);
     }
 
-
     this.client = client;
+  }
+
+  static fromArray(clients: IClient[]): IClientModel[] {
+    return clients.map(i => new Client(i));
   }
 }

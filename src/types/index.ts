@@ -1,6 +1,46 @@
 import { IToasterProps, IToastProps } from '@blueprintjs/core';
 import { Moment } from 'moment';
 
+export type PAGE_TYPES =
+  'add-apd' |
+  'add-clients' |
+  'add-client-case-notes' |
+  'add-client-contact' |
+  'add-database-behaviour' |
+  'add-database-goal' |
+  'add-database-subgoal' |
+  'add-database-task' |
+  'add-sp-goals' |
+  'apd' |
+  'behaviours' |
+  'behaviours-problems' |
+  'behaviours-assign' |
+  'behaviours-database' |
+  'dashboard' |
+  'clients' |
+  'client-case-notes' |
+  'client-info' |
+  'client-links' |
+  'client-contacts' |
+  'edit-database-behaviour' |
+  'edit-database-goal' |
+  'edit-database-subgoal' |
+  'edit-database-task' |
+  'goals' |
+  'goals-data-collection' |
+  'goals-database' |
+  'goals-database-goals' |
+  'goals-database-subgoals' |
+  'goals-database-tasks' |
+  'life-skills' |
+  'logs' |
+  'personal-support' |
+  'reshab-logs' |
+  'respite-logs' |
+  'sp-goals';
+
+
+
 export type APD_FIELDS_TYPE =
   'critical_incident' |
   'county' |
@@ -80,7 +120,13 @@ export type CLIENT_FIELDS_TYPE =
   'definition_of_abuse' |
   'notes';
 
-export type GOAL_FIELDS_TYPE =
+  export type BEHAVIOUR_FIELDS_TYPE =
+  'active' |
+  'description' |
+  'behaviour_type' |
+  'behaviour_description'
+
+  export type GOAL_FIELDS_TYPE =
   'active' |
   'description'
 
@@ -99,6 +145,11 @@ export type INSTRUCTION_FIELDS_TYPE =
   'active' |
   'description' |
   'task'
+
+  export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE =
+  'notes' |
+  'uri' |
+  'frequency'
 
 export type SP_GOALS_FIELDS_TYPE =
   'active' |
@@ -122,6 +173,14 @@ export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE |
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type BEHAVIOUR_FIELDS_FORM_TYPE = {
+  [key in BEHAVIOUR_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -154,6 +213,14 @@ export type TASK_FIELDS_FORM_TYPE = {
 
 export type INSTRUCTION_FIELDS_FORM_TYPE = {
   [key in INSTRUCTION_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type BEHAVIOUR_PROBLEMS_FIELDS_FORM_TYPE = {
+  [key in BEHAVIOUR_PROBLEMS_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -202,41 +269,6 @@ export interface IToastsContext {
   removeToast?: (toastId: string) => void
 }
 
-export type PAGE_TYPES =
-  'add-apd' |
-  'add-clients' |
-  'add-client-case-notes' |
-  'add-client-contact' |
-  'add-database-goal' |
-  'add-database-subgoal' |
-  'add-database-task' |
-  'add-sp-goals' |
-  'apd' |
-  'behaviours' |
-  'behaviours-assign' |
-  'dashboard' |
-  'clients' |
-  'client-case-notes' |
-  'client-info' |
-  'client-links' |
-  'client-contacts' |
-  'edit-database-goal' |
-  'edit-database-subgoal' |
-  'edit-database-task' |
-  'goals' |
-  'goals-data-collection' |
-  'goals-database' |
-  'goals-database-goals' |
-  'goals-database-subgoals' |
-  'goals-database-tasks' |
-  'life-skills' |
-  'logs' |
-  'personal-support' |
-  'reshab-logs' |
-  'respite-logs' |
-  'sp-goals';
-
-
 
 
 /**
@@ -245,7 +277,22 @@ export type PAGE_TYPES =
 
  export interface IBehaviourModel {
   id: string;
+  active: boolean;
+  behaviourDescription: string;
+  behaviourType: string;
   behaviour: IBehaviour;
+  createdAt: Moment;
+}
+
+export interface IClientBehaviourModel {
+  id: string;
+  behaviour: IBehaviourModel;
+  frequency?: number;
+  uri: string;
+  clientsInvolved?: IClientModel[];
+  clientBehaviour: IClientBehaviour;
+  notes: string;
+  createdAt: Moment;
 }
 
  export interface IClientModel {
@@ -312,11 +359,15 @@ export interface ISubGoalModel {
 
 export interface ISpGoalModel {
   id: string;
+  active: boolean;
   client?: string;
+  createdAt: Moment;
+  notes: string;
   endDate?: Moment;
   startDate?: Moment;
   spGoal: ISpGoal;
   goal: IGoalModel;
+  subGoals: ISubGoalModel[]
 }
 
 export interface ILocationModel {
@@ -356,16 +407,20 @@ export interface ITaskModel {
 
 export interface IBehaviour {
   _id: string;
-  client?: string;
-  creator?: string;
-  date?: string;
-  behaviour_type?: string;
-  frequency?: number;
-  uri?: string;
-  clients_involved?: string;
-  notes?: string;
+  active: boolean;
+  behaviour_description: string;
+  behaviour_type: string;
   created_at?: string;
-  updated_at?: string;
+}
+
+export interface IClientBehaviour {
+  _id: string;
+  behaviour: IBehaviour;
+  frequency?: number;
+  uri: string;
+  clients_involved?: IClient[];
+  notes: string;
+  created_at: string;
 }
 
 export interface ICaseNote {
@@ -483,12 +538,13 @@ export interface ISubGoal {
 
 export interface ISpGoal {
   _id: string;
-  description?: string;
+  active: boolean;
   end_date?: string;
   goal: IGoal;
   start_date?: string;
-  notes?: string;
-  active?: false;
+  notes: string;
+  sub_goals: ISubGoal[];
+  created_at: string;
 }
 
 export interface ILocation {

@@ -2,21 +2,15 @@ import * as yup from 'yup';
 
 import { FIELDS_TYPE } from '../../../types';
 
-
-export const GOALS = [
-  'Chew smaller bites to prevent choking'
-]
-
-
 export const FIELDS : FIELDS_TYPE = {
   active: {
     name: 'Active',
     default: false,
     validation: yup.bool(),
   },
-  description: {
+  goal: {
     name: 'Goal',
-    default: GOALS[0],
+    default: '',
     validation: yup.string().required().label('Goal'),
   },
   end_date: {

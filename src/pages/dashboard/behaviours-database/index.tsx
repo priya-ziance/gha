@@ -11,29 +11,30 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import SpGoal from '../../../models/spGoal';
+import Behaviour from '../../../models/behaviour';
 
 import * as helpers from '../../../utils/helpers';
 
 import {
   actionColumn,
   activeColumn,
+  behaviourTypeColumn,
   dateColumn,
-  notesColumn,
+  descriptionColumn,
 } from './helpers';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const DatabaseGoals = () => {
-  const [spGoals, setSpGoals] = useState<SpGoal[] | []>([]);
+const DatabaseBehaviours = () => {
+  const [behaviours, setBehaviours] = useState<Behaviour[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = spGoals.length === PAGE_SIZE;
+  const hasNextPage = behaviours.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -41,8 +42,8 @@ const DatabaseGoals = () => {
       setLoading(true);
 
       try {
-        setSpGoals(
-          await api.spGoals.getSpGoals(clientId, { page, pageSize: PAGE_SIZE })
+        setBehaviours(
+          await api.behaviours.getBehaviours(clientId, { page, pageSize: PAGE_SIZE })
         )
       } catch(e){}
 
@@ -68,8 +69,8 @@ const DatabaseGoals = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
-    { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
-    { text: URLS.getPagePathName('sp-goals') }
+    { href: URLS.getPagePath('behaviours', { clientId }), icon: 'document', text: URLS.getPagePathName('behaviours') },
+    { text: URLS.getPagePathName('behaviours-database') },
   ];
 
   const getAddButton = () => {
@@ -80,27 +81,31 @@ const DatabaseGoals = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-sp-goals', { clientId })
+          to: URLS.getPagePath('add-database-behaviour', { clientId })
         }}
       >
-        Add SP Goal
+        Add behaviour
       </AnchorButton>
     );
   }
 
   return (
     <div>
-      <div className='goals-database-goals'>
+      <div className='behaviours-database'>
         <PageHeading
-          title='SP Goals'
+          title='Behaviour Problem List'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='goals-database-goals__container'>
+        <div className='behaviours-database__container'>
           <Col>
             <Table
               loading={loading}
-              numRows={spGoals.length}
+              numRows={behaviours.length}
+              getCellClipboardData={(row, col) => {
+
+                return behaviours[row]
+              }}
               columns={[
                 {
                   title: 'ID',
@@ -108,8 +113,13 @@ const DatabaseGoals = () => {
                   width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Notes',
-                  cellRenderer: notesColumn,
+                  title: 'Behaviour Type',
+                  cellRenderer: behaviourTypeColumn,
+                  width: helpers.getTableWith(0.2)
+                },
+                {
+                  title: 'Behaviour Description',
+                  cellRenderer: descriptionColumn,
                   width: helpers.getTableWith(0.4)
                 },
                 {
@@ -129,22 +139,25 @@ const DatabaseGoals = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-database-goal',
-                          { clientId, goalId: data.id })
+                          'edit-database-behaviour',
+                          { clientId, behaviourId: data.id })
                       }
                     )
                   },
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={spGoals}
+              data={behaviours}
               enableRowHeader={false}
+              onSelection={(focusedCell) => {
+                console.log(focusedCell)
+              }}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Sp Goals Found"
+              emptyTableMessage="No Behaviours Found"
             />
           </Col>
         </div>
@@ -153,4 +166,4 @@ const DatabaseGoals = () => {
   );
 }
 
-export default DatabaseGoals;
+export default DatabaseBehaviours;

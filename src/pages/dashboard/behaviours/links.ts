@@ -7,7 +7,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Behaviour',
       image: ClientsImage,
-      path: URLS.getPagePath('sp-goals', { clientId })
+      path: URLS.getPagePath('behaviours-problems', { clientId })
     },
     {
       description: '',
@@ -19,7 +19,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Behaviours Database',
       image: ClientsImage,
-      path: URLS.getPagePath('goals-database', { clientId })
+      path: URLS.getPagePath('behaviours-database', { clientId })
     },
     {
       description: '',

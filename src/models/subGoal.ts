@@ -1,6 +1,6 @@
 import IBaseModel from './_baseModel';
 import moment, { Moment } from 'moment';
-import { IGoalModel, ISubGoal } from '../types';
+import { IGoalModel, ISubGoal, ISubGoalModel } from '../types';
 import Goal from '../models/goal';
 
 export default class SubGoal implements IBaseModel {
@@ -18,5 +18,9 @@ export default class SubGoal implements IBaseModel {
     this.createdAt = moment(subGoal.created_at);
     this.subGoal = subGoal;
     this.goal = new Goal(subGoal.goal);
+  }
+
+  static fromArray(subGoals: ISubGoal[]): ISubGoalModel[] {
+    return subGoals.map(i => new SubGoal(i));
   }
 }

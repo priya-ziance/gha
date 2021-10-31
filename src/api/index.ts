@@ -4,10 +4,14 @@ import client from './client';
 
 import Models from '../models';
 import {
+  IBehaviour,
+  IBehaviourModel,
   ICaseNote,
   ICaseNoteModel,
   IClient,
   IClientModel,
+  IClientBehaviour,
+  IClientBehaviourModel,
   IClientContact,
   IClientContactModel,
   IFile,
@@ -351,7 +355,7 @@ class InstructionsApi {
 }
 
 
-//============================= GOAL API'S==================================
+//============================= SP GOAL API'S===============================
 class SpGoalsApi {
   normalizer;
 
@@ -381,23 +385,107 @@ class SpGoalsApi {
   async createSpGoal(body = {}, params = {}) {
     const goalResult = await client.post('/sp_goal', body, { params });
   
-    return this.normalizer.normalize(goalResult.data);
+    // return this.normalizer.normalize(goalResult.data);
   }
 
   async updateSpGoal(goalId = '', body = {}, params = {}) {
     const goalResult = await client.patch(`/sp_goal/${goalId}`, body, { params });
   
-    return this.normalizer.normalize(goalResult.data);
+    // return this.normalizer.normalize(goalResult.data);
   }
 }
 
+
+class BehavioursApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IBehaviourModel, IBehaviour>(Models.Behaviour)
+  }
+
+  async getBehaviours(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const behavioursResult = await client.get(`/behaviours`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(behavioursResult.data.contents);
+  }
+
+  async getBehaviour(behaviourId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const behaviourResult = await client.get(`/behaviour/${behaviourId}`, params);
+  
+    return this.normalizer.normalize(behaviourResult.data);
+  }
+
+  async createBehaviour(body = {}, params = {}) {
+    const behaviourResult = await client.post('/behaviour', body, { params });
+  
+    return this.normalizer.normalize(behaviourResult.data);
+  }
+
+  async updateBehaviour(behaviourId = '', body = {}, params = {}) {
+    const behaviourResult = await client.patch(`/behaviour/${behaviourId}`, body, { params });
+  
+    return this.normalizer.normalize(behaviourResult.data);
+  }
+}
+
+class ClientBehavioursApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IClientBehaviourModel, IClientBehaviour>(Models.ClientBehaviour)
+  }
+
+  async getClientBehaviours(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const behavioursResult = await client.get(`/client_behaviours`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(behavioursResult.data.contents);
+  }
+
+  async getClientBehaviour(clientBehaviourId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const clientBehaviourResult = await client.get(`/client_behaviour/${clientBehaviourId}`, params);
+  
+    return this.normalizer.normalize(clientBehaviourResult.data);
+  }
+
+  async createClientBehaviour(body = {}, params = {}) {
+    const clientBehaviourResult = await client.post('/client_behaviour', body, { params });
+  
+    return this.normalizer.normalize(clientBehaviourResult.data);
+  }
+
+  async assignBehaviours(behaviours: string[], params = {}) {
+    await client.post('/client_behaviours/assign', { behaviour_ids: behaviours }, { params });
+  }
+
+  async updateClientBehaviour(clientBehaviourId = '', body = {}, params = {}) {
+    const clientBehaviourResult = await client.patch(`/client_behaviour/${clientBehaviourId}`, body, { params });
+  
+    return this.normalizer.normalize(clientBehaviourResult.data);
+  }
+}
 
 
 
 //========================================================================
 
 export default (() => ({
+  behaviours: new BehavioursApi(),
   clients: new ClientsApi(),
+  clientBehaviours: new ClientBehavioursApi(),
   clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi(),
   files: new FileApi(),

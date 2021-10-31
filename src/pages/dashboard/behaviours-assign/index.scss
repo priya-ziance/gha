@@ -1,24 +1,11 @@
-.add-case-note {
-  .add-case-note__container {
+.behaviours-assign__container {
+  .row {
+    margin-left: unset !important;
+    margin-right: unset !important;
+  }
 
-    .add-client-case-note__submit-container {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 50px;
-    }
-
-    textarea {
-      width: 100%;
-    }
-
-    .row {
-      display: flex;
-    }
-
-    .row--center {
-      justify-content: center;
-    }
+  label {
+    width: 250px;
+    max-width: 250px;
   }
 }

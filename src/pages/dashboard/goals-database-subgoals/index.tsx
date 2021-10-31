@@ -3,7 +3,7 @@ import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import groupBy from 'lodash/groupBy';
 
-import { AnchorButton, Col, FormItemSelect, PageHeading, Row, Table } from '../../../components';
+import { AnchorButton, Col, FormItemSelect, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';

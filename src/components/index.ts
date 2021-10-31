@@ -15,6 +15,7 @@ import InputGroup from './InputGroup';
 import LoadingView from './LoadingView';
 import ModuleCard from './ModuleCard';
 import NoLocation from './NoLocation';
+import NumericInput from './NumericInput';
 import PageHeading from './PageHeading';
 import Pagination from './Pagination';
 import Row from './Row';
@@ -41,6 +42,7 @@ export {
   LoadingView,
   ModuleCard,
   NoLocation,
+  NumericInput,
   PageHeading,
   Pagination,
   Row,

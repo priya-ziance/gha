@@ -1,18 +1,19 @@
-import { useContext, useEffect, useState } from 'react';
-import { BreadcrumbProps, Intent, Checkbox, MenuItem } from '@blueprintjs/core';
-import { Select, IItemRendererProps } from "@blueprintjs/select";
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
+import pick from 'lodash/pick';
 
 import moment from 'moment';
 
-import { SP_GOALS_FIELDS_TYPE } from '../../../types';
+import { IGoalModel, ISpGoalModel, ISubGoalModel, SP_GOALS_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, DateInput, FormGroup, H4, InputGroup, PageHeading, TextArea } from '../../../components';
+import { Button, DateInput, FormGroup, FormItemSelect, H4, InputGroup, PageHeading, TextArea } from '../../../components';
 
 import LoadingWrapper from '../../../wrappers/loading';
 
@@ -23,30 +24,34 @@ import Client from '../../../models/client';
 
 import * as helpers from './helpers';
 
-import { FIELDS, GOALS } from './constants';
+import { FIELDS } from './constants';
 
-import IGoalModel from '../../../models/goal';
+import Goal from '../../../models/goal';
 import SubGoal from '../../../models/subGoal';
 
 
 import './index.scss';
 
 
-const FormSelect = Select.ofType<string>();
-
 interface AddGoalProps {
   goal?: IGoalModel | undefined;
+  spGoal?: ISpGoalModel | undefined;
+  subGoals?: ISubGoalModel[] | undefined;
   update?: boolean;
 }
 
 const Content = (props: AddGoalProps) => {
   const [client, setClient] = useState<Client | {}>({});
+  const [goals, setGoals] = useState<Goal[] | []>([]);
   const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
   const [selectedSubGoals, setSelectedSubgoals] = useState<{ [key: string]: boolean }>({});
   const [loadingClient, setLoadingClient] = useState(false);
 
   const { addToast } = useContext(ToastsContext);
   const { id: clientId } = useContext(ClientContext);
+
+  const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
+  let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
@@ -71,6 +76,45 @@ const Content = (props: AddGoalProps) => {
     })()
   }, [clientId])
 
+  /**
+   * We are appending the goal into current goals because when this
+   * component loads, it will attempt to load all the goals and we
+   * don't want to overrite that.
+   */
+  useEffect(() => {
+    setGoals(goals => {
+      if (props.goal) {
+        return [...goals, props.goal]
+      } else {
+        return goals;
+      }
+    })
+
+    /**
+     * We are appending the goal into current subgoals because when this
+     * component loads, it will attempt to load all the subgoals and we
+     * don't want to overrite that.
+     */
+    setSubGoals(subGoals => {
+      if (props.subGoals && Array.isArray(props.subGoals)) {
+        return [...subGoals, ...props.subGoals]
+      } else {
+        return subGoals;
+      }
+    })
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setGoals(await api.goals.getGoals(clientId))
+      } catch(e) {
+        // TODO: Show error message
+      }
+    })()
+  }, [clientId]);
+
+
   useEffect(() => {
     (async () => {
       try {
@@ -81,26 +125,34 @@ const Content = (props: AddGoalProps) => {
     })()
   }, [clientId]);
 
-  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
-    return (
-        <MenuItem
-            text={item}
-            // active={active}
-            onClick={props.handleClick}
-            shouldDismissPopover={false}
-        />
-    )
-  }
-
+    /**
+   * This assigns the goal's info as the initial values if a goal
+   * is passed in
+   */
+     if (props.spGoal) {
+      initialValues = Object.assign(
+        {},
+        helpers.initialValues,
+        pick(props.spGoal.spGoal, Object.keys(helpers.initialValues))
+      );
+      initialValues.goal = get(props, 'goal._id', '')
+      
+      setSelectedSubgoals(
+        get(props, 'sub_goals', [])
+          .map((sg: any) => sg.id)
+      )
+    } else {
+      initialValues = helpers.initialValues;
+    }
 
   const SuccessToast = (
     <>
       <strong>Success</strong>
       <div>
         {props.update ?
-          'Goal updated successfully'
+          'SP Goal updated successfully'
           :
-          'Goal created successfully'
+          'SP Goal created successfully'
         }
       </div>
     </>
@@ -127,9 +179,9 @@ const Content = (props: AddGoalProps) => {
       />
       <div className='add-sp-goal__container'>
         <Formik
-            initialValues={helpers.initialValues}
+            initialValues={initialValues}
             validationSchema={helpers.validationSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { resetForm, setSubmitting }) => {
               setSubmitting(true);
 
               values.sub_goals = Object.keys(selectedSubGoals);
@@ -148,8 +200,10 @@ const Content = (props: AddGoalProps) => {
                     intent:  Intent.SUCCESS
                   }
                 );
+
+                setSelectedSubgoals({});
+                resetForm()
               } catch(e) {
-                console.log(e)
                 addToast(
                   {
                     message: getErrorToast(e.message),
@@ -175,8 +229,8 @@ const Content = (props: AddGoalProps) => {
                 setFieldValue(field, moment(date).toISOString());
               }
 
-              const onFormSelectChange = (field: string) => (value: string) => {
-                setFieldValue(field, value);
+              const onFormSelectChange = (field: string) => (value: any) => {
+                setFieldValue(field, value.id);
               }
 
               const getInputFormGroup = (key: SP_GOALS_FIELDS_TYPE, inputProps: any = {}) => (
@@ -226,7 +280,6 @@ const Content = (props: AddGoalProps) => {
                 </FormGroup>
               );
 
-
               return (
                 <form onSubmit={handleSubmit}>
 
@@ -245,22 +298,15 @@ const Content = (props: AddGoalProps) => {
                       disabled
                     />
                   </FormGroup>
-                  <FormGroup
+
+                  <FormItemSelect
+                    buttonText={goalsObject[values.goal] ? goalsObject[values.goal][0].description : ''}
                     intent={Intent.PRIMARY}
-                    label={get(FIELDS, 'description', { name: '' }).name}
-                    labelFor="text-input"
-                  >
-                    <FormSelect
-                        items={GOALS}
-                        filterable={false}
-                        itemRenderer={formSelectItemRenderer}
-                        noResults={<MenuItem disabled={true} text="No results." />}
-                        onItemSelect={onFormSelectChange('description')}
-                    >
-                        {/* children become the popover target; render value here */}
-                        <Button text={values.description} rightIcon="double-caret-vertical" />
-                    </FormSelect>
-                  </FormGroup>
+                    items={goals}
+                    label={get(FIELDS, 'goal', { name: '' }).name}
+                    menuRenderer={item => item.description}
+                    onFormSelectChange={onFormSelectChange('goal')}
+                  />
 
                   {getInputFormGroup('entries')}
                   {getDateInputFormGroup('start_date')}
