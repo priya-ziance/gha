@@ -27,13 +27,13 @@ import './index.scss';
 const PAGE_SIZE = 10;
 
 const DatabaseGoals = () => {
-  const [spGoals, setSpGoals] = useState<SpGoal[] | []>([]);
+  const [expenses, setExpenses] = useState<SpGoal[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = spGoals.length === PAGE_SIZE;
+  const hasNextPage = expenses.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const DatabaseGoals = () => {
       setLoading(true);
 
       try {
-        setSpGoals(
+        setExpenses(
           await api.spGoals.getSpGoals(clientId, { page, pageSize: PAGE_SIZE })
         )
       } catch(e){}
@@ -68,8 +68,8 @@ const DatabaseGoals = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
-    { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
-    { text: URLS.getPagePathName('sp-goals') }
+    { href: URLS.getPagePath('expenses', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses') },
+    { text: URLS.getPagePathName('expenses-main-account') }
   ];
 
   const getAddButton = () => {
@@ -80,27 +80,27 @@ const DatabaseGoals = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-sp-goals', { clientId })
+          to: URLS.getPagePath('add-expenses-main-account', { clientId })
         }}
       >
-        Add SP Goal
+        Add Main Account Expense
       </AnchorButton>
     );
   }
 
   return (
     <div>
-      <div className='goals-database-goals'>
+      <div className='expenses-main-account'>
         <PageHeading
-          title='SP Goals'
+          title='Main Account Expenses'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='goals-database-goals__container'>
+        <div className='expenses-main-account__container'>
           <Col>
             <Table
               loading={loading}
-              numRows={spGoals.length}
+              numRows={expenses.length}
               columns={[
                 {
                   title: 'ID',
@@ -137,14 +137,14 @@ const DatabaseGoals = () => {
                   width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={spGoals}
+              data={expenses}
               enableRowHeader={false}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Sp Goals Found"
+              emptyTableMessage="No Expenses Found"
             />
           </Col>
         </div>

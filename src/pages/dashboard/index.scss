@@ -19,3 +19,20 @@
 .navbar__popover {
   margin-top: 10px;
 }
+
+.module-cards__container {
+  display: flex;
+  align-items: center;
+
+  .row {
+    display: flex;
+  }
+
+  .row--center {
+    justify-content: center;
+  }
+
+  .gha__modulecard {
+    margin: 15px;
+  }
+}

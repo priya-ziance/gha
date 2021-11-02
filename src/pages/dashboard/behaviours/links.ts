@@ -20,12 +20,13 @@ export const getLinks = (clientId: string) => {
       title: 'Behaviours Database',
       image: ClientsImage,
       path: URLS.getPagePath('behaviours-database', { clientId })
-    },
-    {
-      description: '',
-      title: 'Behaviours Insertion',
-      image: ClientsImage,
-      path: URLS.getPagePath('goals-database', { clientId })
     }
+    // ,
+    // {
+    //   description: '',
+    //   title: 'Behaviours Insertion',
+    //   image: ClientsImage,
+    //   path: URLS.getPagePath('goals-database', { clientId })
+    // }
   ]
 }

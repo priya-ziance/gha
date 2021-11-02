@@ -77,20 +77,21 @@ const UpdateBehaviourProblemDialog = (props: UpdateBehaviourProblemDialogProps) 
                 errors,
                 handleChange,
                 handleSubmit,
-                isSubmitting
+                isSubmitting,
+                setFieldValue
               }) => {
                 const getNumericInput = (key: BEHAVIOUR_PROBLEMS_FIELDS_TYPE) => (
                   <FormGroup
                     intent={helpers.getFormIntent(errors[key])}
                     label={get(FIELDS, key, { name: '' }).name}
-                    labelFor={`text-input__${key}`}
+                    labelFor={`numeric-input__${key}`}
                     helperText={errors[key]}
                   >
                     <NumericInput
                       id={`numeric-input__${key}`}
                       intent={helpers.getFormIntent(errors[key])}
-                      onValueChange={(_, value) => {
-                        handleChange(key)(value)
+                      onValueChange={(_: any, value: string) => {
+                        setFieldValue(key, value)
                       }}
                       value={values[key]}
                     />

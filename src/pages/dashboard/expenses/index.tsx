@@ -20,14 +20,14 @@ const Content = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links'), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { text: URLS.getPagePathName('goals') }
+    { text: URLS.getPagePathName('expenses') }
   ];
 
   return (
     <div>
-      <div className='clients'>
+      <div className='expenses'>
         <PageHeading
-          title='Clients'
+          title='Expenses'
           breadCrumbs={BREADCRUMBS}
         />
         <div className='module-cards__container'>
@@ -38,7 +38,7 @@ const Content = () => {
                   key={link.title}
                   title={link.title}
                   body={link.description}
-                  interactive
+                  interactive={link.interactive}
                   link={link.path}
                   image={link.image}
                 />

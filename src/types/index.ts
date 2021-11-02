@@ -10,6 +10,7 @@ export type PAGE_TYPES =
   'add-database-goal' |
   'add-database-subgoal' |
   'add-database-task' |
+  'add-expenses-main-account' |
   'add-sp-goals' |
   'apd' |
   'behaviours' |
@@ -26,6 +27,8 @@ export type PAGE_TYPES =
   'edit-database-goal' |
   'edit-database-subgoal' |
   'edit-database-task' |
+  'expenses' |
+  'expenses-main-account' |
   'goals' |
   'goals-data-collection' |
   'goals-database' |
@@ -120,13 +123,25 @@ export type CLIENT_FIELDS_TYPE =
   'definition_of_abuse' |
   'notes';
 
-  export type BEHAVIOUR_FIELDS_TYPE =
+export type ACCOUNT_EXPENSE_FIELDS_TYPE =
+  'active' |
+  'community_activity_save' |
+  'document' |
+  'expense' |
+  'expense_date' |
+  'expense_description' |
+  'expense_type' |
+  'inventory_save' |
+  'location' |
+  'type';
+
+export type BEHAVIOUR_FIELDS_TYPE =
   'active' |
   'description' |
   'behaviour_type' |
   'behaviour_description'
 
-  export type GOAL_FIELDS_TYPE =
+export type GOAL_FIELDS_TYPE =
   'active' |
   'description'
 
@@ -175,6 +190,14 @@ export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type ACCOUNT_EXPENSE_FIELDS_FORM_TYPE = {
+  [key in ACCOUNT_EXPENSE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean | number,
     validation: any
   }
 }

@@ -29,8 +29,8 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Expenses',
       image: ClientsImage,
-      // path: '/dashboard/clients',
-      interactive: false
+      path: URLS.getPagePath('expenses', { clientId }),
+      interactive: true
     },
     {
       description: '',
