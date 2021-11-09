@@ -1,18 +1,18 @@
 import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
+import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import moment from 'moment';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 
 import ToastsContext from '../../../contexts/toasts';
+import ClientContext from '../../../contexts/client';
 
-import IClientModel from '../../../models/client';
+import IExpenseModel from '../../../models/expense';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls'; 
-import { dataURItoBlob } from '../../../utils/helpers';
 
 import {
   Button,
@@ -44,16 +44,18 @@ import * as helpers from './helpers';
 import './index.scss';
 
 interface ExpensesMainAccountProps {
-  client?: IClientModel | undefined;
+  expense?: IExpenseModel | undefined;
   update?: boolean;
 }
 
 
 const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   const [loading, setLoading] = useState(false);
-  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null); 
-  const [signatureDataURL, setSignatureDataURL] = useState('');
+  const [document, setDocumentFile] = useState<File | null>(null); 
+  
   const { addToast } = useContext(ToastsContext);
+  const { id: clientId } = useContext(ClientContext);
+
   let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
@@ -61,72 +63,66 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links'), icon: 'document', text: URLS.getPagePathName('client-links') },
     { href: URLS.getPagePath('expenses'), icon: 'document', text: URLS.getPagePathName('expenses') },
-    { href: URLS.getPagePath('expenses-main-account'), icon: 'document', text: URLS.getPagePathName('expenses-main-account') }
+    { href: URLS.getPagePath('expenses-account'), icon: 'document', text: URLS.getPagePathName('expenses-account') }
   ];
 
   if (props.update) {
     BREADCRUMBS.push({
       href: URLS.getPagePath('client-links',
-      { clientId: props.client?.id }),
+      { clientId}),
       icon: 'document', text: URLS.getPagePathName('client-links') 
     })
     BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
   } else {
-    BREADCRUMBS.push({ text: URLS.getPagePathName('add-expenses-main-account') })
+    BREADCRUMBS.push({ text: URLS.getPagePathName('add-expenses-account') })
   }
 
 
-  const uploadProfilePicture = async () => {
-    if (profilePictureFile) {
-      return api.files.uploadFile(get(props, 'client.id'), 'image', profilePictureFile);
-    }
-  }
-
-  const uploadSignature = async () => {
-    if (signatureDataURL) {
-      return api.files.uploadFile(get(props, 'client.id'), 'image', dataURItoBlob(signatureDataURL));
+  const uploadDocument = async () => {
+    if (document) {
+      return api.files.uploadFile(clientId, 'image', document);
     }
   }
 
   const getErrorToast = (message: string) => {
     return (
-      <CreateClientErrorToast message={message} />
+      <CreateExpenseErrorToast message={message} />
     )
   }
 
-  const CreateClientSuccessToast = (
+  const CreateExpenseSuccessToast = (
     <>
       <strong>Success</strong>
       <div>
         {props.update ?
-          'Client updated successfully'
+          'Expense updated successfully'
           :
-          'Client created successfully'
+          'Expense created successfully'
         }
       </div>
     </>
   );
 
-  const CreateClientErrorToast = (props: any) => (
+  const CreateExpenseErrorToast = (props: any) => (
     <>
       <strong>Error</strong>
       <div> {props.message} </div>
     </>
   );
 
-  const setProfilePicture = (files: File[]) => {
-    setProfilePictureFile(files[0]);
+  const setDocument = (files: File[]) => {
+    setDocumentFile(files[0]);
   }
 
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
-  if (props.client) {
+  if (props.expense) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.client.client, Object.keys(helpers.initialValues))
+      pick(props.expense.apiExpense, Object.keys(helpers.initialValues))
     );
   } else {
     initialValues = helpers.initialValues;
@@ -136,46 +132,48 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
     <LoadingView loading={loading}>
       <div className='client'>
         <PageHeading
-          title='Client Detail'
+          title={
+            props.update ?
+            'Update Expense' :
+            'Add Expense'
+          }
           breadCrumbs={BREADCRUMBS}
         />
         <div className='client__container'>
           <Formik
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
 
-              if (profilePictureFile) {
-                let file = await uploadProfilePicture();
-                values.profile_picture = file?.id;
-              }
+              values.client = clientId;
 
-              /**
-               * signatureDataURL should only be available if a new signature was
-               * added
-               */
-              if (signatureDataURL) { 
+              // TODO: Change this to use a real employee
+              values.employee = 'Employee'
+
+              if (document) {
                 try {
-                  let signatureFile = await uploadSignature();
-                  values.signature = signatureFile?.id;
+                  let file = await uploadDocument();
+                  values.document = file?.id;
                 } catch(e) {}
               }
 
               try {
                 if (props.update) {
-                  await api.clients.updateClient(get(props, 'client.id', ''), values);
+                  await api.expenses.updateExpense(clientId, values);
                 } else {
-                  await api.clients.createClient(values);
+                  await api.expenses.createExpense(values, { clientId });
                 }
 
                 addToast(
                   {
-                    message: CreateClientSuccessToast,
+                    message: CreateExpenseSuccessToast,
                     timeout: 5000,
                     intent:  Intent.SUCCESS
                   }
                 );
+
+                resetForm()
               } catch(e) {
                 addToast(
                   {
@@ -279,11 +277,11 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                 <form onSubmit={handleSubmit}>
                   <FormGroup
                     intent={Intent.PRIMARY}
-                    label={'User Image'}
+                    label={'Document'}
                   >
                     <ImageDropzone
-                      files={profilePictureFile ? [profilePictureFile]: []}
-                      setFiles={setProfilePicture}
+                      files={document ? [document]: []}
+                      setFiles={setDocument}
                       imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
                     />
                   </FormGroup>

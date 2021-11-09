@@ -10,7 +10,7 @@ export type PAGE_TYPES =
   'add-database-goal' |
   'add-database-subgoal' |
   'add-database-task' |
-  'add-expenses-main-account' |
+  'add-expenses-account' |
   'add-sp-goals' |
   'apd' |
   'behaviours' |
@@ -27,8 +27,9 @@ export type PAGE_TYPES =
   'edit-database-goal' |
   'edit-database-subgoal' |
   'edit-database-task' |
+  'edit-expense-account' |
   'expenses' |
-  'expenses-main-account' |
+  'expenses-account' |
   'goals' |
   'goals-data-collection' |
   'goals-database' |
@@ -353,6 +354,23 @@ export interface IClientContactModel {
   clientContact: IClientContact;
 }
 
+export interface IExpenseModel {
+  id: string;
+  expenseDate: Moment;
+  expenseDescription: string;
+  expenseType: string;
+  expense: number;
+  location?: string;
+  employee?: IClientModel;
+  type: string;
+  document?: IFileModel;
+  active: boolean;
+  inventorySave: boolean;
+  communityActivitySave: boolean;
+  apiExpense: IExpense;
+  createdAt: Moment;
+}
+
 export interface IFileModel {
   createdAt?: string;
   id: string;
@@ -531,6 +549,22 @@ export interface IClient {
   creator?: string;
   profile_picture?: IFile;
   signature?: IFile;
+}
+
+export interface IExpense {
+  _id: string;
+  expense_date: string;
+  expense_description: string;
+  expense_type: string;
+  expense: number;
+  location: string;
+  employee: IClient;
+  type: string;
+  document?: IFile;
+  active: boolean;
+  inventory_save: boolean;
+  community_activity_save: boolean;
+  created_at: string;
 }
 
 export interface IFile {

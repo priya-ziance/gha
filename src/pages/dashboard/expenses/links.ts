@@ -5,17 +5,10 @@ export const getLinks = (clientId: string) => {
   return [
     {
       description: 'Expenses',
-      title: 'Main Account',
+      title: 'Account Expenses',
       image: ClientsImage,
-      path: URLS.getPagePath('expenses-main-account', { clientId }),
+      path: URLS.getPagePath('expenses-account', { clientId }),
       interactive: true
-    },
-    {
-      description: 'Account',
-      title: 'Personal Funds',
-      image: ClientsImage,
-      // path: URLS.getPagePath('goals-data-collection', { clientId }),
-      interactive: false
     },
     {
       description: '',

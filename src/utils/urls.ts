@@ -4,6 +4,7 @@ import { PAGE_TYPES } from '../types';
 type OPTIONS_TYPE = {
   clientId?: string,
   behaviourId?: string,
+  expenseId?: string,
   goalId?: string,
   subGoalId?: string,
   taskId?: string
@@ -27,8 +28,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/subgoals/add`;
     case 'add-database-task':
       return `${clientBase}/goals/database/tasks/add`;
-    case 'add-expenses-main-account':
-      return `${clientBase}/expenses/main-account/add`;
+    case 'add-expenses-account':
+      return `${clientBase}/expenses/expense-account/add`;
     case 'add-sp-goals':
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
@@ -61,10 +62,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/subgoals/${options.subGoalId}/edit`;
     case 'edit-database-task':
       return `${clientBase}/goals/database/tasks/${options.taskId}/edit`;
+    case 'edit-expense-account':
+      return `${clientBase}/expenses/${options.expenseId}/edit`;
     case 'expenses':
       return `${clientBase}/expenses`;
-    case 'expenses-main-account':
-      return `${clientBase}/expenses/main-account`;
+    case 'expenses-account':
+      return `${clientBase}/expenses/expense-account`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'goals-data-collection':
@@ -110,7 +113,7 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Database Sugboal';
     case 'add-database-task':
       return 'Add Database Tasks';
-    case 'add-expenses-main-account':
+    case 'add-expenses-account':
       return 'Add Main Account Expense';
     case 'add-sp-goals':
       return `Add SP Goals`;
@@ -144,9 +147,11 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit SubGoal';
     case 'edit-database-task':
       return 'Edit Task';
+    case 'edit-expense-account':
+      return 'Edit Expense';
     case 'expenses':
       return 'Expenses';
-    case 'expenses-main-account':
+    case 'expenses-account':
       return 'Expenses Main Account';
     case 'goals':
       return `Client Goals`;

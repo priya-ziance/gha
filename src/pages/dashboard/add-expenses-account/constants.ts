@@ -64,5 +64,5 @@ export const FIELDS : ACCOUNT_EXPENSE_FIELDS_FORM_TYPE= {
     name: 'Type',
     default: 'main_account',
     validation: yup.string().required().label('Expense Account Type'),
-  },
+  }
 }

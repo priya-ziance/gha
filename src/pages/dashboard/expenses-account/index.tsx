@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import get from 'lodash/get';
 
-import { AnchorButton, Col, PageHeading, Table } from '../../../components';
+import { AnchorButton, Col, FormItemSelect, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';
@@ -11,25 +12,28 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import SpGoal from '../../../models/spGoal';
+import Expense from '../../../models/expense';
 
 import * as helpers from '../../../utils/helpers';
+
+import { EXPENSE_ACCOUNT_TYPES } from './constants';
 
 import {
   actionColumn,
   activeColumn,
   dateColumn,
-  notesColumn,
+  descriptionColumn,
 } from './helpers';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const DatabaseGoals = () => {
-  const [expenses, setExpenses] = useState<SpGoal[] | []>([]);
+const ExpensesAccount = () => {
+  const [expenses, setExpenses] = useState<Expense[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [accountType, setAccountType] = useState(Object.keys(EXPENSE_ACCOUNT_TYPES)[0])
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
@@ -42,15 +46,13 @@ const DatabaseGoals = () => {
 
       try {
         setExpenses(
-          await api.spGoals.getSpGoals(clientId, { page, pageSize: PAGE_SIZE })
+          await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
       } catch(e){}
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
+      setLoading(false);
     })()
-  }, [clientId, page, selectedLocationId]);
+  }, [clientId, page, selectedLocationId, accountType]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -69,7 +71,7 @@ const DatabaseGoals = () => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('expenses', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses') },
-    { text: URLS.getPagePathName('expenses-main-account') }
+    { text: URLS.getPagePathName('expenses-account') }
   ];
 
   const getAddButton = () => {
@@ -80,7 +82,7 @@ const DatabaseGoals = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-expenses-main-account', { clientId })
+          to: URLS.getPagePath('add-expenses-account', { clientId })
         }}
       >
         Add Main Account Expense
@@ -90,14 +92,22 @@ const DatabaseGoals = () => {
 
   return (
     <div>
-      <div className='expenses-main-account'>
+      <div className='expenses-account'>
         <PageHeading
           title='Main Account Expenses'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='expenses-main-account__container'>
+        <div className='expenses-account__container'>
           <Col>
+            <FormItemSelect
+              buttonText={get(EXPENSE_ACCOUNT_TYPES, accountType, '')}
+              items={Object.keys(EXPENSE_ACCOUNT_TYPES)}
+              label={'Expense Type'}
+              menuRenderer={item => get(EXPENSE_ACCOUNT_TYPES, item, '')}
+              onFormSelectChange={setAccountType}
+            />
+
             <Table
               loading={loading}
               numRows={expenses.length}
@@ -108,8 +118,8 @@ const DatabaseGoals = () => {
                   width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Notes',
-                  cellRenderer: notesColumn,
+                  title: 'Description',
+                  cellRenderer: descriptionColumn,
                   width: helpers.getTableWith(0.6)
                 },
                 {
@@ -129,8 +139,8 @@ const DatabaseGoals = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-database-goal',
-                          { clientId, goalId: data.id })
+                          'edit-expense-account',
+                          { clientId, expenseId: data.id })
                       }
                     )
                   },
@@ -153,4 +163,4 @@ const DatabaseGoals = () => {
   );
 }
 
-export default DatabaseGoals;
+export default ExpensesAccount;

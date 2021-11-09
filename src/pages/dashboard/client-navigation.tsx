@@ -23,9 +23,10 @@ import BehavioursProblemsPage from './behaviours-problems';
 import BehavioursAssignPage from './behaviours-assign';
 import BehavioursDatabasePage from './behaviours-database';
 
-import AddExpensesMainAccountPage from './add-expenses-main-account';
+import AddExpensesAccountPage from './add-expenses-account';
+import EditExpenseAccountPage from './edit-expense-account';
 import ExpensesPage from './expenses';
-import ExpensesMainAccountPage from './expenses-main-account';
+import ExpensesAccountPage from './expenses-account';
 
 import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
@@ -104,8 +105,9 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
 
       <Route path="/dashboard/clients/:clientId/expenses" exact component={ExpensesPage} />
-      <Route path="/dashboard/clients/:clientId/expenses/main-account" exact component={ExpensesMainAccountPage} />
-      <Route path="/dashboard/clients/:clientId/expenses/main-account/add" exact component={AddExpensesMainAccountPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/:expenseId/edit" exact component={EditExpenseAccountPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/expense-account" exact component={ExpensesAccountPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/expense-account/add" exact component={AddExpensesAccountPage} />
       
       <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-info" exact component={ClientInfo} />

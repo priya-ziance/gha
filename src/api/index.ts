@@ -14,6 +14,8 @@ import {
   IClientBehaviourModel,
   IClientContact,
   IClientContactModel,
+  IExpense,
+  IExpenseModel,
   IFile,
   IFileModel,
   IGoal,
@@ -479,6 +481,48 @@ class ClientBehavioursApi {
 }
 
 
+class ExpensesApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IExpenseModel, IExpense>(Models.Expense)
+  }
+
+  async getExpenses(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const expensesResult = await client.get(`/expenses`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(expensesResult.data.contents);
+  }
+
+  async getExpense(expenseId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const expenseResult = await client.get(`/expense/${expenseId}`, params);
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async createExpense(body = {}, params = {}) {
+    const expenseResult = await client.post('/expense', body, { params });
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async updateExpense(expenseId = '', body = {}, params = {}) {
+    const expenseResult = await client.patch(`/expense/${expenseId}`, body, { params });
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+}
+
+
 
 //========================================================================
 
@@ -488,6 +532,7 @@ export default (() => ({
   clientBehaviours: new ClientBehavioursApi(),
   clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi(),
+  expenses: new ExpensesApi(),
   files: new FileApi(),
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),
