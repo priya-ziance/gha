@@ -4,6 +4,7 @@ import Card from './Card';
 import Col from './Col';
 import DateInput from './DateInput';
 import Dialog from './Dialog';
+import FileInput from './FileInput'
 import FormGroup from './FormGroup';
 import FormItemSelect from './FormItemSelect';
 import H1 from './H1';
@@ -31,6 +32,7 @@ export {
   Col,
   DateInput,
   Dialog,
+  FileInput,
   FormGroup,
   FormItemSelect,
   H1,

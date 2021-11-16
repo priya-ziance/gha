@@ -3,6 +3,7 @@ import { Moment } from 'moment';
 
 export type PAGE_TYPES =
   'add-apd' |
+  'add-bank-statement' |
   'add-clients' |
   'add-client-case-notes' |
   'add-client-contact' |
@@ -13,6 +14,7 @@ export type PAGE_TYPES =
   'add-expenses-account' |
   'add-sp-goals' |
   'apd' |
+  'bank-statement' |
   'behaviours' |
   'behaviours-problems' |
   'behaviours-assign' |
@@ -50,6 +52,15 @@ export type APD_FIELDS_TYPE =
   'county' |
   'incident_date_time' |
   'reportable_incident'
+
+export type BANK_STATEMENT_FIELDS_TYPE =
+  'active' |
+  'document' |
+  'from_date' |
+  'statement_name' |
+  'statement_description' |
+  'to_date' |
+  'type'
 
 export type CASE_NOTE_FIELDS_TYPE =
   'active' |
@@ -203,6 +214,14 @@ export type ACCOUNT_EXPENSE_FIELDS_FORM_TYPE = {
   }
 }
 
+export type BANK_STATEMENT_FIELDS_FORM_TYPE = {
+  [key in BANK_STATEMENT_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean | number,
+    validation: any
+  }
+}
+
 export type BEHAVIOUR_FIELDS_FORM_TYPE = {
   [key in BEHAVIOUR_FIELDS_TYPE]?: {
     name: string,
@@ -299,7 +318,20 @@ export interface IToastsContext {
  * App Models
  */
 
- export interface IBehaviourModel {
+export interface IBankStatementModel {
+  id: string;
+  statementName: string;
+  statementDescription: string;
+  fromDate: Moment;
+  toDate: Moment;
+  type: string;
+  document?: IFileModel;
+  active: boolean;
+  bankStatement: IBankStatement;
+  createdAt: Moment;
+}
+
+export interface IBehaviourModel {
   id: string;
   active: boolean;
   behaviourDescription: string;
@@ -445,6 +477,18 @@ export interface ITaskModel {
 /**
  * API Models
  */
+
+export interface IBankStatement {
+  _id: string;
+  statement_name: string;
+  statement_description: string;
+  from_date: string;
+  to_date: string;
+  type: string;
+  document?: IFile;
+  active: true;
+  created_at: string;
+}
 
 export interface IBehaviour {
   _id: string;

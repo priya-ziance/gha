@@ -27,6 +27,8 @@ import AddExpensesAccountPage from './add-expenses-account';
 import EditExpenseAccountPage from './edit-expense-account';
 import ExpensesPage from './expenses';
 import ExpensesAccountPage from './expenses-account';
+import BankStatementPage from './bank-statement';
+import AddBankStatementPage from './add-bank-statement';
 
 import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
@@ -105,6 +107,8 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
 
       <Route path="/dashboard/clients/:clientId/expenses" exact component={ExpensesPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/bank-statement" exact component={BankStatementPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/bank-statement/add" exact component={AddBankStatementPage} />
       <Route path="/dashboard/clients/:clientId/expenses/:expenseId/edit" exact component={EditExpenseAccountPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expense-account" exact component={ExpensesAccountPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expense-account/add" exact component={AddExpensesAccountPage} />

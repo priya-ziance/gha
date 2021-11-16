@@ -3,6 +3,7 @@ import { PAGE_TYPES } from '../types';
 
 type OPTIONS_TYPE = {
   clientId?: string,
+  bankStatementId?: string,
   behaviourId?: string,
   expenseId?: string,
   goalId?: string,
@@ -16,6 +17,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
   switch (page) {
     case 'add-apd':
       return `${clientBase}/apd/add`;
+    case 'add-bank-statement':
+      return `${clientBase}/expenses/bank-statement/add`;
     case 'add-client-case-notes':
       return `${clientBase}/client-case-notes/add`;
     case 'add-client-contact':
@@ -34,6 +37,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
       return `${clientBase}/apd`;
+    case 'bank-statement':
+      return `${clientBase}/expenses/bank-statement`;
     case 'behaviours':
       return `${clientBase}/behaviours`;
     case 'behaviours-assign':
@@ -101,6 +106,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
   switch (page) {
     case 'add-apd':
       return 'Add APD';
+    case 'add-bank-statement':
+      return 'Add Bank Statement';
     case 'add-client-case-notes':
       return `Add Client Case Note`;
     case 'add-database-behaviour':
@@ -119,6 +126,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Add SP Goals`;
     case 'apd':
       return 'APD';
+    case 'bank-statement':
+      return 'Bank Statement';
     case 'behaviours':
       return 'Behaviours';
     case 'behaviours-assign':

@@ -8,7 +8,7 @@ import pick from 'lodash/pick';
 import ToastsContext from '../../../contexts/toasts';
 import ClientContext from '../../../contexts/client';
 
-import IExpenseModel from '../../../models/expense';
+import IBankStatementModel from '../../../models/bankStatement';
 
 import api from '../../../api';
 
@@ -18,13 +18,11 @@ import {
   Button,
   Col,
   DateInput,
+  FileInput,
   FormGroup,
   FormItemSelect,
-  ImageDropzone,
   InputGroup,
-  NumericInput,
   LoadingView,
-
   PageHeading,
   Row,
   Switch,
@@ -33,25 +31,24 @@ import {
 
 import {
   FIELDS,
-  EXPENSE_TYPES,
-  EXPENSE_ACCOUNT_TYPES
+  BANK_STATEMENT_ACCOUNT_TYPES
 } from './constants';
 
-import { ACCOUNT_EXPENSE_FIELDS_TYPE } from '../../../types';
+import { BANK_STATEMENT_FIELDS_TYPE } from '../../../types';
 
 import * as helpers from './helpers';
 
 import './index.scss';
 
-interface ExpensesMainAccountProps {
-  expense?: IExpenseModel | undefined;
+interface BankStatementsMainAccountProps {
+  bankStatement?: IBankStatementModel | undefined;
   update?: boolean;
 }
 
 
-const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
+const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
   const [loading, setLoading] = useState(false);
-  const [document, setDocumentFile] = useState<File | null>(null); 
+  const [documentFile, setDocumentFile] = useState<File | null>(null); 
   
   const { addToast } = useContext(ToastsContext);
   const { id: clientId } = useContext(ClientContext);
@@ -63,7 +60,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links'), icon: 'document', text: URLS.getPagePathName('client-links') },
     { href: URLS.getPagePath('expenses'), icon: 'document', text: URLS.getPagePathName('expenses') },
-    { href: URLS.getPagePath('expenses-account'), icon: 'document', text: URLS.getPagePathName('expenses-account') }
+    { href: URLS.getPagePath('bank-statement'), icon: 'document', text: URLS.getPagePathName('bank-statement') }
   ];
 
   if (props.update) {
@@ -74,55 +71,63 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
     })
     BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
   } else {
-    BREADCRUMBS.push({ text: URLS.getPagePathName('add-expenses-account') })
+    BREADCRUMBS.push({ text: URLS.getPagePathName('add-bank-statement') })
   }
 
 
   const uploadDocument = async () => {
-    if (document) {
-      return api.files.uploadFile(clientId, 'image', document);
+    if (documentFile) {
+      return api.files.uploadFile(clientId, 'image', documentFile);
     }
   }
 
   const getErrorToast = (message: string) => {
     return (
-      <CreateExpenseErrorToast message={message} />
+      <CreateBankStatementErrorToast message={message} />
     )
   }
 
-  const CreateExpenseSuccessToast = (
+  const CreateBankStatementSuccessToast = (
     <>
       <strong>Success</strong>
       <div>
         {props.update ?
-          'Expense updated successfully'
+          'Bank Statement updated successfully'
           :
-          'Expense created successfully'
+          'Bank Statement created successfully'
         }
       </div>
     </>
   );
 
-  const CreateExpenseErrorToast = (props: any) => (
+  const CreateBankStatementErrorToast = (props: any) => (
     <>
       <strong>Error</strong>
       <div> {props.message} </div>
     </>
   );
 
-  const setDocument = (files: File[]) => {
-    setDocumentFile(files[0]);
+  const onDocumentChange = (e: any) => {
+    setDocumentFile(get(e, 'target.files', [])[0])
+  }
+
+  const getDocumentText = () => {
+    if (documentFile) {
+      return get(documentFile, 'name')
+    } else {
+      return get(props, 'bankStatement.document.key')
+    }
   }
 
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
-  if (props.expense) {
+  if (props.bankStatement) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.expense.apiExpense, Object.keys(helpers.initialValues))
+      pick(props.bankStatement.bankStatement, Object.keys(helpers.initialValues))
     );
   } else {
     initialValues = helpers.initialValues;
@@ -134,8 +139,8 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
         <PageHeading
           title={
             props.update ?
-            'Update Expense' :
-            'Add Expense'
+            'Update Bank Statement' :
+            'Add Bank Statement'
           }
           breadCrumbs={BREADCRUMBS}
         />
@@ -149,9 +154,9 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
               values.client = clientId;
 
               // TODO: Change this to use a real employee
-              values.employee = 'Employee'
+              // values.employee = 'Employee'
 
-              if (document) {
+              if (documentFile) {
                 try {
                   let file = await uploadDocument();
                   values.document = file?.id;
@@ -160,14 +165,14 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
 
               try {
                 if (props.update) {
-                  await api.expenses.updateExpense(clientId, values);
+                  await api.bankStatements.updateBankStatement(clientId, values);
                 } else {
-                  await api.expenses.createExpense(values, { clientId });
+                  await api.bankStatements.createBankStatement(values, { clientId });
                 }
 
                 addToast(
                   {
-                    message: CreateExpenseSuccessToast,
+                    message: CreateBankStatementSuccessToast,
                     timeout: 5000,
                     intent:  Intent.SUCCESS
                   }
@@ -197,16 +202,12 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
               handleSubmit,
               isSubmitting,
               setFieldValue
-            }) => {
-              const onFormSelectChange = (field: string) => (value: string) => {
-                setFieldValue(field, value);
-              }
-              
+            }) => {              
               const onFormDateChange = (field: string) => (date: Date) => {
                 setFieldValue(field, moment(date).toISOString());
               }
 
-              const getInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
+              const getInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -222,7 +223,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                 </FormGroup>
               )
 
-              const getDateInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
+              const getDateInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -236,7 +237,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                 </FormGroup>
               );
 
-              const getTextAreaInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
+              const getTextAreaInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
                 <FormGroup
                   intent={helpers.getFormIntent(errors[key])}
                   label={get(FIELDS, key, { name: '' }).name}
@@ -252,62 +253,29 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                 </FormGroup>
               )
 
-              const getNumericInput = (key: ACCOUNT_EXPENSE_FIELDS_TYPE, inputOptions = {}) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`numeric-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <NumericInput
-                    id={`numeric-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onValueChange={(_: any, value: string) => {
-                      setFieldValue(key, value)
-                    }}
-                    value={values[key]}
-                    {...inputOptions}
-                  />
-                </FormGroup>
-              )
-
-              const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
-
               return (
                 <form onSubmit={handleSubmit}>
                   <FormGroup
                     intent={Intent.PRIMARY}
                     label={'Document'}
                   >
-                    <ImageDropzone
-                      files={document ? [document]: []}
-                      setFiles={setDocument}
-                      imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
-                    />
+                    <FileInput text={getDocumentText()} onChange={onDocumentChange} />
                   </FormGroup>
                   <Row>
                     <Col>
-                      {getInputFormGroup('location')}
+                      {getInputFormGroup('statement_name')}
 
-                      {getDateInputFormGroup('expense_date')}
+                      {getDateInputFormGroup('from_date')}
+
+                      {getDateInputFormGroup('to_date')}
                       
-                      {getTextAreaInputFormGroup('expense_description')}
-
-                      {getNumericInput('expense', { leftIcon: 'dollar' })}
+                      {getTextAreaInputFormGroup('statement_description')}
 
                       <FormItemSelect
-                        buttonText={values.expense_type}
-                        items={EXPENSE_TYPES}
-                        label={get(FIELDS, 'expense_type', { name: '' }).name}
-                        menuRenderer={item => item}
-                        onFormSelectChange={(handleChange('expense_type'))}
-                      />
-
-                      <FormItemSelect
-                        buttonText={get(EXPENSE_ACCOUNT_TYPES, values.type, '')}
-                        items={Object.keys(EXPENSE_ACCOUNT_TYPES)}
+                        buttonText={get(BANK_STATEMENT_ACCOUNT_TYPES, values.type, '')}
+                        items={Object.keys(BANK_STATEMENT_ACCOUNT_TYPES)}
                         label={get(FIELDS, 'type', { name: '' }).name}
-                        menuRenderer={item => get(EXPENSE_ACCOUNT_TYPES, item, '')}
+                        menuRenderer={item => get(BANK_STATEMENT_ACCOUNT_TYPES, item, '')}
                         onFormSelectChange={(handleChange('type'))}
                       />
 
@@ -318,24 +286,6 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                         labelInfo={"(required)"}
                       >
                         <Switch id="switch-input" large checked={values.active} onChange={handleChange('active')}/>
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'inventory_save', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.inventory_save} onChange={handleChange('inventory_save')}/>
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'community_activity_save', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.community_activity_save} onChange={handleChange('community_activity_save')}/>
                       </FormGroup>
                     </Col>
   
@@ -353,4 +303,4 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   );
 }
 
-export default ExpensesMainAccount;
+export default BankStatementsMainAccount;

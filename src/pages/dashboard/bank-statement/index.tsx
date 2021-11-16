@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import get from 'lodash/get';
 
-import { AnchorButton, Col, PageHeading, Table } from '../../../components';
+import { AnchorButton, Col, FormItemSelect, PageHeading, Table } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';
@@ -11,9 +12,11 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import Goal from '../../../models/goal';
+import Expense from '../../../models/expense';
 
 import * as helpers from '../../../utils/helpers';
+
+import { BANK_STATEMENT_TYPES } from './constants';
 
 import {
   actionColumn,
@@ -26,14 +29,15 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const DatabaseGoals = () => {
-  const [goals, setGoals] = useState<Goal[] | []>([]);
+const BankStatement = () => {
+  const [expenses, setExpenses] = useState<Expense[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [accountType, setAccountType] = useState(Object.keys(BANK_STATEMENT_TYPES)[0])
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = goals.length === PAGE_SIZE;
+  const hasNextPage = expenses.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -41,16 +45,14 @@ const DatabaseGoals = () => {
       setLoading(true);
 
       try {
-        setGoals(
-          await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
+        setExpenses(
+          await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
       } catch(e){}
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
+      setLoading(false);
     })()
-  }, [clientId, page, selectedLocationId]);
+  }, [clientId, page, selectedLocationId, accountType]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -68,9 +70,8 @@ const DatabaseGoals = () => {
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
-    { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: URLS.getPagePathName('goals') },
-    { href: URLS.getPagePath('goals-database', { clientId }), icon: 'document', text: URLS.getPagePathName('goals-database') },
-    { text: URLS.getPagePathName('goals-database-goals') }
+    { href: URLS.getPagePath('expenses', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses') },
+    { text: URLS.getPagePathName('bank-statement') }
   ];
 
   const getAddButton = () => {
@@ -81,31 +82,35 @@ const DatabaseGoals = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-database-goal', { clientId })
+          to: URLS.getPagePath('add-bank-statement', { clientId })
         }}
       >
-        Add goal
+        Add Main Account Expense
       </AnchorButton>
     );
   }
 
   return (
     <div>
-      <div className='goals-database-goals'>
+      <div className='bank-statement'>
         <PageHeading
-          title='Database Goals'
+          title='Bank Statements'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='goals-database-goals__container'>
+        <div className='bank-statement__container'>
           <Col>
+            <FormItemSelect
+              buttonText={get(BANK_STATEMENT_TYPES, accountType, '')}
+              items={Object.keys(BANK_STATEMENT_TYPES)}
+              label={'Bank Statement Type'}
+              menuRenderer={item => get(BANK_STATEMENT_TYPES, item, '')}
+              onFormSelectChange={setAccountType}
+            />
+
             <Table
               loading={loading}
-              numRows={goals.length}
-              getCellClipboardData={(row, col) => {
-
-                return goals[row]
-              }}
+              numRows={expenses.length}
               columns={[
                 {
                   title: 'ID',
@@ -134,25 +139,22 @@ const DatabaseGoals = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-database-goal',
-                          { clientId, goalId: data.id })
+                          'edit-expense-account',
+                          { clientId, expenseId: data.id })
                       }
                     )
                   },
                   width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={goals}
+              data={expenses}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Goals Found"
+              emptyTableMessage="No Expenses Found"
             />
           </Col>
         </div>
@@ -161,4 +163,4 @@ const DatabaseGoals = () => {
   );
 }
 
-export default DatabaseGoals;
+export default BankStatement;

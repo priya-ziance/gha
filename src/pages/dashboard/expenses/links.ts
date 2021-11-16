@@ -12,23 +12,16 @@ export const getLinks = (clientId: string) => {
     },
     {
       description: '',
+      title: 'Bank Statements',
+      image: ClientsImage,
+      path: URLS.getPagePath('bank-statement', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
       title: 'Expense List',
       image: ClientsImage,
       // path: URLS.getPagePath('goals-database', { clientId }),
-      interactive: false
-    },
-    {
-      description: '',
-      title: 'Main Account',
-      image: ClientsImage,
-      // path: URLS.getPagePath('sp-goals', { clientId }),
-      interactive: false
-    },
-    {
-      description: '',
-      title: 'Personal Funds',
-      image: ClientsImage,
-      // path: URLS.getPagePath('goals-data-collection', { clientId }),
       interactive: false
     },
     {

@@ -114,9 +114,7 @@ const Content = (props: AddGoalProps) => {
             {({
               values,
               errors,
-              touched,
               handleChange,
-              handleBlur,
               handleSubmit,
               isSubmitting,
               setFieldValue

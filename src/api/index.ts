@@ -4,6 +4,8 @@ import client from './client';
 
 import Models from '../models';
 import {
+  IBankStatement,
+  IBankStatementModel,
   IBehaviour,
   IBehaviourModel,
   ICaseNote,
@@ -523,10 +525,53 @@ class ExpensesApi {
 }
 
 
+class BankStatementsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IBankStatementModel, IBankStatement>(Models.BankStatement)
+  }
+
+  async getBankStatements(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const bankStatementsResult = await client.get(`/bank_statements`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(bankStatementsResult.data.contents);
+  }
+
+  async getBankStatement(bank_statementId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const bank_statementResult = await client.get(`/bank_statement/${bank_statementId}`, params);
+  
+    return this.normalizer.normalize(bank_statementResult.data);
+  }
+
+  async createBankStatement(body = {}, params = {}) {
+    const bank_statementResult = await client.post('/bank_statement', body, { params });
+  
+    return this.normalizer.normalize(bank_statementResult.data);
+  }
+
+  async updateBankStatement(bank_statementId = '', body = {}, params = {}) {
+    const bank_statementResult = await client.patch(`/bank_statement/${bank_statementId}`, body, { params });
+  
+    return this.normalizer.normalize(bank_statementResult.data);
+  }
+}
+
+
 
 //========================================================================
 
 export default (() => ({
+  bankStatements: new BankStatementsApi(),
   behaviours: new BehavioursApi(),
   clients: new ClientsApi(),
   clientBehaviours: new ClientBehavioursApi(),
