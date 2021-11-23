@@ -247,6 +247,24 @@ class MedicationApi{
   
     return this.normalizer.normalizeArray(medicationResult.data.contents);
   }
+
+  async getMedication(medicationID: string, clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const medicationResult = await client.get(`/medication/${medicationID}`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(medicationResult.data.contents);
+  }
+
+  async getMedicationDetails(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const medicationResult = await client.get('/details', {
+      clientId,
+      page
+    });
+  }
 }
 
 //============================= SUBGOAL API'S==================================
