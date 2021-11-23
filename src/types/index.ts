@@ -12,6 +12,7 @@ export type PAGE_TYPES =
   'add-database-subgoal' |
   'add-database-task' |
   'add-expenses-account' |
+  'add-medication' |
   'add-sp-goals' |
   'apd' |
   'bank-statement' |
@@ -40,6 +41,10 @@ export type PAGE_TYPES =
   'goals-database-tasks' |
   'life-skills' |
   'logs' |
+  'med-destruction' |
+  'med-pass' |
+  'medication' |
+  'medication-list' |
   'personal-support' |
   'reshab-logs' |
   'respite-logs' |
@@ -188,6 +193,27 @@ export type SP_GOALS_FIELDS_TYPE =
   'sub_goals'
 
 
+export type MEDICATION_FIELDS_TYPE = 
+  'control_meds' |
+  'directions' |
+  'doctor' |
+  'dosage' |
+  'medication' |
+  'medication_reason' |
+  'notes' |
+  'off_cycyle_meds' |
+  'prn_meds' |
+  'quantity' |
+  'refills' |
+  'route' |
+  'side_effect' |
+  'status' |
+  'taken_days' |
+  'temporary_meds' |
+  'time' |
+  'type' 
+
+
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
 export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE |
@@ -280,6 +306,14 @@ export type GOAL_FIELDS_FORM_TYPE = {
 
 export type CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   [key in CLIENT_CONTACT_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type MEDICATION_FIELDS_FORM_TYPE = {
+  [key in MEDICATION_FIELDS_TYPE]? : {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -419,6 +453,23 @@ export interface IGoalModel {
   createdAt: Moment;
   description: string;
   goal: IGoal;
+}
+
+export interface IMedicationModel {
+  id: string;
+  client: string;
+  creator: string;
+  proprietary_name?: string;
+  non_proprietary_name?: string;
+  route_name?: string;
+  type?: string;
+  dosage?: string;
+  directions?: string;
+  med_time?: string;
+  picture?: string;
+  createdAt?: Moment;
+  updatedAt?: Moment
+
 }
 
 export interface ISubGoalModel {
@@ -627,6 +678,23 @@ export interface IGoal {
   created_at: Moment;
   description: string; 
   active: false;
+}
+
+export interface IMedication {
+  _id: string;
+  client: string;
+  creator: string;
+  proprietary_name?: string;
+  non_proprietary_name?: string;
+  route_name?: string;
+  type?: string;
+  dosage?: string;
+  directions?: string;
+  med_time?: string;
+  picture?: string;
+  createdAt?: Moment;
+  updatedAt?: Moment
+
 }
 
 export interface ISubGoal {

@@ -26,6 +26,8 @@ import {
   IInstructionModel,
   ILocation,
   ILocationModel,
+  IMedication,
+  IMedicationModel,
   ISpGoal,
   ISpGoalModel,
   ISubGoalModel,
@@ -224,6 +226,26 @@ class LocationApi {
     const locationsResult = await client.get('/locations');
   
     return this.normalizer.normalizeArray(locationsResult.data.contents);
+  }
+}
+
+
+//================================ Medication API's==========================
+class MedicationApi{
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IMedicationModel, IMedication>(Models.Medication )
+  }
+
+  async getMedications(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const medicationResult = await client.get('/medications', {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(medicationResult.data.contents);
   }
 }
 
@@ -582,6 +604,7 @@ export default (() => ({
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),
   locations: new LocationApi(),
+  medications: new MedicationApi(),
   spGoals: new SpGoalsApi(),
   subgoals: new SubGoalsApi(),
   tasks: new TasksApi(),

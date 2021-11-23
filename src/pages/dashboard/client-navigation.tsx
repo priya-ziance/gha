@@ -53,6 +53,12 @@ import RespiteLogsPage from './respite-logs';
 import LifeSkillsPage from './life-skills';
 import PersonalSupportPage from './personal-support';
 
+import AddMedication from './add-medication';
+import MedicationPage from './medication';
+import MedPassPage from './med-pass';
+import MedDestructionPage from './med-destruction';
+import MedicationListPage from './medication-list';
+
 import api from '../../api';
 
 interface ClientPathsType {
@@ -137,6 +143,14 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/logs/respite-logs" exact component={RespiteLogsPage} />
       <Route path="/dashboard/clients/:clientId/logs/life-skills" exact component={LifeSkillsPage} />
       <Route path="/dashboard/clients/:clientId/logs/personal-support" exact component={PersonalSupportPage} />
+
+      <Route path="/dashboard/clients/:clientId/medication" exact component={MedicationPage} />
+      <Route path="/dashboard/clients/:clientId/medication/med-pass" exact component={MedPassPage} />
+      <Route path="/dashboard/clients/:clientId/medication/med-destruction" exact component={MedDestructionPage} />
+      <Route path="/dashboard/clients/:clientId/medication/medication-list" exact component={MedicationListPage} />
+      <Route path="/dashboard/clients/:clientId/medication/medication-list/add" exact component={AddMedication} />
+
+
     </Switch>
   );
 }

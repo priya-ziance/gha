@@ -33,6 +33,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/tasks/add`;
     case 'add-expenses-account':
       return `${clientBase}/expenses/expense-account/add`;
+    case 'add-medication':
+      return `${clientBase}/medication/medication-list/add`;
     case 'add-sp-goals':
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
@@ -89,6 +91,14 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/logs/life-skills`;
     case 'logs':
       return `${clientBase}/logs`;
+    case 'med-destruction':
+      return `${clientBase}/medication/med-destruction`;
+    case 'med-pass':
+      return `${clientBase}/medication/med-pass`;
+    case 'medication':
+      return `${clientBase}/medication`;
+    case 'medication-list':
+      return `${clientBase}/medication/medication-list`;
     case 'personal-support':
       return `${clientBase}/logs/personal-support`;
     case 'reshab-logs':
@@ -122,6 +132,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Database Tasks';
     case 'add-expenses-account':
       return 'Add Main Account Expense';
+    case 'add-medication':
+      return 'Add Client Medication';
     case 'add-sp-goals':
       return `Add SP Goals`;
     case 'apd':
@@ -178,6 +190,14 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Life Skills';
     case 'logs':
       return 'Logs';
+    case 'med-destruction':
+      return 'Medication Destruction List';
+    case 'med-pass':
+      return 'Med Pass List';
+    case 'medication':
+      return 'Medication';
+    case 'medication-list':
+      return 'Medication List';
     case 'personal-support':
       return 'Personal Support';
     case 'reshab-logs':
