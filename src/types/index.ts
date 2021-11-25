@@ -3,6 +3,7 @@ import { Moment } from 'moment';
 
 export type PAGE_TYPES =
   'add-apd' |
+  'add-appointment' |
   'add-bank-statement' |
   'add-clients' |
   'add-client-case-notes' |
@@ -14,6 +15,7 @@ export type PAGE_TYPES =
   'add-expenses-account' |
   'add-sp-goals' |
   'apd' |
+  'appointments' |
   'bank-statement' |
   'behaviours' |
   'behaviours-problems' |
@@ -52,6 +54,26 @@ export type APD_FIELDS_TYPE =
   'county' |
   'incident_date_time' |
   'reportable_incident'
+
+
+export type APPOINTMENT_FIELDS_TYPE = 
+  'client_name' |
+  'appointment_date' |
+  'time' |
+  'doctor' |
+  'contact_type' |
+  'type_of_appointment' |
+  'staff_notes' |
+  'physicain_notes' |
+  'appt_notes' |
+  'physician_documents' |
+  'follow_up_date' |
+  'active' |
+  'annual_dental' |
+  'annual_medical' |
+  'reporgram_medication' |
+  'labs'
+
 
 export type BANK_STATEMENT_FIELDS_TYPE =
   'active' |
@@ -214,6 +236,14 @@ export type ACCOUNT_EXPENSE_FIELDS_FORM_TYPE = {
   }
 }
 
+export type APPOINTMENT_FIELDS_FORM_TYPE = {
+  [key in APPOINTMENT_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean | number,
+    validation: any
+  }
+}
+
 export type BANK_STATEMENT_FIELDS_FORM_TYPE = {
   [key in BANK_STATEMENT_FIELDS_TYPE]?: {
     name: string,
@@ -317,6 +347,22 @@ export interface IToastsContext {
 /**
  * App Models
  */
+
+export interface IAppointmentModel {
+  id: string;
+  clientName: string;
+  appointmentDate?: Moment;
+  time?: Moment;
+  doctor?: string;
+  contactType?: string;
+  typeOfAppointment?: string;
+  staffNotes?: string;
+  physicianNotes?: string;
+  apptNotes?: string;
+  active?: boolean;
+  annual_dental? : boolean;
+  annual_medical? : boolean;
+}
 
 export interface IBankStatementModel {
   id: string;
@@ -477,6 +523,22 @@ export interface ITaskModel {
 /**
  * API Models
  */
+
+ export interface IAppointment {
+  id: string;
+  clientName: string;
+  appointmentDate?: Moment;
+  time?: Moment;
+  doctor?: string;
+  contactType?: string;
+  typeOfAppointment?: string;
+  staffNotes?: string;
+  physicianNotes?: string;
+  apptNotes?: string;
+  active?: boolean;
+  annual_dental? : boolean;
+  annual_medical? : boolean;
+}
 
 export interface IBankStatement {
   _id: string;

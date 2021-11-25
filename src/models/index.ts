@@ -1,3 +1,4 @@
+import Appointment from './appointment';
 import BankStatement from './bankStatement';
 import Behaviour from './behaviour';
 import CaseNote from './caseNote';
@@ -14,6 +15,7 @@ import SubGoal from './subGoal';
 import Task from './task';
 
 const Exports = {
+  Appointment,
   BankStatement,
   Behaviour,
   CaseNote,
