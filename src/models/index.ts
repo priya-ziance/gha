@@ -5,6 +5,7 @@ import Client from './client';
 import ClientBehaviour from './clientBehaviour';
 import ClientContact from './clientContact';
 import Expense from './expense';
+import ExpenseList from './expenseList';
 import File from './file';
 import Goal from './goal';
 import Instruction from './instruction';
@@ -22,6 +23,7 @@ const Exports = {
   ClientBehaviour,
   ClientContact,
   Expense,
+  ExpenseList,
   File,
   Goal,
   Instruction,

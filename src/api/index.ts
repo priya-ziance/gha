@@ -18,6 +18,8 @@ import {
   IClientContactModel,
   IExpense,
   IExpenseModel,
+  IExpenseList,
+  IExpenseListModel,
   IFile,
   IFileModel,
   IGoal,
@@ -310,7 +312,7 @@ class SubGoalsApi {
 }
 
 
-//============================= TASK API'S==================================
+//============================= TASK API'S====================================
 class TasksApi {
   normalizer;
 
@@ -354,7 +356,7 @@ class TasksApi {
   }
 }
 
-//============================= INSTRUCTION API'S===========================
+//============================= INSTRUCTION API'S==============================
 class InstructionsApi {
   normalizer;
 
@@ -399,7 +401,7 @@ class InstructionsApi {
 }
 
 
-//============================= SP GOAL API'S===============================
+//============================= SP GOAL API'S===================================
 class SpGoalsApi {
   normalizer;
 
@@ -440,6 +442,7 @@ class SpGoalsApi {
 }
 
 
+//============================= BEHAVIOUR'S API'S=================================
 class BehavioursApi {
   normalizer;
 
@@ -479,6 +482,8 @@ class BehavioursApi {
   }
 }
 
+
+//============================= CLIENT BEHAVIOUR'S API'S===========================
 class ClientBehavioursApi {
   normalizer;
 
@@ -523,6 +528,7 @@ class ClientBehavioursApi {
 }
 
 
+//============================= EXPENSES API'S====================================
 class ExpensesApi {
   normalizer;
 
@@ -565,6 +571,7 @@ class ExpensesApi {
 }
 
 
+//============================= BANK STATEMENT API'S===============================
 class BankStatementsApi {
   normalizer;
 
@@ -607,6 +614,50 @@ class BankStatementsApi {
 }
 
 
+//============================= EXPENSES LIST API'S===============================
+class ExpensesListApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IExpenseListModel, IExpenseList>(Models.ExpenseList)
+  }
+
+  async getExpenseLists(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const expensesResult = await client.get(`/expense_lists`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(expensesResult.data.contents);
+  }
+
+  async getExpenseList(expenseListId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const expenseResult = await client.get(`/expense_list/${expenseListId}`, params);
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async createExpenseList(body = {}, params = {}) {
+    const expenseResult = await client.post('/expense_list', body, { params });
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async updateExpenseList(expenseListId = '', body = {}, params = {}) {
+    const expenseResult = await client.patch(`/expense_list/${expenseListId}`, body, { params });
+  
+    return this.normalizer.normalize(expenseResult.data);
+  }
+}
+
+
+
 
 //========================================================================
 
@@ -618,6 +669,7 @@ export default (() => ({
   clientContacts: new ClientContactApi(),
   caseNotes: new CaseNotesApi(),
   expenses: new ExpensesApi(),
+  expensesList: new ExpensesListApi(),
   files: new FileApi(),
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),

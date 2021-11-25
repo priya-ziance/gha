@@ -1,0 +1,24 @@
+.add-expense-list {
+  .add-expense-list__container {
+
+    .add-expense-list__submit-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  }
+}

@@ -12,6 +12,7 @@ export type PAGE_TYPES =
   'add-database-subgoal' |
   'add-database-task' |
   'add-expenses-account' |
+  'add-expenses-list' |
   'add-medication' |
   'add-sp-goals' |
   'apd' |
@@ -26,13 +27,16 @@ export type PAGE_TYPES =
   'client-info' |
   'client-links' |
   'client-contacts' |
+  'edit-bank-statement' |
   'edit-database-behaviour' |
   'edit-database-goal' |
   'edit-database-subgoal' |
   'edit-database-task' |
   'edit-expense-account' |
+  'edit-expenses-list' |
   'expenses' |
   'expenses-account' |
+  'expenses-list' |
   'goals' |
   'goals-data-collection' |
   'goals-database' |
@@ -49,7 +53,6 @@ export type PAGE_TYPES =
   'reshab-logs' |
   'respite-logs' |
   'sp-goals';
-
 
 
 export type APD_FIELDS_TYPE =
@@ -213,6 +216,13 @@ export type MEDICATION_FIELDS_TYPE =
   'time' |
   'type' 
 
+export type EXPENSES_LIST_FIELDS_TYPE =
+  'expense_description' |
+  'expense_type' |
+  'expense' |
+  'active' |
+  'type'
+
 
 export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
 
@@ -258,6 +268,14 @@ export type BEHAVIOUR_FIELDS_FORM_TYPE = {
 
 export type CASE_NOTE_FIELDS_FORM_TYPE = {
   [key in CASE_NOTE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type EXPENSES_LIST_FIELDS_FORM_TYPE = {
+  [key in EXPENSES_LIST_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -435,6 +453,18 @@ export interface IExpenseModel {
   communityActivitySave: boolean;
   apiExpense: IExpense;
   createdAt: Moment;
+}
+
+export interface IExpenseListModel {
+  id: string;
+  client: IClientModel;
+  expenseDescription: string;
+  expenseType: string;
+  expense: number;
+  active: boolean;
+  type: string;
+  createdAt: Moment;
+  expenseList: IExpenseList;
 }
 
 export interface IFileModel {
@@ -660,6 +690,17 @@ export interface IExpense {
   inventory_save: boolean;
   community_activity_save: boolean;
   created_at: string;
+}
+
+export interface IExpenseList {
+  _id: string;
+  client: IClient,
+  expense_description: string,
+  expense_type: string,
+  expense: number,
+  active: boolean,
+  type: string,
+  created_at: string
 }
 
 export interface IFile {

@@ -21,15 +21,8 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Expense List',
       image: ClientsImage,
-      // path: URLS.getPagePath('goals-database', { clientId }),
-      interactive: false
-    },
-    {
-      description: '',
-      title: 'Reoccurring Expense List',
-      image: ClientsImage,
-      // path: URLS.getPagePath('goals-database', { clientId }),
-      interactive: false
+      path: URLS.getPagePath('expenses-list', { clientId }),
+      interactive: true
     }
   ]
 }

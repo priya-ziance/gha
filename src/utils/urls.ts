@@ -6,6 +6,7 @@ type OPTIONS_TYPE = {
   bankStatementId?: string,
   behaviourId?: string,
   expenseId?: string,
+  expensesListId?: string,
   goalId?: string,
   subGoalId?: string,
   taskId?: string
@@ -33,6 +34,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/tasks/add`;
     case 'add-expenses-account':
       return `${clientBase}/expenses/expense-account/add`;
+    case 'add-expenses-list':
+      return `${clientBase}/expenses/expenses-list/add`;
     case 'add-medication':
       return `${clientBase}/medication/medication-list/add`;
     case 'add-sp-goals':
@@ -61,6 +64,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-contacts`;
     case 'client-info':
       return `${clientBase}/client-info`;
+    case 'edit-bank-statement':
+      return `${clientBase}/expenses/bank-statements/${options.bankStatementId}/edit`;
     case 'edit-database-behaviour':
       return `${clientBase}/behaviours/database/${options.behaviourId}/edit`;
     case 'edit-database-goal':
@@ -71,10 +76,14 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/tasks/${options.taskId}/edit`;
     case 'edit-expense-account':
       return `${clientBase}/expenses/${options.expenseId}/edit`;
+    case 'edit-expenses-list':
+      return `${clientBase}/expenses/expenses-list/${options.expensesListId}/edit`;
     case 'expenses':
       return `${clientBase}/expenses`;
     case 'expenses-account':
       return `${clientBase}/expenses/expense-account`;
+    case 'expenses-list':
+      return `${clientBase}/expenses/expenses-list`;
     case 'goals':
       return `${clientBase}/goals`;
     case 'goals-data-collection':
@@ -132,6 +141,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Database Tasks';
     case 'add-expenses-account':
       return 'Add Main Account Expense';
+    case 'add-expenses-list':
+      return 'Add Expenses List';
     case 'add-medication':
       return 'Add Client Medication';
     case 'add-sp-goals':
@@ -139,7 +150,7 @@ const getPagePathName = (page: PAGE_TYPES) => {
     case 'apd':
       return 'APD';
     case 'bank-statement':
-      return 'Bank Statement';
+      return 'Bank Statements';
     case 'behaviours':
       return 'Behaviours';
     case 'behaviours-assign':
@@ -160,6 +171,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Links`;
     case 'client-contacts':
       return `Client Contacts`;
+    case 'edit-bank-statement':
+      return 'Edit Bank Statement';
     case 'edit-database-behaviour':
       return 'Edit Behaviour';
     case 'edit-database-goal':
@@ -170,10 +183,14 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit Task';
     case 'edit-expense-account':
       return 'Edit Expense';
+    case 'edit-expenses-list':
+      return 'Edit Expense List';
     case 'expenses':
       return 'Expenses';
     case 'expenses-account':
       return 'Expenses Main Account';
+    case 'expenses-list':
+      return 'Expenses List';
     case 'goals':
       return `Client Goals`;
     case 'goals-data-collection':

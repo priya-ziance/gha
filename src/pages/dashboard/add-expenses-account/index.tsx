@@ -115,7 +115,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   }
 
   /**
-   * This assigns the client's info as the initial values if a client
+   * This assigns the expense's info as the initial values if a client
    * is passed in
    */
   if (props.expense) {

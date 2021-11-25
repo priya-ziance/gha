@@ -12,11 +12,11 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import Expense from '../../../models/expense';
+import ExpenseList from '../../../models/expenseList';
 
 import * as helpers from '../../../utils/helpers';
 
-import { BANK_STATEMENT_TYPES } from './constants';
+import { EXPENSE_ACCOUNT_TYPES } from './constants';
 
 import {
   actionColumn,
@@ -29,15 +29,15 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const BankStatement = () => {
-  const [expenses, setExpenses] = useState<Expense[] | []>([]);
+const ExpensesAccount = () => {
+  const [expensesLists, setExpensesLists] = useState<ExpenseList[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [accountType, setAccountType] = useState(Object.keys(BANK_STATEMENT_TYPES)[0])
+  const [accountType, setAccountType] = useState(Object.keys(EXPENSE_ACCOUNT_TYPES)[0])
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = expenses.length === PAGE_SIZE;
+  const hasNextPage = expensesLists.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -45,8 +45,8 @@ const BankStatement = () => {
       setLoading(true);
 
       try {
-        setExpenses(
-          await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
+        setExpensesLists(
+          await api.expensesList.getExpenseLists(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
       } catch(e){}
 
@@ -71,7 +71,7 @@ const BankStatement = () => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('expenses', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses') },
-    { text: URLS.getPagePathName('bank-statement') }
+    { text: URLS.getPagePathName('expenses-list') }
   ];
 
   const getAddButton = () => {
@@ -82,35 +82,35 @@ const BankStatement = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-bank-statement', { clientId })
+          to: URLS.getPagePath('add-expenses-list', { clientId })
         }}
       >
-        Add Main Account Expense
+        Add Expense List
       </AnchorButton>
     );
   }
 
   return (
     <div>
-      <div className='bank-statement'>
+      <div className='expenses-list'>
         <PageHeading
-          title='Bank Statements'
+          title='Expenses List'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='bank-statement__container'>
+        <div className='expenses-list__container'>
           <Col>
             <FormItemSelect
-              buttonText={get(BANK_STATEMENT_TYPES, accountType, '')}
-              items={Object.keys(BANK_STATEMENT_TYPES)}
-              label={'Bank Statement Type'}
-              menuRenderer={item => get(BANK_STATEMENT_TYPES, item, '')}
+              buttonText={get(EXPENSE_ACCOUNT_TYPES, accountType, '')}
+              items={Object.keys(EXPENSE_ACCOUNT_TYPES)}
+              label={'Expense Type'}
+              menuRenderer={item => get(EXPENSE_ACCOUNT_TYPES, item, '')}
               onFormSelectChange={setAccountType}
             />
 
             <Table
               loading={loading}
-              numRows={expenses.length}
+              numRows={expensesLists.length}
               columns={[
                 {
                   title: 'ID',
@@ -139,22 +139,22 @@ const BankStatement = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-expense-account',
-                          { clientId, expenseId: data.id })
+                          'edit-expenses-list',
+                          { clientId, expensesListId: data.id })
                       }
                     )
                   },
                   width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={expenses}
+              data={expensesLists}
               enableRowHeader={false}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Expenses Found"
+              emptyTableMessage="No Expense Lists Found"
             />
           </Col>
         </div>
@@ -163,4 +163,4 @@ const BankStatement = () => {
   );
 }
 
-export default BankStatement;
+export default ExpensesAccount;

@@ -64,12 +64,7 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
   ];
 
   if (props.update) {
-    BREADCRUMBS.push({
-      href: URLS.getPagePath('client-links',
-      { clientId}),
-      icon: 'document', text: URLS.getPagePathName('client-links') 
-    })
-    BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
+    BREADCRUMBS.push({ text: URLS.getPagePathName('edit-bank-statement') })
   } else {
     BREADCRUMBS.push({ text: URLS.getPagePathName('add-bank-statement') })
   }

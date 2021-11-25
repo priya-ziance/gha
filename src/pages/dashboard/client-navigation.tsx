@@ -27,8 +27,12 @@ import AddExpensesAccountPage from './add-expenses-account';
 import EditExpenseAccountPage from './edit-expense-account';
 import ExpensesPage from './expenses';
 import ExpensesAccountPage from './expenses-account';
-import BankStatementPage from './bank-statement';
+import BankStatementsPage from './bank-statements';
 import AddBankStatementPage from './add-bank-statement';
+import EditBankStatementPage from './edit-bank-statement';
+import ExpensesListPage from './expenses-list';
+import AddExpensesListPage from './add-expenses-list';
+import EditExpensesListPage from './edit-expenses-list';
 
 import AddSpGoalsPage from './add-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
@@ -113,11 +117,15 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
 
       <Route path="/dashboard/clients/:clientId/expenses" exact component={ExpensesPage} />
-      <Route path="/dashboard/clients/:clientId/expenses/bank-statement" exact component={BankStatementPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/bank-statement" exact component={BankStatementsPage} />
       <Route path="/dashboard/clients/:clientId/expenses/bank-statement/add" exact component={AddBankStatementPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/bank-statements/:bankStatementId/edit" exact component={EditBankStatementPage} />
       <Route path="/dashboard/clients/:clientId/expenses/:expenseId/edit" exact component={EditExpenseAccountPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expense-account" exact component={ExpensesAccountPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expense-account/add" exact component={AddExpensesAccountPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/expenses-list" exact component={ExpensesListPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/expenses-list/add" exact component={AddExpensesListPage} />
+      <Route path="/dashboard/clients/:clientId/expenses/expenses-list/:expenseListId/edit" exact component={EditExpensesListPage} />
       
       <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-info" exact component={ClientInfo} />
