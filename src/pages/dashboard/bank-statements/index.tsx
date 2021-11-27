@@ -12,7 +12,7 @@ import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import Expense from '../../../models/expense';
+import BankStatementModel from '../../../models/bankStatement';
 
 import * as helpers from '../../../utils/helpers';
 
@@ -30,14 +30,14 @@ import './index.scss';
 const PAGE_SIZE = 10;
 
 const BankStatement = () => {
-  const [expenses, setExpenses] = useState<Expense[] | []>([]);
+  const [bankStatements, setBankStatements] = useState<BankStatementModel[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [accountType, setAccountType] = useState(Object.keys(BANK_STATEMENT_TYPES)[0])
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  const hasNextPage = expenses.length === PAGE_SIZE;
+  const hasNextPage = bankStatements.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -45,8 +45,8 @@ const BankStatement = () => {
       setLoading(true);
 
       try {
-        setExpenses(
-          await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
+        setBankStatements(
+          await api.bankStatements.getBankStatements(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
       } catch(e){}
 
@@ -85,7 +85,7 @@ const BankStatement = () => {
           to: URLS.getPagePath('add-bank-statement', { clientId })
         }}
       >
-        Add Main Account Expense
+        Add Main Account BankStatement
       </AnchorButton>
     );
   }
@@ -110,7 +110,7 @@ const BankStatement = () => {
 
             <Table
               loading={loading}
-              numRows={expenses.length}
+              numRows={bankStatements.length}
               columns={[
                 {
                   title: 'ID',
@@ -147,7 +147,7 @@ const BankStatement = () => {
                   width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={expenses}
+              data={bankStatements}
               enableRowHeader={false}
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}

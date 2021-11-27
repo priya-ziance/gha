@@ -99,28 +99,24 @@ const AddExpenseList = (props: AddExpenseListProps) => {
 
               try {
                 if (props.update) {
-                  await api.expensesList.updateExpenseList(clientId, values);
+                  await api.expensesList.updateExpenseList(get(props.expenseList, 'id'), values);
                 } else {
                   await api.expensesList.createExpenseList(values, { clientId });
                 }
 
-                addToast(
-                  {
-                    message: CreateExpenseSuccessToast,
-                    timeout: 5000,
-                    intent:  Intent.SUCCESS
-                  }
-                );
+                addToast({
+                  message: CreateExpenseSuccessToast,
+                  timeout: 5000,
+                  intent:  Intent.SUCCESS
+                });
 
                 resetForm()
               } catch(e) {
-                addToast(
-                  {
-                    message: getErrorToast(e.message),
-                    timeout: 5000,
-                    intent:  Intent.DANGER
-                  }
-                );
+                addToast({
+                  message: getErrorToast(e.message),
+                  timeout: 5000,
+                  intent:  Intent.DANGER
+                });
               }
 
               setSubmitting(false);

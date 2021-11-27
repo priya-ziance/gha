@@ -7,6 +7,7 @@ import Dialog from './Dialog';
 import FileInput from './FileInput'
 import FormGroup from './FormGroup';
 import FormItemSelect from './FormItemSelect';
+import FormMultiItemSelect from './FormMultiItemSelect';
 import H1 from './H1';
 import H2 from './H2';
 import H3 from './H3';
@@ -35,6 +36,7 @@ export {
   FileInput,
   FormGroup,
   FormItemSelect,
+  FormMultiItemSelect,
   H1,
   H2,
   H3,

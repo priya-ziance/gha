@@ -1,9 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Classes, Intent} from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
 
-import { BEHAVIOUR_PROBLEMS_FIELDS_TYPE, IClientBehaviourModel } from '../../../types';
+import { BEHAVIOUR_PROBLEMS_FIELDS_TYPE, IClientBehaviourModel, IClientModel } from '../../../types';
 
 import api from '../../../api';
 
@@ -11,6 +11,8 @@ import { Button, Dialog, FormGroup, FormItemSelect, H4, InputGroup, NumericInput
 
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
+
+import ClientsInputSelect from '../../../controlled-components/ClientsInput';
 
 import * as helpers from './helpers';
 
@@ -80,6 +82,10 @@ const UpdateBehaviourProblemDialog = (props: UpdateBehaviourProblemDialogProps) 
                 isSubmitting,
                 setFieldValue
               }) => {
+                const handleNewClients = (clients: {any: IClientModel}) => {
+                  setFieldValue("clients_involved", Object.keys(clients))
+                }
+
                 const getNumericInput = (key: BEHAVIOUR_PROBLEMS_FIELDS_TYPE) => (
                   <FormGroup
                     intent={helpers.getFormIntent(errors[key])}
@@ -137,6 +143,11 @@ const UpdateBehaviourProblemDialog = (props: UpdateBehaviourProblemDialogProps) 
                       label={'URI'}
                       menuRenderer={item => item}
                       onFormSelectChange={(handleChange('uri'))}
+                    />
+
+                    <ClientsInputSelect
+                      onNewClients={handleNewClients}
+                      clients={clientBehaviour.clientsInvolved}
                     />
 
                     <div className='behaviours__behaviours-problems__submit-container'>

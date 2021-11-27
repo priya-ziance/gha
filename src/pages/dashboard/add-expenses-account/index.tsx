@@ -174,6 +174,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
                 );
 
                 resetForm()
+                setDocumentFile(null)
               } catch(e) {
                 addToast(
                   {

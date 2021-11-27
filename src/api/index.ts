@@ -80,6 +80,12 @@ class ClientsApi {
   
     return this.normalizer.normalize(clientsResult.data);
   }
+
+  async searchClients(query: string) {
+    const clientsResult = await client.post('/clients/search', { searchString: query });
+  
+    return this.normalizer.normalizeArray(clientsResult.data);
+  }
 }
 
 //============================= CASE NOTE API'S=============================
@@ -266,6 +272,18 @@ class MedicationApi{
       clientId,
       page
     });
+  }
+
+  async createMedication(body = {}, params = {}) {
+    const medicationResult = await client.post('/medication', body, { params });
+  
+    return this.normalizer.normalize(medicationResult.data);
+  }
+
+  async updateMedication(medicationId = '', body = {}, params = {}) {
+    const medicationResult = await client.patch(`/medication/${medicationId}`, body, { params });
+  
+    return this.normalizer.normalize(medicationResult.data);
   }
 }
 

@@ -209,10 +209,11 @@ export type MEDICATION_FIELDS_TYPE =
   'quantity' |
   'refills' |
   'route' |
+  'script_date' |
   'side_effect' |
   'status' |
   'taken_days' |
-  'temporary_meds' |
+  'temp_meds' |
   'time' |
   'type' 
 
@@ -389,6 +390,7 @@ export interface IBehaviourModel {
   behaviourDescription: string;
   behaviourType: string;
   behaviour: IBehaviour;
+  clientsInvolved?: IClientModel[];
   createdAt: Moment;
 }
 
@@ -488,18 +490,26 @@ export interface IGoalModel {
 export interface IMedicationModel {
   id: string;
   client: string;
-  creator: string;
-  proprietary_name?: string;
-  non_proprietary_name?: string;
-  route_name?: string;
+  proprietaryName?: string;
+  routeName?: string;
   type?: string;
   dosage?: string;
   directions?: string;
-  med_time?: string;
-  picture?: string;
+  medTime?: string;
+  picture?: IFileModel;
   createdAt?: Moment;
-  updatedAt?: Moment
-
+  quantity?: number;
+  notes?: string;
+  medicationReason?: string;
+  script?: IFileModel;
+  prnMed?: boolean;
+  tempMed?: boolean;
+  takenDays?: string;
+  status?: string;
+  refills?: number;
+  doctor?: string;
+  scriptDate?: Moment;
+  medication: IMedication
 }
 
 export interface ISubGoalModel {
@@ -576,6 +586,7 @@ export interface IBehaviour {
   active: boolean;
   behaviour_description: string;
   behaviour_type: string;
+  clients_involved?: IClient[];
   created_at?: string;
 }
 
@@ -732,10 +743,19 @@ export interface IMedication {
   dosage?: string;
   directions?: string;
   med_time?: string;
-  picture?: string;
-  createdAt?: Moment;
-  updatedAt?: Moment
-
+  picture?: IFile;
+  createdAt?: string;
+  quantity?: number;
+  notes?: string;
+  medication_reason?: string;
+  script?: IFile;
+  prn_med?: boolean;
+  temp_med?: boolean;
+  taken_days?: string;
+  status?: string;
+  refills?: number;
+  doctor?: string;
+  script_date?: string;
 }
 
 export interface ISubGoal {

@@ -1,6 +1,7 @@
 import IBaseModel from './_baseModel';
+import Client from './client';
 import moment, { Moment } from 'moment';
-import { IBehaviour } from '../types'
+import { IBehaviour, IClientModel } from '../types'
 
 export default class Behaviour implements IBaseModel {
   id: string;
@@ -9,6 +10,7 @@ export default class Behaviour implements IBaseModel {
   behaviourDescription: string;
   behaviourType: string;
   behaviour: IBehaviour;
+  clientsInvolved?: IClientModel[]
 
   constructor(behaviour: IBehaviour) {
     this.id = behaviour._id;
@@ -17,5 +19,6 @@ export default class Behaviour implements IBaseModel {
     this.behaviourType = behaviour.behaviour_type;
     this.createdAt = moment(behaviour.created_at);
     this.behaviour = behaviour;
+    this.clientsInvolved = behaviour.clients_involved && Client.fromArray(behaviour.clients_involved)
   }
 }

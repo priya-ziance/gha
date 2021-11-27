@@ -2,6 +2,18 @@ import * as yup from 'yup';
 
 import { MEDICATION_FIELDS_FORM_TYPE } from '../../../types';
 
+export const TAKEN_DAYS = {
+  daily: 'Daily',
+  two_times_a_week: 'Two times a week',
+  three_times_a_week: 'Three times a week',
+  four_times_a_week: 'Four times a week',
+  five_times_a_week: 'Five times a week',
+  six_times_a_week: 'Six times a week',
+  weekly: 'Weekly',
+  bi_weekly: 'Bi-Weekly',
+  monthly: 'Monthly',
+}
+
 
 export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
   medication: {
@@ -22,12 +34,17 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
   route: {
     name: 'Route',
     default: '',
-    validation: yup.string().label('Contact Type').required(),
+    validation: yup.string().label('Route').required(),
   },
   side_effect: {
     name: 'Side Effect',
     default: null,
-    validation: yup.string().label('Side Effecrs').required().nullable(),
+    validation: yup.string().label('Side Effect').required().nullable(),
+  },
+  script_date: {
+    name: 'Script Date',
+    default: null,
+    validation: yup.string().label('Script Date').required().nullable(),
   },
   directions: {
     name: 'Directions',
@@ -71,18 +88,18 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
   },
   taken_days: {
     name: 'Taken Days',
-    default: '',
+    default: Object.keys(TAKEN_DAYS)[0],
     validation: yup.string()
   },
   prn_meds: {
     name: 'PRN Med',
-    default: '',
-    validation: yup.string()
+    default: false,
+    validation: yup.bool()
   },
-  temporary_meds: {
+  temp_meds: {
     name: 'Temporary Med',
-    default: '',
-    validation: yup.string()
+    default: false,
+    validation: yup.bool()
   }
 
 }
