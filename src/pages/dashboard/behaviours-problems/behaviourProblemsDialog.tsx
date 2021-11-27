@@ -30,14 +30,12 @@ interface UpdateBehaviourProblemDialogProps {
 const UpdateBehaviourProblemDialog = (props: UpdateBehaviourProblemDialogProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
-  const { clientBehaviour } = props;
+  const { clientBehaviour, isOpen, onClose } = props;
   let initialValues = {
     frequency: clientBehaviour.frequency,
     uri: clientBehaviour.uri,
     notes: clientBehaviour.notes
   }
-  
-  const { isOpen, onClose } = props;
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>

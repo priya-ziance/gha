@@ -436,7 +436,6 @@ export interface IBehaviourModel {
   behaviourDescription: string;
   behaviourType: string;
   behaviour: IBehaviour;
-  clientsInvolved?: IClientModel[];
   createdAt: Moment;
 }
 
@@ -648,7 +647,6 @@ export interface IBehaviour {
   active: boolean;
   behaviour_description: string;
   behaviour_type: string;
-  clients_involved?: IClient[];
   created_at?: string;
 }
 

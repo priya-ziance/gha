@@ -13,7 +13,7 @@ import IClientModel from '../../../models/client';
 import api from '../../../api';
 
 import URLS from '../../../utils/urls'; 
-import { dataURItoBlob } from '../../../utils/helpers';
+
 import ClientContext from '../../../contexts/client';
 
 import {
