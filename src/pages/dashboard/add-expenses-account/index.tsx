@@ -43,13 +43,13 @@ import * as helpers from './helpers';
 
 import './index.scss';
 
-interface ExpensesMainAccountProps {
+interface ExpensesAccountProps {
   expense?: IExpenseModel | undefined;
   update?: boolean;
 }
 
 
-const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
+const ExpensesAccount = (props: ExpensesAccountProps) => {
   const [loading, setLoading] = useState(false);
   const [document, setDocumentFile] = useState<File | null>(null); 
   
@@ -67,12 +67,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   ];
 
   if (props.update) {
-    BREADCRUMBS.push({
-      href: URLS.getPagePath('client-links',
-      { clientId}),
-      icon: 'document', text: URLS.getPagePathName('client-links') 
-    })
-    BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
+    BREADCRUMBS.push({ text: URLS.getPagePathName('edit-expense-account') })
   } else {
     BREADCRUMBS.push({ text: URLS.getPagePathName('add-expenses-account') })
   }
@@ -127,10 +122,11 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   } else {
     initialValues = helpers.initialValues;
   }
-
+  
+  console.log('INITIALS:', initialValues)
   return (
     <LoadingView loading={loading}>
-      <div className='client'>
+      <div className='add-expenses-account'>
         <PageHeading
           title={
             props.update ?
@@ -139,7 +135,7 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
           }
           breadCrumbs={BREADCRUMBS}
         />
-        <div className='client__container'>
+        <div className='add-expenses-account__container'>
           <Formik
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
@@ -199,10 +195,6 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
               isSubmitting,
               setFieldValue
             }) => {
-              const onFormSelectChange = (field: string) => (value: string) => {
-                setFieldValue(field, value);
-              }
-              
               const onFormDateChange = (field: string) => (date: Date) => {
                 setFieldValue(field, moment(date).toISOString());
               }
@@ -354,4 +346,4 @@ const ExpensesMainAccount = (props: ExpensesMainAccountProps) => {
   );
 }
 
-export default ExpensesMainAccount;
+export default ExpensesAccount;

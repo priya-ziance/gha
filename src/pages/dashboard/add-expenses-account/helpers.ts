@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import moment from "moment";
 import get from 'lodash/get';
 
-import { JOINED_FIELDS_TYPE } from '../../../types';
+import { ACCOUNT_EXPENSE_FIELDS_TYPE } from '../../../types';
 
 import { DateInputProps } from '../../../components/DateInput';
 
@@ -11,14 +11,14 @@ import { FIELDS } from './constants';
 
 const formFields: any = Object.keys(FIELDS);
 
-export const initialValues = Object.assign({}, ...formFields.map((formField: JOINED_FIELDS_TYPE) => {
+export const initialValues = Object.assign({}, ...formFields.map((formField: ACCOUNT_EXPENSE_FIELDS_TYPE) => {
   return {
     [formField]: get(FIELDS, formField, { default: '' }).default
   }
 }))
 
 export const validationSchema = yup.object().shape(
-  Object.assign({}, ...formFields.map((formField: JOINED_FIELDS_TYPE) => {
+  Object.assign({}, ...formFields.map((formField: ACCOUNT_EXPENSE_FIELDS_TYPE) => {
     return {
       [formField]: get(FIELDS, formField, { validation: '' }).validation
     }
