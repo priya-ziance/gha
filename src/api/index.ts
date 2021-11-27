@@ -4,6 +4,7 @@ import client from './client';
 
 import Models from '../models';
 import {
+  IAppointmentModel,
   IBankStatement,
   IBankStatementModel,
   IBehaviour,
@@ -35,7 +36,8 @@ import {
   ISubGoalModel,
   ISubGoal,
   ITaskModel,
-  ITask
+  ITask,
+  IAppointment,
 } from '../types';
 
 
@@ -45,6 +47,41 @@ type OPTIONS_TYPE = {
   page?: number;
   pageSize?: number;
   params?: {} 
+}
+
+//=============================Appointment API'S=========================
+
+class AppointmentApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IAppointmentModel, IAppointment>(Models.Appointment)
+  }
+
+  async getAppointments(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const appointmentsResult = await client.get(`/appointments`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(appointmentsResult.data.contents);
+  }
+
+  async getAppointment(appointmentId: string) {
+    const appointmentsResult = await client.get(`/appointment/${appointmentId}`);
+  
+    return this.normalizer.normalize(appointmentsResult.data);
+  }
+
+  async createAppointment(body = {}) {
+    const appointmentsResult = await client.post('/appointment', body);
+  
+    return this.normalizer.normalize(appointmentsResult.data);
+  }
+
+
 }
 
 //============================= CLIENT API'S=============================
@@ -680,6 +717,7 @@ class ExpensesListApi {
 //========================================================================
 
 export default (() => ({
+  appointments: new AppointmentApi(),
   bankStatements: new BankStatementsApi(),
   behaviours: new BehavioursApi(),
   clients: new ClientsApi(),

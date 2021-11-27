@@ -18,6 +18,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
   switch (page) {
     case 'add-apd':
       return `${clientBase}/apd/add`;
+    case 'add-appointment':
+      return `${clientBase}/appointment/add`;
     case 'add-bank-statement':
       return `${clientBase}/expenses/bank-statement/add`;
     case 'add-client-case-notes':
@@ -42,6 +44,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
       return `${clientBase}/apd`;
+    case 'appointments':
+      return `${clientBase}/appointments`;
     case 'bank-statement':
       return `${clientBase}/expenses/bank-statement`;
     case 'behaviours':
@@ -125,6 +129,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
   switch (page) {
     case 'add-apd':
       return 'Add APD';
+    case 'add-appointment':
+      return 'Add Appointment';
     case 'add-bank-statement':
       return 'Add Bank Statement';
     case 'add-client-case-notes':
@@ -149,6 +155,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Add SP Goals`;
     case 'apd':
       return 'APD';
+    case 'appointments':
+      return 'Appointments';
     case 'bank-statement':
       return 'Bank Statements';
     case 'behaviours':

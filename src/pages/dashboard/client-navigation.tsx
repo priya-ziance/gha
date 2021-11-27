@@ -63,6 +63,9 @@ import MedPassPage from './med-pass';
 import MedDestructionPage from './med-destruction';
 import MedicationListPage from './medication-list';
 
+import AddAppointment from './add-appointment';
+import AppointmentsPage from './appointments';
+
 import api from '../../api';
 
 interface ClientPathsType {
@@ -102,6 +105,9 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
   
   return (
     <Switch>
+      <Route path="/dashboard/clients/:clientId/appointment/add" exact component={AddAppointment} />
+      <Route path="/dashboard/clients/:clientId/appointments" exact component={AppointmentsPage} />
+
       <Route path="/dashboard/clients/:clientId/apd" exact component={APDPage} />
       <Route path="/dashboard/clients/:clientId/apd/add" exact component={AddAPDPage} />
       <Route path="/dashboard/clients/:clientId/links" exact component={ClientLinksPage} />
