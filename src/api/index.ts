@@ -4,6 +4,7 @@ import client from './client';
 
 import Models from '../models';
 import {
+  IAppointment,
   IAppointmentModel,
   IBankStatement,
   IBankStatementModel,
@@ -36,8 +37,7 @@ import {
   ISubGoalModel,
   ISubGoal,
   ITaskModel,
-  ITask,
-  IAppointment,
+  ITask
 } from '../types';
 
 
@@ -81,7 +81,11 @@ class AppointmentApi {
     return this.normalizer.normalize(appointmentsResult.data);
   }
 
-
+  async updateAppointment(appointmentId = '', body = {}, params = {}) {
+    const appointmentResult = await client.patch(`/appointment/${appointmentId}`, body, { params });
+  
+    return this.normalizer.normalize(appointmentResult.data);
+  }
 }
 
 //============================= CLIENT API'S=============================

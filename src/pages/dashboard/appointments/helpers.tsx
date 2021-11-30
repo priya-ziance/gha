@@ -8,7 +8,7 @@ import { IAppointmentModel } from '../../../types';
 
 export const clientNameColumn = (data: IAppointmentModel) => {
   return (
-    <>{data.clientName}</>
+    <>{get(data, 'client.name', '')}</>
   )
 }
 

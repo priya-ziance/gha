@@ -1,4 +1,4 @@
-.client {
+.add-appointment {
   .bp3-form-content {
     .bp3-popover-wrapper {
       width: 100%;
@@ -21,7 +21,7 @@
     width: 100%;
   }
 
-  .client__container {
+  .add-appointment__container {
     display: flex;
     align-items: center;
 
@@ -29,12 +29,4 @@
       width: 100%;
     }
   }
-}
-
-.add-client__levelsOfService > div { 
-  margin-bottom: 30px;
-}
-
-.add-client__signature {
-  
 }

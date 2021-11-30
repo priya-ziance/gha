@@ -16,12 +16,13 @@ import URLS from '../../../utils/urls';
 
 import ClientContext from '../../../contexts/client';
 
+import formikWrapper from '../../../wrappers/formik';
+
 import {
   Button,
   Col,
   DateInput,
   FormGroup,
-  ImageDropzone,
   InputGroup,
   LoadingView,
   PageHeading,
@@ -30,13 +31,7 @@ import {
   TextArea
 } from '../../../components';
 
-import {
-  DIALOG_NAMES,
-  FIELDS,
-  LEGAL_STATUS_OPTIONS,
-  PRIMARY_DIAGNOSIS_OPTIONS,
-  SEX_OPTIONS
-} from './constants';
+import { FIELDS } from './constants';
 
 import { APPOINTMENT_FIELDS_TYPE } from '../../../types';
 
@@ -139,9 +134,9 @@ const AddAppointment = (props: AddClientProps) => {
 
               try {
                 if (props.update) {
-                  await api.clients.updateClient(get(props, 'client.id', ''), values);
+                  await api.appointments.updateAppointment(get(props, 'appointment.id', ''), values);
                 } else {
-                  await api.clients.createClient(values);
+                  await api.appointments.createAppointment(values);
                 }
 
                 addToast(
@@ -165,199 +160,94 @@ const AddAppointment = (props: AddClientProps) => {
             }}
             >
 
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
+            {formikWrapper(({
+              wrapperProps: {
+                getDateInputFormGroup,
+                getTextAreaInputFormGroup,
+                getSwitchInputFormGroup,
+                getInputFormGroup
+              },
+              formikProps: {
+                handleSubmit,
+                isSubmitting
+              }
             }) => {
-              const onFormSelectChange = (field: string) => (value: string) => {
-                setFieldValue(field, value);
-              }
-              
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
-              }
-
-              const getInputFormGroup = (key: APPOINTMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getDateInputFormGroup = (key: APPOINTMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
-              const getTextAreaInputFormGroup = (key: APPOINTMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-area__${key}`}
-                  helperText={errors[key]}
-                >
-                  <TextArea
-                    id={`text-area__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              return (
-                <form onSubmit={handleSubmit}>
-                  <Row>
-                    {/* ---------------------------COL 1------------------------------- */}
-                    <Col>
-                      {getDateInputFormGroup('appointment_date')}
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'doctor', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <FormSelect
-                            items={doctorList}
-                            filterable={false}
-                            itemRenderer={formSelectItemRenderer}
-                            noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectChange('doctor')}
-                        >
-                            {/* children become the popover target; render value here */}
-                            <Button text={values.sex} rightIcon="double-caret-vertical" />
-                        </FormSelect>
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Type Of Appointment"}
-                        labelFor="text-input"
-                      >
-                        <TextArea id="text-input" />
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Physician Notes"}
-                        labelFor="text-input"
-                      >
-                        <TextArea id="text-input" />
-                      </FormGroup>
-
-                      {/* {getInputFormGroup('address_line_1')}
-                      {getInputFormGroup('address_line_2')}
-                      {getInputFormGroup('city')}
-                      {getInputFormGroup('state')}
-
-                      {getInputFormGroup('zip_code')}
-                      {getInputFormGroup('phone')}
-                      {getInputFormGroup('mobile')}
-                      {getInputFormGroup('ssn')} */}
-                      
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'active', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('active')}/>
-                      </FormGroup> 
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'annual_dental', { name: '' }).name}
-                        labelFor="text-input"
-                      >
-                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('annual_dental')}/>
-                      </FormGroup> 
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'annual_medical', { name: '' }).name}
-                        labelFor="text-input"
-                      >
-                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('annual_medical')}/>
-                      </FormGroup> 
-                    </Col>
+                return (
+                  <form onSubmit={handleSubmit}>
+                    <Row>
+                      {/* ---------------------------COL 1------------------------------- */}
+                      <Col>
+                        {getDateInputFormGroup('appointment_date')}
   
-                    {/* ---------------------------COL 2------------------------------- */}
-                    <Col>
-                      {getInputFormGroup('client_name')}
-                      {getInputFormGroup('time')}
-                      {getInputFormGroup('contact_type')}
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Staff Notes"}
-                        labelFor="text-input"
-                      >
-                        <TextArea id="text-input" />
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Appt Notes"}
-                        labelFor="text-input"
-                      >
-                        <TextArea id="text-input" />
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Reprogram Medication"}
-                        labelFor="text-input"
-                      >
-                        <Button intent={Intent.PRIMARY}>
-                          <b>Reprogram Meds</b>
-                        </Button>
-                        
-                      </FormGroup>
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Labs"}
-                        labelFor="text-input"
-                      >
-                        <Button intent={Intent.PRIMARY}>
-                          <b>Labs</b>
-                        </Button>
-                      </FormGroup>
-                    </Col>
-
-                  </Row>
-                  
-                  <Button type="submit" disabled={isSubmitting} loading={isSubmitting} large intent={Intent.PRIMARY}>
-                    {props.update ? 'Update' : 'Save'}
-                  </Button>
-                </form>
-              )
-            }}
+                        {/* <FormGroup
+                          intent={Intent.PRIMARY}
+                          label={get(FIELDS, 'doctor', { name: '' }).name}
+                          labelFor="text-input"
+                          labelInfo={"(required)"}
+                        >
+                          <FormSelect
+                              items={doctorList}
+                              filterable={false}
+                              itemRenderer={formSelectItemRenderer}
+                              noResults={<MenuItem disabled={true} text="No results." />}
+                              onItemSelect={onFormSelectChange('doctor')}
+                          >
+                              <Button text={values.sex} rightIcon="double-caret-vertical" />
+                          </FormSelect>
+                        </FormGroup>
+   */}
+                        {getTextAreaInputFormGroup('type_of_appointment')}
+  
+                        {getTextAreaInputFormGroup('physicain_notes')}
+  
+                        {getSwitchInputFormGroup('active')}
+  
+                        {getSwitchInputFormGroup('annual_dental')}
+  
+                        {getSwitchInputFormGroup('annual_medical')}
+  
+                      </Col>
+    
+                      {/* ---------------------------COL 2------------------------------- */}
+                      <Col>
+                        {getInputFormGroup('time')}
+  
+                        {getInputFormGroup('contact_type')}
+  
+                        {getTextAreaInputFormGroup('staff_notes')}
+  
+                        {getTextAreaInputFormGroup('appt_notes')}
+  
+                        {getDateInputFormGroup('follow_up_date')}
+  
+                        <FormGroup
+                          intent={Intent.PRIMARY}
+                          label={"Reprogram Medication"}
+                        >
+                          <Button intent={Intent.PRIMARY}>
+                            <b>Reprogram Meds</b>
+                          </Button>
+                          
+                        </FormGroup>
+                        <FormGroup
+                          intent={Intent.PRIMARY}
+                          label={"Labs"}
+                        >
+                          <Button intent={Intent.PRIMARY}>
+                            <b>Labs</b>
+                          </Button>
+                        </FormGroup>
+                      </Col>
+  
+                    </Row>
+                    
+                    <Button type="submit" disabled={isSubmitting} loading={isSubmitting} large intent={Intent.PRIMARY}>
+                      {props.update ? 'Update' : 'Save'}
+                    </Button>
+                  </form>
+                )
+              }, FIELDS
+            )}
           </Formik>
         </div>
       </div>

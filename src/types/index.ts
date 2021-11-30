@@ -66,7 +66,6 @@ export type APD_FIELDS_TYPE =
 
 
 export type APPOINTMENT_FIELDS_TYPE = 
-  'client_name' |
   'appointment_date' |
   'time' |
   'doctor' |
@@ -75,7 +74,7 @@ export type APPOINTMENT_FIELDS_TYPE =
   'staff_notes' |
   'physicain_notes' |
   'appt_notes' |
-  'physician_documents' |
+  'physician_document' |
   'follow_up_date' |
   'active' |
   'annual_dental' |
@@ -404,8 +403,8 @@ export interface IToastsContext {
 
 export interface IAppointmentModel {
   id: string;
-  clientName: string;
   appointmentDate?: Moment;
+  client?: IClientModel;
   time?: Moment;
   doctor?: string;
   contactType?: string;
@@ -414,8 +413,11 @@ export interface IAppointmentModel {
   physicianNotes?: string;
   apptNotes?: string;
   active?: boolean;
-  annual_dental? : boolean;
-  annual_medical? : boolean;
+  annualDental? : boolean;
+  annualMedical? : boolean;
+  physicianDocument?: IFileModel;
+  followUpDate?: Moment;
+  appointment: IAppointment
 }
 
 export interface IBankStatementModel {
@@ -617,19 +619,21 @@ export interface ITaskModel {
  */
 
  export interface IAppointment {
-  id: string;
-  clientName: string;
-  appointmentDate?: Moment;
+  _id: string;
+  appointment_date?: Moment;
+  client?: IClient;
   time?: Moment;
   doctor?: string;
-  contactType?: string;
-  typeOfAppointment?: string;
-  staffNotes?: string;
-  physicianNotes?: string;
-  apptNotes?: string;
+  contact_type?: string;
+  type_of_appointment?: string;
+  staff_notes?: string;
+  physician_notes?: string;
+  appt_notes?: string;
   active?: boolean;
+  physician_document?: IFile;
   annual_dental? : boolean;
   annual_medical? : boolean;
+  follow_up_date?: string;
 }
 
 export interface IBankStatement {
