@@ -36,6 +36,7 @@ export type PAGE_TYPES =
   'edit-database-task' |
   'edit-expense-account' |
   'edit-expenses-list' |
+  'edit-medication' |
   'expenses' |
   'expenses-account' |
   'expenses-list' |
@@ -227,16 +228,16 @@ export type MEDICATION_FIELDS_TYPE =
   'medication_reason' |
   'notes' |
   'off_cycyle_meds' |
-  'prn_meds' |
+  'prn_med' |
   'quantity' |
   'refills' |
-  'route' |
+  'route_name' |
   'script_date' |
   'side_effect' |
   'status' |
   'taken_days' |
-  'temp_meds' |
-  'time' |
+  'temp_med' |
+  'med_time' |
   'type' 
 
 export type EXPENSES_LIST_FIELDS_TYPE =
@@ -364,7 +365,7 @@ export type CLIENT_CONTACT_FIELDS_FORM_TYPE = {
 export type MEDICATION_FIELDS_FORM_TYPE = {
   [key in MEDICATION_FIELDS_TYPE]? : {
     name: string,
-    default: string | null | boolean,
+    default: string | null | boolean | string[],
     validation: any
   }
 }
@@ -520,6 +521,7 @@ export interface IFileModel {
   file: IFile;
   publicUrl?: string;
   url?: string;
+  key?: string;
   loadFile: () => Promise<void>
   updatedAt?: string;
 }
@@ -535,12 +537,12 @@ export interface IGoalModel {
 export interface IMedicationModel {
   id: string;
   client: string;
-  proprietaryName?: string;
+  medication?: string;
   routeName?: string;
   type?: string;
   dosage?: string;
   directions?: string;
-  medTime?: string;
+  medTime?: string[];
   picture?: IFileModel;
   createdAt?: Moment;
   quantity?: number;
@@ -554,7 +556,7 @@ export interface IMedicationModel {
   refills?: number;
   doctor?: string;
   scriptDate?: Moment;
-  medication: IMedication
+  apiMedication: IMedication
 }
 
 export interface ISubGoalModel {
@@ -796,15 +798,14 @@ export interface IMedication {
   _id: string;
   client: string;
   creator: string;
-  proprietary_name?: string;
-  non_proprietary_name?: string;
+  medication?: string;
   route_name?: string;
   type?: string;
   dosage?: string;
   directions?: string;
-  med_time?: string;
+  med_time?: string[];
   picture?: IFile;
-  createdAt?: string;
+  created_at?: string;
   quantity?: number;
   notes?: string;
   medication_reason?: string;

@@ -18,7 +18,7 @@ export const TAKEN_DAYS = {
 export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
   medication: {
     name: 'Medication',
-    default: false,
+    default: '',
     validation: yup.string(),
   },
   type: {
@@ -31,30 +31,30 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string(),
   },
-  route: {
+  route_name: {
     name: 'Route',
     default: '',
-    validation: yup.string().label('Route').required(),
+    validation: yup.string().label('Route'),
   },
   side_effect: {
     name: 'Side Effect',
     default: null,
-    validation: yup.string().label('Side Effect').required().nullable(),
+    validation: yup.string().label('Side Effect').nullable(),
   },
   script_date: {
     name: 'Script Date',
     default: null,
-    validation: yup.string().label('Script Date').required().nullable(),
+    validation: yup.string().label('Script Date').nullable(),
   },
   directions: {
     name: 'Directions',
     default: '',
-    validation: yup.string().label('Directions').email(),
+    validation: yup.string().label('Directions'),
   },
-  time: {
+  med_time: {
     name: 'Time',
-    default: '',
-    validation: yup.string().label('First Name').required(),
+    default: [],
+    validation: yup.array().label('Time'),
   },
   doctor: {
     name: 'Doctor',
@@ -69,7 +69,7 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
   quantity: {
     name: 'Quantity',
     default: '',
-    validation: yup.string().required(),
+    validation: yup.string(),
   },
   notes: {
     name: 'Notes #',
@@ -91,12 +91,12 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: Object.keys(TAKEN_DAYS)[0],
     validation: yup.string()
   },
-  prn_meds: {
+  prn_med: {
     name: 'PRN Med',
     default: false,
     validation: yup.bool()
   },
-  temp_meds: {
+  temp_med: {
     name: 'Temporary Med',
     default: false,
     validation: yup.bool()

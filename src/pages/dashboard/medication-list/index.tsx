@@ -16,11 +16,12 @@ import { IMedicationModel } from '../../../types';
 
 import {
   actionColumn,
-  activeColumn,
-  dateOfBirthColumn,
-  addressColumn,
-  firstNameColumn,
-  lastNameColumn,
+  medTimeColumn,
+  dosageColumn,
+  directionsColumn,
+  propriataryNameColumn,
+  typeColumn,
+  expiryColumn
 } from './helpers';
 
 import './index.scss';
@@ -28,12 +29,12 @@ import './index.scss';
 const PAGE_SIZE = 10;
 
 const MedicationListPage = () => {
-  const [medication, setMedication] = useState<IMedicationModel[] | []>([]);
+  const [medications, setMedications] = useState<IMedicationModel[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
 
-  const hasNextPage = medication.length === PAGE_SIZE;
+  const hasNextPage = medications.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const MedicationListPage = () => {
       setLoading(true);
 
       try {
-        setMedication(
+        setMedications(
           await api.medications.getMedications(clientId, { page, pageSize: PAGE_SIZE })
         )
       } catch(e){}
@@ -101,43 +102,52 @@ const MedicationListPage = () => {
           <Col>
             <Table
               loading={loading}
-              numRows={medication.length}
+              numRows={medications.length}
               getCellClipboardData={(row, col) => {
-                return medication[row]
+                return medications[row]
               }}
               columns={[
                 {
-                  title: 'First Name',
-                  cellRenderer: firstNameColumn,
+                  title: 'Proprietary Name',
+                  cellRenderer: propriataryNameColumn,
                   width: helpers.getTableWith(0.15)
                 },
                 {
-                  title: 'Last Name',
-                  cellRenderer: lastNameColumn,
+                  title: 'Type',
+                  cellRenderer: typeColumn,
                   width: helpers.getTableWith(0.15)
                 },
                 {
-                  title: 'DOB',
-                  cellRenderer: dateOfBirthColumn,
-                  width: helpers.getTableWith(0.13)
+                  title: 'Dosage',
+                  cellRenderer: dosageColumn,
+                  width: helpers.getTableWith(0.10)
                 },
                 {
-                  title: 'Active',
-                  cellRenderer: activeColumn,
-                  width: helpers.getTableWith(0.07)
+                  title: 'Directions',
+                  cellRenderer: directionsColumn,
+                  width: helpers.getTableWith(0.35)
                 },
                 {
-                  title: 'Address',
-                  cellRenderer: addressColumn,
-                  width: helpers.getTableWith(0.3)
+                  title: 'Exp Date',
+                  cellRenderer: expiryColumn,
+                  width: helpers.getTableWith(0.15)
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-medication',
+                          { clientId, medicationId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
-              data={medication}
+              data={medications}
               enableRowHeader={false}
               onSelection={(focusedCell) => {
                 console.log(focusedCell)

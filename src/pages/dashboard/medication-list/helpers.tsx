@@ -1,37 +1,49 @@
-import { Checkbox, Intent } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { Button } from '../../../components';
+import { AnchorButton } from '../../../components';
 
-import { IClientContactModel } from '../../../types';
+import { IMedicationModel } from '../../../types';
 
 
-export const firstNameColumn = (data: IClientContactModel) => {
+export const propriataryNameColumn = (data: IMedicationModel) => {
   return (
-    <>{data.firstName}</>
+    <>{data.medication}</>
   )
 }
 
-export const lastNameColumn = (data: IClientContactModel) => {
+export const typeColumn = (data: IMedicationModel) => {
   return (
-    <>{data.lastName}</>
+    <>{data.type}</>
   )
 }
 
-export const addressColumn = (data: IClientContactModel) => {
+export const directionsColumn = (data: IMedicationModel) => {
   return (
-    <>{data.address}</>
+    <>{data.directions}</>
   )
 }
 
-export const activeColumn = (data: IClientContactModel) => {
+export const medTimeColumn = (data: IMedicationModel) => {
   return (
-    <Checkbox checked={data.active} disabled/>
+    <>
+      {get(data, 'medTime', []).map((i: string) => {
+        return (
+          <p>{i}</p>
+        )
+      })}
+    </>
   )
 }
 
-export const dateOfBirthColumn = (data: IClientContactModel) => {
-  const date = get(data, 'dateOfBirth');
+export const dosageColumn = (data: IMedicationModel) => {
+  return (
+    <> {data.dosage} </>
+  )
+}
+
+export const expiryColumn = (data: IMedicationModel) => {
+  const date = get(data, 'scriptDate');
   
   if (date) {
     return (
@@ -42,12 +54,19 @@ export const dateOfBirthColumn = (data: IClientContactModel) => {
   return (<></>)
 }
 
-export const actionColumn = (data: IClientContactModel) => {
+export const actionColumn = (data: IMedicationModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

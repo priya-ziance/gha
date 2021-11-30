@@ -7,6 +7,7 @@ type OPTIONS_TYPE = {
   behaviourId?: string,
   expenseId?: string,
   expensesListId?: string,
+  medicationId?: string,
   goalId?: string,
   subGoalId?: string,
   taskId?: string
@@ -82,6 +83,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/${options.expenseId}/edit`;
     case 'edit-expenses-list':
       return `${clientBase}/expenses/expenses-list/${options.expensesListId}/edit`;
+    case 'edit-medication':
+      return `${clientBase}/medication/medication-list/${options.medicationId}/edit`;
     case 'expenses':
       return `${clientBase}/expenses`;
     case 'expenses-account':
@@ -199,6 +202,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Expenses Main Account';
     case 'expenses-list':
       return 'Expenses List';
+    case 'edit-medication':
+      return 'Edit Medication';
     case 'goals':
       return `Client Goals`;
     case 'goals-data-collection':

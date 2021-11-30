@@ -3,6 +3,7 @@ import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 import moment from 'moment';
 
 import { IMedicationModel, MEDICATION_FIELDS_TYPE } from '../../../types';
@@ -28,6 +29,8 @@ import {
 
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
+
+import TimeInput from './timeInput';
 
 import * as helpers from './helpers';
 
@@ -78,14 +81,14 @@ const AddMedication = (props: AddMedicationProps) => {
   }
 
     /**
-   * This assigns the expense's info as the initial values if a client
+   * This assigns the medication's info as the initial values if a client
    * is passed in
    */
      if (props.medication) {
       initialValues = Object.assign(
         {},
         helpers.initialValues,
-        pick(props.medication.medication, Object.keys(helpers.initialValues))
+        pick(props.medication.apiMedication, Object.keys(helpers.initialValues))
       );
     } else {
       initialValues = helpers.initialValues;
@@ -98,7 +101,12 @@ const AddMedication = (props: AddMedicationProps) => {
   return (
     <div className='add-medication'>
       <PageHeading
-        title='Add Client Medication'
+        title={
+          props.update ?
+          'Update Client Medication'
+          :
+          'Add Client Medication'
+        }
         breadCrumbs={BREADCRUMBS}
       />
       <div className='add-medication__container'>
@@ -108,33 +116,33 @@ const AddMedication = (props: AddMedicationProps) => {
             onSubmit={async (values, { resetForm, setSubmitting }) => {
               const medicationId = get(props, 'medication.id')
 
-              setSubmitting(true);
+              const _values = omit(values, ['picture', 'script'])
 
-              values.client = clientId;
+              setSubmitting(true);
 
               if (pillPictureFile) {
                 try {
                   let file = await uploadDocument(pillPictureFile);
-                  values.picture = file?.id;
+                  _values.picture = file?.id;
                 } catch(e) {}
               }
 
               if (scriptFile) {
                 try {
                   let file = await uploadDocument(scriptFile);
-                  values.script = file?.id;
+                  _values.script = file?.id;
                 } catch(e) {}
               }
 
               try {
                 if (props.update) {
-                  await api.medications.updateMedication(medicationId, values);
+                  await api.medications.updateMedication(medicationId, _values, { clientId });
                   addToast({
                     message: 'Client Medication Updated',
                     intent: Intent.SUCCESS
                   })
                 } else {
-                  await api.medications.createMedication(values);
+                  await api.medications.createMedication(_values, { clientId });
                   addToast({
                     message: 'Client Medication Added',
                     intent: Intent.SUCCESS
@@ -164,6 +172,10 @@ const AddMedication = (props: AddMedicationProps) => {
             }) => {
               const onFormDateChange = (field: string) => (date: Date) => {
                 setFieldValue(field, moment(date).toISOString());
+              }
+
+              const onNewTimes = (times: string[]) => {
+                setFieldValue('med_time', times)
               }
 
               const getInputFormGroup = (key: MEDICATION_FIELDS_TYPE) => (
@@ -248,10 +260,10 @@ const AddMedication = (props: AddMedicationProps) => {
                   </Row>
                   <Row>
                     <Col xs={12} md={6}>
-                      {getNumericInput('dosage')}
+                      {getInputFormGroup('dosage')}
                     </Col>
                     <Col xs={12} md={6}>
-                      {getInputFormGroup('route')}
+                      {getInputFormGroup('route_name')}
                     </Col>
                   </Row>
                   <Row>
@@ -267,7 +279,7 @@ const AddMedication = (props: AddMedicationProps) => {
                   </Row>
                   <Row>
                     <Col xs={12} md={6}>
-                      {getInputFormGroup('refills')}
+                      {getNumericInput('refills')}
                     </Col>
                     <Col xs={12} md={6}>
                       {getNumericInput('quantity')}
@@ -285,6 +297,7 @@ const AddMedication = (props: AddMedicationProps) => {
                   </FormGroup>
 
                   {getTextAreaFormGroup('notes')}
+
                   {getTextAreaFormGroup('medication_reason')}
 
                   {getDateInputFormGroup('script_date')}
@@ -307,26 +320,31 @@ const AddMedication = (props: AddMedicationProps) => {
                     onFormSelectChange={(handleChange('taken_days'))}
                   />
 
+                  <TimeInput
+                    onNewTimes={onNewTimes}
+                    times={values.med_time}
+                  />
+
                   <Switch
                     label='Temporary Med'
-                    checked={values.temp_meds}
+                    checked={values.temp_med}
                     onChange={e => {
-                      setFieldValue('temp_meds', get(e, 'target.checked'))
+                      setFieldValue('temp_med', get(e, 'target.checked'))
                     }}
                   />
 
                   <Switch
                     label='PRN Med'
-                    checked={values.prn_meds}
+                    checked={values.prn_med}
                     onChange={e => {
-                      setFieldValue('prn_meds', get(e, 'target.checked'))
+                      setFieldValue('prn_med', get(e, 'target.checked'))
                     }}
                   />
 
                   <div className='add-medication__submit-container'>
                     <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
                       <b>
-                        Submit
+                        {props.update ? 'Update' : 'Submit'}
                       </b>
                     </Button>
                   </div>

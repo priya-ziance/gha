@@ -300,14 +300,17 @@ class MedicationApi{
       page
     });
   
-    return this.normalizer.normalizeArray(medicationResult.data.contents);
+    return this.normalizer.normalize(medicationResult.data);
   }
 
   async getMedicationDetails(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+
     const medicationResult = await client.get('/details', {
       clientId,
-      page
+      page,
+      ...params
     });
   }
 

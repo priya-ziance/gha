@@ -10,9 +10,9 @@ export default class Medication implements IBaseModel {
   dosage?: string;
   directions?: string;
   picture?: IFileModel;
-  proprietaryName?: string;
+  medication?: string;
   routeName?: string;  
-  medTime?: string;
+  medTime?: string[];
   quantity?: number;
   notes?: string;
   medicationReason?: string;
@@ -25,7 +25,7 @@ export default class Medication implements IBaseModel {
   doctor?: string; 
   scriptDate?: Moment;
   createdAt?: Moment;
-  medication: IMedication;
+  apiMedication: IMedication;
 
   constructor(medication: IMedication) {
       this.id = medication._id;
@@ -34,7 +34,7 @@ export default class Medication implements IBaseModel {
       this.type = medication.type;
       this.directions = medication.directions;
       this.routeName = medication.route_name;
-      this.proprietaryName = medication.proprietary_name;
+      this.medication = medication.medication;
       this.scriptDate = moment(medication.script_date)
       this.medTime = medication.med_time;
       this.picture = medication.picture ? new IFile(medication.picture): undefined
@@ -48,8 +48,8 @@ export default class Medication implements IBaseModel {
       this.notes = medication.notes;
       this.quantity = medication.quantity;
 
-      this.createdAt = moment(medication.createdAt);
-      this.medication = medication;
+      this.createdAt = moment(medication.created_at);
+      this.apiMedication = medication;
   }
 
   static fromArray(medication: IMedication[]): IMedicationModel[] {

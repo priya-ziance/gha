@@ -58,6 +58,7 @@ import LifeSkillsPage from './life-skills';
 import PersonalSupportPage from './personal-support';
 
 import AddMedication from './add-medication';
+import EditMedicationPage from './edit-medication';
 import MedicationPage from './medication';
 import MedPassPage from './med-pass';
 import MedDestructionPage from './med-destruction';
@@ -163,6 +164,7 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/medication/med-destruction" exact component={MedDestructionPage} />
       <Route path="/dashboard/clients/:clientId/medication/medication-list" exact component={MedicationListPage} />
       <Route path="/dashboard/clients/:clientId/medication/medication-list/add" exact component={AddMedication} />
+      <Route path="/dashboard/clients/:clientId/medication/medication-list/:medicationId/edit" exact component={EditMedicationPage} />
 
 
     </Switch>

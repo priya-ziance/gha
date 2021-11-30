@@ -9,6 +9,7 @@ export default class File implements IBaseModel {
   file: IFile;
   publicUrl?: string;
   url?: string;
+  key?: string;
   updatedAt?: string;
 
   constructor(file: IFile) {
@@ -16,7 +17,7 @@ export default class File implements IBaseModel {
     this.createdAt = file.created_at;
     this.updatedAt = file.updated_at;
     this.url = file.url;
-
+    this.key = file.key;
     this.file = file;
   }
 
