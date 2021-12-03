@@ -103,9 +103,6 @@ const MedicationListPage = () => {
             <Table
               loading={loading}
               numRows={medications.length}
-              getCellClipboardData={(row, col) => {
-                return medications[row]
-              }}
               columns={[
                 {
                   title: 'Proprietary Name',

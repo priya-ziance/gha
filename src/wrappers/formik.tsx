@@ -2,6 +2,7 @@ import { FormikProps } from 'formik';
 import get from 'lodash/get';
 import moment from 'moment';
 import { Intent } from '@blueprintjs/core';
+import { TimePicker } from '@blueprintjs/datetime';
 
 import {
   DateInput,
@@ -14,15 +15,21 @@ import {
 import { getMomentFormatter } from '../utils/helpers'
 
 
+interface IInputOptions {
+  childProps: Object
+}
+
 interface ChildrenProps {
   wrapperProps: {
-    getSwitchInputFormGroup: (key: string) => {};
-    getInputFormGroup: (key: string) => {};
-    getDateInputFormGroup: (key: string) => {};
-    getTextAreaInputFormGroup: (key: string) => {};
+    getSwitchInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getDateInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getTextAreaInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getTimeInputFormGroup: (key: string, props?: IInputOptions) => {};
   };
   formikProps: FormikProps<any>;
 }
+
 
 const getFormIntent = (error: any) => {
   if (error) { 
@@ -94,6 +101,25 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     </FormGroup>
   );
 
+  const getTimeInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+
+    return (
+      <FormGroup
+        intent={getFormIntent(errors[key])}
+        label={get(fields, key, { name: '' }).name}
+        helperText={errors[key]}
+      >
+        <TimePicker
+          value={values[key] ? moment(values[key]).toDate() : null}
+          onChange={onFormDateChange(key)}
+          useAmPm
+          {...cProps}
+        />
+      </FormGroup>
+    )
+  };
+
   const getTextAreaInputFormGroup = (key: string) => (
     <FormGroup
       intent={getFormIntent(errors[key])}
@@ -108,7 +134,8 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
         value={values[key]}
       />
     </FormGroup>
-  )
+  );
+
   return (
     <>
       {child({
@@ -116,7 +143,8 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
           getDateInputFormGroup,
           getInputFormGroup,
           getSwitchInputFormGroup,
-          getTextAreaInputFormGroup
+          getTextAreaInputFormGroup,
+          getTimeInputFormGroup
         },
         formikProps
       })}

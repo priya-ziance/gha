@@ -69,14 +69,16 @@ class AppointmentApi {
     return this.normalizer.normalizeArray(appointmentsResult.data.contents);
   }
 
-  async getAppointment(appointmentId: string) {
-    const appointmentsResult = await client.get(`/appointment/${appointmentId}`);
+  async getAppointment(appointmentId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+  
+    const appointmentsResult = await client.get(`/appointment/${appointmentId}`, params);
   
     return this.normalizer.normalize(appointmentsResult.data);
   }
 
-  async createAppointment(body = {}) {
-    const appointmentsResult = await client.post('/appointment', body);
+  async createAppointment(body = {}, params = {}) {
+    const appointmentsResult = await client.post('/appointment', body, { params });
   
     return this.normalizer.normalize(appointmentsResult.data);
   }
@@ -184,6 +186,15 @@ class ClientContactApi {
     });
   
     return this.normalizer.normalizeArray(clientContactsResult.data.contents);
+  }
+
+
+  async getClientContact(clientContactId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const clientContactResult = await client.get(`/client_contacts/${clientContactId}`, params);
+  
+    return this.normalizer.normalize(clientContactResult.data);
   }
 
   async createClientContact(body = {}) {

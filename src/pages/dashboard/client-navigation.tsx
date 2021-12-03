@@ -13,7 +13,10 @@ import AddClientCaseNotesPage from './add-client-case-notes';
 import AddClientContactsPage from './add-client-contact';
 import ClientLinksPage from './client-links';
 import ClientCaseNotesPage from './client-case-notes';
+
 import ClientContactsPage from './client-contacts';
+import EditClientContactPage from './edit-client-contact';
+
 import ClientInfo from './client-info';
 
 import AddDatabaseBehaviourPage from './add-database-behaviour';
@@ -66,6 +69,7 @@ import MedicationListPage from './medication-list';
 
 import AddAppointment from './add-appointment';
 import AppointmentsPage from './appointments';
+import EditAppointmentPage from './edit-appointment';
 
 import api from '../../api';
 
@@ -106,8 +110,9 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
   
   return (
     <Switch>
-      <Route path="/dashboard/clients/:clientId/appointment/add" exact component={AddAppointment} />
+      <Route path="/dashboard/clients/:clientId/appointments/add" exact component={AddAppointment} />
       <Route path="/dashboard/clients/:clientId/appointments" exact component={AppointmentsPage} />
+      <Route path="/dashboard/clients/:clientId/appointments/:appointmentId/edit" exact component={EditAppointmentPage} />
 
       <Route path="/dashboard/clients/:clientId/apd" exact component={APDPage} />
       <Route path="/dashboard/clients/:clientId/apd/add" exact component={AddAPDPage} />
@@ -134,9 +139,11 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/expenses/expenses-list/add" exact component={AddExpensesListPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expenses-list/:expenseListId/edit" exact component={EditExpensesListPage} />
       
-      <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-info" exact component={ClientInfo} />
+
+      <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-contacts/add" exact component={AddClientContactsPage} />
+      <Route path="/dashboard/clients/:clientId/client-contacts/:clientContactId/edit" exact component={EditClientContactPage} />
       
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />

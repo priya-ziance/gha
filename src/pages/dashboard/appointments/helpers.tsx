@@ -1,27 +1,38 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
+import moment from 'moment';
 
-import { Button } from '../../../components';
+import { AnchorButton } from '../../../components';
 
 import { IAppointmentModel } from '../../../types';
 
 
-export const clientNameColumn = (data: IAppointmentModel) => {
-  return (
-    <>{get(data, 'client.name', '')}</>
-  )
-}
-
-export const doctorColumn = (data: IAppointmentModel) => {
+export const contactNameColumn = (data: IAppointmentModel) => {
   return (
     <>{data.doctor}</>
   )
 }
 
-export const timeColumn = (data: IAppointmentModel) => {
+export const appointmentTypeColumn = (data: IAppointmentModel) => {
   return (
-    <>{data.time}</>
+    <>{data.typeOfAppointment}</>
   )
+}
+
+export const contactTypeColumn = (data: IAppointmentModel) => {
+  return (
+    <>{data.contactType}</>
+  )
+}
+
+export const timeColumn = (data: IAppointmentModel) => {
+  if (data.time) {
+    return (
+      <>{moment(data.time).format('LT')}</>
+    )
+  }
+
+  return <></>
 }
 
 export const activeColumn = (data: IAppointmentModel) => {
@@ -42,12 +53,19 @@ export const appointmentDateColumn = (data: IAppointmentModel) => {
   return (<></>)
 }
 
-export const actionColumn = (data: IAppointmentModel) => {
+export const actionColumn = (data: IAppointmentModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

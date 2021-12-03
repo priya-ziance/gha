@@ -17,8 +17,9 @@ import { IAppointment, IAppointmentModel } from '../../../types';
 import {
   actionColumn,
   activeColumn,
-  clientNameColumn,
-  doctorColumn,
+  contactNameColumn,
+  appointmentTypeColumn,
+  contactTypeColumn,
   appointmentDateColumn,
   timeColumn,
 } from './helpers';
@@ -82,7 +83,7 @@ const AppointmentsPage = () => {
           to: URLS.getPagePath('add-appointment', { clientId })
         }}
       >
-        Add 
+        Add Appointment
       </AnchorButton>
     );
   }
@@ -101,29 +102,31 @@ const AppointmentsPage = () => {
             <Table
               loading={loading}
               numRows={appointment.length}
-              getCellClipboardData={(row, col) => {
-                return appointment[row]
-              }}
               columns={[
                 {
-                  title: 'Client Name',
-                  cellRenderer: clientNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  title: 'Contact Name',
+                  cellRenderer: contactNameColumn,
+                  width: helpers.getTableWith(0.25)
                 },
                 {
-                  title: 'Doctor ',
-                  cellRenderer: doctorColumn,
-                  width: helpers.getTableWith(0.15)
-                },
-                {
-                  title: 'Date',
-                  cellRenderer: appointmentDateColumn,
+                  title: 'Contact Type',
+                  cellRenderer: contactTypeColumn,
                   width: helpers.getTableWith(0.13)
+                },
+                {
+                  title: 'Appointment Type',
+                  cellRenderer: appointmentTypeColumn,
+                  width: helpers.getTableWith(0.2)
+                },
+                {
+                  title: 'AppointmentDate',
+                  cellRenderer: appointmentDateColumn,
+                  width: helpers.getTableWith(0.15)
                 },
                 {
                   title: 'Time',
                   cellRenderer: timeColumn,
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.1)
                 },
                 {
                   title: 'Active',
@@ -132,8 +135,17 @@ const AppointmentsPage = () => {
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-appointment',
+                          { clientId, appointmentId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={appointment}

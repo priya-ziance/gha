@@ -2,6 +2,8 @@ import { PAGE_TYPES } from '../types';
 
 
 type OPTIONS_TYPE = {
+  appointmentId?: string,
+  clientContactId?: string,
   clientId?: string,
   bankStatementId?: string,
   behaviourId?: string,
@@ -20,7 +22,7 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case 'add-apd':
       return `${clientBase}/apd/add`;
     case 'add-appointment':
-      return `${clientBase}/appointment/add`;
+      return `${clientBase}/appointments/add`;
     case 'add-bank-statement':
       return `${clientBase}/expenses/bank-statement/add`;
     case 'add-client-case-notes':
@@ -69,8 +71,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-contacts`;
     case 'client-info':
       return `${clientBase}/client-info`;
+    case 'edit-appointment':
+      return `${clientBase}/appointments/${options.appointmentId}/edit`;
     case 'edit-bank-statement':
       return `${clientBase}/expenses/bank-statements/${options.bankStatementId}/edit`;
+    case 'edit-client-contact':
+      return `${clientBase}/client-contacts/${options.clientContactId}/edit`;
     case 'edit-database-behaviour':
       return `${clientBase}/behaviours/database/${options.behaviourId}/edit`;
     case 'edit-database-goal':
@@ -182,8 +188,12 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Links`;
     case 'client-contacts':
       return `Client Contacts`;
+    case 'edit-appointment':
+      return 'Edit Appointment';
     case 'edit-bank-statement':
       return 'Edit Bank Statement';
+    case 'edit-client-contact':
+      return 'Edit Client Contact';
     case 'edit-database-behaviour':
       return 'Edit Behaviour';
     case 'edit-database-goal':

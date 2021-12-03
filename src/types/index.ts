@@ -29,7 +29,9 @@ export type PAGE_TYPES =
   'client-info' |
   'client-links' |
   'client-contacts' |
+  'edit-appointment' |
   'edit-bank-statement' |
+  'edit-client-contact' |
   'edit-database-behaviour' |
   'edit-database-goal' |
   'edit-database-subgoal' |
@@ -72,8 +74,8 @@ export type APPOINTMENT_FIELDS_TYPE =
   'contact_type' |
   'type_of_appointment' |
   'staff_notes' |
-  'physicain_notes' |
-  'appt_notes' |
+  'physician_notes' |
+  'app_notes' |
   'physician_document' |
   'follow_up_date' |
   'active' |
@@ -411,7 +413,7 @@ export interface IAppointmentModel {
   typeOfAppointment?: string;
   staffNotes?: string;
   physicianNotes?: string;
-  apptNotes?: string;
+  appNotes?: string;
   active?: boolean;
   annualDental? : boolean;
   annualMedical? : boolean;
@@ -628,7 +630,7 @@ export interface ITaskModel {
   type_of_appointment?: string;
   staff_notes?: string;
   physician_notes?: string;
-  appt_notes?: string;
+  app_notes?: string;
   active?: boolean;
   physician_document?: IFile;
   annual_dental? : boolean;

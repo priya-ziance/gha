@@ -2,13 +2,13 @@ import { useContext, useState } from 'react';
 import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
-import moment from 'moment';
 import get from 'lodash/get';
+import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 
 import ToastsContext from '../../../contexts/toasts';
 
-import IClientModel from '../../../models/client';
+import IAppointmentModel from '../../../models/appointment';
 
 import api from '../../../api';
 
@@ -21,14 +21,11 @@ import formikWrapper from '../../../wrappers/formik';
 import {
   Button,
   Col,
-  DateInput,
+  FileInput,
   FormGroup,
-  InputGroup,
   LoadingView,
   PageHeading,
-  Row,
-  Switch,
-  TextArea
+  Row
 } from '../../../components';
 
 import { FIELDS } from './constants';
@@ -42,14 +39,15 @@ import './index.scss';
 
 const FormSelect = Select.ofType<string>();
 
-interface AddClientProps {
-  client?: IClientModel | undefined;
+interface AddAppointmentProps {
+  appointment?: IAppointmentModel | undefined;
   update?: boolean;
 }
 
 
-const AddAppointment = (props: AddClientProps) => {
+const AddAppointment = (props: AddAppointmentProps) => {
   const [loading, setLoading] = useState(false);
+  const [physicianFile, setPhysicianFile] = useState<File | null>(null); 
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
@@ -64,18 +62,6 @@ const AddAppointment = (props: AddClientProps) => {
 
   const doctorList: string[] = [];
 
-
-
-  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
-    return (
-        <MenuItem
-            text={item}
-            // active={active}
-            onClick={props.handleClick}
-            shouldDismissPopover={false}
-        />
-    )
-  }
 
   const getErrorToast = (message: string) => {
     return (
@@ -105,17 +91,35 @@ const AddAppointment = (props: AddClientProps) => {
 
 
   /**
-   * This assigns the client's info as the initial values if a client
+   * This assigns the appointment's info as the initial values if a appointment
    * is passed in
    */
-  if (props.client) {
+  if (props.appointment) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.client.client, Object.keys(helpers.initialValues))
+      pick(props.appointment.appointment, Object.keys(helpers.initialValues))
     );
   } else {
     initialValues = helpers.initialValues;
+  }
+
+  const getDocumentText = (documentFile: any, savedDocument: any) => {
+    if (documentFile) {
+      return get(documentFile, 'name')
+    } else {
+      return get(savedDocument, 'key')
+    }
+  }
+
+  const onDocumentChange = (setDocumentFile: any) => (e: any) => {
+    setDocumentFile(get(e, 'target.files', [])[0])
+  }
+
+  const uploadDocument = async (document: File) => {
+    if (document) {
+      return api.files.uploadFile(clientId, 'image', document);
+    }
   }
 
   return (
@@ -130,13 +134,24 @@ const AddAppointment = (props: AddClientProps) => {
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
+              const appointmentId = get(props, 'appointment.id')
+
+              const _values = omit(values, ['physician_document'])
+
               setSubmitting(true);
+
+              if (physicianFile) {
+                try {
+                  let file = await uploadDocument(physicianFile);
+                  _values.physician_document = file?.id;
+                } catch(e) {}
+              }
 
               try {
                 if (props.update) {
-                  await api.appointments.updateAppointment(get(props, 'appointment.id', ''), values);
+                  await api.appointments.updateAppointment(appointmentId, _values);
                 } else {
-                  await api.appointments.createAppointment(values);
+                  await api.appointments.createAppointment(_values, { clientId });
                 }
 
                 addToast(
@@ -165,7 +180,8 @@ const AddAppointment = (props: AddClientProps) => {
                 getDateInputFormGroup,
                 getTextAreaInputFormGroup,
                 getSwitchInputFormGroup,
-                getInputFormGroup
+                getInputFormGroup,
+                getTimeInputFormGroup
               },
               formikProps: {
                 handleSubmit,
@@ -198,7 +214,17 @@ const AddAppointment = (props: AddClientProps) => {
    */}
                         {getTextAreaInputFormGroup('type_of_appointment')}
   
-                        {getTextAreaInputFormGroup('physicain_notes')}
+                        {getTextAreaInputFormGroup('physician_notes')}
+
+                        <FormGroup
+                          intent={Intent.PRIMARY}
+                          label={'Physician Document'}
+                        >
+                          <FileInput
+                            text={getDocumentText(physicianFile, get(props, 'appointment.physicianDocument'))}
+                            onChange={onDocumentChange(setPhysicianFile)}
+                          />
+                        </FormGroup>
   
                         {getSwitchInputFormGroup('active')}
   
@@ -210,13 +236,13 @@ const AddAppointment = (props: AddClientProps) => {
     
                       {/* ---------------------------COL 2------------------------------- */}
                       <Col>
-                        {getInputFormGroup('time')}
+                        {getTimeInputFormGroup('time')}
   
                         {getInputFormGroup('contact_type')}
   
                         {getTextAreaInputFormGroup('staff_notes')}
   
-                        {getTextAreaInputFormGroup('appt_notes')}
+                        {getTextAreaInputFormGroup('app_notes')}
   
                         {getDateInputFormGroup('follow_up_date')}
   

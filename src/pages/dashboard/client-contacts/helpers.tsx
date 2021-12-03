@@ -1,7 +1,7 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { Button } from '../../../components';
+import { AnchorButton } from '../../../components';
 
 import { IClientContactModel } from '../../../types';
 
@@ -42,12 +42,19 @@ export const dateOfBirthColumn = (data: IClientContactModel) => {
   return (<></>)
 }
 
-export const actionColumn = (data: IClientContactModel) => {
+export const actionColumn = (data: IClientContactModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

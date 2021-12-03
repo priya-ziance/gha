@@ -14,7 +14,7 @@ export default class Appointment implements IBaseModel {
     typeOfAppointment?: string;
     staffNotes?: string;
     physicianNotes?: string;
-    apptNotes?: string;
+    appNotes?: string;
     active?: boolean;
     followUpDate?: Moment;
     physicianDocument?: IFileModel;
@@ -27,7 +27,7 @@ export default class Appointment implements IBaseModel {
         this.annual_dental = appointment.annual_dental;
         this.annual_medical = appointment.annual_medical;
         this.appointmentDate = appointment.appointment_date ? moment(appointment.appointment_date) : undefined;
-        this.apptNotes = appointment.appt_notes
+        this.appNotes = appointment.app_notes
         this.client = appointment.client ? new Client(appointment.client) : undefined
         this.contactType = appointment.contact_type;
         this.doctor = appointment.doctor;
@@ -36,6 +36,7 @@ export default class Appointment implements IBaseModel {
         this.staffNotes = appointment.staff_notes;
         this.typeOfAppointment = appointment.type_of_appointment;
         this.physicianDocument = appointment.physician_document ? new File(appointment.physician_document) : undefined
+        this.time = appointment.time;
         this.appointment = appointment
       }
 }

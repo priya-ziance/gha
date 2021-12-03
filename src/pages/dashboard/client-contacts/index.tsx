@@ -110,12 +110,12 @@ const ClientContacts = () => {
                 {
                   title: 'First Name',
                   cellRenderer: firstNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  width: helpers.getTableWith(0.2)
                 },
                 {
                   title: 'Last Name',
                   cellRenderer: lastNameColumn,
-                  width: helpers.getTableWith(0.15)
+                  width: helpers.getTableWith(0.2)
                 },
                 {
                   title: 'DOB',
@@ -134,8 +134,17 @@ const ClientContacts = () => {
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-client-contact',
+                          { clientId, clientContactId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={clientContacts}

@@ -24,7 +24,7 @@ export const FIELDS : APPOINTMENT_FIELDS_FORM_TYPE= {
     default: '',
     validation: yup.string(),
   },
-  appt_notes: {
+  app_notes: {
     name: 'Appt Notes',
     default: '',
     validation: yup.string(),
@@ -34,7 +34,7 @@ export const FIELDS : APPOINTMENT_FIELDS_FORM_TYPE= {
     default: '',
     validation: yup.string(),
   },
-  physicain_notes: {
+  physician_notes: {
     name: 'Physician Notes',
     default: '',
     validation: yup.string(),
@@ -63,16 +63,6 @@ export const FIELDS : APPOINTMENT_FIELDS_FORM_TYPE= {
     name: 'Annual Medical',
     default: false,
     validation: yup.boolean(),
-  },
-  reporgram_medication: {
-    name: 'Reprogram Medication',
-    default: '',
-    validation: yup.string(),
-  },
-  labs: {
-    name: 'Labs',
-    default: '',
-    validation: yup.string(),
   },
   active: {
     name: 'Active',

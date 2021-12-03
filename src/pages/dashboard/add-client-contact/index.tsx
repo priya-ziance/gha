@@ -2,9 +2,10 @@ import { useContext } from 'react';
 import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
+import pick from 'lodash/pick';
 import moment from 'moment';
 
-import { CLIENT_CONTACT_FIELDS_TYPE } from '../../../types';
+import { CLIENT_CONTACT_FIELDS_TYPE, IClientContactModel } from '../../../types';
 
 import api from '../../../api';
 
@@ -17,47 +18,88 @@ import ToastsContext from '../../../contexts/toasts';
 
 import * as helpers from './helpers';
 
+import formikWrapper from '../../../wrappers/formik';
+
 import { FIELDS } from './constants';
 
 import './index.scss';
 
 
-const AddClientContact = () => {
+interface AddClientContactProps {
+  clientContact?: IClientContactModel;
+  update?: boolean;
+}
+
+const AddClientContact = (props: AddClientContactProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
+  let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
-    { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: "Clients" },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
-    { href: URLS.getPagePath('client-contacts', { clientId }), icon: 'document', text: 'Client Contacts' },
-    { text: 'Add Client Contact' }
+    { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
+    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
+    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
+    { href: URLS.getPagePath('client-contacts', { clientId }), icon: 'document', text: URLS.getPagePathName('client-contacts') }
   ];
+
+  if (props.update) {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('edit-client-contact') })
+  } else {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('add-client-contact') })
+  }
+
+    /**
+   * This assigns the client's info as the initial values if a client
+   * is passed in
+   */
+     if (props.clientContact) {
+      initialValues = Object.assign(
+        {},
+        helpers.initialValues,
+        pick(props.clientContact.clientContact, Object.keys(helpers.initialValues))
+      );
+    } else {
+      initialValues = helpers.initialValues;
+    }
 
   return (
     <div className='add-client-contact'>
       <PageHeading
-        title='Add Client Contact Detail'
+        title={
+          props.update ?
+          'Update Client Contact Detail' :
+          'Add Client Contact Detail'
+        }
         breadCrumbs={BREADCRUMBS}
       />
       <div className='add-client-contact__container'>
         <Formik
-            initialValues={helpers.initialValues}
+            initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
               setSubmitting(true);
 
+              const clientContactId = get(props, 'clientContact.id', '')
+
               values.client = clientId;
 
               try {
-                await api.clientContacts.createClientContact(values);
-                addToast({
-                  message: 'Client Contact Created',
-                  intent: Intent.SUCCESS
-                })
+                if (props.update) {
+                  await api.clientContacts.updateClientContact(clientContactId, values);
+                  addToast({
+                    message: 'Client Contact Updated',
+                    intent: Intent.SUCCESS
+                  })
+                } else {
+                  await api.clientContacts.createClientContact(values);
+                  addToast({
+                    message: 'Client Contact Created',
+                    intent: Intent.SUCCESS
+                  })
 
-                // Reset the form
-                resetForm();
+                  // Reset the form
+                  resetForm();
+                  }
               } catch(e) {
                 addToast({
                   message: 'Something went wrong',
@@ -69,65 +111,18 @@ const AddClientContact = () => {
             }}
             >
 
-            {({
-              values,
-              errors,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
-            }) => {
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
+            {formikWrapper(({
+              wrapperProps: {
+                getDateInputFormGroup,
+                getTextAreaInputFormGroup,
+                getSwitchInputFormGroup,
+                getInputFormGroup
+              },
+              formikProps: {
+                handleSubmit,
+                isSubmitting
               }
-
-              const getInputFormGroup = (key: CLIENT_CONTACT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getTextAreaFormGroup = (key: CLIENT_CONTACT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <TextArea
-                    id={`text-area__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getDateInputFormGroup = (key: CLIENT_CONTACT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    maxDate={new Date()}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
+            }) => {
               return (
                 <form onSubmit={handleSubmit}>
 
@@ -167,25 +162,19 @@ const AddClientContact = () => {
                       {getInputFormGroup('company')}
                     </Col>
                   </Row>
-                  {getTextAreaFormGroup('notes')}
-                  <Switch
-                    label='Active'
-                    checked={values.active}
-                    onChange={e => {
-                      setFieldValue('active', get(e, 'target.checked'))
-                    }}
-                  />
+                  {getTextAreaInputFormGroup('notes')}
+                  {getSwitchInputFormGroup('active')}
 
                   <div className='add-client-contact__submit-container'>
                     <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>
                       <b>
-                        Submit
+                        {props.update ? 'Update' : 'Submit'}
                       </b>
                     </Button>
                   </div>
                 </form>
               )
-            }}
+            }, FIELDS)}
         </Formik>
       </div>
     </div>
