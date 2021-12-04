@@ -5,6 +5,7 @@ import { Button, FormGroup } from '..';
 
 interface FormItemSelectProps {
   buttonText: string;
+  defaultButtonText?: string;
   intent?: 'primary';
   items: any[],
   label?: string,
@@ -14,7 +15,7 @@ interface FormItemSelectProps {
 }
 
 const FormItemSelect = (props: FormItemSelectProps) => {
-  const { buttonText, items, label, menuRenderer, onFormSelectChange, required } = props;
+  const { buttonText, defaultButtonText, items, label, menuRenderer, onFormSelectChange, required } = props;
 
   const formSelectItemRenderer = (item: any, props: IItemRendererProps) => {
     return (
@@ -44,10 +45,14 @@ const FormItemSelect = (props: FormItemSelectProps) => {
           onItemSelect={onFormSelectChange}
       >
           {/* children become the popover target; render value here */}
-          <Button text={buttonText} rightIcon="double-caret-vertical" />
+          <Button text={buttonText || defaultButtonText} rightIcon="double-caret-vertical" />
       </FormSelect>
     </FormGroup>
   )
+}
+
+FormItemSelect.defaultProps = {
+  defaultButtonText: 'Please Select One'
 }
 
 export default FormItemSelect;

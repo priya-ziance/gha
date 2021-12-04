@@ -9,11 +9,13 @@ import ClientContext from '../../contexts/client';
 
 import withPathId from '../../hoc/withPathId';
 
-import AddClientCaseNotesPage from './add-client-case-notes';
-import AddClientContactsPage from './add-client-contact';
 import ClientLinksPage from './client-links';
-import ClientCaseNotesPage from './client-case-notes';
 
+import AddClientCaseNotesPage from './add-client-case-notes';
+import ClientCaseNotesPage from './client-case-notes';
+import EditClientCaseNotePage from './edit-case-note';
+
+import AddClientContactsPage from './add-client-contact';
 import ClientContactsPage from './client-contacts';
 import EditClientContactPage from './edit-client-contact';
 
@@ -127,6 +129,7 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       
       <Route path="/dashboard/clients/:clientId/client-case-notes" exact component={ClientCaseNotesPage} />
       <Route path="/dashboard/clients/:clientId/client-case-notes/add" exact component={AddClientCaseNotesPage} />
+      <Route path="/dashboard/clients/:clientId/client-case-notes/:caseNoteId/edit" exact component={EditClientCaseNotePage} />
 
       <Route path="/dashboard/clients/:clientId/expenses" exact component={ExpensesPage} />
       <Route path="/dashboard/clients/:clientId/expenses/bank-statement" exact component={BankStatementsPage} />

@@ -31,6 +31,7 @@ export type PAGE_TYPES =
   'client-contacts' |
   'edit-appointment' |
   'edit-bank-statement' |
+  'edit-case-note' |
   'edit-client-contact' |
   'edit-database-behaviour' |
   'edit-database-goal' |

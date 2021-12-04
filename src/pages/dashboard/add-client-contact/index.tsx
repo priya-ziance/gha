@@ -52,7 +52,7 @@ const AddClientContact = (props: AddClientContactProps) => {
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
-     if (props.clientContact) {
+    if (props.clientContact) {
       initialValues = Object.assign(
         {},
         helpers.initialValues,

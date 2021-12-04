@@ -3,6 +3,7 @@ import { PAGE_TYPES } from '../types';
 
 type OPTIONS_TYPE = {
   appointmentId?: string,
+  caseNoteId?: string,
   clientContactId?: string,
   clientId?: string,
   bankStatementId?: string,
@@ -75,6 +76,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/appointments/${options.appointmentId}/edit`;
     case 'edit-bank-statement':
       return `${clientBase}/expenses/bank-statements/${options.bankStatementId}/edit`;
+    case 'edit-case-note':
+      return `${clientBase}/client-case-notes/${options.caseNoteId}/edit`
     case 'edit-client-contact':
       return `${clientBase}/client-contacts/${options.clientContactId}/edit`;
     case 'edit-database-behaviour':
@@ -202,6 +205,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit SubGoal';
     case 'edit-database-task':
       return 'Edit Task';
+    case 'edit-case-note':
+      return 'Edit Case Note';
     case 'edit-expense-account':
       return 'Edit Expense';
     case 'edit-expenses-list':

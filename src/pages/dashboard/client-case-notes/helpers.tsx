@@ -1,7 +1,7 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { Button } from '../../../components';
+import { AnchorButton } from '../../../components';
 
 import { ICaseNoteModel } from '../../../types';
 
@@ -36,12 +36,19 @@ export const dateColumn = (data: ICaseNoteModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: ICaseNoteModel) => {
+export const actionColumn = (data: ICaseNoteModel, { viewLink }: any) => {
   return (
     <>
-      <Button intent={Intent.PRIMARY} small>
+      <AnchorButton
+        linkProps={{
+          to: viewLink
+        }}
+        buttonProps={{
+          intent: Intent.PRIMARY
+        }}
+      >
         <b>view</b>
-      </Button>
+      </AnchorButton>
     </>
   )
 }

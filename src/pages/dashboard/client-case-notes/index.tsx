@@ -120,7 +120,7 @@ const ClientCaseNotes = () => {
                 {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.3)
+                  width: helpers.getTableWith(0.4)
                 },
                 {
                   title: 'Active',
@@ -134,8 +134,17 @@ const ClientCaseNotes = () => {
                 },
                 {
                   title: 'Actions',
-                  cellRenderer: actionColumn,
-                  width: helpers.getTableWith(0.2)
+                  cellRenderer: (data) => {
+                    return actionColumn(
+                      data,
+                      {
+                        viewLink: URLS.getPagePath(
+                          'edit-case-note',
+                          { clientId, caseNoteId: data.id })
+                      }
+                    )
+                  },
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={caseNotes}

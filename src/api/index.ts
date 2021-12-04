@@ -150,8 +150,8 @@ class CaseNotesApi {
     return this.normalizer.normalizeArray(caseNotesResult.data.contents);
   }
 
-  async getCaseNote(caseNoteId: string) {
-    const caseNoteResult = await client.get(`/case_notes/${caseNoteId}`);
+  async getCaseNote(caseNoteId: string, params = {}) {
+    const caseNoteResult = await client.get(`/case_notes/${caseNoteId}`, params);
   
     return this.normalizer.normalize(caseNoteResult.data);
   }
@@ -162,8 +162,8 @@ class CaseNotesApi {
     return this.normalizer.normalize(caseNoteResult.data);
   }
 
-  async updateCaseNote(caseNoteId = '', body = {}) {
-    const caseNoteResult = await client.patch(`/case_notes/${caseNoteId}`, body);
+  async updateCaseNote(caseNoteId = '', body = {}, params = {}) {
+    const caseNoteResult = await client.patch(`/case_notes/${caseNoteId}`, body, { params });
   
     return this.normalizer.normalize(caseNoteResult.data);
   }
