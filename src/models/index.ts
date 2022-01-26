@@ -11,10 +11,12 @@ import File from './file';
 import Goal from './goal';
 import Instruction from './instruction';
 import Location from './location';
+import LogTemplate from './logTemplate';
 import Medication from './medication';
 import SpGoal from './spGoal';
 import SubGoal from './subGoal';
 import Task from './task';
+import Question from './question';
 
 const Exports = {
   Appointment,
@@ -30,7 +32,9 @@ const Exports = {
   Goal,
   Instruction,
   Location,
+  LogTemplate,
   Medication,
+  Question,
   SpGoal,
   SubGoal,
   Task

@@ -30,8 +30,12 @@ import {
   IInstructionModel,
   ILocation,
   ILocationModel,
+  ILogTemplate,
+  ILogTemplateModel,
   IMedication,
   IMedicationModel,
+  IQuestion,
+  IQuestionModel,
   ISpGoal,
   ISpGoalModel,
   ISubGoalModel,
@@ -286,6 +290,49 @@ class LocationApi {
     const locationsResult = await client.get('/locations');
   
     return this.normalizer.normalizeArray(locationsResult.data.contents);
+  }
+}
+
+
+//============================= LOG TEMPLATES API'S====================================
+class LogTemplatesApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ILogTemplateModel, ILogTemplate>(Models.LogTemplate)
+  }
+
+  async getLogTemplates(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const logTemplatesResult = await client.get(`/templates`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(logTemplatesResult.data.contents);
+  }
+
+  async getLogTemplate(logTemplateId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const logTemplateResult = await client.get(`/template/${logTemplateId}`, params);
+  
+    return this.normalizer.normalize(logTemplateResult.data);
+  }
+
+  async createLogTemplate(body = {}, params = {}) {
+    const logTemplateResult = await client.post('/template', body, { params });
+  
+    return this.normalizer.normalize(logTemplateResult.data);
+  }
+
+  async updateLogTemplate(logTemplateId = '', body = {}, params = {}) {
+    const logTemplateResult = await client.patch(`/template/${logTemplateId}`, body, { params });
+  
+    return this.normalizer.normalize(logTemplateResult.data);
   }
 }
 
@@ -730,6 +777,48 @@ class ExpensesListApi {
 }
 
 
+//============================= QUESTIONS API'S====================================
+class QuestionsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IQuestionModel, IQuestion>(Models.Question)
+  }
+
+  async getQuestions(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const questionsResult = await client.get(`/questions`, {
+      clientId,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(questionsResult.data.contents);
+  }
+
+  async getQuestion(questionId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const questionResult = await client.get(`/question/${questionId}`, params);
+  
+    return this.normalizer.normalize(questionResult.data);
+  }
+
+  async createQuestion(body = {}, params = {}) {
+    const questionResult = await client.post('/question', body, { params });
+  
+    return this.normalizer.normalize(questionResult.data);
+  }
+
+  async updateQuestion(questionId = '', body = {}, params = {}) {
+    const questionResult = await client.patch(`/question/${questionId}`, body, { params });
+  
+    return this.normalizer.normalize(questionResult.data);
+  }
+}
+
 
 
 //========================================================================
@@ -748,7 +837,9 @@ export default (() => ({
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),
   locations: new LocationApi(),
+  logTemplates: new LogTemplatesApi(),
   medications: new MedicationApi(),
+  questions: new QuestionsApi(),
   spGoals: new SpGoalsApi(),
   subgoals: new SubGoalsApi(),
   tasks: new TasksApi(),

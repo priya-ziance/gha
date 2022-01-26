@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
+import get from 'lodash/get'
 
 import moment from 'moment';
 
@@ -11,6 +12,7 @@ import {
   Col,
   DateInput,
   FormGroup,
+  FormItemSelect,
   PageHeading,
   Row,
   Table,
@@ -25,6 +27,8 @@ import URLS from '../../../utils/urls';
 import api from '../../../api';
 
 import CaseNote from '../../../models/caseNote';
+import LogTemplate from '../../../models/logTemplate';
+import Question from '../../../models/question';
 
 import * as helpers from '../../../utils/helpers';
 
@@ -44,18 +48,23 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const ClientCaseNotes = () => {
+const ReshabLogs = () => {
   const [caseNotes, setCaseNotes] = useState<CaseNote[] | []>([]);
+  const [logTemplate, setLogTemplate] = useState<LogTemplate | null>(null)
+  const [templateQuestions, setTemplateQuestions] = useState<Question[] | []>([])
+  const [selectedQuestions, setSelectedQuestions] = useState<{[key: string]: string} | null>({})
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingTemplate, setLoadingTemplate] = useState(false);
   const [isMonthLogOpen, setIsMonthLogOpen] = useState(false);
+  const [logDate, setLogDate] = useState<Date | null>(null);
+
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
   const hasNextPage = caseNotes.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  const FormSelect = Select.ofType<string>();
 
   useEffect(() => {
     (async () => {
@@ -67,11 +76,37 @@ const ClientCaseNotes = () => {
         )
       } catch(e){}
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
+      setLoading(false);
     })()
   }, [clientId, page, selectedLocationId]);
+
+  useEffect(() => {
+    (async () => {
+      setLoadingTemplate(true);
+
+      try {
+        setLogTemplate(
+          await api.logTemplates.getLogTemplate(clientId, { page, pageSize: PAGE_SIZE })
+        )
+      } catch(e){}
+
+      setLoadingTemplate(false);
+    })()
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      setLoadingTemplate(true);
+
+      try {
+        setTemplateQuestions(
+          await api.questions.getQuestions(clientId, { page, pageSize: PAGE_SIZE })
+        )
+      } catch(e){}
+
+      setLoadingTemplate(false);
+    })()
+  }, [])
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -88,18 +123,6 @@ const ClientCaseNotes = () => {
   const onLogDateChange = (date: Date) => {
     
   }
-
-  const formSelectItemRenderer = (item: string, props: IItemRendererProps) => {
-    return (
-        <MenuItem
-            text={item}
-            // active={active}
-            onClick={props.handleClick}
-            shouldDismissPopover={false}
-        />
-    )
-  }
-
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
@@ -122,7 +145,8 @@ const ClientCaseNotes = () => {
           label='Log Date'
         >
           <DateInput
-            onChange={onLogDateChange}
+            onChange={setLogDate}
+            value={logDate}
             {...helpers.getMomentFormatter('LL')}
           />
         </FormGroup>
@@ -217,114 +241,23 @@ const ClientCaseNotes = () => {
                 return (
                   <form onSubmit={handleSubmit} className='reshab-logs__form'>
                     <Row className='reshab-logs__form__row'>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          labelFor="text-input"
-                          label='Was the reshab service provided? '
-                        >
-                          <FormSelect
-                              items={TEMP_ANSWERS}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('legal_status')}
-                          >
-                              {/* children become the popover target; render value here */}
-                              <Button text={'A'} rightIcon="double-caret-vertical" />
-                          </FormSelect>
-                        </FormGroup>
-                      </Col>
+                      {templateQuestions.map(templateQuestion => {
+                        return (
+                          <Col md={6}>
+                            <FormGroup
+                              intent={Intent.PRIMARY}
+                              label={templateQuestion.questionValue}
+                            >
+                              <FormItemSelect
+                                buttonText={get(selectedQuestions, `${templateQuestion.id}`, '')}
+                                items={templateQuestion.answers}
+                                menuRenderer={item => item}
+                                onFormSelectChange={(handleChange('expense_type'))}
+                              />
+                            </FormGroup>
+                          </Col>
+                        )
+                      })}
                     </Row>
 
                     <FormGroup
@@ -353,4 +286,4 @@ const ClientCaseNotes = () => {
   );
 }
 
-export default ClientCaseNotes;
+export default ReshabLogs;

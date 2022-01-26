@@ -539,6 +539,13 @@ export interface IGoalModel {
   goal: IGoal;
 }
 
+export interface ILogTemplateModel {
+  id: string;
+  type: string;
+  questions: IQuestionModel[];
+  logTemplate: ILogTemplate
+}
+
 export interface IMedicationModel {
   id: string;
   client: string;
@@ -615,6 +622,15 @@ export interface ITaskModel {
   task: ITask,
   createdAt: Moment
 }
+
+export interface IQuestionModel {
+  id: string;
+  questionValue: string;
+  type: string;
+  answers: string[];
+  question: IQuestion;
+}
+
 
 
 /**
@@ -801,6 +817,12 @@ export interface IGoal {
   active: false;
 }
 
+export interface ILogTemplate {
+  _id: string;
+  type: string;
+  questions: IQuestion[]
+}
+
 export interface IMedication {
   _id: string;
   client: string;
@@ -874,6 +896,13 @@ export interface IInstruction {
   task?: ITask;
   created_at: string;
   updated_at?: string;
+}
+
+export interface IQuestion {
+  _id: string;
+  question_value: string;
+  type: string;
+  answers: string[]
 }
 
 /**
