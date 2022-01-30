@@ -5,6 +5,7 @@ export default class Question implements IBaseModel {
   id: string;
   answers: string[];
   type: string;
+  selectedAnswers: string[];
   questionValue: string;
   question: IQuestion;
 
@@ -12,6 +13,7 @@ export default class Question implements IBaseModel {
     this.id = question._id;
     this.type = question.type;
     this.answers = question.answers;
+    this.selectedAnswers = question.selected_answers;
     this.questionValue = question.question_value;
     this.question = question;
   }

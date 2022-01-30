@@ -12,6 +12,7 @@ import Goal from './goal';
 import Instruction from './instruction';
 import Location from './location';
 import LogTemplate from './logTemplate';
+import Log from './log';
 import Medication from './medication';
 import SpGoal from './spGoal';
 import SubGoal from './subGoal';
@@ -33,6 +34,7 @@ const Exports = {
   Instruction,
   Location,
   LogTemplate,
+  Log,
   Medication,
   Question,
   SpGoal,

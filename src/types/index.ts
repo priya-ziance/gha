@@ -50,6 +50,7 @@ export type PAGE_TYPES =
   'goals-database-subgoals' |
   'goals-database-tasks' |
   'life-skills' |
+  'life-skills-logs' |
   'logs' |
   'med-destruction' |
   'med-pass' |
@@ -460,6 +461,9 @@ export interface IClientBehaviourModel {
   id: string;
   name: string;
   client: IClient;
+  firstName: string;
+  lastName: string;
+  address?: string;
   profilePicture?: IFileModel;
   signature?: IFileModel;
 }
@@ -543,6 +547,7 @@ export interface ILogTemplateModel {
   id: string;
   type: string;
   questions: IQuestionModel[];
+  logNotes: string;
   logTemplate: ILogTemplate
 }
 
@@ -603,6 +608,15 @@ export interface ILocationModel {
   updatedAt?: string;
 }
 
+export interface ILogModel {
+  id: string;
+  questions: IQuestionModel[];
+  client: IClientModel;
+  type: string;
+  log: ILog;
+  createdAt: Moment
+}
+
 export interface IInstructionModel {
   id: string,
   description: string,
@@ -627,6 +641,7 @@ export interface IQuestionModel {
   id: string;
   questionValue: string;
   type: string;
+  selectedAnswers: string[];
   answers: string[];
   question: IQuestion;
 }
@@ -746,7 +761,7 @@ export interface IClient {
   primary_diagnosis?: string;
   secondary_diagnosis?: string;
   allergies?: string;
-  location?: string;
+  location?: ILocation;
   health_insurance?: string;
   effective_date?: string;
   monthly_ssi_amount?: string;
@@ -820,7 +835,9 @@ export interface IGoal {
 export interface ILogTemplate {
   _id: string;
   type: string;
-  questions: IQuestion[]
+  log_notes: string;
+  questions: IQuestion[];
+  created_at: string;
 }
 
 export interface IMedication {
@@ -898,8 +915,17 @@ export interface IInstruction {
   updated_at?: string;
 }
 
+export interface ILog {
+  _id: string;
+  questions: IQuestion[];
+  client: IClient;
+  type: string;
+  created_at: string;
+}
+
 export interface IQuestion {
   _id: string;
+  selected_answers: string[];
   question_value: string;
   type: string;
   answers: string[]

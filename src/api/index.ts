@@ -32,6 +32,8 @@ import {
   ILocationModel,
   ILogTemplate,
   ILogTemplateModel,
+  ILog,
+  ILogModel,
   IMedication,
   IMedicationModel,
   IQuestion,
@@ -315,10 +317,20 @@ class LogTemplatesApi {
     return this.normalizer.normalizeArray(logTemplatesResult.data.contents);
   }
 
+  async getLogTemplateByType(type: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const logTemplateResult = await client.get(`/templates/type`, { type, ...params });
+  
+    if (logTemplateResult.data && logTemplateResult.data[0]) {
+      return this.normalizer.normalize(logTemplateResult.data[0]);
+    }
+  }
+  
   async getLogTemplate(logTemplateId: string, options?: OPTIONS_TYPE) {
     const params = get(options, 'params', {});
 
-    const logTemplateResult = await client.get(`/template/${logTemplateId}`, params);
+    const logTemplateResult = await client.get(`/templates/${logTemplateId}`, params);
   
     return this.normalizer.normalize(logTemplateResult.data);
   }
@@ -330,7 +342,7 @@ class LogTemplatesApi {
   }
 
   async updateLogTemplate(logTemplateId = '', body = {}, params = {}) {
-    const logTemplateResult = await client.patch(`/template/${logTemplateId}`, body, { params });
+    const logTemplateResult = await client.patch(`/templates/${logTemplateId}`, body, { params });
   
     return this.normalizer.normalize(logTemplateResult.data);
   }
@@ -819,6 +831,69 @@ class QuestionsApi {
   }
 }
 
+//============================= TEMPLATES API'S====================================
+class LogsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ILogModel, ILog>(Models.Log)
+  }
+
+  async getLogsForPeriod(date_period: string, clientId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+  
+    const logsResult = await client.get(`/logs/client/month`, {
+      clientId,
+      date_period,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(logsResult.data);
+  }
+
+  async getLogsForDate(log_date: string, clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const logsResult = await client.get(`/logs/date`, {
+      clientId,
+      page,
+      log_date,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(logsResult.data.contents);
+  }
+
+  async getLogsByType(type: string, clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const logsResult = await client.get(`/logs/type`, {
+      clientId,
+      page,
+      type,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(logsResult.data);
+  }
+
+  async getLog(logId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const logResult = await client.get(`/logs/${logId}`, params);
+  
+    return this.normalizer.normalize(logResult.data);
+  }
+
+  async updateLog(logId = '', body = {}, params = {}) {
+    const logResult = await client.patch(`/logs/${logId}`, body, { params });
+  
+    return this.normalizer.normalize(logResult.data);
+  }
+}
+
 
 
 //========================================================================
@@ -838,6 +913,7 @@ export default (() => ({
   instructions: new InstructionsApi(),
   locations: new LocationApi(),
   logTemplates: new LogTemplatesApi(),
+  logs: new LogsApi(),
   medications: new MedicationApi(),
   questions: new QuestionsApi(),
   spGoals: new SpGoalsApi(),

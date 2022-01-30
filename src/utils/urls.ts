@@ -114,6 +114,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/goals/database/tasks`;
     case 'life-skills':
       return `${clientBase}/logs/life-skills`;
+    case 'life-skills-logs':
+      return `${clientBase}/logs/life-skills/logs`;
     case 'logs':
       return `${clientBase}/logs`;
     case 'med-destruction':
@@ -233,6 +235,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Tasks'
     case 'life-skills':
       return 'Life Skills';
+    case 'life-skills-logs':
+      return 'Life Skills Logs';
     case 'logs':
       return 'Logs';
     case 'med-destruction':
