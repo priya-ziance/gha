@@ -4,28 +4,22 @@ import ClientsImage from '../../../assets/svg/man-woman.svg';
 export const getLinks = (clientId: string) => {
   return [
     {
-      description: 'Add client\'s Reshab log. Daily task',
-      title: 'Reshab Log',
+      description: 'Add client\'s Life Skill Daily task',
+      title: 'Life Skill Logs',
       image: ClientsImage,
-      path: URLS.getPagePath('reshab-logs', { clientId })
+      path: URLS.getPagePath('life-skills-logs', { clientId })
     },
     {
-      description: 'Add client\'s Reshab log. Daily task',
-      title: 'Respite Log',
+      description: '',
+      title: 'Life Skill Places Database',
       image: ClientsImage,
       path: URLS.getPagePath('respite-logs', { clientId })
     },
     {
-      description: 'Add client\'s Reshab log. Daily task',
-      title: 'Life Skills',
+      description: '',
+      title: 'Life Skill Notes Database',
       image: ClientsImage,
       path: URLS.getPagePath('life-skills', { clientId })
-    },
-    {
-      description: 'Add client\'s Reshab log. Daily task',
-      title: 'Personal Support',
-      image: ClientsImage,
-      path: URLS.getPagePath('personal-support', { clientId })
-    },
+    }
   ]
 }

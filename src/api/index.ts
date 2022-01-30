@@ -851,12 +851,11 @@ class LogsApi {
     return this.normalizer.normalizeArray(logsResult.data);
   }
 
-  async getLogsForDate(log_date: string, clientId: string, options?: OPTIONS_TYPE) {
+  async getLogsForDate(log_date: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
     const params = get(options, 'params', {});
   
     const logsResult = await client.get(`/logs/date`, {
-      clientId,
       page,
       log_date,
       ...params

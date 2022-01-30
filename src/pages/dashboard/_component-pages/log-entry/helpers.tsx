@@ -24,12 +24,6 @@ export const addressColumn = (data: ILogModel) => {
   )
 }
 
-export const activeColumn = (data: ILogModel) => {
-  return (
-    <Checkbox checked={!!data} disabled/>
-  )
-}
-
 export const medicaidColumn = (data: ILogModel) => {
   return (
     <p className='bp3-table-truncated-cell'>{get(data, 'client.medicaidId', '')}</p>
@@ -50,11 +44,14 @@ export const locationColumn = (data: ILogModel) => {
 
 export const actionColumn = (data: ILogModel, actions?: any) => {
   return (
-    <>
+    <div className='log-entry__actions'>
       <Button intent={Intent.PRIMARY} small onClick={actions.onView}>
-        <b>view</b>
+        <b>view logs</b>
       </Button>
-    </>
+      <Button intent={Intent.PRIMARY} small onClick={actions.onEdit}>
+        <b>edit</b>
+      </Button>
+    </div>
   )
 }
 

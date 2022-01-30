@@ -351,7 +351,7 @@ const AddClient = (props: AddClientProps) => {
                       >
                         <div style={{ maxWidth: 200 }}>
                           <img
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', marginBottom: 10 }}
                             alt='client signature'
                             src={signatureDataURL || props.client?.signature?.publicUrl}
                           />

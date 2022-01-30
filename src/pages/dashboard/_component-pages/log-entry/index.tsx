@@ -33,9 +33,10 @@ import LoadingWrapper from '../../../../wrappers/loading';
 
 import * as helpers from '../../../../utils/helpers';
 
+import { ILogModel, ILogTemplateModel } from '../../../../types';
+
 import {
   actionColumn,
-  activeColumn,
   medicaidColumn,
   addressColumn,
   firstNameColumn,
@@ -43,7 +44,9 @@ import {
   locationColumn
 } from './helpers';
 
-import MonthLog from './monthLog';
+import MonthLogDialog from './monthLog';
+
+import EditLogDialog from './editLogDialog';
 
 import './index.scss';
 
@@ -53,15 +56,36 @@ interface LogEntryProps {
   type: string
 }
 
+const selectedAnswersToArray = (answers: {[key: string]: string} | null = {}) => {
+  if (answers) {
+    const keys = Object.keys(answers);
+
+    return keys.map((key: string) => {
+      return {
+        question_id: key,
+        selected_answers: [answers[key]]
+      }
+    })
+  }
+}
+
+const handleTemplateUpdate = async (answers: any, logTemplate: ILogTemplateModel, clientId: string, values = {}) => {
+  const answerObjects = selectedAnswersToArray(answers)
+                
+  await api.logTemplates.updateLogTemplate(logTemplate?.id, { answerObjects, ...values }, { clientId })
+}
+
 const LogEntry = (props: LogEntryProps) => {
   const [logs, setLogs] = useState<Log[] | []>([]);
-  const [logTemplate, setLogTemplate] = useState<LogTemplate | undefined>(undefined)
+  const [logTemplate, setLogTemplate] = useState<ILogTemplateModel | undefined>(undefined)
   const [templateQuestions, setTemplateQuestions] = useState<Question[] | []>([])
   const [selectedAnswers, setSelectedAnswers] = useState<{[key: string]: string} | null>({})
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingTemplate, setLoadingTemplate] = useState(false);
-  const [isMonthLogOpen, setIsMonthLogOpen] = useState(false);
+  const [isMonthLogDialogOpen, setIsMonthLogDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedLogToEdit, setselectedLogToEdit] = useState<ILogModel | null>(null)
   const [logDate, setLogDate] = useState<Date>(new Date());
   const [selectedClient, setSelectedClient] = useState('')
 
@@ -76,18 +100,18 @@ const LogEntry = (props: LogEntryProps) => {
 
   useEffect(() => {
     (async () => {
-      if (clientId) {
+      if (clientId && logDate) {
         setLoading(true);
 
         try {
-          const fetchedLogs = await api.logs.getLogsByType(type, clientId, { page, pageSize: PAGE_SIZE })
+          const fetchedLogs = await api.logs.getLogsForDate(moment(logDate).format('YYYY-MM-DD'), { page, pageSize: PAGE_SIZE })
           setLogs(fetchedLogs)
         } catch(e){}
 
         setLoading(false);
       }
     })()
-  }, [type, clientId, page, selectedLocationId]);
+  }, [type, clientId, page, selectedLocationId, logDate]);
 
   useEffect(() => {
     (async () => {
@@ -133,19 +157,6 @@ const LogEntry = (props: LogEntryProps) => {
     })
   }
 
-  const selectedAnswersToArray = (answers: {[key: string]: string} | null = {}) => {
-    if (answers) {
-      const keys = Object.keys(answers);
-
-      return keys.map((key: string) => {
-        return {
-          question_id: key,
-          selected_answers: [answers[key]]
-        }
-      })
-    }
-  }
-
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
@@ -161,13 +172,28 @@ const LogEntry = (props: LogEntryProps) => {
       BREADCRUMBS.push({ text: URLS.getPagePathName('respite-logs') });
       break;
     case 'lifeskills':
+      BREADCRUMBS.push({ href: URLS.getPagePath('life-skills', { clientId }), icon: 'document', text: URLS.getPagePathName('life-skills') },);
       BREADCRUMBS.push({ text: URLS.getPagePathName('life-skills-logs') });
+      break;
+    case 'personalsupport':
+      BREADCRUMBS.push({ href: URLS.getPagePath('personal-support', { clientId }), icon: 'document', text: URLS.getPagePathName('personal-support') },);
+      BREADCRUMBS.push({ text: URLS.getPagePathName('personal-support-logs') });
       break;
   }
 
-  const handleMonthLogClose = () => {
-    setIsMonthLogOpen(false)
+  const handleMonthLogDialogClose = () => {
+    setIsMonthLogDialogOpen(false)
     setSelectedClient('')
+  }
+
+  const handleEditLogClose = () => {
+    setIsEditDialogOpen(false);
+    setselectedLogToEdit(null);
+  }
+
+  const onLogDate = (date: Date) => {
+    setLogDate(date);
+    setPage(0);
   }
 
   const getPageTitle =(type: string) => {
@@ -178,6 +204,8 @@ const LogEntry = (props: LogEntryProps) => {
         return 'Respite Logs'
       case 'lifeskills':
         return 'Life Skills Logs'
+      case 'personalsupport':
+        return 'Personal Support Logs'
       default:
         return ''
     }
@@ -196,7 +224,7 @@ const LogEntry = (props: LogEntryProps) => {
           label='Log Date'
         >
           <DateInput
-            onChange={setLogDate}
+            onChange={onLogDate}
             value={logDate}
             {...helpers.getMomentFormatter('LL')}
           />
@@ -240,21 +268,20 @@ const LogEntry = (props: LogEntryProps) => {
                   width: helpers.getTableWith(0.19)
                 },
                 {
-                  title: 'Single',
-                  cellRenderer: activeColumn,
-                  width: helpers.getTableWith(0.07)
-                },
-                {
                   title: 'Actions',
                   cellRenderer: (data) => {
                     return actionColumn(data, {
                       onView() {
-                        setIsMonthLogOpen(true);
+                        setIsMonthLogDialogOpen(true);
                         setSelectedClient(get(data, 'client.id'))
+                      },
+                      onEdit() {
+                        setIsEditDialogOpen(true);
+                        setselectedLogToEdit(data)
                       }
                     })
                   },
-                  width: helpers.getTableWith(0.13)
+                  width: helpers.getTableWith(0.2)
                 }
               ]}
               data={logs}
@@ -276,15 +303,15 @@ const LogEntry = (props: LogEntryProps) => {
                   log_notes: get(logTemplate, 'logNotes')
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
-                  setSubmitting(true)
+                  if (logTemplate) {
+                    setSubmitting(true)
+                    
+                    try {
+                      await handleTemplateUpdate(selectedAnswers, logTemplate, clientId, values)
+                    } catch(e) {}
 
-                  const answerObjects = selectedAnswersToArray(selectedAnswers)
-                  
-                  try {
-                    await api.logTemplates.updateLogTemplate(logTemplate?.id, { answerObjects, ...values }, { clientId })
-                  } catch(e) {}
-
-                  setSubmitting(false)
+                    setSubmitting(false)
+                  }
                 }}
                 >
 
@@ -332,7 +359,6 @@ const LogEntry = (props: LogEntryProps) => {
                           onChange={handleChange('log_notes')}
                         />
                       </FormGroup>
-                      
 
                       <Button type="submit" disabled={isSubmitting} loading={isSubmitting} large intent={Intent.PRIMARY}>
                         Save
@@ -346,7 +372,21 @@ const LogEntry = (props: LogEntryProps) => {
         </div>
       </div>
 
-      <MonthLog clientId={selectedClient} type={type} date={logDate} isOpen={isMonthLogOpen} onClose={handleMonthLogClose}/>
+      <MonthLogDialog
+        clientId={selectedClient}
+        type={type}
+        date={logDate}
+        isOpen={isMonthLogDialogOpen}
+        onClose={handleMonthLogDialogClose}
+      />
+
+      <EditLogDialog
+        isOpen={isEditDialogOpen}
+        log={selectedLogToEdit}
+        onClose={handleEditLogClose}
+        template={logTemplate}
+        onUpdate={handleTemplateUpdate}
+      />
     </div>
   );
 }

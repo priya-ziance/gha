@@ -57,6 +57,7 @@ export type PAGE_TYPES =
   'medication' |
   'medication-list' |
   'personal-support' |
+  'personal-support-logs' |
   'reshab-logs' |
   'respite-logs' |
   'sp-goals';

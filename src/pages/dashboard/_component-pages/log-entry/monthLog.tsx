@@ -11,7 +11,7 @@ import * as helpers from '../../../../utils/helpers';
 
 import api from '../../../../api';
 
-import { ILogModel, IQuestionModel } from '../../../../types';
+import { ILogModel } from '../../../../types';
 
 import './index.scss';
 import moment from 'moment';
@@ -56,6 +56,22 @@ const MonthLog = (props: MonthLogProps) => {
     })()
   }, [clientId, date, type, isOpen])
 
+  /**
+   * Trying to get the logs in the shape below
+   * {
+      question: 'Was the reshab service provided:',
+      logs: {
+        1: 'Y',
+        2: 'N',
+        3: 'Y',
+        4: 'N',
+        5: 'Y',
+        6: 'Y'
+      }
+    }
+   * @param logs 
+   * @returns 
+   */
   const formatLogs = (logs: ILogModel[]) => {
     const questions: any[] = []
     let formattedLogs: any[] = []
@@ -71,10 +87,10 @@ const MonthLog = (props: MonthLogProps) => {
           log.questions.forEach((quest: any) => {
             const dayOfMonth = log.createdAt.date()
 
-            if (questions[quest.questionValue]) {
-              questions[quest.questionValue].logs[dayOfMonth] = quest.selectedAnswers[0]
+            if (questions[quest.id]) {
+              questions[quest.id].logs[dayOfMonth] = quest.selectedAnswers[0]
             } else {
-              questions[quest.questionValue] = {
+              questions[quest.id] = {
                 question: quest.questionValue,
                 logs: {
                   [dayOfMonth]: quest.selectedAnswers[0]

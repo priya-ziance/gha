@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Overlay } from '@blueprintjs/core';
+import { Intent, Overlay } from '@blueprintjs/core';
 
 import { Button, SignaturePad } from '../../../components';
 
@@ -21,13 +21,15 @@ class Signature extends React.Component<SignatureProps> {
     this.onSave = this.onSave.bind(this);
   }
 
-  onClear() {
+  onClear(e: any) {
     if (this.signature.current) {
       this.signature.current.clear();
     }
+
+    e.stopPropagation();
   }
 
-  onSave() {
+  onSave(e: any) {
     if (this.props.onSave && this.signature.current) {
       this.props.onSave(this.signature.current.toDataURL());
     }
@@ -35,25 +37,27 @@ class Signature extends React.Component<SignatureProps> {
     if (this.props.onClose) {
       this.props.onClose();
     }
+
+    e.stopPropagation();
+  }
+
+  onClickContainer(event: any) {
+    event.stopPropagation()
   }
 
   render() {
     return (
       <Overlay isOpen={this.props.isOpen} onClose={this.props.onClose}>
-        <div className='add-client__signature'>
-          <div style={{
-            height: 300,
-            width: 500,
-            backgroundColor: 'white'
-          }}>
-            <SignaturePad ref={this.signature} width={500} height={300} style={{ backgroundColor: 'blue' }} options={{minWidth: 1, maxWidth: 2}} />
+        <div className='add-client__signature' onClick={this.props.onClose}>
+          <div className='add-client__signature__container' onClick={this.onClickContainer}>
+            <SignaturePad ref={this.signature} style={{ backgroundColor: 'blue' }} />
           </div>
   
           <div className='add-client__signature__actions'>
-            <Button onClick={this.onSave}>
+            <Button intent={Intent.PRIMARY} large onClick={this.onSave}>
               Save
             </Button>
-            <Button onClick={this.onClear}>
+            <Button large onClick={this.onClear}>
               Clear
             </Button>
           </div>
@@ -61,12 +65,6 @@ class Signature extends React.Component<SignatureProps> {
       </Overlay>
     )
   }
-}
-
-
-const Signature2 = (props: SignatureProps) => {
-
-  
 }
 
 export default Signature;

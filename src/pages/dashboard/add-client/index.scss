@@ -36,5 +36,28 @@
 }
 
 .add-client__signature {
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  &__container {
+    height: 400px;
+    width: 800px;
+    background-color: white;
+    margin-bottom: 20px;
+
+    canvas {
+      height: 400px;
+      width: 600px;
+    }
+  }
+
+  &__actions {
+    .gha__button {
+      margin-right: 10px;
+    }
+  }
 }

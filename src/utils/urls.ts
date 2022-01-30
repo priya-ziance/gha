@@ -128,6 +128,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/medication/medication-list`;
     case 'personal-support':
       return `${clientBase}/logs/personal-support`;
+    case 'personal-support-logs':
+      return `${clientBase}/logs/personal-support/logs`;
     case 'reshab-logs':
       return `${clientBase}/logs/reshab-logs`;
     case 'respite-logs':
@@ -249,6 +251,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Medication List';
     case 'personal-support':
       return 'Personal Support';
+    case 'personal-support-logs':
+      return 'Personal Support Logs';
     case 'reshab-logs':
       return 'Reshab Logs';
     case 'respite-logs':
