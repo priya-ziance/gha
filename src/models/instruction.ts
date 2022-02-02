@@ -13,7 +13,6 @@ export default class Instruction implements IBaseModel {
   updatedAt?: string;
 
   constructor(instruction: IInstruction) {
-    console.log('Instruct:', instruction)
     this.id = instruction._id;
     this.active = instruction.active;
     this.createdAt = moment(instruction.created_at);

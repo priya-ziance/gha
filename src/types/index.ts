@@ -51,6 +51,7 @@ export type PAGE_TYPES =
   'goals-database-tasks' |
   'life-skills' |
   'life-skills-logs' |
+  'life-skills-places-database' |
   'logs' |
   'med-destruction' |
   'med-pass' |
@@ -139,7 +140,6 @@ export type CLIENT_FIELDS_TYPE =
   'medicaid' |
   'medicare' |
   'medicaid_waiver' |
-  'current_month_weight' |
   'height' |
   'eye_color' |
   'hair_color' |
@@ -151,17 +151,12 @@ export type CLIENT_FIELDS_TYPE =
   'location' |
   'health_insurance' |
   'effective_date' |
-  'monthly_ssi_amount' |
   'funds_method' |
   'special_equipments' |
-  'bank_account_name' |
-  'bank_account_number' |
   'race' |
   'home_entry_date' |
   'home_discharge_date' |
   'religion' |
-  'vision' |
-  'hearing' |
   'mobility' |
   'behaviours' |
   'likes' |
@@ -207,6 +202,10 @@ export type INSTRUCTION_FIELDS_TYPE =
   'active' |
   'description' |
   'task'
+
+export type PLACES_FIELDS_TYPE =
+  'active' |
+  'description'
 
   export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE =
   'notes' |
@@ -336,6 +335,14 @@ export type TASK_FIELDS_FORM_TYPE = {
 
 export type INSTRUCTION_FIELDS_FORM_TYPE = {
   [key in INSTRUCTION_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type PLACES_FIELDS_FORM_TYPE = {
+  [key in PLACES_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -627,6 +634,14 @@ export interface IInstructionModel {
   createdAt: Moment
 }
 
+export interface IPlaceDatabaseModel {
+  id: string,
+  description: string,
+  active: boolean,
+  placeDatabase: IPlaceDatabase,
+  createdAt: Moment
+}
+
 export interface ITaskModel {
   instructions: IInstructionModel[],
   id: string,
@@ -753,7 +768,6 @@ export interface IClient {
   medicaid?: string;
   medicare?: string;
   medicaid_waiver?: string;
-  current_month_weight?: string;
   height?: string;
   eye_color?: string;
   hair_color?: string;
@@ -765,17 +779,12 @@ export interface IClient {
   location?: ILocation;
   health_insurance?: string;
   effective_date?: string;
-  monthly_ssi_amount?: string;
   funds_method?: string;
   special_equipments?: string;
-  bank_account_name?: string;
-  bank_account_number?: string;
   race?: string;
   home_entry_date?: string;
   home_discharge_date?: string;
   religion?: string;
-  vision?: string;
-  hearing?: string;
   mobility?: string;
   behaviours?: string;
   likes?: string;
@@ -921,6 +930,13 @@ export interface ILog {
   questions: IQuestion[];
   client: IClient;
   type: string;
+  created_at: string;
+}
+
+export interface IPlaceDatabase {
+  _id: string;
+  active: boolean;
+  description: string;
   created_at: string;
 }
 

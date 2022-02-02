@@ -19,6 +19,8 @@ import api from '../../../api';
 import URLS from '../../../utils/urls'; 
 import { dataURItoBlob } from '../../../utils/helpers';
 
+import formikWrapper from '../../../wrappers/formik';
+
 import {
   Button,
   Col,
@@ -212,69 +214,24 @@ const AddClient = (props: AddClientProps) => {
             }}
             >
 
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
+            {formikWrapper(({
+              wrapperProps: {
+                getDateInputFormGroup,
+                getTextAreaInputFormGroup,
+                getInputFormGroup,
+                getNumericInputFormGroup
+              },
+              formikProps: {
+                values,
+                handleChange,
+                handleSubmit,
+                isSubmitting,
+                setFieldValue
+              }
             }) => {
               const onFormSelectChange = (field: string) => (value: string) => {
                 setFieldValue(field, value);
               }
-              
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
-              }
-
-              const getInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getDateInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
-              const getTextAreaInputFormGroup = (key: CLIENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-area__${key}`}
-                  helperText={errors[key]}
-                >
-                  <TextArea
-                    id={`text-area__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
 
               const onAddSignature = () => setSignatureOpen(true);
               const onCloseSignature = () => setSignatureOpen(false);
@@ -333,12 +290,12 @@ const AddClient = (props: AddClientProps) => {
                       {getInputFormGroup('zip_code')}
                       {getInputFormGroup('phone')}
                       {getInputFormGroup('mobile')}
-                      {getInputFormGroup('ssn')}
+                      {getNumericInputFormGroup('ssn', { childProps: { max: 999999999 } })}
                       
                       {getTextAreaInputFormGroup('behaviours')}
 
                       <FormGroup
-                        intent={Intent.PRIMARY}
+                        intent={Intent.PRIMARY} 
                         label={get(FIELDS, 'active', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
@@ -362,7 +319,7 @@ const AddClient = (props: AddClientProps) => {
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Trainers"}
+                        label={"Staff that can be called Trainers"}
                       >
                         <Button intent={Intent.PRIMARY}>
                           <b>Add Trainers</b>
@@ -377,18 +334,12 @@ const AddClient = (props: AddClientProps) => {
                       {getInputFormGroup('medicare')}
                       {getInputFormGroup('medicaid_waiver')}
 
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'current_month_weight', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <InputGroup id="text-input" />
-                      </FormGroup>
-
                       {getInputFormGroup('height')}
                       {getInputFormGroup('eye_color')}
                       {getInputFormGroup('hair_color')}
+
+                      {getInputFormGroup('religion')}
+                      {getInputFormGroup('mobility')}
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={get(FIELDS, 'legal_status', { name: '' }).name}
@@ -426,16 +377,10 @@ const AddClient = (props: AddClientProps) => {
                             <Button text={values.primary_diagnosis} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
-                      
-                      {getInputFormGroup('secondary_diagnosis')}
-                      {getInputFormGroup('allergies')}
-                      
-                      {getTextAreaInputFormGroup('likes')}
-                      {getTextAreaInputFormGroup('definition_of_abuse')}
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Witnessess"}
+                        label={"Staff to be used as Witnesses"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY}>
@@ -444,7 +389,7 @@ const AddClient = (props: AddClientProps) => {
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Services"}
+                        label={"Services provided by Group home Connect"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY}>
@@ -465,20 +410,17 @@ const AddClient = (props: AddClientProps) => {
                         <DateInput {...helpers.getMomentFormatter('LL')}/>
                       </FormGroup>
 
-                      {getInputFormGroup('monthly_ssi_amount')}
-
                       {getInputFormGroup('special_equipments')}
-                      {getInputFormGroup('bank_account_name')}
-                      {getInputFormGroup('bank_account_number')}
                       {getInputFormGroup('race')}
                       
                       {getDateInputFormGroup('home_entry_date')}
                       {getDateInputFormGroup('home_discharge_date')}
 
-                      {getInputFormGroup('religion')}
-                      {getInputFormGroup('vision')}
-                      {getInputFormGroup('hearing')}
-                      {getInputFormGroup('mobility')}
+                      {getInputFormGroup('secondary_diagnosis')}
+                      {getInputFormGroup('allergies')}
+                      
+                      {getTextAreaInputFormGroup('likes')}
+                      {getTextAreaInputFormGroup('definition_of_abuse')}
                       
                       {getTextAreaInputFormGroup('dislikes')}
                       {getTextAreaInputFormGroup('notes')}
@@ -494,7 +436,7 @@ const AddClient = (props: AddClientProps) => {
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Level of Service"}
+                        label={"Level of Service Required by staff"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY} onClick={onLevelOfService}>
@@ -521,7 +463,7 @@ const AddClient = (props: AddClientProps) => {
                   <Signature isOpen={signatureOpen} onClose={onCloseSignature} onSave={setSignatureDataURL} />
                 </form>
               )
-            }}
+            }, FIELDS)}
           </Formik>
         </div>
       </div>

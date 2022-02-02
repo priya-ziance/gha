@@ -9,6 +9,7 @@ import {
   FormGroup,
   InputGroup,
   Switch,
+  NumericInput,
   TextArea
 } from '../components';
 
@@ -16,6 +17,7 @@ import { getMomentFormatter } from '../utils/helpers'
 
 
 interface IInputOptions {
+  // These are the props for the main component
   childProps: Object
 }
 
@@ -24,6 +26,7 @@ interface ChildrenProps {
     getSwitchInputFormGroup: (key: string, props?: IInputOptions) => {};
     getInputFormGroup: (key: string, props?: IInputOptions) => {};
     getDateInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getNumericInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTextAreaInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTimeInputFormGroup: (key: string, props?: IInputOptions) => {};
   };
@@ -136,12 +139,36 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     </FormGroup>
   );
 
+  const getNumericInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+    
+    return (
+      <FormGroup
+        intent={getFormIntent(errors[key])}
+        label={get(fields, key, { name: '' }).name}
+        labelFor={`text-area__${key}`}
+        helperText={errors[key]}
+      >
+        <NumericInput
+          id={`numeric-input__${key}`}
+          intent={getFormIntent(errors[key])}
+          onValueChange={(_: any, value: string) => {
+            setFieldValue(key, value)
+          }}
+          value={values[key]}
+          {...cProps}
+        />
+      </FormGroup>
+    );
+  }
+
   return (
     <>
       {child({
         wrapperProps: {
           getDateInputFormGroup,
           getInputFormGroup,
+          getNumericInputFormGroup,
           getSwitchInputFormGroup,
           getTextAreaInputFormGroup,
           getTimeInputFormGroup

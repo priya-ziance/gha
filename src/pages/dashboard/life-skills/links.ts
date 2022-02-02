@@ -13,7 +13,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Life Skill Places Database',
       image: ClientsImage,
-      path: URLS.getPagePath('respite-logs', { clientId })
+      path: URLS.getPagePath('life-skills-places-database', { clientId })
     },
     {
       description: '',

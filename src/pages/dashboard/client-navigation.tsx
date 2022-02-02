@@ -61,6 +61,7 @@ import ReshabLogsPage from './reshab-logs';
 import RespiteLogsPage from './respite-logs';
 import LifeSkillsPage from './life-skills';
 import LifeSkillsLogsPage from './life-skills-logs';
+import LifeSkillsPlacesDatabasePage from './life-skills-places-database';
 import PersonalSupportPage from './personal-support';
 import PersonalSupportLogsPage from './personal-support-logs';
 
@@ -170,6 +171,7 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/logs/respite-logs" exact component={RespiteLogsPage} />
       <Route path="/dashboard/clients/:clientId/logs/life-skills" exact component={LifeSkillsPage} />
       <Route path="/dashboard/clients/:clientId/logs/life-skills/logs" exact component={LifeSkillsLogsPage} />
+      <Route path="/dashboard/clients/:clientId/logs/life-skills/places-database" exact component={LifeSkillsPlacesDatabasePage} />
       <Route path="/dashboard/clients/:clientId/logs/personal-support" exact component={PersonalSupportPage} />
       <Route path="/dashboard/clients/:clientId/logs/personal-support/logs" exact component={PersonalSupportLogsPage} />
 

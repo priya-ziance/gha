@@ -36,6 +36,8 @@ import {
   ILogModel,
   IMedication,
   IMedicationModel,
+  IPlaceDatabase,
+  IPlaceDatabaseModel,
   IQuestion,
   IQuestionModel,
   ISpGoal,
@@ -110,6 +112,12 @@ class ClientsApi {
     const clientsResult = await client.get(`/clients?page=${page}`);
   
     return this.normalizer.normalizeArray(clientsResult.data.contents);
+  }
+
+  async getClientsForUser() {  
+    const clientsResult = await client.get(`/clients/forUser`);
+  
+    return this.normalizer.normalizeArray(clientsResult.data);
   }
 
   async getClient(clientId: string) {
@@ -875,7 +883,7 @@ class LogsApi {
       ...params
     });
   
-    return this.normalizer.normalizeArray(logsResult.data);
+    return this.normalizer.normalizeArray(logsResult.data.contents);
   }
 
   async getLog(logId: string, options?: OPTIONS_TYPE) {
@@ -892,6 +900,54 @@ class LogsApi {
     return this.normalizer.normalize(logResult.data);
   }
 }
+
+//============================= PLACE DATABASE API'S==============================
+class PlaceDatabasesApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IPlaceDatabaseModel, IPlaceDatabase>(Models.PlaceDatabase)
+  }
+
+  async getPlaces(clientId: string, type: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const placesResult = await client.get(`/places`, {
+      clientId,
+      type,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(placesResult.data.contents);
+  }
+
+  async getPlace(placeId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const placeResult = await client.get(`/places/${placeId}`, params);
+  
+    return this.normalizer.normalize(placeResult.data);
+  }
+
+  async createPlace(body = {}, params = {}) {
+    const placeResult = await client.post('/places', body, { params });
+  
+    return this.normalizer.normalize(placeResult.data);
+  }
+
+  async updatePlace(placeId = '', body = {}, params = {}) {
+    const placeResult = await client.patch(`/places/${placeId}`, body, { params });
+  
+    return this.normalizer.normalize(placeResult.data);
+  }
+
+  async deletePlace(placeId = '', body = {}, params = {}) {
+    await client.delete(`/places/${placeId}`, body, { params });
+  }
+}
+
 
 
 
@@ -914,6 +970,7 @@ export default (() => ({
   logTemplates: new LogTemplatesApi(),
   logs: new LogsApi(),
   medications: new MedicationApi(),
+  places: new PlaceDatabasesApi(),
   questions: new QuestionsApi(),
   spGoals: new SpGoalsApi(),
   subgoals: new SubGoalsApi(),

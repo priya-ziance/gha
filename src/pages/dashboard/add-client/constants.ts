@@ -127,7 +127,7 @@ export const FIELDS : FIELDS_TYPE= {
   ssn: {
     name: 'SS #',
     default: '',
-    validation: yup.string().required().label('SS #'),
+    validation: yup.number().max(999999999).min(100000000).required().label('SS #'),
   },
   florida_id: {
     name: 'Florida Id',
@@ -148,11 +148,6 @@ export const FIELDS : FIELDS_TYPE= {
     name: 'Medicaid Waiver #',
     default: '',
     validation: yup.string().required().label('Medicaid Waiver #'),
-  },
-  current_month_weight: {
-    name: ' Current Month Weight',
-    default: '',
-    validation: yup.string(),
   },
   height: {
     name: 'Height',
@@ -204,23 +199,8 @@ export const FIELDS : FIELDS_TYPE= {
     default: '',
     validation: yup.string(),
   },
-  monthly_ssi_amount: {
-    name: 'Monthly SSI Amount',
-    default: '',
-    validation: yup.string(),
-  },
   special_equipments: {
     name: 'Special Equipments',
-    default: '',
-    validation: yup.string(),
-  },
-  bank_account_name: {
-    name: 'Bank Account Name',
-    default: '',
-    validation: yup.string(),
-  },
-  bank_account_number: {
-    name: 'Bank Account Number',
     default: '',
     validation: yup.string(),
   },
@@ -241,16 +221,6 @@ export const FIELDS : FIELDS_TYPE= {
   },
   religion: {
     name: 'Religion',
-    default: '',
-    validation: yup.string(),
-  },
-  vision: {
-    name: 'Vision',
-    default: '',
-    validation: yup.string(),
-  },
-  hearing: {
-    name: 'Hearing',
     default: '',
     validation: yup.string(),
   },

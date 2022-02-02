@@ -14,6 +14,7 @@ import Location from './location';
 import LogTemplate from './logTemplate';
 import Log from './log';
 import Medication from './medication';
+import PlaceDatabase from './placeDatabase';
 import SpGoal from './spGoal';
 import SubGoal from './subGoal';
 import Task from './task';
@@ -36,6 +37,7 @@ const Exports = {
   LogTemplate,
   Log,
   Medication,
+  PlaceDatabase,
   Question,
   SpGoal,
   SubGoal,

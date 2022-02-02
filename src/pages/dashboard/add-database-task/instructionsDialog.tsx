@@ -14,7 +14,6 @@ import ClientContext from '../../../contexts/client';
 
 import api from '../../../api';
 
-import URLS from '../../../utils/urls';
 import * as helpers from '../../../utils/helpers';
 
 import {

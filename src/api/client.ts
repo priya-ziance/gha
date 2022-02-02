@@ -65,6 +65,16 @@ const client = (() => {
 
         throw err;
       })
+    },
+    delete(url: string, body?: any, options = {}) {
+      return axios.delete(url, { data: body, ...options }).catch(e => {
+        const err = new ClientError();
+        
+        err.message = e.response.data.message;
+        err.data = e.response.data;
+
+        throw err;
+      })
     }
   }
 })()
