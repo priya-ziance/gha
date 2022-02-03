@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
@@ -11,6 +11,7 @@ import ToastsContext from '../../../contexts/toasts';
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
 import Signature from './signature';
+import Services from './servicesDialog';
 
 import IClientModel from '../../../models/client';
 
@@ -64,6 +65,7 @@ const AddClient = (props: AddClientProps) => {
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const [currentDialog, setCurrentDialog] = useState('');
   const [signatureDataURL, setSignatureDataURL] = useState('');
+  const [services, setServices] = useState<any>({})
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
@@ -83,10 +85,17 @@ const AddClient = (props: AddClientProps) => {
     BREADCRUMBS.push({ text: URLS.getPagePathName('client-info') })
   }
 
+  useEffect(() => {
+    if (props.client) {
+      setServices(props.client.services)
+    }
+  }, [props.client])
+
   const handleDialogClose = () => setCurrentDialog('');
 
   const onLevelOfService = () => setCurrentDialog(DIALOG_NAMES.levelsOfService);
   const onClientCustomForm = () => setCurrentDialog(DIALOG_NAMES.clientCustomForm);
+  const onServicesForm = () => setCurrentDialog(DIALOG_NAMES.services);
 
 
   const uploadProfilePicture = async () => {
@@ -186,6 +195,8 @@ const AddClient = (props: AddClientProps) => {
                 } catch(e) {}
               }
 
+              values.services = services;
+
               try {
                 if (props.update) {
                   await api.clients.updateClient(get(props, 'client.id', ''), values);
@@ -238,6 +249,7 @@ const AddClient = (props: AddClientProps) => {
 
               const levelOfServiceOpen = currentDialog === DIALOG_NAMES.levelsOfService;
               const clientCustomFormOpen = currentDialog === DIALOG_NAMES.clientCustomForm;
+              const servicesDialogOpen = currentDialog === DIALOG_NAMES.services;
 
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
 
@@ -392,7 +404,7 @@ const AddClient = (props: AddClientProps) => {
                         label={"Services provided by Group home Connect"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY}>
+                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
                           <b>Services</b>
                         </Button>
                       </FormGroup>
@@ -459,6 +471,8 @@ const AddClient = (props: AddClientProps) => {
                   <LevelsOfServiceDialog isOpen={levelOfServiceOpen} handleClose={handleDialogClose} />
 
                   <ClientCustomDialog isOpen={clientCustomFormOpen} handleClose={handleDialogClose} />
+
+                  <Services handleServicesChange={setServices} services={services} isOpen={servicesDialogOpen} handleClose={handleDialogClose} />
 
                   <Signature isOpen={signatureOpen} onClose={onCloseSignature} onSave={setSignatureDataURL} />
                 </form>

@@ -105,8 +105,8 @@ const LevelsOfService = (props: IDialog) => {
               onChange={handleRadioChange}
               selectedValue=''
             >
-              <Row>
-                <Col>
+              {/* <Row> */}
+                {/* <Col> */}
                   <Radio
                     label='Verbal assistance only'
                     value='verbal assistance only'
@@ -119,8 +119,8 @@ const LevelsOfService = (props: IDialog) => {
                     label='full observation to prevent choking'
                     value='full observation to prevent choking'
                   />
-                </Col>
-                <Col>
+                {/* </Col> */}
+                {/* <Col> */}
                   <Radio
                     label='physical assistance'
                     value='physical assistance'
@@ -129,8 +129,8 @@ const LevelsOfService = (props: IDialog) => {
                     label='adaptive utensils used'
                     value='adaptive utensils used'
                   />
-                </Col>
-              </Row>
+                {/* </Col> */}
+              {/* </Row> */}
             </RadioGroup>
             <Row>
               <Col>

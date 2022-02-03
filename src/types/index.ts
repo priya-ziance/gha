@@ -477,6 +477,7 @@ export interface IClientBehaviourModel {
   address?: string;
   profilePicture?: IFileModel;
   signature?: IFileModel;
+  services: object;
 }
 
 export interface ICaseNoteModel {
@@ -806,6 +807,7 @@ export interface IClient {
   creator?: string;
   profile_picture?: IFile;
   signature?: IFile;
+  services: object;
 }
 
 export interface IExpense {

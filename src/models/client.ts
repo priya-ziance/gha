@@ -13,6 +13,7 @@ export default class Client implements IBaseModel {
   profilePicture?: IFileModel;
   signature?: IFileModel;
   location?: ILocationModel;
+  services: object;
 
   constructor(client: IClient) {
     this.id = client._id;
@@ -20,6 +21,7 @@ export default class Client implements IBaseModel {
     this.firstName = client.first_name;
     this.lastName = client.last_name;
     this.medicaidId = client.medicaid;
+    this.services = client.services;
     
     if (client.location) {
       this.location = new Location(client.location);
