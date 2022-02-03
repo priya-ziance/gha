@@ -25,8 +25,8 @@ import './index.scss';
 interface AddPlaceDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  place?: IPlaceDatabaseModel;
   type: string;
+  place?: IPlaceDatabaseModel;
 }
 
 const AddPlaceDialog = (props: AddPlaceDialogProps) => {
@@ -65,7 +65,7 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
             }
           </H4>
         </div>
-        <div className={`database-task__instructions__add-instruction ${Classes.DIALOG_BODY}`}>
+        <div className={`personal-support-places__add-place ${Classes.DIALOG_BODY}`}>
           <Formik
               initialValues={initialValues}
               validationSchema={helpers.validationSchema}
@@ -81,6 +81,7 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
                       intent: 'primary'
                     })
                   } else {
+                    // Type should only be added when creating a place. It shouldn't be updated
                     await api.places.createPlace(values, { clientId, type });
 
                     addToast({

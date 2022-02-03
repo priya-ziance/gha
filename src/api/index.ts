@@ -36,6 +36,8 @@ import {
   ILogModel,
   IMedication,
   IMedicationModel,
+  INotesDatabase,
+  INotesDatabaseModel,
   IPlaceDatabase,
   IPlaceDatabaseModel,
   IQuestion,
@@ -949,6 +951,54 @@ class PlaceDatabasesApi {
 }
 
 
+//============================= PLACE DATABASE API'S==============================
+class NoteDatabasesApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<INotesDatabaseModel, INotesDatabase>(Models.NotesDatabase)
+  }
+
+  async getNotes(clientId: string, type: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+  
+    const notesResult = await client.get(`/notes`, {
+      clientId,
+      type,
+      page,
+      ...params
+    });
+  
+    return this.normalizer.normalizeArray(notesResult.data.contents);
+  }
+
+  async getNote(noteId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const noteResult = await client.get(`/notes/${noteId}`, params);
+  
+    return this.normalizer.normalize(noteResult.data);
+  }
+
+  async createNote(body = {}, params = {}) {
+    const noteResult = await client.post('/notes', body, { params });
+  
+    return this.normalizer.normalize(noteResult.data);
+  }
+
+  async updateNote(noteId = '', body = {}, params = {}) {
+    const noteResult = await client.patch(`/notes/${noteId}`, body, { params });
+  
+    return this.normalizer.normalize(noteResult.data);
+  }
+
+  async deleteNote(noteId = '', body = {}, params = {}) {
+    await client.delete(`/notes/${noteId}`, body, { params });
+  }
+}
+
+
 
 
 //========================================================================
@@ -970,6 +1020,7 @@ export default (() => ({
   logTemplates: new LogTemplatesApi(),
   logs: new LogsApi(),
   medications: new MedicationApi(),
+  notes: new NoteDatabasesApi(),
   places: new PlaceDatabasesApi(),
   questions: new QuestionsApi(),
   spGoals: new SpGoalsApi(),

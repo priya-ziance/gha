@@ -29,7 +29,7 @@ import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const TYPE = 'lifeskills';
+const TYPE = 'personalsupport';
 
 const DatabasePlaces = () => {
   const [page, setPage] = useState(0);
@@ -38,7 +38,7 @@ const DatabasePlaces = () => {
   const [selectedPlaceToDelete, setSelectedPlaceToDelete] = useState<IPlaceDatabaseModel | undefined>(undefined);
   const { id: clientId } = useContext(ClientContext);
 
-  const { data: _places, isValidating } = useSWR('/api/client-behaviours', () => {
+  const { data: _places, isValidating } = useSWR('/api/personal-support/places', () => {
     return api.places.getPlaces(clientId, TYPE, { page, pageSize: PAGE_SIZE })
   }, { refreshInterval: 50 })
 
@@ -64,8 +64,8 @@ const DatabasePlaces = () => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('logs', { clientId }), icon: 'document', text: URLS.getPagePathName('logs') },
-    { href: URLS.getPagePath('life-skills', { clientId }), icon: 'document', text: URLS.getPagePathName('life-skills') },
-    { text: URLS.getPagePathName('life-skills-places-database') }
+    { href: URLS.getPagePath('personal-support', { clientId }), icon: 'document', text: URLS.getPagePathName('personal-support') },
+    { text: URLS.getPagePathName('personal-support-places-database') }
   ];
 
   const onAddPlace = () => {
@@ -95,13 +95,13 @@ const DatabasePlaces = () => {
 
   return (
     <div>
-      <div className='life-skills-places'>
+      <div className='personal-support-places'>
         <PageHeading
-          title='Life Skills Places Database'
+          title='Personal Support Places Database'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='life-skills-places__container'>
+        <div className='personal-support-places__container'>
           <Col>
             <Table
               loading={isValidating && !places}
@@ -165,7 +165,7 @@ const DatabasePlaces = () => {
           </Col>
         </div>
 
-        <AddPlaceDialog place={selectedPlace} isOpen={isAddPlaceOpen} onClose={onClosePlaceDialog} type={TYPE} />
+        <AddPlaceDialog place={selectedPlace} isOpen={isAddPlaceOpen} onClose={onClosePlaceDialog} type={TYPE}/>
         {selectedPlaceToDelete &&
           <DeletePlaceDialog place={selectedPlaceToDelete} isOpen={!!selectedPlaceToDelete} onClose={onCloseDeleteDialog} />
         }

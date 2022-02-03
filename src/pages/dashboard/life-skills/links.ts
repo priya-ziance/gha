@@ -19,7 +19,7 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Life Skill Notes Database',
       image: ClientsImage,
-      path: URLS.getPagePath('life-skills', { clientId })
+      path: URLS.getPagePath('life-skills-notes-database', { clientId })
     }
   ]
 }

@@ -13,7 +13,7 @@ import api from '../../../api';
 
 import * as helpers from '../../../utils/helpers';
 
-import { IPlaceDatabaseModel } from '../../../types';
+import { INotesDatabaseModel } from '../../../types';
 
 import {
   actionColumn,
@@ -22,29 +22,29 @@ import {
   descriptionColumn,
 } from './helpers';
 
-import AddPlaceDialog from './addPlaceDialog';
-import DeletePlaceDialog from './deletePlaceDialog';
+import AddNoteDialog from './addNoteDialog';
+import DeleteNoteDialog from './deleteNoteDialog';
 
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
-const TYPE = 'lifeskills';
+const TYPE = 'personalsupport';
 
-const DatabasePlaces = () => {
+const DatabaseNotes = () => {
   const [page, setPage] = useState(0);
-  const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState<IPlaceDatabaseModel | undefined>(undefined);
-  const [selectedPlaceToDelete, setSelectedPlaceToDelete] = useState<IPlaceDatabaseModel | undefined>(undefined);
+  const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<INotesDatabaseModel | undefined>(undefined);
+  const [selectedNoteToDelete, setSelectedNoteToDelete] = useState<INotesDatabaseModel | undefined>(undefined);
   const { id: clientId } = useContext(ClientContext);
 
-  const { data: _places, isValidating } = useSWR('/api/client-behaviours', () => {
-    return api.places.getPlaces(clientId, TYPE, { page, pageSize: PAGE_SIZE })
+  const { data: _Notes, isValidating } = useSWR('/api/personal-support/Notes', () => {
+    return api.notes.getNotes(clientId, TYPE, { page, pageSize: PAGE_SIZE })
   }, { refreshInterval: 50 })
 
-  const places = _places || []
+  const Notes = _Notes || []
 
-  const hasNextPage = places.length === PAGE_SIZE;
+  const hasNextPage = Notes.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   const onNextPage = () => {
@@ -64,21 +64,21 @@ const DatabasePlaces = () => {
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
     { href: URLS.getPagePath('logs', { clientId }), icon: 'document', text: URLS.getPagePathName('logs') },
-    { href: URLS.getPagePath('life-skills', { clientId }), icon: 'document', text: URLS.getPagePathName('life-skills') },
-    { text: URLS.getPagePathName('life-skills-places-database') }
+    { href: URLS.getPagePath('personal-support', { clientId }), icon: 'document', text: URLS.getPagePathName('personal-support') },
+    { text: URLS.getPagePathName('personal-support-notes-database') }
   ];
 
-  const onAddPlace = () => {
-    setIsAddPlaceOpen(true)
+  const onAddNote = () => {
+    setIsAddNoteOpen(true)
   }
 
-  const onClosePlaceDialog = () => {
-    setIsAddPlaceOpen(false)
-    setSelectedPlace(undefined);
+  const onCloseNoteDialog = () => {
+    setIsAddNoteOpen(false)
+    setSelectedNote(undefined);
   }
 
   const onCloseDeleteDialog = () => {
-    setSelectedPlaceToDelete(undefined)
+    setSelectedNoteToDelete(undefined)
   }
 
   const getAddButton = () => {
@@ -86,29 +86,29 @@ const DatabasePlaces = () => {
       <Button
         intent={Intent.PRIMARY}
         icon={IconNames.ADD}
-        onClick={onAddPlace}
+        onClick={onAddNote}
       >
-        Add place
+        Add Note
       </Button>
     );
   }
 
   return (
     <div>
-      <div className='life-skills-places'>
+      <div className='personal-support-Notes'>
         <PageHeading
-          title='Life Skills Places Database'
+          title='Personal Support Notes Database'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='life-skills-places__container'>
+        <div className='personal-support-Notes__container'>
           <Col>
             <Table
-              loading={isValidating && !places}
-              numRows={places.length}
+              loading={isValidating && !Notes}
+              numRows={Notes.length}
               getCellClipboardData={(row, col) => {
 
-                return places[row]
+                return Notes[row]
               }}
               columns={[
                 {
@@ -137,12 +137,12 @@ const DatabasePlaces = () => {
                     return actionColumn(
                       data,
                       {
-                        onView(data: IPlaceDatabaseModel) {
-                          setSelectedPlace(data);
-                          setIsAddPlaceOpen(true)
+                        onView(data: INotesDatabaseModel) {
+                          setSelectedNote(data);
+                          setIsAddNoteOpen(true)
                         },
-                        onDelete(data: IPlaceDatabaseModel) {
-                          setSelectedPlaceToDelete(data)
+                        onDelete(data: INotesDatabaseModel) {
+                          setSelectedNoteToDelete(data)
                         }
                       }
                     )
@@ -150,7 +150,7 @@ const DatabasePlaces = () => {
                   width: helpers.getTableWith(0.2)
                 }
               ]}
-              data={places}
+              data={Notes}
               enableRowHeader={false}
               onSelection={(focusedCell) => {
                 console.log(focusedCell)
@@ -160,18 +160,18 @@ const DatabasePlaces = () => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Places Found"
+              emptyTableMessage="No Notes Found"
             />
           </Col>
         </div>
 
-        <AddPlaceDialog place={selectedPlace} isOpen={isAddPlaceOpen} onClose={onClosePlaceDialog} type={TYPE} />
-        {selectedPlaceToDelete &&
-          <DeletePlaceDialog place={selectedPlaceToDelete} isOpen={!!selectedPlaceToDelete} onClose={onCloseDeleteDialog} />
+        <AddNoteDialog note={selectedNote} isOpen={isAddNoteOpen} onClose={onCloseNoteDialog} type={TYPE}/>
+        {selectedNoteToDelete &&
+          <DeleteNoteDialog note={selectedNoteToDelete} isOpen={!!selectedNoteToDelete} onClose={onCloseDeleteDialog} />
         }
       </div>
     </div>
   );
 }
 
-export default DatabasePlaces;
+export default DatabaseNotes;

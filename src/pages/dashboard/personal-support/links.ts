@@ -13,13 +13,13 @@ export const getLinks = (clientId: string) => {
       description: '',
       title: 'Personal Support Places Database',
       image: ClientsImage,
-      path: URLS.getPagePath('respite-logs', { clientId })
+      path: URLS.getPagePath('personal-support-places-database', { clientId })
     },
     {
       description: '',
       title: 'Personal Support Notes Database',
       image: ClientsImage,
-      path: URLS.getPagePath('life-skills', { clientId })
+      path: URLS.getPagePath('personal-support-notes-database', { clientId })
     }
   ]
 }

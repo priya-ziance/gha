@@ -52,6 +52,7 @@ export type PAGE_TYPES =
   'life-skills' |
   'life-skills-logs' |
   'life-skills-places-database' |
+  'life-skills-notes-database' |
   'logs' |
   'med-destruction' |
   'med-pass' |
@@ -59,6 +60,8 @@ export type PAGE_TYPES =
   'medication-list' |
   'personal-support' |
   'personal-support-logs' |
+  'personal-support-places-database' |
+  'personal-support-notes-database' |
   'reshab-logs' |
   'respite-logs' |
   'sp-goals';
@@ -634,6 +637,14 @@ export interface IInstructionModel {
   createdAt: Moment
 }
 
+export interface INotesDatabaseModel {
+  id: string,
+  description: string,
+  active: boolean,
+  noteDatabase: INotesDatabase,
+  createdAt: Moment
+}
+
 export interface IPlaceDatabaseModel {
   id: string,
   description: string,
@@ -930,6 +941,13 @@ export interface ILog {
   questions: IQuestion[];
   client: IClient;
   type: string;
+  created_at: string;
+}
+
+export interface INotesDatabase {
+  _id: string;
+  active: boolean;
+  description: string;
   created_at: string;
 }
 

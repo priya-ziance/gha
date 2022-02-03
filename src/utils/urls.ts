@@ -118,6 +118,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/logs/life-skills/logs`;
     case 'life-skills-places-database':
       return `${clientBase}/logs/life-skills/places-database`
+    case 'life-skills-notes-database':
+      return `${clientBase}/logs/life-skills/notes-database`
     case 'logs':
       return `${clientBase}/logs`;
     case 'med-destruction':
@@ -132,6 +134,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/logs/personal-support`;
     case 'personal-support-logs':
       return `${clientBase}/logs/personal-support/logs`;
+    case 'personal-support-places-database':
+      return `${clientBase}/logs/personal-support/places-database`;
+    case 'personal-support-notes-database':
+      return `${clientBase}/logs/personal-support/notes-database`;
     case 'reshab-logs':
       return `${clientBase}/logs/reshab-logs`;
     case 'respite-logs':
@@ -243,6 +249,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Life Skills Logs';
     case 'life-skills-places-database':
       return 'Life Skills Places Database'
+    case 'life-skills-notes-database':
+      return 'Life Skills Notes Database'
     case 'logs':
       return 'Logs';
     case 'med-destruction':
@@ -257,6 +265,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Personal Support';
     case 'personal-support-logs':
       return 'Personal Support Logs';
+    case 'personal-support-places-database':
+      return 'Personal Support Places Database'
+    case 'personal-support-notes-database':
+      return 'Personal Support Notes Database'
     case 'reshab-logs':
       return 'Reshab Logs';
     case 'respite-logs':

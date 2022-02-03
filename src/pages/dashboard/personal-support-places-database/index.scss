@@ -1,0 +1,34 @@
+.personal-support-places {
+  .personal-support-places__container {
+    display: flex;
+    align-items: center;
+
+    .personal-support-places__table__cell {
+      height: 100%; 
+    }
+  
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  
+    .gha__modulecard {
+      margin: 15px;
+    }
+  }
+
+  &__actions {
+    .gha__button {
+      margin-right: 10px;
+    }
+  }
+}
+
+.personal-support-places__add-place {
+  textarea {
+    width: 100%
+  }
+}

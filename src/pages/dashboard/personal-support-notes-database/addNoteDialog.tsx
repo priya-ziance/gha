@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 
-import {  IPlaceDatabaseModel } from '../../../types';
+import {  INotesDatabaseModel } from '../../../types';
 
 import api from '../../../api';
 
@@ -22,20 +22,20 @@ import { FIELDS } from './constants';
 import './index.scss';
 
 
-interface AddPlaceDialogProps {
+interface AddNoteDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  place?: IPlaceDatabaseModel;
   type: string;
+  note?: INotesDatabaseModel;
 }
 
-const AddPlaceDialog = (props: AddPlaceDialogProps) => {
+const AddNoteDialog = (props: AddNoteDialogProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
-  const { place } = props;
+  const { note } = props;
 
   let initialValues;
-  const update = !!place
+  const update = !!note
   
   const { isOpen, onClose, type } = props;
 
@@ -43,11 +43,11 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
    * This assigns the instruction's info as the initial values if a instruction
    * is passed in
    */
-    if (props.place) {
+    if (props.note) {
       initialValues = Object.assign(
         {},
         helpers.initialValues,
-        pick(props.place.placeDatabase, Object.keys(helpers.initialValues))
+        pick(props.note.noteDatabase, Object.keys(helpers.initialValues))
       );
     } else {
       initialValues = helpers.initialValues;
@@ -59,13 +59,13 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
         <div className={Classes.DIALOG_HEADER}>
           <H4>
             {update ?
-              'Update Place'
+              'Update Note'
               :
-              'Add Place'
+              'Add Note'
             }
           </H4>
         </div>
-        <div className={`database-task__instructions__add-instruction ${Classes.DIALOG_BODY}`}>
+        <div className={`personal-support-notes__add-note ${Classes.DIALOG_BODY}`}>
           <Formik
               initialValues={initialValues}
               validationSchema={helpers.validationSchema}
@@ -74,17 +74,18 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
 
                 try {
                   if (update) {
-                    await api.places.updatePlace(place?.id, values, { clientId, type });
+                    await api.notes.updateNote(note?.id, values, { clientId, type });
 
                     addToast({
-                      message: 'Place Updated',
+                      message: 'Note Updated',
                       intent: 'primary'
                     })
                   } else {
-                    await api.places.createPlace(values, { clientId, type });
+                    // Type should only be added when creating a note. It shouldn't be updated
+                    await api.notes.createNote(values, { clientId, type });
 
                     addToast({
-                      message: 'Place Created',
+                      message: 'Note Created',
                       intent: 'primary'
                     })
                   }
@@ -137,4 +138,4 @@ const AddPlaceDialog = (props: AddPlaceDialogProps) => {
   )
 }
 
-export default AddPlaceDialog;
+export default AddNoteDialog;
