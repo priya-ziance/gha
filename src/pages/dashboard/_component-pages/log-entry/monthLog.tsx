@@ -3,7 +3,6 @@ import { Classes, Intent, Spinner } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
-import groupBy from 'lodash/groupBy';
 
 import { Button, Dialog, Table } from '../../../../components';
 

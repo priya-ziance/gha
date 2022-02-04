@@ -8,25 +8,25 @@ import { ILogModel } from '../../../../types';
 
 export const firstNameColumn = (data: ILogModel) => {
   return (
-    <p>{get(data, 'client.firstName', '')}</p>
+    <p>{get(data, 'firstName', '')}</p>
   )
 }
 
 export const lastNameColumn = (data: ILogModel) => {
   return (
-    <p>{get(data, 'client.lastName', '')}</p>
+    <p>{get(data, 'lastName', '')}</p>
   )
 }
 
 export const addressColumn = (data: ILogModel) => {
   return (
-    <p className='bp3-table-truncated-cell'>{get(data, 'client.location.address', '')}</p>
+    <p className='bp3-table-truncated-cell'>{get(data, 'location.address', '')}</p>
   )
 }
 
 export const medicaidColumn = (data: ILogModel) => {
   return (
-    <p className='bp3-table-truncated-cell'>{get(data, 'client.medicaidId', '')}</p>
+    <p className='bp3-table-truncated-cell'>{get(data, 'medicaidId', '')}</p>
   )
 }
 

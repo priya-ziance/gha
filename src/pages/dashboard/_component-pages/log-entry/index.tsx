@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import moment from 'moment';
 
 import {
-  AnchorButton,
   Button,
   Col,
   DateInput,
@@ -25,15 +24,13 @@ import URLS from '../../../../utils/urls';
 
 import api from '../../../../api';
 
-import Log from '../../../../models/log';
-import LogTemplate from '../../../../models/logTemplate';
 import Question from '../../../../models/question';
 
 import LoadingWrapper from '../../../../wrappers/loading';
 
 import * as helpers from '../../../../utils/helpers';
 
-import { ILogModel, ILogTemplateModel } from '../../../../types';
+import { IClientModel, ILogModel, ILogTemplateModel } from '../../../../types';
 
 import {
   actionColumn,
@@ -76,7 +73,7 @@ const handleTemplateUpdate = async (answers: any, logTemplate: ILogTemplateModel
 }
 
 const LogEntry = (props: LogEntryProps) => {
-  const [logs, setLogs] = useState<Log[] | []>([]);
+  const [logs, setClients] = useState<IClientModel[] | []>([]);
   const [logTemplate, setLogTemplate] = useState<ILogTemplateModel | undefined>(undefined)
   const [templateQuestions, setTemplateQuestions] = useState<Question[] | []>([])
   const [selectedAnswers, setSelectedAnswers] = useState<{[key: string]: string} | null>({})
@@ -104,8 +101,7 @@ const LogEntry = (props: LogEntryProps) => {
         setLoading(true);
 
         try {
-          const fetchedLogs = await api.logs.getLogsForDate(moment(logDate).format('YYYY-MM-DD'), { page, pageSize: PAGE_SIZE })
-          setLogs(fetchedLogs)
+          setClients(await api.clients.getClientsForUser({ page, pageSize: PAGE_SIZE }))
         } catch(e){}
 
         setLoading(false);
@@ -273,7 +269,7 @@ const LogEntry = (props: LogEntryProps) => {
                     return actionColumn(data, {
                       onView() {
                         setIsMonthLogDialogOpen(true);
-                        setSelectedClient(get(data, 'client.id'))
+                        setSelectedClient(get(data, 'id'))
                       },
                       onEdit() {
                         setIsEditDialogOpen(true);
@@ -294,7 +290,7 @@ const LogEntry = (props: LogEntryProps) => {
               onNextPage={onNextPage}
               onPrevPage={onPrevPage}
               page={page}
-              emptyTableMessage="No Logs Found"
+              emptyTableMessage="No Clients Found"
             />
 
             <LoadingWrapper loading={loadingTemplate}>

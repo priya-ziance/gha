@@ -59,7 +59,7 @@ type OPTIONS_TYPE = {
   params?: {} 
 }
 
-//=============================Appointment API'S=========================
+//=============================APPOINTMENT API'S=========================
 
 class AppointmentApi {
   normalizer;
@@ -116,8 +116,10 @@ class ClientsApi {
     return this.normalizer.normalizeArray(clientsResult.data.contents);
   }
 
-  async getClientsForUser() {  
-    const clientsResult = await client.get(`/clients/forUser`);
+  async getClientsForUser(options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+
+    const clientsResult = await client.get(`/clients/forUser?page=${page}`);
   
     return this.normalizer.normalizeArray(clientsResult.data);
   }
