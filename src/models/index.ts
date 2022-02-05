@@ -19,6 +19,7 @@ import PlaceDatabase from './placeDatabase';
 import SpGoal from './spGoal';
 import SubGoal from './subGoal';
 import Task from './task';
+import User from './user';
 import Question from './question';
 
 const Exports = {
@@ -43,7 +44,8 @@ const Exports = {
   Question,
   SpGoal,
   SubGoal,
-  Task
+  Task,
+  User
 }
 
 export default Exports;

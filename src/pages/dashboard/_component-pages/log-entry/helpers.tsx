@@ -48,9 +48,6 @@ export const actionColumn = (data: ILogModel, actions?: any) => {
       <Button intent={Intent.PRIMARY} small onClick={actions.onView}>
         <b>view logs</b>
       </Button>
-      <Button intent={Intent.PRIMARY} small onClick={actions.onEdit}>
-        <b>edit</b>
-      </Button>
     </div>
   )
 }

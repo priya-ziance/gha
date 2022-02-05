@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import { Select, IItemRendererProps } from "@blueprintjs/select";
-import moment from 'moment';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 
@@ -12,6 +11,8 @@ import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
 import Signature from './signature';
 import Services from './servicesDialog';
+import Witnesses from './witnessesDialog';
+import Trainers from './trainersDialog';
 
 import IClientModel from '../../../models/client';
 
@@ -28,7 +29,6 @@ import {
   DateInput,
   FormGroup,
   ImageDropzone,
-  InputGroup,
   LoadingView,
   PageHeading,
   Row,
@@ -44,11 +44,10 @@ import {
   SEX_OPTIONS
 } from './constants';
 
-import { CLIENT_FIELDS_TYPE } from '../../../types';
-
 import * as helpers from './helpers';
 
 import './index.scss';
+import { IUserModel } from '../../../types';
 
 
 const FormSelect = Select.ofType<string>();
@@ -66,6 +65,8 @@ const AddClient = (props: AddClientProps) => {
   const [currentDialog, setCurrentDialog] = useState('');
   const [signatureDataURL, setSignatureDataURL] = useState('');
   const [services, setServices] = useState<any>({})
+  const [witnesses, setWitnesses] = useState<IUserModel[] | []>([])
+  const [trainers, setTrainers] = useState<IUserModel[] | []>([])
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
@@ -96,6 +97,8 @@ const AddClient = (props: AddClientProps) => {
   const onLevelOfService = () => setCurrentDialog(DIALOG_NAMES.levelsOfService);
   const onClientCustomForm = () => setCurrentDialog(DIALOG_NAMES.clientCustomForm);
   const onServicesForm = () => setCurrentDialog(DIALOG_NAMES.services);
+  const onWitnessesForm = () => setCurrentDialog(DIALOG_NAMES.witnesses);
+  const onTrainersForm = () => setCurrentDialog(DIALOG_NAMES.trainers);
 
 
   const uploadProfilePicture = async () => {
@@ -165,6 +168,14 @@ const AddClient = (props: AddClientProps) => {
     initialValues = helpers.initialValues;
   }
 
+  const handleWitnessesChange = (users: { [key: string]: IUserModel }) => {
+    setWitnesses(Object.values(users))
+  }
+
+  const handleTrainersChange = (users: { [key: string]: IUserModel }) => {
+    setTrainers(Object.values(users))
+  }
+
   return (
     <LoadingView loading={loading}>
       <div className='client'>
@@ -182,6 +193,14 @@ const AddClient = (props: AddClientProps) => {
               if (profilePictureFile) {
                 let file = await uploadProfilePicture();
                 values.profile_picture = file?.id;
+              }
+
+              if (witnesses && Array.isArray(witnesses)) {
+                values.witnesses = witnesses.map(w => w.id)
+              }
+
+              if (trainers && Array.isArray(trainers)) {
+                values.trainers = trainers.map(w => w.id)
               }
 
               /**
@@ -211,7 +230,7 @@ const AddClient = (props: AddClientProps) => {
                     intent:  Intent.SUCCESS
                   }
                 );
-              } catch(e) {
+              } catch(e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),
@@ -250,6 +269,8 @@ const AddClient = (props: AddClientProps) => {
               const levelOfServiceOpen = currentDialog === DIALOG_NAMES.levelsOfService;
               const clientCustomFormOpen = currentDialog === DIALOG_NAMES.clientCustomForm;
               const servicesDialogOpen = currentDialog === DIALOG_NAMES.services;
+              const witnessesDialogOpen = currentDialog === DIALOG_NAMES.witnesses;
+              const trainersDialogOpen = currentDialog === DIALOG_NAMES.trainers;
 
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
 
@@ -333,8 +354,8 @@ const AddClient = (props: AddClientProps) => {
                         intent={Intent.PRIMARY}
                         label={"Staff that can be called Trainers"}
                       >
-                        <Button intent={Intent.PRIMARY}>
-                          <b>Add Trainers</b>
+                        <Button intent={Intent.PRIMARY} onClick={onTrainersForm}>
+                          <b>Add Trainers ({trainers.length})</b>
                         </Button>
                       </FormGroup>
                     </Col>
@@ -395,8 +416,8 @@ const AddClient = (props: AddClientProps) => {
                         label={"Staff to be used as Witnesses"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY}>
-                          <b>Add Witnessess</b>
+                        <Button intent={Intent.PRIMARY} onClick={onWitnessesForm}>
+                          <b>Add Witnessess ({witnesses.length})</b>
                         </Button>
                       </FormGroup>
                       <FormGroup
@@ -475,6 +496,10 @@ const AddClient = (props: AddClientProps) => {
                   <Services handleServicesChange={setServices} services={services} isOpen={servicesDialogOpen} handleClose={handleDialogClose} />
 
                   <Signature isOpen={signatureOpen} onClose={onCloseSignature} onSave={setSignatureDataURL} />
+
+                  <Witnesses handleWitnessesChange={handleWitnessesChange} witnesses={witnesses} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
+                  
+                  <Trainers handleTrainersChange={handleTrainersChange} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
                 </form>
               )
             }, FIELDS)}

@@ -22,6 +22,7 @@ export interface MonthLogProps {
   date: Date;
   type: string;
   clientId: string;
+  handleLogClick?: (log: ILogModel) => void
 }
 
 
@@ -29,7 +30,7 @@ const MonthLog = (props: MonthLogProps) => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState<ILogModel[] | []>([]);
 
-  const { isOpen, clientId, date, type } = props;
+  const { isOpen, clientId, date, handleLogClick, type } = props;
 
   useEffect(() => {
     (async () => {
@@ -87,12 +88,18 @@ const MonthLog = (props: MonthLogProps) => {
             const dayOfMonth = log.createdAt.date()
 
             if (questions[quest.id]) {
-              questions[quest.id].logs[dayOfMonth] = quest.selectedAnswers[0]
+              questions[quest.id].logs[dayOfMonth] = {
+                value: quest.selectedAnswers[0],
+                log
+              }
             } else {
               questions[quest.id] = {
                 question: quest.questionValue,
                 logs: {
-                  [dayOfMonth]: quest.selectedAnswers[0]
+                  [dayOfMonth]: {
+                    value: quest.selectedAnswers[0],
+                    log
+                  }
                 }
               }
             }
@@ -131,7 +138,19 @@ const MonthLog = (props: MonthLogProps) => {
                 ...Array.from({length: 31}, (_, i) => i + 1).map(index => {
                   return {
                     title: `${index}`,
-                    cellRenderer: (data: any) => (<p>{data.logs[index]}</p>),
+                    cellRenderer: (data: any) => {
+                      return (
+                        <p
+                          onClick={() => {
+                            if (handleLogClick) {
+                              handleLogClick(data.logs[index].log)
+                            }
+                          }}
+                        >
+                          {data.logs[index]?.value}
+                        </p>
+                      )
+                    },
                     width: helpers.getTableWith(0.039)
                   }
                 })

@@ -665,6 +665,15 @@ export interface ITaskModel {
   createdAt: Moment
 }
 
+export interface IUserModel {
+  id: string;
+  email: string;
+  name: string;
+  type: string;
+  createdAt: Moment;
+  user: IUser;
+}
+
 export interface IQuestionModel {
   id: string;
   questionValue: string;
@@ -957,6 +966,14 @@ export interface IPlaceDatabase {
   _id: string;
   active: boolean;
   description: string;
+  created_at: string;
+}
+
+export interface IUser {
+  _id: string;
+  email: string;
+  name: string;
+  type: string;
   created_at: string;
 }
 

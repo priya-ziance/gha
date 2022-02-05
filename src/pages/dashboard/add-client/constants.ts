@@ -32,7 +32,9 @@ export const MEDICAL_RELEASE_FORM = [
 export const DIALOG_NAMES = {
   clientCustomForm: 'clientCustomForm',
   levelsOfService: 'levelsOfService',
-  services: 'services'
+  services: 'services',
+  witnesses: 'witnesses',
+  trainers: 'trainers'
 }
 
 export const FUNDS_METHODS_OPTIONS = [

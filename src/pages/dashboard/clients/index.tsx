@@ -34,6 +34,7 @@ const Content = () => {
       try {
         setClients(
           await api.clients.getClients()
+          // await api.clients.getClientsForUser()
         )
       } catch(e){}
 

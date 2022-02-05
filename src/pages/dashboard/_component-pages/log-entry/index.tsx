@@ -82,7 +82,7 @@ const LogEntry = (props: LogEntryProps) => {
   const [loadingTemplate, setLoadingTemplate] = useState(false);
   const [isMonthLogDialogOpen, setIsMonthLogDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedLogToEdit, setselectedLogToEdit] = useState<ILogModel | null>(null)
+  const [selectedLogToEdit, setSelectedLogToEdit] = useState<ILogModel | null>(null)
   const [logDate, setLogDate] = useState<Date>(new Date());
   const [selectedClient, setSelectedClient] = useState('')
 
@@ -94,6 +94,12 @@ const LogEntry = (props: LogEntryProps) => {
   const hasNextPage = logs.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
+  const handleLogClick = (log: ILogModel) => {
+    setIsMonthLogDialogOpen(false)
+    setSelectedLogToEdit(log)
+    setIsEditDialogOpen(true)
+  }
+
 
   useEffect(() => {
     (async () => {
@@ -101,7 +107,8 @@ const LogEntry = (props: LogEntryProps) => {
         setLoading(true);
 
         try {
-          setClients(await api.clients.getClientsForUser({ page, pageSize: PAGE_SIZE }))
+          // setClients(await api.clients.getClientsForUserByService(type, { page, pageSize: PAGE_SIZE }))
+          setClients(await api.clients.getClients({ page, pageSize: PAGE_SIZE }))
         } catch(e){}
 
         setLoading(false);
@@ -184,7 +191,7 @@ const LogEntry = (props: LogEntryProps) => {
 
   const handleEditLogClose = () => {
     setIsEditDialogOpen(false);
-    setselectedLogToEdit(null);
+    setSelectedLogToEdit(null);
   }
 
   const onLogDate = (date: Date) => {
@@ -261,7 +268,7 @@ const LogEntry = (props: LogEntryProps) => {
                 {
                   title: 'Location',
                   cellRenderer: locationColumn,
-                  width: helpers.getTableWith(0.19)
+                  width: helpers.getTableWith(0.29)
                 },
                 {
                   title: 'Actions',
@@ -270,14 +277,10 @@ const LogEntry = (props: LogEntryProps) => {
                       onView() {
                         setIsMonthLogDialogOpen(true);
                         setSelectedClient(get(data, 'id'))
-                      },
-                      onEdit() {
-                        setIsEditDialogOpen(true);
-                        setselectedLogToEdit(data)
                       }
                     })
                   },
-                  width: helpers.getTableWith(0.2)
+                  width: helpers.getTableWith(0.1)
                 }
               ]}
               data={logs}
@@ -374,6 +377,7 @@ const LogEntry = (props: LogEntryProps) => {
         date={logDate}
         isOpen={isMonthLogDialogOpen}
         onClose={handleMonthLogDialogClose}
+        handleLogClick={handleLogClick}
       />
 
       <EditLogDialog

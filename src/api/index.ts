@@ -47,7 +47,9 @@ import {
   ISubGoalModel,
   ISubGoal,
   ITaskModel,
-  ITask
+  ITask,
+  IUser,
+  IUserModel
 } from '../types';
 
 
@@ -120,6 +122,14 @@ class ClientsApi {
     const page = get(options, 'page', 0);
 
     const clientsResult = await client.get(`/clients/forUser?page=${page}`);
+  
+    return this.normalizer.normalizeArray(clientsResult.data);
+  }
+
+  async getClientsForUserByService(service: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+
+    const clientsResult = await client.get(`/clients/byService?page=${page}&type=${service}`);
   
     return this.normalizer.normalizeArray(clientsResult.data);
   }
@@ -1000,6 +1010,20 @@ class NoteDatabasesApi {
   }
 }
 
+//============================= USER API'S==============================
+class UsersApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IUserModel, IUser>(Models.User)
+  }
+
+  async search(searchString: string) {
+    const usersResult = await client.post(`/users/search`, { searchString });
+  
+    return this.normalizer.normalizeArray(usersResult.data);
+  }
+}
 
 
 
@@ -1028,4 +1052,5 @@ export default (() => ({
   spGoals: new SpGoalsApi(),
   subgoals: new SubGoalsApi(),
   tasks: new TasksApi(),
+  users: new UsersApi()
 }))()

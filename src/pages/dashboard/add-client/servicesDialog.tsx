@@ -53,8 +53,6 @@ const Services = (props: IDialog & ServicesProps) => {
     }
   }
 
-  console.log(localServices)
-
   return (
     <Dialog
       icon='info-sign'
