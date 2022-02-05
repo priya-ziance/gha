@@ -478,6 +478,8 @@ export interface IClientBehaviourModel {
   profilePicture?: IFileModel;
   signature?: IFileModel;
   services: object;
+  witnesses?: IUserModel[];
+  trainers?: IUserModel[];
 }
 
 export interface ICaseNoteModel {
@@ -817,6 +819,8 @@ export interface IClient {
   profile_picture?: IFile;
   signature?: IFile;
   services: object;
+  trainers?: IUser[]
+  witnesses?: IUser[]
 }
 
 export interface IExpense {

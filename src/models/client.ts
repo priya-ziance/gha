@@ -1,7 +1,8 @@
 import IBaseModel from './_baseModel';
-import { IClient, IClientModel, IFileModel, ILocationModel } from '../types'
+import { IClient, IClientModel, IFileModel, ILocationModel, IUserModel } from '../types'
 import models from '../models';
 import Location from './location';
+import User from './user';
 
 export default class Client implements IBaseModel {
   id: string;
@@ -14,6 +15,8 @@ export default class Client implements IBaseModel {
   signature?: IFileModel;
   location?: ILocationModel;
   services: object;
+  witnesses?: IUserModel[];
+  trainers?: IUserModel[]
 
   constructor(client: IClient) {
     this.id = client._id;
@@ -22,6 +25,14 @@ export default class Client implements IBaseModel {
     this.lastName = client.last_name;
     this.medicaidId = client.medicaid;
     this.services = client.services;
+    
+    if (client.witnesses) {
+      this.witnesses = User.fromArray(client.witnesses)
+    }
+
+    if (client.trainers) {
+      this.trainers = User.fromArray(client.trainers)
+    }
     
     if (client.location) {
       this.location = new Location(client.location);
