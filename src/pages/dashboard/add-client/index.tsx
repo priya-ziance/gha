@@ -89,6 +89,8 @@ const AddClient = (props: AddClientProps) => {
   useEffect(() => {
     if (props.client) {
       setServices(props.client.services)
+      setWitnesses(props.client.witnesses || [])
+      setTrainers(props.client.trainers || [])
     }
   }, [props.client])
 
@@ -196,11 +198,11 @@ const AddClient = (props: AddClientProps) => {
               }
 
               if (witnesses && Array.isArray(witnesses)) {
-                // values.witnesses = witnesses.map(w => w.id)
+                values.witnesses = witnesses.map(w => w.id)
               }
 
               if (trainers && Array.isArray(trainers)) {
-                // values.trainers = trainers.map(w => w.id)
+                values.trainers = trainers.map(w => w.id)
               }
 
               /**
