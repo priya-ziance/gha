@@ -82,14 +82,17 @@ const MonthLog = (props: MonthLogProps) => {
         a => moment(a.createdAt).milliseconds()
       )
 
+      console.log(formattedLogs)
+
       formattedLogs.forEach((log: ILogModel) => {
         if (Array.isArray(log.questions) && log.questions.length) {
-          log.questions.forEach((quest: any) => {
+          log.questions.forEach((question: any) => {
+            const quest = question.questionId
             const dayOfMonth = log.createdAt.date()
 
             if (questions[quest.id]) {
               questions[quest.id].logs[dayOfMonth] = {
-                value: quest.selectedAnswers[0],
+                value: question.selectedAnswer,
                 log
               }
             } else {
@@ -97,7 +100,7 @@ const MonthLog = (props: MonthLogProps) => {
                 question: quest.questionValue,
                 logs: {
                   [dayOfMonth]: {
-                    value: quest.selectedAnswers[0],
+                    value: question.selectedAnswer,
                     log
                   }
                 }

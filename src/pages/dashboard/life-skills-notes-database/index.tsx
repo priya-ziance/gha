@@ -61,10 +61,8 @@ const DatabaseNotes = () => {
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
-    { href: URLS.getPagePath('logs', { clientId }), icon: 'document', text: URLS.getPagePathName('logs') },
-    { href: URLS.getPagePath('life-skills', { clientId }), icon: 'document', text: URLS.getPagePathName('life-skills') },
+    { href: URLS.getPagePath('logs'), icon: 'document', text: URLS.getPagePathName('logs') },
+    { href: URLS.getPagePath('life-skills'), icon: 'document', text: URLS.getPagePathName('life-skills') },
     { text: URLS.getPagePathName('life-skills-notes-database') }
   ];
 

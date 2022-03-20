@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
-import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
+import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get'
-
-import moment from 'moment';
 
 import {
   Button,
@@ -17,20 +15,17 @@ import {
   TextArea
 } from '../../../../components';
 
-import ClientContext from '../../../../contexts/client';
 import LocationContext from '../../../../contexts/location';
 
 import URLS from '../../../../utils/urls';
 
 import api from '../../../../api';
 
-import Question from '../../../../models/question';
-
 import LoadingWrapper from '../../../../wrappers/loading';
 
 import * as helpers from '../../../../utils/helpers';
 
-import { IClientModel, ILogModel, ILogTemplateModel } from '../../../../types';
+import { IClientModel, ILogModel, ILogTemplateModel, ILogTemplateQuestionModel } from '../../../../types';
 
 import {
   actionColumn,
@@ -66,16 +61,16 @@ const selectedAnswersToArray = (answers: {[key: string]: string} | null = {}) =>
   }
 }
 
-const handleTemplateUpdate = async (answers: any, logTemplate: ILogTemplateModel, clientId: string, values = {}) => {
+const handleTemplateUpdate = async (answers: any, logTemplate: ILogTemplateModel, values = {}) => {
   const answerObjects = selectedAnswersToArray(answers)
                 
-  await api.logTemplates.updateLogTemplate(logTemplate?.id, { answerObjects, ...values }, { clientId })
+  await api.logTemplates.updateLogTemplate(logTemplate?.id, { answerObjects, ...values })
 }
 
 const LogEntry = (props: LogEntryProps) => {
   const [logs, setClients] = useState<IClientModel[] | []>([]);
   const [logTemplate, setLogTemplate] = useState<ILogTemplateModel | undefined>(undefined)
-  const [templateQuestions, setTemplateQuestions] = useState<Question[] | []>([])
+  const [templateQuestions, setTemplateQuestions] = useState<ILogTemplateQuestionModel[] | []>([])
   const [selectedAnswers, setSelectedAnswers] = useState<{[key: string]: string} | null>({})
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -88,7 +83,6 @@ const LogEntry = (props: LogEntryProps) => {
 
   const { type } = props;
 
-  const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
   const hasNextPage = logs.length === PAGE_SIZE;
@@ -103,18 +97,17 @@ const LogEntry = (props: LogEntryProps) => {
 
   useEffect(() => {
     (async () => {
-      if (clientId && logDate) {
+      if (logDate) {
         setLoading(true);
 
         try {
-          // setClients(await api.clients.getClientsForUserByService(type, { page, pageSize: PAGE_SIZE }))
-          setClients(await api.clients.getClients({ page, pageSize: PAGE_SIZE }))
+          setClients(await api.clients.getClientsForUserByService(type, { page, pageSize: PAGE_SIZE }))
         } catch(e){}
 
         setLoading(false);
       }
     })()
-  }, [type, clientId, page, selectedLocationId, logDate]);
+  }, [type, page, selectedLocationId, logDate]);
 
   useEffect(() => {
     (async () => {
@@ -130,7 +123,7 @@ const LogEntry = (props: LogEntryProps) => {
           setTemplateQuestions(logTemplate.questions)
 
           logTemplate.questions.forEach(question => {
-            answers[question.id] = question.selectedAnswers
+            answers[question.questionId.id] = question.selectedAnswer
           })
 
           setSelectedAnswers(answers)
@@ -162,9 +155,7 @@ const LogEntry = (props: LogEntryProps) => {
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { href: URLS.getPagePath('logs', { clientId }), icon: 'document', text: URLS.getPagePathName('logs') },
+    { href: URLS.getPagePath('logs'), icon: 'document', text: URLS.getPagePathName('logs') },
   ];
 
   switch(type) {
@@ -175,12 +166,14 @@ const LogEntry = (props: LogEntryProps) => {
       BREADCRUMBS.push({ text: URLS.getPagePathName('respite-logs') });
       break;
     case 'lifeskills':
-      BREADCRUMBS.push({ href: URLS.getPagePath('life-skills', { clientId }), icon: 'document', text: URLS.getPagePathName('life-skills') },);
+      BREADCRUMBS.push({ href: URLS.getPagePath('life-skills'), icon: 'document', text: URLS.getPagePathName('life-skills') },);
       BREADCRUMBS.push({ text: URLS.getPagePathName('life-skills-logs') });
       break;
     case 'personalsupport':
-      BREADCRUMBS.push({ href: URLS.getPagePath('personal-support', { clientId }), icon: 'document', text: URLS.getPagePathName('personal-support') },);
+      BREADCRUMBS.push({ href: URLS.getPagePath('personal-support'), icon: 'document', text: URLS.getPagePathName('personal-support') },);
       BREADCRUMBS.push({ text: URLS.getPagePathName('personal-support-logs') });
+      break;
+    default:
       break;
   }
 
@@ -306,7 +299,7 @@ const LogEntry = (props: LogEntryProps) => {
                     setSubmitting(true)
                     
                     try {
-                      await handleTemplateUpdate(selectedAnswers, logTemplate, clientId, values)
+                      await handleTemplateUpdate(selectedAnswers, logTemplate, values)
                     } catch(e) {}
 
                     setSubmitting(false)
@@ -328,19 +321,21 @@ const LogEntry = (props: LogEntryProps) => {
                     <form onSubmit={handleSubmit} className='reshab-logs__form'>
                       <Row className='reshab-logs__form__row'>
                         {templateQuestions.map(templateQuestion => {
+                          const quest = templateQuestion.questionId;
+
                           return (
                             <Col md={6}>
                               <FormGroup
                                 intent={Intent.PRIMARY}
-                                label={templateQuestion.questionValue}
+                                label={quest.questionValue}
                               >
                                 <FormItemSelect
                                   buttonText={
-                                    get(selectedAnswers, `${templateQuestion.id}`, '')
+                                    get(selectedAnswers, `${quest.id}`, '')
                                   }
-                                  items={templateQuestion.answers}
+                                  items={quest.answers}
                                   menuRenderer={item => item}
-                                  onFormSelectChange={onQuestionAnswer(templateQuestion.id)}
+                                  onFormSelectChange={onQuestionAnswer(quest.id)}
                                 />
                               </FormGroup>
                             </Col>

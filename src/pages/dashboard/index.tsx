@@ -23,6 +23,18 @@ import AddClientPage from './add-client';
 import ContentPage from './content';
 import ClientsPage from './clients';
 
+import LogsPage from './logs';
+import ReshabLogsPage from './reshab-logs';
+import RespiteLogsPage from './respite-logs';
+import LifeSkillsPage from './life-skills';
+import LifeSkillsLogsPage from './life-skills-logs';
+import LifeSkillsNotesDatabasePage from './life-skills-notes-database';
+import LifeSkillsPlacesDatabasePage from './life-skills-places-database';
+import PersonalSupportPage from './personal-support';
+import PersonalSupportLogsPage from './personal-support-logs';
+import PersonalSupportPlacesDatabasePage from './personal-support-places-database';
+import PersonalSupportNotesDatabasePage from './personal-support-notes-database';
+
 import ClientNavigation from './client-navigation';
 
 import LocationContext from '../../contexts/location';
@@ -202,6 +214,17 @@ function Dashboard() {
             <Route path="/dashboard/clients" exact component={ClientsPage} />
             <Route path="/dashboard/clients/add" exact component={AddClientPage} />
             <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
+            <Route path="/dashboard/logs" exact component={LogsPage} />
+            <Route path="/dashboard/logs/reshab-logs" exact component={ReshabLogsPage} />
+            <Route path="/dashboard/logs/respite-logs" exact component={RespiteLogsPage} />
+            <Route path="/dashboard/logs/life-skills" exact component={LifeSkillsPage} />
+            <Route path="/dashboard/logs/life-skills/logs" exact component={LifeSkillsLogsPage} />
+            <Route path="/dashboard/logs/life-skills/notes-database" exact component={LifeSkillsNotesDatabasePage} />
+            <Route path="/dashboard/logs/life-skills/places-database" exact component={LifeSkillsPlacesDatabasePage} />
+            <Route path="/dashboard/logs/personal-support" exact component={PersonalSupportPage} />
+            <Route path="/dashboard/logs/personal-support/logs" exact component={PersonalSupportLogsPage} />
+            <Route path="/dashboard/logs/personal-support/places-database" exact component={PersonalSupportPlacesDatabasePage} />
+            <Route path="/dashboard/logs/personal-support/notes-database" exact component={PersonalSupportNotesDatabasePage} />
           </Switch>
         }
       </div>

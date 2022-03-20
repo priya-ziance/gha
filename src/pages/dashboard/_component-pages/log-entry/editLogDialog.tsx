@@ -1,20 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { Classes, Intent} from '@blueprintjs/core';
 import get from 'lodash/get';
-import pick from 'lodash/pick';
 
 import { ILogModel, ILogTemplateModel } from '../../../../types';
 
-import api from '../../../../api';
-
-import { Button, Col, Dialog, FormGroup, FormItemSelect, Row, H4, Switch, TextArea } from '../../../../components';
+import { Button, Col, Dialog, FormGroup, FormItemSelect, Row, H4 } from '../../../../components';
 
 import ClientContext from '../../../../contexts/client';
 import ToastsContext from '../../../../contexts/toasts';
-
-import * as helpers from './helpers';
-
-import { FIELDS } from './constants';
 
 import './index.scss';
 
@@ -40,9 +33,10 @@ const EditLog = (props: EditLogProps) => {
       setSelectedAnswers(
         Object.assign(
           {},
-          ...log.questions.map(quest => {
+          ...log.questions.map(question => {
+            const quest = question.questionId
             return {
-              [quest.id]: quest.selectedAnswers[0]
+              [quest.id]: question.selectedAnswer
             }
           })
         )
@@ -90,7 +84,8 @@ const EditLog = (props: EditLogProps) => {
         </div>
         <div className={`database-task__instructions__add-instruction ${Classes.DIALOG_BODY}`}>
           <Row className='reshab-logs__form__row'>
-              {templateQuestions.map(templateQuestion => {
+              {templateQuestions.map(_templateQuestion => {
+                const templateQuestion = _templateQuestion.questionId
                 return (
                   <Col md={6}>
                     <FormGroup

@@ -1,12 +1,12 @@
 import { ModuleCard, PageHeading, Row } from '../../../components';
 
-import ClientsImage from '../../../assets/svg/man-woman.svg';
-import ListImage from '../../../assets/svg/list.svg';
-import ReportImage from '../../../assets/svg/report.svg';
+import { getLinks } from './links';
 
 import './index.scss';
 
 const Content = () => {
+  const links = getLinks()
+
   return (
     <div className='content'>
       <PageHeading
@@ -14,20 +14,18 @@ const Content = () => {
       />
       <div className='content__container'>
         <Row>
-          <ModuleCard
-            title='Clients'
-            interactive
-            link='/dashboard/clients'
-            image={ClientsImage}
-          />
-          <ModuleCard
-            title='User Tasks List'
-            image={ListImage}
-          />
-          <ModuleCard
-            title='Reports'
-            image={ReportImage}
-          />
+          {links.map(link => {
+            return (
+              <ModuleCard
+                key={link.title}
+                title={link.title}
+                body={link.description}
+                interactive
+                link={link.path}
+                image={link.image}
+              />
+            );
+          })}
         </Row>
       </div>
     </div>

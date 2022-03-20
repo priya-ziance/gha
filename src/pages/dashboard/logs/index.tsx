@@ -18,8 +18,6 @@ const Content = () => {
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
     { text: URLS.getPagePathName('logs') }
   ];
 

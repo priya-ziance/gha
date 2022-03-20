@@ -1,12 +1,29 @@
 import IBaseModel from './_baseModel';
 import Question from './question';
 import Client from './client';
-import { ILog, IQuestionModel, IClientModel } from '../types'
+import { ILog, IQuestionModel, IClientModel, ILogQuestion, ILogQuestionModel } from '../types'
 import moment, { Moment } from 'moment';
+
+
+class LogQuestion {
+  questionId: IQuestionModel;
+  selectedAnswer: string;
+  logQuestion: ILogQuestion
+
+  constructor(logQuestion: ILogQuestion) {
+    this.questionId = new Question(logQuestion.question_id);
+    this.selectedAnswer = logQuestion.selected_answer;
+    this.logQuestion = logQuestion
+  }
+
+  static fromArray(logQuestions: ILogQuestion[]): ILogQuestionModel[] {
+    return logQuestions.map(i => new LogQuestion(i));
+  }
+}
 
 export default class Log implements IBaseModel {
   id: string;
-  questions: IQuestionModel[];
+  questions: ILogQuestionModel[];
   type: string;
   client: IClientModel;
   log: ILog;
@@ -15,7 +32,7 @@ export default class Log implements IBaseModel {
   constructor(log: ILog) {
     this.id = log._id;
     this.type = log.type;
-    this.questions = Question.fromArray(log.questions);
+    this.questions = LogQuestion.fromArray(log.questions);
     this.client = new Client(log.client);
     this.log = log;
     this.createdAt = moment(log.created_at)

@@ -17,7 +17,8 @@ type OPTIONS_TYPE = {
 }
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
-  const clientBase = `/dashboard/clients/${options.clientId}`;
+  const dashboardBase = `/dashboard`
+  const clientBase = `${dashboardBase}/clients/${options.clientId}`;
 
   switch (page) {
     case 'add-apd':
@@ -113,15 +114,15 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case 'goals-database-tasks':
       return `${clientBase}/goals/database/tasks`;
     case 'life-skills':
-      return `${clientBase}/logs/life-skills`;
+      return `${dashboardBase}/logs/life-skills`;
     case 'life-skills-logs':
-      return `${clientBase}/logs/life-skills/logs`;
+      return `${dashboardBase}/logs/life-skills/logs`;
     case 'life-skills-places-database':
-      return `${clientBase}/logs/life-skills/places-database`
+      return `${dashboardBase}/logs/life-skills/places-database`
     case 'life-skills-notes-database':
-      return `${clientBase}/logs/life-skills/notes-database`
+      return `${dashboardBase}/logs/life-skills/notes-database`
     case 'logs':
-      return `${clientBase}/logs`;
+      return `${dashboardBase}/logs`;
     case 'med-destruction':
       return `${clientBase}/medication/med-destruction`;
     case 'med-pass':
@@ -131,17 +132,17 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case 'medication-list':
       return `${clientBase}/medication/medication-list`;
     case 'personal-support':
-      return `${clientBase}/logs/personal-support`;
+      return `${dashboardBase}/logs/personal-support`;
     case 'personal-support-logs':
-      return `${clientBase}/logs/personal-support/logs`;
+      return `${dashboardBase}/logs/personal-support/logs`;
     case 'personal-support-places-database':
-      return `${clientBase}/logs/personal-support/places-database`;
+      return `${dashboardBase}/logs/personal-support/places-database`;
     case 'personal-support-notes-database':
-      return `${clientBase}/logs/personal-support/notes-database`;
+      return `${dashboardBase}/logs/personal-support/notes-database`;
     case 'reshab-logs':
-      return `${clientBase}/logs/reshab-logs`;
+      return `${dashboardBase}/logs/reshab-logs`;
     case 'respite-logs':
-      return `${clientBase}/logs/respite-logs`;
+      return `${dashboardBase}/logs/respite-logs`;
     case 'sp-goals':
       return `${clientBase}/goals/sp-goals`;
     default:

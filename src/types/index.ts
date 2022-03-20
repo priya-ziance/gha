@@ -560,7 +560,7 @@ export interface IGoalModel {
 export interface ILogTemplateModel {
   id: string;
   type: string;
-  questions: IQuestionModel[];
+  questions: ILogTemplateQuestionModel[];
   logNotes: string;
   logTemplate: ILogTemplate
 }
@@ -624,7 +624,7 @@ export interface ILocationModel {
 
 export interface ILogModel {
   id: string;
-  questions: IQuestionModel[];
+  questions: ILogQuestionModel[];
   client: IClientModel;
   type: string;
   log: ILog;
@@ -683,6 +683,18 @@ export interface IQuestionModel {
   selectedAnswers: string[];
   answers: string[];
   question: IQuestion;
+}
+
+export interface ILogTemplateQuestionModel {
+  questionId: IQuestionModel;
+  selectedAnswer: string;
+  logTemplateQuestion: ILogTemplateQuestion;
+}
+
+export interface ILogQuestionModel {
+  questionId: IQuestionModel;
+  selectedAnswer: string;
+  logQuestion: ILogQuestion;
 }
 
 
@@ -870,9 +882,10 @@ export interface IGoal {
 
 export interface ILogTemplate {
   _id: string;
-  type: string;
+  template_type: string;
   log_notes: string;
-  questions: IQuestion[];
+  selected_answer: string;
+  questions: ILogTemplateQuestion[];
   created_at: string;
 }
 
@@ -953,7 +966,7 @@ export interface IInstruction {
 
 export interface ILog {
   _id: string;
-  questions: IQuestion[];
+  questions: ILogQuestion[];
   client: IClient;
   type: string;
   created_at: string;
@@ -987,6 +1000,16 @@ export interface IQuestion {
   question_value: string;
   type: string;
   answers: string[]
+}
+
+export interface ILogTemplateQuestion {
+  question_id: IQuestion;
+  selected_answer: string;
+}
+
+export interface ILogQuestion {
+  question_id: IQuestion;
+  selected_answer: string;
 }
 
 /**
