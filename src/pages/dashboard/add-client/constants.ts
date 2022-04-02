@@ -61,7 +61,7 @@ export const SEX_OPTIONS = [
   'Female'
 ];
 
-export const FIELDS : FIELDS_TYPE= {
+export const FIELDS : FIELDS_TYPE = {
   email: {
     name: 'Email',
     default: '',
@@ -132,11 +132,6 @@ export const FIELDS : FIELDS_TYPE= {
     default: '',
     validation: yup.number().max(999999999).min(100000000).required().label('SS #'),
   },
-  florida_id: {
-    name: 'Florida Id',
-    default: '',
-    validation: yup.string(),
-  },
   medicaid: {
     name: 'Medicaid #',
     default: '',
@@ -189,11 +184,6 @@ export const FIELDS : FIELDS_TYPE= {
   },
   allergies: {
     name: 'Allergies',
-    default: '',
-    validation: yup.string(),
-  },
-  health_insurance: {
-    name: 'Health Insurance',
     default: '',
     validation: yup.string(),
   },

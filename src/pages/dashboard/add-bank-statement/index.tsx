@@ -10,6 +10,8 @@ import ClientContext from '../../../contexts/client';
 
 import IBankStatementModel from '../../../models/bankStatement';
 
+import formikWrapper from '../../../wrappers/formik';
+
 import api from '../../../api';
 
 import URLS from '../../../utils/urls'; 
@@ -17,24 +19,19 @@ import URLS from '../../../utils/urls';
 import {
   Button,
   Col,
-  DateInput,
   FileInput,
   FormGroup,
   FormItemSelect,
-  InputGroup,
   LoadingView,
   PageHeading,
   Row,
-  Switch,
-  TextArea
+  Switch
 } from '../../../components';
 
 import {
   FIELDS,
   BANK_STATEMENT_ACCOUNT_TYPES
 } from './constants';
-
-import { BANK_STATEMENT_FIELDS_TYPE } from '../../../types';
 
 import * as helpers from './helpers';
 
@@ -188,66 +185,19 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
             }}
             >
 
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
-            }) => {              
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
+            {formikWrapper(({
+              wrapperProps: {
+                getDateInputFormGroup,
+                getTextAreaInputFormGroup,
+                getInputFormGroup
+              },
+              formikProps: {
+                handleSubmit,
+                isSubmitting,
+                values,
+                handleChange
               }
-
-              const getInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getDateInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
-              const getTextAreaInputFormGroup = (key: BANK_STATEMENT_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-area__${key}`}
-                  helperText={errors[key]}
-                >
-                  <TextArea
-                    id={`text-area__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
+            }) => {
               return (
                 <form onSubmit={handleSubmit}>
                   <FormGroup
@@ -290,7 +240,7 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
                   </Button>
                 </form>
               )
-            }}
+            }, FIELDS)}
           </Formik>
         </div>
       </div>

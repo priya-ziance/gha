@@ -18,6 +18,8 @@ import ClientContext from '../../../contexts/client';
 
 import formikWrapper from '../../../wrappers/formik';
 
+import ContactsInput from '../../../controlled-components/ContactInput';
+
 import {
   Button,
   Col,
@@ -195,23 +197,15 @@ const AddAppointment = (props: AddAppointmentProps) => {
                       <Col>
                         {getDateInputFormGroup('appointment_date')}
   
-                        {/* <FormGroup
+                        <FormGroup
                           intent={Intent.PRIMARY}
                           label={get(FIELDS, 'doctor', { name: '' }).name}
                           labelFor="text-input"
                           labelInfo={"(required)"}
                         >
-                          <FormSelect
-                              items={doctorList}
-                              filterable={false}
-                              itemRenderer={formSelectItemRenderer}
-                              noResults={<MenuItem disabled={true} text="No results." />}
-                              onItemSelect={onFormSelectChange('doctor')}
-                          >
-                              <Button text={values.sex} rightIcon="double-caret-vertical" />
-                          </FormSelect>
+                          <ContactsInput />
                         </FormGroup>
-   */}
+  
                         {getTextAreaInputFormGroup('type_of_appointment')}
   
                         {getTextAreaInputFormGroup('physician_notes')}
@@ -238,7 +232,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
                       <Col>
                         {getTimeInputFormGroup('time')}
   
-                        {getInputFormGroup('contact_type')}
+                        {getInputFormGroup('contact_type', { childProps: { disabled: true } })}
   
                         {getTextAreaInputFormGroup('staff_notes')}
   

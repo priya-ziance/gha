@@ -3,6 +3,9 @@ import * as yup from 'yup';
 import { CLIENT_CONTACT_FIELDS_FORM_TYPE } from '../../../types';
 
 
+export const CONTACT_TYPES = ['doctor', 'nurse', 'optometrist']
+
+
 export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   active: {
     name: 'Active',

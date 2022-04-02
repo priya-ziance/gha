@@ -7,13 +7,14 @@ import { TimePicker } from '@blueprintjs/datetime';
 import {
   DateInput,
   FormGroup,
+  FormItemSelect,
   InputGroup,
   Switch,
   NumericInput,
   TextArea
 } from '../components';
 
-import { getMomentFormatter } from '../utils/helpers'
+import { getMomentFormatter, capitalizeFirstLetter } from '../utils/helpers'
 
 
 interface IInputOptions {
@@ -27,6 +28,7 @@ interface ChildrenProps {
     getInputFormGroup: (key: string, props?: IInputOptions) => {};
     getDateInputFormGroup: (key: string, props?: IInputOptions) => {};
     getNumericInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getSelectFieldInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTextAreaInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTimeInputFormGroup: (key: string, props?: IInputOptions) => {};
   };
@@ -74,21 +76,26 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     )
   }
 
-  const getInputFormGroup = (key: string) => (
-    <FormGroup
-      intent={getFormIntent(errors[key])}
-      label={get(fields, key, { name: '' }).name}
-      labelFor={`text-input__${key}`}
-      helperText={errors[key]}
-    >
-      <InputGroup
-        id={`text-input__${key}`}
+  const getInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+
+    return (
+      <FormGroup
         intent={getFormIntent(errors[key])}
-        onChange={handleChange(key)}
-        value={values[key]}
-      />
-    </FormGroup>
-  )
+        label={get(fields, key, { name: '' }).name}
+        labelFor={`text-input__${key}`}
+        helperText={errors[key]}
+      >
+        <InputGroup
+          id={`text-input__${key}`}
+          intent={getFormIntent(errors[key])}
+          onChange={handleChange(key)}
+          value={values[key]}
+          {...cProps}
+        />
+      </FormGroup>
+    )
+  }
 
   const getDateInputFormGroup = (key: string) => (
     <FormGroup
@@ -162,6 +169,40 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     );
   }
 
+  const getSelectFieldInputFormGroup = (key: string, props?: IInputOptions) => {
+    const childProps = props?.childProps
+    const selectOptions = get(childProps, 'selectOptions', [])
+    const capitalizeFirst = get(childProps, 'capitalizeFirst', false)
+    let btnTxt = values[key]
+
+    if (capitalizeFirst) {
+      btnTxt = capitalizeFirstLetter(btnTxt)
+    }
+
+
+    return (
+      <FormGroup
+        intent={Intent.PRIMARY}
+        label={get(fields, key, { name: '' }).name}
+      >
+        <FormItemSelect
+          buttonText={btnTxt}
+          items={selectOptions}
+          menuRenderer={item => {
+            if (capitalizeFirst) {
+              return capitalizeFirstLetter(item)
+            }
+
+            return item;
+          }}
+          onFormSelectChange={(value: string) => {
+            setFieldValue(key, value)
+          }}
+        />
+      </FormGroup>
+    )
+  }
+
   return (
     <>
       {child({
@@ -169,6 +210,7 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
           getDateInputFormGroup,
           getInputFormGroup,
           getNumericInputFormGroup,
+          getSelectFieldInputFormGroup,
           getSwitchInputFormGroup,
           getTextAreaInputFormGroup,
           getTimeInputFormGroup

@@ -4,6 +4,7 @@ import Card from './Card';
 import Col from './Col';
 import DateInput from './DateInput';
 import Dialog from './Dialog';
+import FileDropzone from './FileDropzone';
 import FileInput from './FileInput'
 import FormGroup from './FormGroup';
 import FormItemSelect from './FormItemSelect';
@@ -33,6 +34,7 @@ export {
   Col,
   DateInput,
   Dialog,
+  FileDropzone,
   FileInput,
   FormGroup,
   FormItemSelect,

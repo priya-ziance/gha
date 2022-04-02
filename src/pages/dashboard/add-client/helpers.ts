@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import moment from "moment";
 import get from 'lodash/get';
 
-import { JOINED_FIELDS_TYPE } from '../../../types';
+import { JOINED_FIELDS_TYPE, CLIENT_FIELDS_TYPE } from '../../../types';
 
 import { DateInputProps } from '../../../components/DateInput';
 
@@ -11,7 +11,7 @@ import { FIELDS } from './constants';
 
 const formFields: any = Object.keys(FIELDS);
 
-export const initialValues = Object.assign({}, ...formFields.map((formField: JOINED_FIELDS_TYPE) => {
+export const initialValues = Object.assign({}, ...formFields.map((formField: CLIENT_FIELDS_TYPE) => {
   return {
     [formField]: get(FIELDS, formField, { default: '' }).default
   }

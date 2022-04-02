@@ -6,12 +6,14 @@ export default class Client implements IBaseModel {
   id: string;
   address: string;
   location: ILocation;
+  phoneNumber? : string;
   updatedAt?: string;
 
   constructor(location: ILocation) {
     this.id = location._id;
     this.address = location.address;
     this.createdAt = location.created_at;
+    this.phoneNumber = location.phoneNumber;
     this.updatedAt = location.updated_at;
 
     this.location = location;

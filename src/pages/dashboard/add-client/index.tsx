@@ -6,6 +6,7 @@ import get from 'lodash/get';
 import pick from 'lodash/pick';
 
 import ToastsContext from '../../../contexts/toasts';
+import LocationContext from '../../../contexts/location';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
@@ -27,6 +28,7 @@ import {
   Button,
   Col,
   DateInput,
+  FileInput,
   FormGroup,
   ImageDropzone,
   LoadingView,
@@ -46,8 +48,9 @@ import {
 
 import * as helpers from './helpers';
 
-import './index.scss';
 import { IUserModel } from '../../../types';
+
+import './index.scss';
 
 
 const FormSelect = Select.ofType<string>();
@@ -62,12 +65,15 @@ const AddClient = (props: AddClientProps) => {
   const [loading, setLoading] = useState(false);
   const [signatureOpen, setSignatureOpen] = useState(false);
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
+  const [floridaFile, setFloridaFile] = useState<File | null>(null);
+  const [insuranceFile, setInsuranceFile] = useState<File | null>(null);
   const [currentDialog, setCurrentDialog] = useState('');
   const [signatureDataURL, setSignatureDataURL] = useState('');
   const [services, setServices] = useState<any>({})
   const [witnesses, setWitnesses] = useState<IUserModel[] | []>([])
   const [trainers, setTrainers] = useState<IUserModel[] | []>([])
   const { addToast } = useContext(ToastsContext);
+  const { location } = useContext(LocationContext);
   let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
@@ -103,9 +109,9 @@ const AddClient = (props: AddClientProps) => {
   const onTrainersForm = () => setCurrentDialog(DIALOG_NAMES.trainers);
 
 
-  const uploadProfilePicture = async () => {
-    if (profilePictureFile) {
-      return api.files.uploadFile(get(props, 'client.id'), 'image', profilePictureFile);
+  const uploadFile = async (file: File) => {
+    if (file) {
+      return api.files.uploadFile(get(props, 'client.id'), 'image', file);
     }
   }
 
@@ -156,6 +162,11 @@ const AddClient = (props: AddClientProps) => {
     setProfilePictureFile(files[0]);
   }
 
+  const onDocumentChange = (func: (f: File | null) => void) => (e: any) => {
+    func(get(e, 'target.files', [])[0])
+  }
+
+
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
@@ -168,6 +179,7 @@ const AddClient = (props: AddClientProps) => {
     );
   } else {
     initialValues = helpers.initialValues;
+    initialValues.phone = location?.phoneNumber
   }
 
   const handleWitnessesChange = (users: { [key: string]: IUserModel }) => {
@@ -193,8 +205,18 @@ const AddClient = (props: AddClientProps) => {
               setSubmitting(true);
 
               if (profilePictureFile) {
-                let file = await uploadProfilePicture();
+                let file = await uploadFile(profilePictureFile);
                 values.profile_picture = file?.id;
+              }
+
+              if (floridaFile) {
+                let fFile = await uploadFile(floridaFile);
+                values.florida_id = fFile?.id;
+              }
+
+              if (insuranceFile) {
+                let sFile = await uploadFile(insuranceFile);
+                values.health_insurance = sFile?.id;
               }
 
               if (witnesses && Array.isArray(witnesses)) {
@@ -258,7 +280,8 @@ const AddClient = (props: AddClientProps) => {
                 handleChange,
                 handleSubmit,
                 isSubmitting,
-                setFieldValue
+                setFieldValue,
+                errors
               }
             }) => {
               const onFormSelectChange = (field: string) => (value: string) => {
@@ -364,7 +387,18 @@ const AddClient = (props: AddClientProps) => {
   
                     {/* ---------------------------COL 2------------------------------- */}
                     <Col>
-                      {getInputFormGroup('florida_id')}
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={'Florida ID'}
+                      >
+                        <FileInput
+                          text={get(floridaFile, 'name', get(props, 'client.floridaId.key'))}
+                          onChange={onDocumentChange(setFloridaFile)}
+                          inputProps={{
+                            accept: 'image/*,.pdf'
+                          }}
+                        />
+                      </FormGroup>
                       {getInputFormGroup('medicaid')}
                       {getInputFormGroup('medicare')}
                       {getInputFormGroup('medicaid_waiver')}
@@ -435,15 +469,20 @@ const AddClient = (props: AddClientProps) => {
   
                     {/* ---------------------------COL 3------------------------------- */}
                     <Col>
-                      {getInputFormGroup('health_insurance')}
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'effective_date', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
+                        label={'Health Insurance'}
                       >
-                        <DateInput {...helpers.getMomentFormatter('LL')}/>
+                        <FileInput
+                          text={get(insuranceFile, 'name', get(props, 'client.healthInsurance.key'))}
+                          onChange={onDocumentChange(setInsuranceFile)}
+                          inputProps={{
+                            accept: 'image/*,.pdf'
+                          }}
+                        />
                       </FormGroup>
+                      
+                      {getDateInputFormGroup('effective_date')}
 
                       {getInputFormGroup('special_equipments')}
                       {getInputFormGroup('race')}

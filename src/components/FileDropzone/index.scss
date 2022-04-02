@@ -1,0 +1,13 @@
+.file-dropzone {
+  max-width: 200px;
+  height: 200px;
+
+  .file-dropzone__images-container img {
+    max-height: 190px;
+    max-width: 190px;
+  }
+}
+
+.file-dropzone__placeholder {
+  height: 100px;
+}

@@ -66,7 +66,6 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
     }
   }
 
-  console.log('MOODULE', cardImage)
   return (
     <Card {...props} className={localClassName} elevation={Elevation.ONE}>
       <LinkWrapper link={link || ''}>

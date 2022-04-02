@@ -8,6 +8,8 @@ import pick from 'lodash/pick';
 import ToastsContext from '../../../contexts/toasts';
 import ClientContext from '../../../contexts/client';
 
+import formikWrapper from '../../../wrappers/formik';
+
 import IExpenseModel from '../../../models/expense';
 
 import api from '../../../api';
@@ -17,18 +19,13 @@ import URLS from '../../../utils/urls';
 import {
   Button,
   Col,
-  DateInput,
   FormGroup,
   FormItemSelect,
-  ImageDropzone,
-  InputGroup,
-  NumericInput,
+  FileDropzone,  
   LoadingView,
 
   PageHeading,
-  Row,
-  Switch,
-  TextArea
+  Row
 } from '../../../components';
 
 import {
@@ -36,8 +33,6 @@ import {
   EXPENSE_TYPES,
   EXPENSE_ACCOUNT_TYPES
 } from './constants';
-
-import { ACCOUNT_EXPENSE_FIELDS_TYPE } from '../../../types';
 
 import * as helpers from './helpers';
 
@@ -61,9 +56,9 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links'), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { href: URLS.getPagePath('expenses'), icon: 'document', text: URLS.getPagePathName('expenses') },
-    { href: URLS.getPagePath('expenses-account'), icon: 'document', text: URLS.getPagePathName('expenses-account') }
+    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
+    { href: URLS.getPagePath('expenses', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses') },
+    { href: URLS.getPagePath('expenses-account', { clientId }), icon: 'document', text: URLS.getPagePathName('expenses-account') }
   ];
 
   if (props.update) {
@@ -122,8 +117,7 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
   } else {
     initialValues = helpers.initialValues;
   }
-  
-  console.log('INITIALS:', initialValues)
+
   return (
     <LoadingView loading={loading}>
       <div className='add-expenses-account'>
@@ -185,85 +179,21 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
             }}
             >
 
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue
-            }) => {
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
+            {formikWrapper(({
+              wrapperProps: {
+                getDateInputFormGroup,
+                getTextAreaInputFormGroup,
+                getSwitchInputFormGroup,
+                getNumericInputFormGroup,
+                getInputFormGroup
+              },
+              formikProps: {
+                handleSubmit,
+                isSubmitting,
+                values,
+                handleChange
               }
-
-              const getInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <InputGroup
-                    id={`text-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getDateInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  helperText={errors[key]}
-                >
-                  <DateInput
-                    value={values[key] ? moment(values[key]).toDate() : null}
-                    onChange={onFormDateChange(key)}
-                    {...helpers.getMomentFormatter('LL')}
-                  />
-                </FormGroup>
-              );
-
-              const getTextAreaInputFormGroup = (key: ACCOUNT_EXPENSE_FIELDS_TYPE) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`text-area__${key}`}
-                  helperText={errors[key]}
-                >
-                  <TextArea
-                    id={`text-area__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onChange={handleChange(key)}
-                    value={values[key]}
-                  />
-                </FormGroup>
-              )
-
-              const getNumericInput = (key: ACCOUNT_EXPENSE_FIELDS_TYPE, inputOptions = {}) => (
-                <FormGroup
-                  intent={helpers.getFormIntent(errors[key])}
-                  label={get(FIELDS, key, { name: '' }).name}
-                  labelFor={`numeric-input__${key}`}
-                  helperText={errors[key]}
-                >
-                  <NumericInput
-                    id={`numeric-input__${key}`}
-                    intent={helpers.getFormIntent(errors[key])}
-                    onValueChange={(_: any, value: string) => {
-                      setFieldValue(key, value)
-                    }}
-                    value={values[key]}
-                    {...inputOptions}
-                  />
-                </FormGroup>
-              )
-
+            }) => {
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
 
               return (
@@ -272,10 +202,11 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
                     intent={Intent.PRIMARY}
                     label={'Document'}
                   >
-                    <ImageDropzone
+                    <FileDropzone
                       files={document ? [document]: []}
                       setFiles={setDocument}
                       imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
+                      accept="image/*,.pdf"
                     />
                   </FormGroup>
                   <Row>
@@ -286,7 +217,7 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
                       
                       {getTextAreaInputFormGroup('expense_description')}
 
-                      {getNumericInput('expense', { leftIcon: 'dollar' })}
+                      {getNumericInputFormGroup('expense', { childProps:  { leftIcon: 'dollar' } })}
 
                       <FormItemSelect
                         buttonText={values.expense_type}
@@ -304,32 +235,9 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
                         onFormSelectChange={(handleChange('type'))}
                       />
 
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'active', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('active')}/>
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'inventory_save', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.inventory_save} onChange={handleChange('inventory_save')}/>
-                      </FormGroup>
-
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'community_activity_save', { name: '' }).name}
-                        labelFor="text-input"
-                        labelInfo={"(required)"}
-                      >
-                        <Switch id="switch-input" large checked={values.community_activity_save} onChange={handleChange('community_activity_save')}/>
-                      </FormGroup>
+                      {getSwitchInputFormGroup('active')}
+                      {getSwitchInputFormGroup('inventory_save')}
+                      {getSwitchInputFormGroup('community_activity_save')}
                     </Col>
   
                   </Row>
@@ -338,7 +246,7 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
                   </Button>
                 </form>
               )
-            }}
+            }, FIELDS)}
           </Formik>
         </div>
       </div>

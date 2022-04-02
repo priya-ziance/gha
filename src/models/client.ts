@@ -11,6 +11,8 @@ export default class Client implements IBaseModel {
   lastName: string;
   medicaidId?: string;
   client: IClient;
+  floridaId?: IFileModel;
+  healthInsurance?: IFileModel;
   profilePicture?: IFileModel;
   signature?: IFileModel;
   location?: ILocationModel;
@@ -40,6 +42,14 @@ export default class Client implements IBaseModel {
     
     if (client.profile_picture) {
       this.profilePicture = new models.File(client.profile_picture);
+    }
+
+    if (client.florida_id) {
+      this.floridaId = new models.File(client.florida_id);
+    }
+
+    if (client.health_insurance) {
+      this.healthInsurance = new models.File(client.health_insurance);
     }
 
     if (client.signature) {

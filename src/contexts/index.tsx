@@ -58,7 +58,8 @@ function Contexts(props: any) {
     setLocationContext({
       address: get(_location, 'address'),
       id: get(_location, 'id'),
-      locations
+      locations,
+      location 
     })
   }, [locations, location])
 

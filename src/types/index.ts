@@ -402,6 +402,7 @@ export interface ILocationContext {
   id?: string;
   setLocation?: (locationId: string) => void
   loading?: boolean;
+  location?: ILocationModel;
   locations?: ILocationModel[]
 }
 
@@ -475,6 +476,8 @@ export interface IClientBehaviourModel {
   firstName: string;
   lastName: string;
   address?: string;
+  floridaId?: IFileModel;
+  healthInsurance?: IFileModel;
   profilePicture?: IFileModel;
   signature?: IFileModel;
   services: object;
@@ -618,6 +621,7 @@ export interface ILocationModel {
   city?: string;
   country?: string;
   coordinates?: [number, number]
+  phoneNumber?: string
   createdAt?: string;
   updatedAt?: string;
 }
@@ -799,7 +803,7 @@ export interface IClient {
   phone?: string;
   mobile?: string;
   ssn?: string;
-  florida_id?: string;
+  florida_id?: IFile;
   medicaid?: string;
   medicare?: string;
   medicaid_waiver?: string;
@@ -812,7 +816,7 @@ export interface IClient {
   secondary_diagnosis?: string;
   allergies?: string;
   location?: ILocation;
-  health_insurance?: string;
+  health_insurance?: IFile;
   effective_date?: string;
   funds_method?: string;
   special_equipments?: string;
@@ -936,6 +940,7 @@ export interface ISpGoal {
 export interface ILocation {
   _id: string;
   address: string;
+  phoneNumber?: string;
   city?: string;
   country?: string;
   loc?: {

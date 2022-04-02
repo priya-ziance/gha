@@ -216,7 +216,6 @@ class ClientContactApi {
     return this.normalizer.normalizeArray(clientContactsResult.data.contents);
   }
 
-
   async getClientContact(clientContactId: string, options?: OPTIONS_TYPE) {
     const params = get(options, 'params', {});
 
@@ -230,6 +229,15 @@ class ClientContactApi {
   
     return this.normalizer.normalize(clientContactResult.data);
   }
+
+  async search(searchString: string) {
+    const clientContactsResult = await client.post(`/client_contacts/search`, {
+      searchString
+    });
+  
+    return this.normalizer.normalizeArray(clientContactsResult.data);
+  }
+
 
   async updateClientContact(clientContactId = '', body = {}) {
     const clientContactResult = await client.patch(`/client_contacts/${clientContactId}`, body);

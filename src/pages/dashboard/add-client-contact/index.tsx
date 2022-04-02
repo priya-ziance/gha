@@ -3,15 +3,14 @@ import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
-import moment from 'moment';
 
-import { CLIENT_CONTACT_FIELDS_TYPE, IClientContactModel } from '../../../types';
+import { IClientContactModel } from '../../../types';
 
 import api from '../../../api';
 
 import URLS from '../../../utils/urls';
 
-import { Button, Col, DateInput, FormGroup, InputGroup, PageHeading, Row, Switch, TextArea } from '../../../components';
+import { Button, Col, PageHeading, Row } from '../../../components';
 
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
@@ -20,7 +19,7 @@ import * as helpers from './helpers';
 
 import formikWrapper from '../../../wrappers/formik';
 
-import { FIELDS } from './constants';
+import { CONTACT_TYPES, FIELDS } from './constants';
 
 import './index.scss';
 
@@ -115,6 +114,7 @@ const AddClientContact = (props: AddClientContactProps) => {
               wrapperProps: {
                 getDateInputFormGroup,
                 getTextAreaInputFormGroup,
+                getSelectFieldInputFormGroup,
                 getSwitchInputFormGroup,
                 getInputFormGroup
               },
@@ -126,7 +126,7 @@ const AddClientContact = (props: AddClientContactProps) => {
               return (
                 <form onSubmit={handleSubmit}>
 
-                  {getInputFormGroup('contact_type')}
+                  {getSelectFieldInputFormGroup('contact_type', { childProps: { selectOptions: CONTACT_TYPES, capitalizeFirst: true } })}
                   <Row>
                     <Col xs={12} md={6}>
                       {getInputFormGroup('first_name')}
