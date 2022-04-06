@@ -27,8 +27,7 @@ import formikWrapper from '../../../wrappers/formik';
 import {
   Button,
   Col,
-  DateInput,
-  FileInput,
+  FileDropzone,
   FormGroup,
   ImageDropzone,
   LoadingView,
@@ -162,8 +161,8 @@ const AddClient = (props: AddClientProps) => {
     setProfilePictureFile(files[0]);
   }
 
-  const onDocumentChange = (func: (f: File | null) => void) => (e: any) => {
-    func(get(e, 'target.files', [])[0])
+  const onDocumentChange = (func: (f: File | null) => void) => (files: File[]) => {
+    func(files[0])
   }
 
 
@@ -298,6 +297,10 @@ const AddClient = (props: AddClientProps) => {
               const trainersDialogOpen = currentDialog === DIALOG_NAMES.trainers;
 
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
+              const floridaFileUrl = get(props, 'client.floridaId.publicUrl', '')
+              const healthInsuranceFileUrl = get(props, 'client.healthInsurance.publicUrl', '')
+
+              console.log('ID:', floridaFileUrl, props)
 
               return (
                 <form onSubmit={handleSubmit}>
@@ -391,12 +394,11 @@ const AddClient = (props: AddClientProps) => {
                         intent={Intent.PRIMARY}
                         label={'Florida ID'}
                       >
-                        <FileInput
-                          text={get(floridaFile, 'name', get(props, 'client.floridaId.key'))}
-                          onChange={onDocumentChange(setFloridaFile)}
-                          inputProps={{
-                            accept: 'image/*,.pdf'
-                          }}
+                        <FileDropzone
+                          setFiles={onDocumentChange(setFloridaFile)}
+                          accept='image/*,.pdf'
+                          files={floridaFile ? [floridaFile] : []}
+                          imagesUrls={floridaFileUrl ? [floridaFileUrl] : []}
                         />
                       </FormGroup>
                       {getInputFormGroup('medicaid')}
@@ -473,12 +475,11 @@ const AddClient = (props: AddClientProps) => {
                         intent={Intent.PRIMARY}
                         label={'Health Insurance'}
                       >
-                        <FileInput
-                          text={get(insuranceFile, 'name', get(props, 'client.healthInsurance.key'))}
-                          onChange={onDocumentChange(setInsuranceFile)}
-                          inputProps={{
-                            accept: 'image/*,.pdf'
-                          }}
+                        <FileDropzone
+                          setFiles={onDocumentChange(setInsuranceFile)}
+                          accept='image/*,.pdf'
+                          files={insuranceFile ? [insuranceFile] : []}
+                          imagesUrls={healthInsuranceFileUrl ? [healthInsuranceFileUrl] : []}
                         />
                       </FormGroup>
                       

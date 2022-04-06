@@ -57,6 +57,11 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string().required(),
   },
+  medical_contact: {
+    name: 'Medical Contact',
+    default: false,
+    validation: yup.bool(),
+  },
   mobile: {
     name: 'Mobile #',
     default: '',

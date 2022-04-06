@@ -31,6 +31,14 @@ const ClientInfo = () => {
           await fetchedClient.signature.loadFile();
         }
 
+        if (fetchedClient.floridaId) {
+          await fetchedClient.floridaId.loadFile();
+        }
+
+        if (fetchedClient.healthInsurance) {
+          await fetchedClient.healthInsurance.loadFile();
+        }
+
         setClient(fetchedClient);
       } catch(e) {}
 

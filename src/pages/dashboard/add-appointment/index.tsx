@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react';
-import { BreadcrumbProps, Intent , MenuItem } from '@blueprintjs/core';
+import { useContext, useEffect, useState } from 'react';
+import { BreadcrumbProps, Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
-import { Select, IItemRendererProps } from "@blueprintjs/select";
 import get from 'lodash/get';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
@@ -18,7 +17,6 @@ import ClientContext from '../../../contexts/client';
 
 import formikWrapper from '../../../wrappers/formik';
 
-import ContactsInput from '../../../controlled-components/ContactInput';
 
 import {
   Button,
@@ -32,14 +30,11 @@ import {
 
 import { FIELDS } from './constants';
 
-import { APPOINTMENT_FIELDS_TYPE } from '../../../types';
-
 import * as helpers from './helpers';
 
 import './index.scss';
+import { IClientContactModel } from '../../../types';
 
-
-const FormSelect = Select.ofType<string>();
 
 interface AddAppointmentProps {
   appointment?: IAppointmentModel | undefined;
@@ -50,19 +45,39 @@ interface AddAppointmentProps {
 const AddAppointment = (props: AddAppointmentProps) => {
   const [loading, setLoading] = useState(false);
   const [physicianFile, setPhysicianFile] = useState<File | null>(null); 
+  const [medicalContacts, setMedicalContacts] = useState<IClientContactModel[] | []>([])
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+
+  const medicalContactsObj = Object.assign({}, ...medicalContacts.map(medicalContact => {
+    return {
+      [medicalContact.id]: medicalContact
+    }
+  }))
+
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links')},
-    { href: URLS.getPagePath('appointments', { clientId }), icon: 'document', text: URLS.getPagePathName('appointments')},
-    { text: URLS.getPagePathName('add-appointment') } 
+    { href: URLS.getPagePath('appointments', { clientId }), icon: 'document', text: URLS.getPagePathName('appointments')}
   ];
 
-  const doctorList: string[] = [];
+  if (props.update) {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('edit-appointment') } )
+  } else {
+    BREADCRUMBS.push({ text: URLS.getPagePathName('add-appointment') } )
+  }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const contacts = await api.clientContacts.getMedicalClientContacts(clientId);
+        setMedicalContacts(contacts)
+      } catch(e) {}
+    })()
+  }, [clientId])
 
 
   const getErrorToast = (message: string) => {
@@ -124,6 +139,10 @@ const AddAppointment = (props: AddAppointmentProps) => {
     }
   }
 
+  const contactInputRenderer = (item: string) => {
+    return get(medicalContactsObj, `${item}.name`, '')
+  }
+
   return (
     <LoadingView loading={loading}>
       <div className='add-appointment'>
@@ -183,28 +202,35 @@ const AddAppointment = (props: AddAppointmentProps) => {
                 getTextAreaInputFormGroup,
                 getSwitchInputFormGroup,
                 getInputFormGroup,
+                getSelectFieldInputFormGroup,
                 getTimeInputFormGroup
               },
               formikProps: {
                 handleSubmit,
-                isSubmitting
+                isSubmitting,
+                values
               }
             }) => {
+                const medicalContact = medicalContactsObj[values['doctor']]
+
                 return (
                   <form onSubmit={handleSubmit}>
                     <Row>
                       {/* ---------------------------COL 1------------------------------- */}
                       <Col>
                         {getDateInputFormGroup('appointment_date')}
-  
-                        <FormGroup
-                          intent={Intent.PRIMARY}
-                          label={get(FIELDS, 'doctor', { name: '' }).name}
-                          labelFor="text-input"
-                          labelInfo={"(required)"}
-                        >
-                          <ContactsInput />
-                        </FormGroup>
+
+                        {getSelectFieldInputFormGroup(
+                          'doctor',
+                          {
+                            childProps: {
+                              selectOptions: Object.keys(medicalContactsObj),
+                              capitalizeFirst: true,
+                              menuRenderer: contactInputRenderer,
+                              btnTextRenderer: contactInputRenderer
+                            }
+                          }
+                        )}
   
                         {getTextAreaInputFormGroup('type_of_appointment')}
   
@@ -232,7 +258,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
                       <Col>
                         {getTimeInputFormGroup('time')}
   
-                        {getInputFormGroup('contact_type', { childProps: { disabled: true } })}
+                        {getInputFormGroup('contact_type', { childProps: { disabled: true, value: get(medicalContact, 'contactType') } })}
   
                         {getTextAreaInputFormGroup('staff_notes')}
   

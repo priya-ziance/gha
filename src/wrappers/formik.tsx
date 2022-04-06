@@ -172,11 +172,27 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
   const getSelectFieldInputFormGroup = (key: string, props?: IInputOptions) => {
     const childProps = props?.childProps
     const selectOptions = get(childProps, 'selectOptions', [])
+    const menuRenderer = get(childProps, 'menuRenderer')
+    const btnTextRenderer = get(childProps, 'btnTextRenderer')
     const capitalizeFirst = get(childProps, 'capitalizeFirst', false)
-    let btnTxt = values[key]
+    let btnTxt = ''
 
-    if (capitalizeFirst) {
-      btnTxt = capitalizeFirstLetter(btnTxt)
+    if (btnTextRenderer) {
+      btnTxt = btnTextRenderer(values[key])
+    } else {
+      btnTxt = values[key]
+
+      if (capitalizeFirst) {
+        btnTxt = capitalizeFirstLetter(btnTxt)
+      }
+    }
+
+    const defaultRenderer = (item: string) => {
+      if (capitalizeFirst) {
+        return capitalizeFirstLetter(item)
+      }
+
+      return item;
     }
 
 
@@ -188,14 +204,8 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
         <FormItemSelect
           buttonText={btnTxt}
           items={selectOptions}
-          menuRenderer={item => {
-            if (capitalizeFirst) {
-              return capitalizeFirstLetter(item)
-            }
-
-            return item;
-          }}
-          onFormSelectChange={(value: string) => {
+          menuRenderer={menuRenderer || defaultRenderer}
+          onFormSelectChange={(value: any) => {
             setFieldValue(key, value)
           }}
         />

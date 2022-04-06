@@ -59,7 +59,7 @@ function Contexts(props: any) {
       address: get(_location, 'address'),
       id: get(_location, 'id'),
       locations,
-      location 
+      location: _location
     })
   }, [locations, location])
 

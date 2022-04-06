@@ -121,7 +121,8 @@ export type CLIENT_CONTACT_FIELDS_TYPE =
   'last_name' |
   'mobile' |
   'notes' |
-  'phone'
+  'phone' |
+  'medical_contact'
 
 
 export type CLIENT_FIELDS_TYPE = 
@@ -507,6 +508,7 @@ export interface IClientContactModel {
   lastName?: string;
   name?: string;
   phone?: string;
+  medicalContact?: boolean;
   mobile?: string;
   notes?: string;
   clientContact: IClientContact;
@@ -781,6 +783,7 @@ export interface IClientContact {
   fax?: string;
   email?: string;
   company?: string;
+  medical_contact?: boolean;
   notes?: string;
   active?: true;
   created_at?: string;

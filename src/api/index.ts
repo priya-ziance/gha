@@ -205,6 +205,17 @@ class ClientContactApi {
     this.normalizer = new Normalizer<IClientContactModel, IClientContact>(Models.ClientContact)
   }
 
+  async getMedicalClientContacts(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+  
+    const clientContactsResult = await client.get(`/client_contacts/medicalContacts`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(clientContactsResult.data);
+  }
+
   async getClientContacts(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
   

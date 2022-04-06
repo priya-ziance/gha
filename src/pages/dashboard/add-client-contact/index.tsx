@@ -164,6 +164,7 @@ const AddClientContact = (props: AddClientContactProps) => {
                   </Row>
                   {getTextAreaInputFormGroup('notes')}
                   {getSwitchInputFormGroup('active')}
+                  {getSwitchInputFormGroup('medical_contact')}
 
                   <div className='add-client-contact__submit-container'>
                     <Button type="submit" disabled={isSubmitting} loading={isSubmitting} intent={Intent.PRIMARY} large>

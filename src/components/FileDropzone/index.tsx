@@ -9,7 +9,7 @@ import './index.scss';
 export interface FileDropzoneProps {
   files: File[] | [];
   imagesUrls?: string[] | [];
-  setFiles: (files: File[]) => void;
+  setFiles: (files: File[]) => void; 
   accept: string
 }
 
@@ -115,10 +115,18 @@ const FileDropzone = (props: FileDropzoneProps) => {
       return (
         <div key={url}>
           <div>
-            <img
-              alt={url}
-              src={url}
-            />
+            {url.match(/.(jpg|jpeg|png|gif)/i) ?
+              <img
+                alt='File'
+                src={url}
+              />
+              :
+              <img
+                alt={'File'}
+                src={FolderFile}
+                className='file-dropzone__placeholder'
+              />
+            }
           </div>
         </div>
       )
