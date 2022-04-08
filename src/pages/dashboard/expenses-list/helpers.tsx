@@ -1,24 +1,44 @@
 import { Checkbox, Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { AnchorButton, Button } from '../../../components';
+import { AnchorButton } from '../../../components';
 
-import { IExpenseModel } from '../../../types';
+import { IExpenseListModel } from '../../../types';
+
+import { formatCurrency } from '../../../utils/formatters';
 
 
-export const descriptionColumn = (data: IExpenseModel) => {
+export const expenseTypeColumn = (data: IExpenseListModel) => {
+  return (
+    <p className='bp3-table-truncated-cell'>{data.expenseType}</p>
+  )
+}
+
+export const expenseColumn = (data: IExpenseListModel) => {
+  return (
+    <p className='bp3-table-truncated-cell'>{formatCurrency(get(data, 'expense', 0) * 100)}</p>
+  )
+}
+
+export const descriptionColumn = (data: IExpenseListModel) => {
   return (
     <p className='bp3-table-truncated-cell'>{data.expenseDescription}</p>
   )
 }
 
-export const activeColumn = (data: IExpenseModel) => {
+export const expenseListColumn = (data: IExpenseListModel) => {
+  return (
+    <p className='bp3-table-truncated-cell'>{data.type}</p>
+  )
+}
+
+export const activeColumn = (data: IExpenseListModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateColumn = (data: IExpenseModel) => {
+export const dateColumn = (data: IExpenseListModel) => {
   const date = get(data, 'createdAt');
   
   if (date) {
@@ -30,7 +50,7 @@ export const dateColumn = (data: IExpenseModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: IExpenseModel, { viewLink }: any) => {
+export const actionColumn = (data: IExpenseListModel, { viewLink }: any) => {
   return (
     <>
       <AnchorButton

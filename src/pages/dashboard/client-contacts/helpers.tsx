@@ -24,9 +24,21 @@ export const addressColumn = (data: IClientContactModel) => {
   )
 }
 
+export const contactTypeColumn = (data: IClientContactModel) => {
+  return (
+    <>{data.contactType}</>
+  )
+}
+
 export const activeColumn = (data: IClientContactModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
+  )
+}
+
+export const medicalContactColumn = (data: IClientContactModel) => {
+  return (
+    <Checkbox checked={data.medicalContact} disabled/>
   )
 }
 

@@ -130,7 +130,7 @@ export const FIELDS : FIELDS_TYPE = {
   ssn: {
     name: 'SS #',
     default: '',
-    validation: yup.number().max(999999999).min(100000000).required().label('SS #'),
+    validation: yup.number().max(999999999, 'Too many digits').min(100000000, 'Too few digits').required().label('SS #'),
   },
   medicaid: {
     name: 'Medicaid #',
@@ -140,12 +140,12 @@ export const FIELDS : FIELDS_TYPE = {
   medicare: {
     name: 'Medicare #',
     default: '',
-    validation: yup.string(),
+    validation: yup.number().max(999999999999999, 'Too many digits').min(100000000000000, 'Too few digits').label('Medicare #'),
   },
   medicaid_waiver: {
     name: 'Medicaid Waiver #',
     default: '',
-    validation: yup.string().required().label('Medicaid Waiver #'),
+    validation: yup.number().max(99999999, 'Too many digits').min(10000000, 'Too few digits').required().label('Medicaid Waiver #')
   },
   height: {
     name: 'Height',
@@ -188,12 +188,12 @@ export const FIELDS : FIELDS_TYPE = {
     validation: yup.string(),
   },
   effective_date: {
-    name: 'Effective Date',
+    name: 'Insurance effective date',
     default: '',
     validation: yup.string(),
   },
   special_equipments: {
-    name: 'Special Equipments',
+    name: 'Special adaptive equipment',
     default: '',
     validation: yup.string(),
   },

@@ -111,10 +111,6 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
     }
   }
 
-  /**
-   * This assigns the client's info as the initial values if a client
-   * is passed in
-   */
   if (props.bankStatement) {
     initialValues = Object.assign(
       {},

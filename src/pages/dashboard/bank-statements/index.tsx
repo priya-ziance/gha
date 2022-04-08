@@ -23,6 +23,9 @@ import {
   activeColumn,
   dateColumn,
   descriptionColumn,
+  fromDateColumn,
+  nameColumn,
+  toDateColumn
 } from './helpers';
 
 import './index.scss';
@@ -113,14 +116,19 @@ const BankStatement = () => {
               numRows={bankStatements.length}
               columns={[
                 {
-                  title: 'ID',
-                  cellRenderer: (data) => (<p>{data.id}</p>),
-                  width: helpers.getTableWith(0.1)
-                },
-                {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.6)
+                  width: helpers.getTableWith(0.35)
+                },
+                {
+                  title: 'From Date',
+                  cellRenderer: fromDateColumn,
+                  width: helpers.getTableWith(0.175)
+                },
+                {
+                  title: 'To Date',
+                  cellRenderer: toDateColumn,
+                  width: helpers.getTableWith(0.175)
                 },
                 {
                   title: 'Active',
@@ -130,7 +138,7 @@ const BankStatement = () => {
                 {
                   title: 'Created At',
                   cellRenderer: dateColumn,
-                  width: helpers.getTableWith(0.15)
+                  width: helpers.getTableWith(0.14)
                 },
                 {
                   title: 'Actions',

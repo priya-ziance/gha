@@ -741,6 +741,10 @@ class ExpensesApi {
   
     return this.normalizer.normalize(expenseResult.data);
   }
+
+  async getBalance(type = '', clientId = '') {
+    return await client.get('/balance', { type, client: clientId })
+  }
 }
 
 

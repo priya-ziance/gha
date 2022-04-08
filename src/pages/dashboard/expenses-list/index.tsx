@@ -23,6 +23,9 @@ import {
   activeColumn,
   dateColumn,
   descriptionColumn,
+  expenseColumn,
+  expenseListColumn,
+  expenseTypeColumn
 } from './helpers';
 
 import './index.scss';
@@ -113,14 +116,24 @@ const ExpensesAccount = () => {
               numRows={expensesLists.length}
               columns={[
                 {
-                  title: 'ID',
-                  cellRenderer: (data) => (<p>{data.id}</p>),
+                  title: 'Description',
+                  cellRenderer: descriptionColumn,
+                  width: helpers.getTableWith(0.4)
+                },
+                {
+                  title: 'Type',
+                  cellRenderer: expenseTypeColumn,
                   width: helpers.getTableWith(0.1)
                 },
                 {
-                  title: 'Description',
-                  cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.6)
+                  title: 'Expense',
+                  cellRenderer: expenseColumn,
+                  width: helpers.getTableWith(0.1)
+                },
+                {
+                  title: 'Expense List',
+                  cellRenderer: expenseListColumn,
+                  width: helpers.getTableWith(0.1)
                 },
                 {
                   title: 'Active',

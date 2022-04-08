@@ -3,22 +3,53 @@ import get from 'lodash/get';
 
 import { AnchorButton, Button } from '../../../components';
 
-import { IExpenseModel } from '../../../types';
+import { IBankStatementModel } from '../../../types';
 
 
-export const descriptionColumn = (data: IExpenseModel) => {
+export const nameColumn = (data: IBankStatementModel) => {
   return (
-    <p className='bp3-table-truncated-cell'>{data.expenseDescription}</p>
+    <p className='bp3-table-truncated-cell'>{data.statementName}</p>
   )
 }
 
-export const activeColumn = (data: IExpenseModel) => {
+export const descriptionColumn = (data: IBankStatementModel) => {
+  return (
+    <p className='bp3-table-truncated-cell'>{data.statementDescription}</p>
+  )
+}
+
+export const activeColumn = (data: IBankStatementModel) => {
   return (
     <Checkbox checked={data.active} disabled/>
   )
 }
 
-export const dateColumn = (data: IExpenseModel) => {
+export const fromDateColumn = (data: IBankStatementModel) => {
+  const date = data.fromDate
+  
+  if (date) {
+    return (
+      <p>{date.format('MMMM Do YYYY')}</p>
+    )
+  }
+
+  return (<p></p>)
+}
+
+
+export const toDateColumn = (data: IBankStatementModel) => {
+  const date = data.toDate
+  
+  if (date) {
+    return (
+      <p>{date.format('MMMM Do YYYY')}</p>
+    )
+  }
+
+  return (<p></p>)
+}
+
+export const dateColumn = (data: IBankStatementModel) => {
   const date = get(data, 'createdAt');
   
   if (date) {
@@ -30,7 +61,7 @@ export const dateColumn = (data: IExpenseModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: IExpenseModel, { viewLink }: any) => {
+export const actionColumn = (data: IBankStatementModel, { viewLink }: any) => {
   return (
     <>
       <AnchorButton

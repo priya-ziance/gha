@@ -9,18 +9,21 @@ import ClientContext from '../../../contexts/client';
 import LocationContext from '../../../contexts/location';
 
 import URLS from '../../../utils/urls';
+import * as helpers from '../../../utils/helpers';
+import { formatCurrency } from '../../../utils/formatters';
 
 import api from '../../../api';
 
 import Expense from '../../../models/expense';
-
-import * as helpers from '../../../utils/helpers';
 
 import { EXPENSE_ACCOUNT_TYPES } from './constants';
 
 import {
   actionColumn,
   activeColumn,
+  expenseColumn,
+  expenseTypeColumn,
+  locationColumn,
   dateColumn,
   descriptionColumn,
 } from './helpers';
@@ -34,6 +37,7 @@ const ExpensesAccount = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [accountType, setAccountType] = useState(Object.keys(EXPENSE_ACCOUNT_TYPES)[0])
+  const [expenseBalance, setExpenseBalance] = useState(0)
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
 
@@ -48,6 +52,19 @@ const ExpensesAccount = () => {
         setExpenses(
           await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
+      } catch(e){}
+
+      setLoading(false);
+    })()
+  }, [clientId, page, selectedLocationId, accountType]);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        const result = await api.expenses.getBalance(accountType, clientId)
+        setExpenseBalance(get(result, 'data.balance', 0) * 100)
       } catch(e){}
 
       setLoading(false);
@@ -100,37 +117,52 @@ const ExpensesAccount = () => {
         />
         <div className='expenses-account__container'>
           <Col>
-            <FormItemSelect
-              buttonText={get(EXPENSE_ACCOUNT_TYPES, accountType, '')}
-              items={Object.keys(EXPENSE_ACCOUNT_TYPES)}
-              label={'Expense Type'}
-              menuRenderer={item => get(EXPENSE_ACCOUNT_TYPES, item, '')}
-              onFormSelectChange={setAccountType}
-            />
+            <div className='expenses-account__container__action-bar'>
+              <FormItemSelect
+                buttonText={get(EXPENSE_ACCOUNT_TYPES, accountType, '')}
+                items={Object.keys(EXPENSE_ACCOUNT_TYPES)}
+                label={'Expense Type'}
+                menuRenderer={item => get(EXPENSE_ACCOUNT_TYPES, item, '')}
+                onFormSelectChange={setAccountType}
+              />
+              <div>
+                <span>Balance: <b>{formatCurrency(expenseBalance)}</b></span>
+              </div>
+            </div>
 
             <Table
               loading={loading}
               numRows={expenses.length}
               columns={[
                 {
-                  title: 'ID',
-                  cellRenderer: (data) => (<p>{data.id}</p>),
-                  width: helpers.getTableWith(0.1)
+                  title: 'Expense Date',
+                  cellRenderer: dateColumn,
+                  width: helpers.getTableWith(0.15)
                 },
                 {
                   title: 'Description',
                   cellRenderer: descriptionColumn,
-                  width: helpers.getTableWith(0.6)
+                  width: helpers.getTableWith(0.3)
+                },
+                {
+                  title: 'Expense Type',
+                  cellRenderer: expenseTypeColumn,
+                  width: helpers.getTableWith(0.1)
+                },
+                {
+                  title: 'Expense',
+                  cellRenderer: expenseColumn,
+                  width: helpers.getTableWith(0.1)
+                },
+                {
+                  title: 'Location',
+                  cellRenderer: locationColumn,
+                  width: helpers.getTableWith(0.18)
                 },
                 {
                   title: 'Active',
                   cellRenderer: activeColumn,
                   width: helpers.getTableWith(0.07)
-                },
-                {
-                  title: 'Created At',
-                  cellRenderer: dateColumn,
-                  width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Actions',

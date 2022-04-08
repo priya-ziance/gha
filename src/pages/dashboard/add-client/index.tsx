@@ -179,6 +179,7 @@ const AddClient = (props: AddClientProps) => {
   } else {
     initialValues = helpers.initialValues;
     initialValues.phone = location?.phoneNumber
+    initialValues.address_line_1 = location?.address
   }
 
   const handleWitnessesChange = (users: { [key: string]: IUserModel }) => {
@@ -368,11 +369,13 @@ const AddClient = (props: AddClientProps) => {
                         label={"Signature"}
                       >
                         <div style={{ maxWidth: 200 }}>
-                          <img
-                            style={{ width: '100%', marginBottom: 10 }}
-                            alt='client signature'
-                            src={signatureDataURL || props.client?.signature?.publicUrl}
-                          />
+                          {(signatureDataURL || props.client?.signature?.publicUrl) &&
+                            <img
+                              style={{ width: '100%', marginBottom: 10 }}
+                              alt='client signature'
+                              src={signatureDataURL || props.client?.signature?.publicUrl}
+                            />
+                          }
                           <Button intent={Intent.PRIMARY} onClick={onAddSignature}>
                             <b>Add Signature</b>
                           </Button>
@@ -401,9 +404,9 @@ const AddClient = (props: AddClientProps) => {
                           imagesUrls={floridaFileUrl ? [floridaFileUrl] : []}
                         />
                       </FormGroup>
-                      {getInputFormGroup('medicaid')}
-                      {getInputFormGroup('medicare')}
-                      {getInputFormGroup('medicaid_waiver')}
+                      {getNumericInputFormGroup('medicaid')}
+                      {getNumericInputFormGroup('medicare')}
+                      {getNumericInputFormGroup('medicaid_waiver')}
 
                       {getInputFormGroup('height')}
                       {getInputFormGroup('eye_color')}

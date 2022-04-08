@@ -17,7 +17,8 @@ import { IClientContactModel } from '../../../types';
 import {
   actionColumn,
   activeColumn,
-  dateOfBirthColumn,
+  medicalContactColumn,
+  contactTypeColumn,
   addressColumn,
   firstNameColumn,
   lastNameColumn,
@@ -110,27 +111,27 @@ const ClientContacts = () => {
                 {
                   title: 'First Name',
                   cellRenderer: firstNameColumn,
-                  width: helpers.getTableWith(0.2)
+                  width: helpers.getTableWith(0.25)
                 },
                 {
                   title: 'Last Name',
                   cellRenderer: lastNameColumn,
+                  width: helpers.getTableWith(0.25)
+                },
+                {
+                  title: 'Contact Type',
+                  cellRenderer: contactTypeColumn,
                   width: helpers.getTableWith(0.2)
                 },
                 {
-                  title: 'DOB',
-                  cellRenderer: dateOfBirthColumn,
+                  title: 'Medical Contact',
+                  cellRenderer: medicalContactColumn,
                   width: helpers.getTableWith(0.13)
                 },
                 {
                   title: 'Active',
                   cellRenderer: activeColumn,
                   width: helpers.getTableWith(0.07)
-                },
-                {
-                  title: 'Address',
-                  cellRenderer: addressColumn,
-                  width: helpers.getTableWith(0.3)
                 },
                 {
                   title: 'Actions',
