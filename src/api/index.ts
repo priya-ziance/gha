@@ -418,17 +418,6 @@ class MedicationApi{
     return this.normalizer.normalize(medicationResult.data);
   }
 
-  async getMedicationDetails(clientId: string, options?: OPTIONS_TYPE) {
-    const page = get(options, 'page', 0);
-    const params = get(options, 'params', {});
-
-    const medicationResult = await client.get('/details', {
-      clientId,
-      page,
-      ...params
-    });
-  }
-
   async createMedication(body = {}, params = {}) {
     const medicationResult = await client.post('/medication', body, { params });
   
