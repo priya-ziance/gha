@@ -63,6 +63,5 @@ workflows:
             branches:
               only:
                   - staging
-                  - development
                   - prod
 
