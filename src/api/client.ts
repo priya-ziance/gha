@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class ClientError extends Error {
+export class ClientError extends Error {
   data: any;
 }
 

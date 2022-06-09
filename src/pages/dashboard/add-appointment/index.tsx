@@ -34,6 +34,7 @@ import * as helpers from './helpers';
 
 import './index.scss';
 import { IClientContactModel } from '../../../types';
+import { ClientError } from '../../../api/client';
 
 
 interface AddAppointmentProps {
@@ -182,7 +183,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
                     intent:  Intent.SUCCESS
                   }
                 );
-              } catch(e) {
+              } catch(e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),
