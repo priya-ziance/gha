@@ -32,7 +32,7 @@ jobs:
       # - run:
       #     name: Run unit tests
       #     command: npm test
-  deploy_staging_development:
+  deploy:
     docker:
       - image: cimg/node:15.1
     steps:
@@ -56,7 +56,7 @@ workflows:
       - build_and_test
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
-      - deploy_staging_development:
+      - deploy:
           requires:
             - build_and_test
           filters:
