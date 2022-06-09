@@ -4,8 +4,8 @@ import { BreadcrumbProps } from '@blueprintjs/core';
 import { ModuleCard, PageHeading, Row } from '../../../components';
 
 import URLS from '../../../utils/urls';
-
 import ClientContext from '../../../contexts/client';
+import withLocation from '../../../hoc/withLocation';
 
 import { getLinks } from './links';
 
@@ -50,4 +50,4 @@ const Content = () => {
   );
 }
 
-export default Content;
+export default withLocation()(Content);

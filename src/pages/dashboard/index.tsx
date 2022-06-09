@@ -186,7 +186,7 @@ function Dashboard() {
         const token = await getAccessTokenSilently({
           audience: config.AUTH0_AUDIENCE
         });
-        const tokenPermissions: string[] = get(jwt(token), 'permissions');
+        // const tokenPermissions: string[] = get(jwt(token), 'permissions');
 
         // TODO: Remove log
         // console.log('TOKEN:', token, permissions.compilePermissions(tokenPermissions));
@@ -211,32 +211,29 @@ function Dashboard() {
     <div className='dashboard'>
       <MainNavbar />
       <div className='dashboard__container'>
-        {!selectedLocationId ?
-          <NoLocation /> : 
-          <Switch>
-            <Route path="/dashboard" exact component={ContentPage} />
+        <Switch>
+          <Route path="/dashboard" exact component={ContentPage} />
 
-            <Route path="/dashboard/clients" exact component={ClientsPage} />
-            <Route path="/dashboard/clients/add" exact component={AddClientPage} />
-            <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
+          <Route path="/dashboard/clients" exact component={ClientsPage} />
+          <Route path="/dashboard/clients/add" exact component={AddClientPage} />
+          <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
 
-            <Route path="/dashboard/logs" exact component={LogsPage} />
-            <Route path="/dashboard/logs/reshab-logs" exact component={ReshabLogsPage} />
-            <Route path="/dashboard/logs/respite-logs" exact component={RespiteLogsPage} />
-            <Route path="/dashboard/logs/life-skills" exact component={LifeSkillsPage} />
-            <Route path="/dashboard/logs/life-skills/logs" exact component={LifeSkillsLogsPage} />
-            <Route path="/dashboard/logs/life-skills/notes-database" exact component={LifeSkillsNotesDatabasePage} />
-            <Route path="/dashboard/logs/life-skills/places-database" exact component={LifeSkillsPlacesDatabasePage} />
-            <Route path="/dashboard/logs/personal-support" exact component={PersonalSupportPage} />
-            <Route path="/dashboard/logs/personal-support/logs" exact component={PersonalSupportLogsPage} />
-            <Route path="/dashboard/logs/personal-support/places-database" exact component={PersonalSupportPlacesDatabasePage} />
-            <Route path="/dashboard/logs/personal-support/notes-database" exact component={PersonalSupportNotesDatabasePage} />
+          <Route path="/dashboard/logs" exact component={LogsPage} />
+          <Route path="/dashboard/logs/reshab-logs" exact component={ReshabLogsPage} />
+          <Route path="/dashboard/logs/respite-logs" exact component={RespiteLogsPage} />
+          <Route path="/dashboard/logs/life-skills" exact component={LifeSkillsPage} />
+          <Route path="/dashboard/logs/life-skills/logs" exact component={LifeSkillsLogsPage} />
+          <Route path="/dashboard/logs/life-skills/notes-database" exact component={LifeSkillsNotesDatabasePage} />
+          <Route path="/dashboard/logs/life-skills/places-database" exact component={LifeSkillsPlacesDatabasePage} />
+          <Route path="/dashboard/logs/personal-support" exact component={PersonalSupportPage} />
+          <Route path="/dashboard/logs/personal-support/logs" exact component={PersonalSupportLogsPage} />
+          <Route path="/dashboard/logs/personal-support/places-database" exact component={PersonalSupportPlacesDatabasePage} />
+          <Route path="/dashboard/logs/personal-support/notes-database" exact component={PersonalSupportNotesDatabasePage} />
 
-            <Route path="/dashboard/locations" exact component={LocationsPage} />
-            <Route path="/dashboard/locations/add" exact component={AddLocationPage} />
-            <Route path="/dashboard/locations/:locationId/edit" exact component={EditLocationPage} />
-          </Switch>
-        }
+          <Route path="/dashboard/locations" exact component={LocationsPage} />
+          <Route path="/dashboard/locations/add" exact component={AddLocationPage} />
+          <Route path="/dashboard/locations/:locationId/edit" exact component={EditLocationPage} />
+        </Switch>
       </div>
     </div>
   );

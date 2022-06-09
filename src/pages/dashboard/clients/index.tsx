@@ -5,6 +5,7 @@ import { IconNames } from '@blueprintjs/icons';
 import api from '../../../api';
 
 import Client from '../../../models/client';
+import withLocation from '../../../hoc/withLocation';
 
 import LocationContext from '../../../contexts/location';
 
@@ -20,7 +21,7 @@ const BREADCRUMBS: BreadcrumbProps[] = [
   { text: "Clients" },
 ];
 
-const Content = () => {
+const Clients = () => {
   const [clients, setClients] = useState<Client[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -89,4 +90,4 @@ const Content = () => {
   );
 }
 
-export default Content;
+export default withLocation()(Clients);
