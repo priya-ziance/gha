@@ -23,7 +23,7 @@
     "formik": "^2.2.9",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "lottie-react": "^2.1.0",
+    "lottie-react": "^2.2.1",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
     "query-string": "^4.3.4",
