@@ -111,7 +111,7 @@ const AddExpenseList = (props: AddExpenseListProps) => {
                 });
 
                 resetForm()
-              } catch(e) {
+              } catch(e: any) {
                 addToast({
                   message: getErrorToast(e.message),
                   timeout: 5000,

@@ -167,7 +167,7 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
                 );
 
                 resetForm()
-              } catch(e) {
+              } catch(e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),

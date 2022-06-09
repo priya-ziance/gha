@@ -165,7 +165,7 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
 
                 resetForm()
                 setDocumentFile(null)
-              } catch(e) {
+              } catch(e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),

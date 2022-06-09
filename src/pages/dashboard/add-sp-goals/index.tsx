@@ -203,7 +203,7 @@ const Content = (props: AddGoalProps) => {
 
                 setSelectedSubgoals({});
                 resetForm()
-              } catch(e) {
+              } catch(e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),
