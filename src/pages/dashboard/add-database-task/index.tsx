@@ -87,7 +87,7 @@ const Content = (props: AddGoalProps) => {
 
 
   function refreshPage() {
-    window.location.reload(false);
+    window.location.reload();
   }
 
   const onInstructions = () => setShowInstructions(true);
