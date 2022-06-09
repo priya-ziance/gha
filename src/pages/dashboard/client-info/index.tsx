@@ -40,7 +40,7 @@ const ClientInfo = () => {
         }
 
         setClient(fetchedClient);
-      } catch(e) {}
+      } catch(e: any) {}
 
       setLoading(false);
     })()

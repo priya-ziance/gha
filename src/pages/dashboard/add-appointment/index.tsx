@@ -76,7 +76,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
       try {
         const contacts = await api.clientContacts.getMedicalClientContacts(clientId);
         setMedicalContacts(contacts)
-      } catch(e) {}
+      } catch(e: any) {}
     })()
   }, [clientId])
 
@@ -166,7 +166,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
                 try {
                   let file = await uploadDocument(physicianFile);
                   _values.physician_document = file?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               try {

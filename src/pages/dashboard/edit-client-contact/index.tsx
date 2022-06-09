@@ -32,7 +32,7 @@ const ClientContactInfo = (props: ClientContactPathType) => {
         const fetchedClientContact = await api.clientContacts.getClientContact(clientContactId, { params: { clientId } } );
 
         setClientContact(fetchedClientContact);
-      } catch(e) {
+      } catch(e: any) {
         console.log(e)
       }
 

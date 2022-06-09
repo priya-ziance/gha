@@ -52,7 +52,7 @@ const ExpensesAccount = () => {
         setExpenses(
           await api.expenses.getExpenses(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setLoading(false);
     })()
@@ -65,7 +65,7 @@ const ExpensesAccount = () => {
       try {
         const result = await api.expenses.getBalance(accountType, clientId)
         setExpenseBalance(get(result, 'data.balance', 0) * 100)
-      } catch(e){}
+      } catch(e: any){}
 
       setLoading(false);
     })()

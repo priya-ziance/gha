@@ -44,7 +44,7 @@ const ClientContacts = () => {
         setClientContacts(
           await api.clientContacts.getClientContacts(clientId, { page, pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

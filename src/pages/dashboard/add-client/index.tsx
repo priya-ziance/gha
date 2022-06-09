@@ -235,7 +235,7 @@ const AddClient = (props: AddClientProps) => {
                 try {
                   let signatureFile = await uploadSignature();
                   values.signature = signatureFile?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               values.services = services;

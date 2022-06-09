@@ -32,7 +32,7 @@ const BankStatementInfo = (props: BankStatementPathType) => {
         const fetchedBankStatement = await api.bankStatements.getBankStatement(bankStatementId, { params: { clientId } });
 
         setClient(fetchedBankStatement);
-      } catch(e) {}
+      } catch(e: any) {}
 
       setLoading(false);
     })()

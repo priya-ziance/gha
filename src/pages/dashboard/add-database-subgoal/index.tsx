@@ -50,7 +50,7 @@ const Content = (props: AddGoalProps) => {
     (async () => {
       try {
         setGoals(await api.goals.getGoals(clientId))
-      } catch(e) {
+      } catch(e: any) {
         // TODO: Show error message
       }
     })()
@@ -131,7 +131,7 @@ const Content = (props: AddGoalProps) => {
 
                 // Reset the form
                 resetForm();
-              } catch(e) {
+              } catch(e: any) {
                 addToast({
                   message: 'Something went wrong',
                   intent: 'danger'

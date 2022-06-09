@@ -45,7 +45,7 @@ const AppointmentsPage = () => {
         setAppointment(
           await api.appointments.getAppointments(clientId, { page, pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

@@ -34,7 +34,7 @@ const ClientsInput = (props: ClientsInputProps) => {
         try {
           const results = await api.clients.searchClients(clientQuery)
           setClientResults(results)
-        } catch(e) {}
+        } catch(e: any) {}
       } else {
         setClientResults([])
         debounced.cancel()

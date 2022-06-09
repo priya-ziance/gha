@@ -51,7 +51,7 @@ const InstructionsDialog = (props: InstructionsDialogProps) => {
         try {
           const fetchedInstructions = await api.instructions.getInstructions(clientId, { page, pageSize: PAGE_SIZE })
           setInstructions(fetchedInstructions)
-        } catch(e) {
+        } catch(e: any) {
           console.log(e)
         }
 

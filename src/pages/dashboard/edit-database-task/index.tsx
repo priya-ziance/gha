@@ -36,7 +36,7 @@ const EditTask = (props: GoalPathType) => {
         });
 
         setTask(fetchedTask);
-      } catch(e) {}
+      } catch(e: any) {}
 
       setLoading(false);
     })()

@@ -46,7 +46,7 @@ const DatabaseSubGoals = () => {
     (async () => {
       try {
         setGoals(await api.goals.getGoals(clientId))
-      } catch(e) {
+      } catch(e: any) {
         // TODO: Show error message
       }
     })()
@@ -69,7 +69,7 @@ const DatabaseSubGoals = () => {
             }
           )
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

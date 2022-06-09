@@ -49,7 +49,7 @@ const MonthLog = (props: MonthLogProps) => {
               )
             )
           }
-        } catch(e) {}
+        } catch(e: any) {}
 
         setLoading(false)
         }

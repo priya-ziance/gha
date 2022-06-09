@@ -102,7 +102,7 @@ const LogEntry = (props: LogEntryProps) => {
 
         try {
           setClients(await api.clients.getClientsForUserByService(type, { page, pageSize: PAGE_SIZE }))
-        } catch(e){}
+        } catch(e: any){}
 
         setLoading(false);
       }
@@ -128,7 +128,7 @@ const LogEntry = (props: LogEntryProps) => {
 
           setSelectedAnswers(answers)
         }
-      } catch(e){}
+      } catch(e: any){}
 
       setLoadingTemplate(false);
     })()
@@ -300,7 +300,7 @@ const LogEntry = (props: LogEntryProps) => {
                     
                     try {
                       await handleTemplateUpdate(selectedAnswers, logTemplate, values)
-                    } catch(e) {}
+                    } catch(e: any) {}
 
                     setSubmitting(false)
                   }

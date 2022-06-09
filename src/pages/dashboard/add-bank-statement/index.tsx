@@ -148,7 +148,7 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
                 try {
                   let file = await uploadDocument();
                   values.document = file?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               try {

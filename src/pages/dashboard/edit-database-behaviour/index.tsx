@@ -32,7 +32,7 @@ const GoalInfo = (props: GoalPathType) => {
         const fetchedGoal = await api.behaviours.getBehaviour(behaviourId, { params: { clientId } });
 
         setClient(fetchedGoal);
-      } catch(e) {}
+      } catch(e: any) {}
 
       setLoading(false);
     })()

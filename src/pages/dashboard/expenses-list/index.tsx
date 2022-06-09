@@ -51,7 +51,7 @@ const ExpensesAccount = () => {
         setExpensesLists(
           await api.expensesList.getExpenseLists(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setLoading(false);
     })()

@@ -51,7 +51,7 @@ const BankStatement = () => {
         setBankStatements(
           await api.bankStatements.getBankStatements(clientId, { page, pageSize: PAGE_SIZE, params: { type: accountType } })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setLoading(false);
     })()

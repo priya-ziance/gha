@@ -44,7 +44,7 @@ const DatabaseGoals = () => {
         setGoals(
           await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

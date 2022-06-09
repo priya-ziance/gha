@@ -36,7 +36,7 @@ const Content = () => {
           await api.clients.getClients()
           // await api.clients.getClientsForUser()
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

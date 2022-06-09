@@ -32,7 +32,7 @@ const AppointmentInfo = (props: AppointmentPathType) => {
         const fetchedAppointment = await api.appointments.getAppointment(appointmentId, { params: { clientId } } );
 
         setAppointment(fetchedAppointment);
-      } catch(e) {
+      } catch(e: any) {
         console.log(e)
       }
 

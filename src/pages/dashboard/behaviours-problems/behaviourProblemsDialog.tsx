@@ -61,7 +61,7 @@ const UpdateBehaviourProblemDialog = (props: UpdateBehaviourProblemDialogProps) 
                   })
                   // Reset the form
                   onClose();
-                } catch(e) {
+                } catch(e: any) {
                   addToast({
                     message: 'Something went wrong',
                     intent: 'danger'

@@ -124,14 +124,14 @@ const AddMedication = (props: AddMedicationProps) => {
                 try {
                   let file = await uploadDocument(pillPictureFile);
                   _values.picture = file?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               if (scriptFile) {
                 try {
                   let file = await uploadDocument(scriptFile);
                   _values.script = file?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               try {
@@ -151,7 +151,7 @@ const AddMedication = (props: AddMedicationProps) => {
 
                 // Reset the form
                 resetForm();
-              } catch(e) {
+              } catch(e: any) {
                 addToast({
                   message: 'Something went wrong',
                   intent: Intent.DANGER

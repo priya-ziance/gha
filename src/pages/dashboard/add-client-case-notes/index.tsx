@@ -99,7 +99,7 @@ const CaseNote = (props: CaseNoteProps) => {
                   // Reset the form
                   resetForm();
                 }
-              } catch(e) {
+              } catch(e: any) {
                 addToast({
                   message: 'Something went wrong',
                   intent: 'danger'

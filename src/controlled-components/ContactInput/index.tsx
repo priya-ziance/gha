@@ -40,7 +40,7 @@ const ContactsInput = (props: ContactsInputProps) => {
         try {
           const results = await api.clientContacts.search(userQuery)
           setUserResults(results)
-        } catch(e) {}
+        } catch(e: any) {}
       } else {
         setUserResults([])
         debounced.cancel()

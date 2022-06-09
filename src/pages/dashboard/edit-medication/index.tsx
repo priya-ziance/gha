@@ -32,7 +32,7 @@ const MedicationInfo = (props: MedicationPathType) => {
         const fetchedMedication = await api.medications.getMedication(medicationId, clientId );
 
         setMedication(fetchedMedication);
-      } catch(e) {
+      } catch(e: any) {
         console.log(e)
       }
 

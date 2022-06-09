@@ -38,7 +38,7 @@ const BehavioursAssign = () => {
         setBehaviours(
           await api.behaviours.getBehaviours(clientId, { pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);
@@ -53,7 +53,7 @@ const BehavioursAssign = () => {
         setSelectedBehaviours(
           clientBehaviours.map(clientBehaviour => get(clientBehaviour, 'behaviour.id', ''))
         )
-      } catch(e){}
+      } catch(e: any){}
     })()
   }, []);
 
@@ -91,7 +91,7 @@ const BehavioursAssign = () => {
         message: 'Successfully assigned behaviours',
         intent: 'primary'
       })
-    } catch(e) {
+    } catch(e: any) {
       addToast({
         message: 'Something went wrong',
         intent: 'danger'

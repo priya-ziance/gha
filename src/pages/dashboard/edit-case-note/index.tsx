@@ -32,7 +32,7 @@ const CaseNoteInfo = (props: CaseNotePathType) => {
         const fetchedCaseNote = await api.caseNotes.getCaseNote(caseNoteId, { clientId } );
 
         setCaseNote(fetchedCaseNote);
-      } catch(e) {
+      } catch(e: any) {
         console.log(e)
       }
 

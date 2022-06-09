@@ -45,7 +45,7 @@ const DatabaseBehaviours = () => {
         setBehaviours(
           await api.behaviours.getBehaviours(clientId, { page, pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

@@ -187,7 +187,7 @@ function Dashboard() {
         // TODO: Remove log
         console.log('TOKEN:', token, permissions.compilePermissions(tokenPermissions));
         client.defaults.setToken(token)
-      } catch(e) {}
+      } catch(e: any) {}
 
       setFetchingToken(false)
     }

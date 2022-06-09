@@ -160,7 +160,7 @@ const MedDestructionPage = () => {
           if (_client.profilePicture) {
             await _client.profilePicture.loadFile();
           }
-        } catch(e) {}
+        } catch(e: any) {}
       }
 
       setLoadingClient(false);
@@ -175,7 +175,7 @@ const MedDestructionPage = () => {
         setGoals(
           await api.goals.getGoals(clientId, { page, pageSize: PAGE_SIZE })
         )
-      } catch(e){}
+      } catch(e: any){}
 
       setTimeout(() => {
         setLoading(false);

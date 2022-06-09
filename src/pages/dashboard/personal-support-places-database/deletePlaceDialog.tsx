@@ -37,7 +37,7 @@ const DeletePlaceDialog = (props: DeletePlaceDialogProps) => {
         message: 'Place Deleted',
         intent: 'primary'
       })
-    } catch(e) {
+    } catch(e: any) {
       addToast({
         message: 'Something went wrong',
         intent: 'danger'

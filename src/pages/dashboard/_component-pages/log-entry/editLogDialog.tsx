@@ -69,7 +69,7 @@ const EditLog = (props: EditLogProps) => {
         })
         onClose()
       }
-    } catch(e) {}
+    } catch(e: any) {}
 
     setSubmitting(false);
   }

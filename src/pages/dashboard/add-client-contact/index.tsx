@@ -99,7 +99,7 @@ const AddClientContact = (props: AddClientContactProps) => {
                   // Reset the form
                   resetForm();
                   }
-              } catch(e) {
+              } catch(e: any) {
                 addToast({
                   message: 'Something went wrong',
                   intent: Intent.DANGER

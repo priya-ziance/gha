@@ -40,7 +40,7 @@ const UsersInput = (props: UsersInputProps) => {
         try {
           const results = await api.users.search(userQuery)
           setUserResults(results)
-        } catch(e) {}
+        } catch(e: any) {}
       } else {
         setUserResults([])
         debounced.cancel()

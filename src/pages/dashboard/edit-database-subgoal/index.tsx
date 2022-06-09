@@ -32,7 +32,7 @@ const GoalInfo = (props: GoalPathType) => {
         const fetchedSubGoal = await api.subgoals.getSubGoal(subGoalId, { params: { clientId } });
 
         setSubGoal(fetchedSubGoal);
-      } catch(e) {}
+      } catch(e: any) {}
 
       setLoading(false);
     })()

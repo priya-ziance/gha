@@ -39,7 +39,7 @@ const ExpenseInfo = (props: ExpensePathType) => {
         }
 
         setExpense(fetchedExpense);
-      } catch(e) {
+      } catch(e: any) {
         setError(e)
       }
 

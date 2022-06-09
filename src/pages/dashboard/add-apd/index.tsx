@@ -93,7 +93,7 @@ const Content = () => {
 
               try {
                 await api.clients.createClient(values);
-              } catch(e) {}
+              } catch(e: any) {}
 
               setSubmitting(false);
             }}

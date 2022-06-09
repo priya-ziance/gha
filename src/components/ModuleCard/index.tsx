@@ -45,7 +45,7 @@ const ModuleCard = (_props: CardProps & ModuleCardProps) => {
         try {
           await imageFile.loadFile();
           setCardImage(imageFile.publicUrl);
-        } catch(e) {}
+        } catch(e: any) {}
 
         setImageLoading(false)
       }

@@ -91,7 +91,7 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
         if (onSetClient){
           onSetClient(client)
         }
-      } catch(e) {}
+      } catch(e: any) {}
 
       if (setLoadingClient){
         setLoadingClient(false)

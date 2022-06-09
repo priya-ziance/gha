@@ -37,7 +37,7 @@ const DeletenoteDialog = (props: DeletenoteDialogProps) => {
         message: 'note Deleted',
         intent: 'primary'
       })
-    } catch(e) {
+    } catch(e: any) {
       addToast({
         message: 'Something went wrong',
         intent: 'danger'

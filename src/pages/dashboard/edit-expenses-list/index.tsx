@@ -35,7 +35,7 @@ const ExpensesListInfo = (props: ExpensesListPathType) => {
         const fetchedExpensesList = await api.expensesList.getExpenseList(expenseListId, { params: { clientId } });
 
         setExpensesList(fetchedExpensesList);
-      } catch(e) {
+      } catch(e: any) {
         setError(e)
       }
 

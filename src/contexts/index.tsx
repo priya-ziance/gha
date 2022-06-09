@@ -72,7 +72,7 @@ function Contexts(props: any) {
 
     try {
       setLocations(await api.locations.getLocations())
-    } catch(e) {}
+    } catch(e: any) {}
 
     setLoadingLocations(false);
   }

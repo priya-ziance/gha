@@ -93,7 +93,7 @@ const AddNoteDialog = (props: AddNoteDialogProps) => {
                   // Reset the form
                   resetForm();
                   onClose()
-                } catch(e) {
+                } catch(e: any) {
                   addToast({
                     message: 'Something went wrong',
                     intent: 'danger'

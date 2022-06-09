@@ -145,7 +145,7 @@ const ExpensesAccount = (props: ExpensesAccountProps) => {
                 try {
                   let file = await uploadDocument();
                   values.document = file?.id;
-                } catch(e) {}
+                } catch(e: any) {}
               }
 
               try {
