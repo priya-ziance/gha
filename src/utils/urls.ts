@@ -10,6 +10,7 @@ type OPTIONS_TYPE = {
   behaviourId?: string,
   expenseId?: string,
   expensesListId?: string,
+  locationId?: string,
   medicationId?: string,
   goalId?: string,
   subGoalId?: string,
@@ -43,6 +44,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/expense-account/add`;
     case 'add-expenses-list':
       return `${clientBase}/expenses/expenses-list/add`;
+    case 'add-location':
+      return `${dashboardBase}/locations/add`;
     case 'add-medication':
       return `${clientBase}/medication/medication-list/add`;
     case 'add-sp-goals':
@@ -93,6 +96,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/${options.expenseId}/edit`;
     case 'edit-expenses-list':
       return `${clientBase}/expenses/expenses-list/${options.expensesListId}/edit`;
+    case 'edit-location':
+      return `${dashboardBase}/locations/${options.locationId}/edit`;
     case 'edit-medication':
       return `${clientBase}/medication/medication-list/${options.medicationId}/edit`;
     case 'expenses':
@@ -123,6 +128,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs/life-skills/notes-database`
     case 'logs':
       return `${dashboardBase}/logs`;
+    case 'locations':
+      return `${dashboardBase}/locations`;
     case 'med-destruction':
       return `${clientBase}/medication/med-destruction`;
     case 'med-pass':
@@ -176,6 +183,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Expenses List';
     case 'add-medication':
       return 'Add Client Medication';
+    case 'add-location':
+      return 'Add Location'
     case 'add-sp-goals':
       return `Add SP Goals`;
     case 'apd':
@@ -224,6 +233,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit Expense';
     case 'edit-expenses-list':
       return 'Edit Expense List';
+    case 'edit-location':
+      return 'Edit Location'
     case 'expenses':
       return 'Expenses';
     case 'expenses-account':
@@ -252,6 +263,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Life Skills Places Database'
     case 'life-skills-notes-database':
       return 'Life Skills Notes Database'
+    case 'locations':
+      return 'Locations'
     case 'logs':
       return 'Logs';
     case 'med-destruction':

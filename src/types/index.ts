@@ -14,6 +14,7 @@ export type PAGE_TYPES =
   'add-database-task' |
   'add-expenses-account' |
   'add-expenses-list' |
+  'add-location' |
   'add-medication' |
   'add-sp-goals' |
   'apd' |
@@ -39,6 +40,7 @@ export type PAGE_TYPES =
   'edit-database-task' |
   'edit-expense-account' |
   'edit-expenses-list' |
+  'edit-location' |
   'edit-medication' |
   'expenses' |
   'expenses-account' |
@@ -53,6 +55,7 @@ export type PAGE_TYPES =
   'life-skills-logs' |
   'life-skills-places-database' |
   'life-skills-notes-database' |
+  'locations' |
   'logs' |
   'med-destruction' |
   'med-pass' |
@@ -108,6 +111,12 @@ export type CASE_NOTE_FIELDS_TYPE =
   'notes' |
   'significant_event' |
   'significant_event_notes'
+
+export type LOCATION_FIELDS_TYPE =
+  'phoneNumber' |
+  'address' |
+  'city' |
+  'country'
 
 export type CLIENT_CONTACT_FIELDS_TYPE = 
   'active' |
@@ -307,6 +316,14 @@ export type BEHAVIOUR_FIELDS_FORM_TYPE = {
 
 export type CASE_NOTE_FIELDS_FORM_TYPE = {
   [key in CASE_NOTE_FIELDS_TYPE]?: {
+    name: string,
+    default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type LOCATION_FIELDS_FORM_TYPE = {
+  [key in LOCATION_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
     validation: any
@@ -626,6 +643,7 @@ export interface ILocationModel {
   phoneNumber?: string
   createdAt?: string;
   updatedAt?: string;
+  location: ILocation;
 }
 
 export interface ILogModel {

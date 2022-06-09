@@ -329,8 +329,31 @@ class LocationApi {
     this.normalizer = new Normalizer<ILocationModel, ILocation>(Models.Location)
   }
 
-  async getLocations() {
-    const locationsResult = await client.get('/locations');
+  async getLocation(locationId: string, params = {}) {
+    const locationResult = await client.get(`/locations/${locationId}`, params);
+  
+    return this.normalizer.normalize(locationResult.data);
+  }
+
+  async createLocation(body = {}) {
+    const locationResult = await client.post('/locations', body);
+  
+    return this.normalizer.normalize(locationResult.data);
+  }
+
+  async updateLocation(locationId = '', body = {}, params = {}) {
+    const locationResult = await client.patch(`/locations/${locationId}`, body, { params });
+  
+    return this.normalizer.normalize(locationResult.data);
+  }
+
+  async getLocations(options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const params = get(options, 'params', {});
+    const locationsResult = await client.get(`/locations`, {
+      page,
+      ...params
+    });
   
     return this.normalizer.normalizeArray(locationsResult.data.contents);
   }
