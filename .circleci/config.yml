@@ -44,7 +44,62 @@ jobs:
           template: basic_fail_1
       - slack/notify:
           event: pass
-          template: success_tagged_deploy_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Deployment Successful* :tada:"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\nComputer (laptop)"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*When*:\n $(date +'%m/%d/%Y %T')"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${CIRCLE_BRANCH}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Triggered By:*\n${CIRCLE_USERNAME}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "You can view the build here"
+                  },
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Build",
+                      "emoji": true
+                    },
+                    "value": "click_me_123",
+                    "url": "${CIRCLE_BUILD_URL}",
+                    "action_id": "button-action"
+                  }
+                }
+              ]
+            }
 
 workflows:
   # Below is the definition of your workflow.
