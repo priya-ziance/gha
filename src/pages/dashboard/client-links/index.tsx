@@ -32,7 +32,7 @@ const Content = () => {
         />
         <div className='clients__container'>
           <Row>
-            {links.map(link => {
+            {links.filter(link => link.interactive).map(link => {
               return (
                 <ModuleCard
                   key={link.title}

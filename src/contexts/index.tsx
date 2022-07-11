@@ -21,7 +21,7 @@ const storage = new Storage();
 
 
 function handleResize(entries: IResizeEntry[]) {
-  console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));
+  // console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));
 }
 
 const AppToaster = Toaster.create({
