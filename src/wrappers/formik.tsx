@@ -9,12 +9,13 @@ import {
   FormGroup,
   FormItemSelect,
   InputGroup,
+  PhoneInput,
   Switch,
   NumericInput,
   TextArea
 } from '../components';
-
 import { getMomentFormatter, capitalizeFirstLetter } from '../utils/helpers'
+import AutocompleteInput, { AutocompletResult } from '../controlled-components/AutocompleteInput';
 
 
 interface IInputOptions {
@@ -31,6 +32,8 @@ interface ChildrenProps {
     getSelectFieldInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTextAreaInputFormGroup: (key: string, props?: IInputOptions) => {};
     getTimeInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getAutocompleteInputFormGroup: (key: string, props?: IInputOptions) => {};
+    getPhoneInputFormGroup: (key: string, props?: IInputOptions) => {};
   };
   formikProps: FormikProps<any>;
 }
@@ -97,19 +100,25 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     )
   }
 
-  const getDateInputFormGroup = (key: string) => (
-    <FormGroup
-      intent={getFormIntent(errors[key])}
-      label={get(fields, key, { name: '' }).name}
-      helperText={errors[key]}
-    >
-      <DateInput
-        value={values[key] ? moment(values[key]).toDate() : null}
-        onChange={onFormDateChange(key)}
-        {...getMomentFormatter('LL')}
-      />
-    </FormGroup>
-  );
+  const getDateInputFormGroup = (key: string) => {
+    const minDate = new Date();
+    minDate.setFullYear(1900);
+
+    return (
+      <FormGroup
+        intent={getFormIntent(errors[key])}
+        label={get(fields, key, { name: '' }).name}
+        helperText={errors[key]}
+      >
+        <DateInput
+          minDate={minDate}
+          value={values[key] ? moment(values[key]).toDate() : null}
+          onChange={onFormDateChange(key)}
+          {...getMomentFormatter('LL')}
+        />
+      </FormGroup>
+    )
+  };
 
   const getTimeInputFormGroup = (key: string, props?: IInputOptions) => {
     const cProps = get(props, 'childProps', {});
@@ -169,6 +178,51 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     );
   }
 
+  const getAutocompleteInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {}) as any;
+
+    const onSelect = (result: AutocompletResult) => {
+      setFieldValue(key, result.address);
+    }
+    
+    return (
+      <FormGroup
+        intent={getFormIntent(errors[key])}
+        label={get(fields, key, { name: '' }).name}
+        labelFor={`text-area__${key}`}
+        helperText={errors[key]}
+      >
+        <AutocompleteInput
+          defaultAddress={cProps.defaultAddress}
+          onSelect={onSelect}
+        />
+      </FormGroup>
+    );
+  }
+
+  const getPhoneInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+    
+    return (
+      <FormGroup
+        intent={getFormIntent(errors[key])}
+        label={get(fields, key, { name: '' }).name}
+        labelFor={`phone-input__${key}`}
+        helperText={errors[key]}
+      >
+        <PhoneInput
+          id={`phone-input__${key}`}
+          intent={getFormIntent(errors[key])}
+          onPhone={(value: string) => {
+            setFieldValue(key, value)
+          }}
+          value={values[key]}
+          {...cProps}
+        />
+      </FormGroup>
+    );
+  }
+
   const getSelectFieldInputFormGroup = (key: string, props?: IInputOptions) => {
     const childProps = props?.childProps
     const selectOptions = get(childProps, 'selectOptions', [])
@@ -198,8 +252,9 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
 
     return (
       <FormGroup
-        intent={Intent.PRIMARY}
+        intent={getFormIntent(errors[key])}
         label={get(fields, key, { name: '' }).name}
+        helperText={errors[key]}
       >
         <FormItemSelect
           buttonText={btnTxt}
@@ -223,7 +278,9 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
           getSelectFieldInputFormGroup,
           getSwitchInputFormGroup,
           getTextAreaInputFormGroup,
-          getTimeInputFormGroup
+          getTimeInputFormGroup,
+          getAutocompleteInputFormGroup,
+          getPhoneInputFormGroup
         },
         formikProps
       })}

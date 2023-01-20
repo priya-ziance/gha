@@ -27,11 +27,6 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string().label('Contact Type').required(),
   },
-  date_of_birth: {
-    name: 'Date Of Birth',
-    default: null,
-    validation: yup.string().label('Date Of Birth').required().nullable(),
-  },
   email: {
     name: 'Email',
     default: '',
@@ -55,7 +50,7 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   phone: {
     name: 'Phone #',
     default: '',
-    validation: yup.string().required(),
+    validation: yup.string(),
   },
   medical_contact: {
     name: 'Medical Contact',

@@ -21,6 +21,7 @@ import NoLocation from './NoLocation';
 import NumericInput from './NumericInput';
 import PageHeading from './PageHeading';
 import Pagination from './Pagination';
+import PhoneInput from './PhoneInput';
 import Row from './Row';
 import SignaturePad from './SignaturePad';
 import Switch from './Switch';
@@ -51,6 +52,7 @@ export {
   NumericInput,
   PageHeading,
   Pagination,
+  PhoneInput,
   Row,
   SignaturePad,
   Switch,

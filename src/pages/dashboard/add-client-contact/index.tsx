@@ -7,20 +7,13 @@ import pick from 'lodash/pick';
 import { IClientContactModel } from '../../../types';
 
 import api from '../../../api';
-
 import URLS from '../../../utils/urls';
-
 import { Button, Col, PageHeading, Row } from '../../../components';
-
 import ClientContext from '../../../contexts/client';
 import ToastsContext from '../../../contexts/toasts';
-
 import * as helpers from './helpers';
-
 import formikWrapper from '../../../wrappers/formik';
-
 import { CONTACT_TYPES, FIELDS } from './constants';
-
 import './index.scss';
 
 
@@ -112,15 +105,17 @@ const AddClientContact = (props: AddClientContactProps) => {
 
             {formikWrapper(({
               wrapperProps: {
-                getDateInputFormGroup,
+                getNumericInputFormGroup,
                 getTextAreaInputFormGroup,
                 getSelectFieldInputFormGroup,
                 getSwitchInputFormGroup,
-                getInputFormGroup
+                getInputFormGroup,
+                getAutocompleteInputFormGroup,
+                getPhoneInputFormGroup
               },
               formikProps: {
                 handleSubmit,
-                isSubmitting
+                isSubmitting,
               }
             }) => {
               return (
@@ -137,21 +132,18 @@ const AddClientContact = (props: AddClientContactProps) => {
                   </Row>
                   <Row>
                     <Col xs={12} md={6}>
-                      {getDateInputFormGroup('date_of_birth')}
-                    </Col>
-                    <Col xs={12} md={6}>
-                      {getInputFormGroup('address')}
+                      {getAutocompleteInputFormGroup('address')}
                     </Col>
                   </Row>
                   <Row>
                     <Col xs={12} md={4}>
-                      {getInputFormGroup('phone')}
+                      {getPhoneInputFormGroup('phone', { childProps: { type: "tel" } })}
                     </Col>
                     <Col xs={12} md={4}>
-                      {getInputFormGroup('mobile')}
+                      {getPhoneInputFormGroup('mobile', { childProps: { type: "tel" } })}
                     </Col>
                     <Col xs={12} md={4}>
-                      {getInputFormGroup('fax')}
+                      {getPhoneInputFormGroup('fax', { childProps: { type: "tel" } })}
                     </Col>
                   </Row>
                   <Row>
