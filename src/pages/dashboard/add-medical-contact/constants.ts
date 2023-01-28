@@ -11,7 +11,7 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   },
   medical_contact: {
     name: 'Medical Contact',
-    default: false,
+    default: true,
     validation: yup.bool(),
   },
   address: {

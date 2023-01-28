@@ -12,6 +12,7 @@ type OPTIONS_TYPE = {
   expensesListId?: string,
   locationId?: string,
   medicationId?: string,
+  medicalContactId?: string,
   goalId?: string,
   subGoalId?: string,
   taskId?: string
@@ -22,6 +23,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
   const clientBase = `${dashboardBase}/clients/${options.clientId}`;
 
   switch (page) {
+    case 'admins':
+      return `${dashboardBase}/admins`;
     case 'add-apd':
       return `${clientBase}/apd/add`;
     case 'add-appointment':
@@ -48,6 +51,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/locations/add`;
     case 'add-medication':
       return `${clientBase}/medication/medication-list/add`;
+    case 'add-medical-contact':
+      return `${dashboardBase}/admins/medical-contacts/add-medical-contact`;
     case 'add-sp-goals':
       return `${clientBase}/goals/sp-goals/add`;
     case 'apd':
@@ -100,6 +105,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/locations/${options.locationId}/edit`;
     case 'edit-medication':
       return `${clientBase}/medication/medication-list/${options.medicationId}/edit`;
+    case 'edit-medical-contact':
+      return `${dashboardBase}/admins/medical-contacts/${options.medicalContactId}/edit`
     case 'expenses':
       return `${clientBase}/expenses`;
     case 'expenses-account':
@@ -130,6 +137,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs`;
     case 'locations':
       return `${dashboardBase}/locations`;
+    case 'medical-contacts':
+      return `${dashboardBase}/admins/medical-contacts`
     case 'med-destruction':
       return `${clientBase}/medication/med-destruction`;
     case 'med-pass':
@@ -159,6 +168,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
 
 const getPagePathName = (page: PAGE_TYPES) => {
   switch (page) {
+    case 'admins':
+      return 'Admins';
     case 'add-apd':
       return 'Add APD';
     case 'add-appointment':
@@ -183,6 +194,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Expenses List';
     case 'add-medication':
       return 'Add Client Medication';
+    case 'add-medical-contact':
+      return 'Add Medical Contact';
     case 'add-location':
       return 'Add Location'
     case 'add-sp-goals':
@@ -235,6 +248,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Edit Expense List';
     case 'edit-location':
       return 'Edit Location'
+    case 'edit-medical-contact':
+      return 'Edit Medical Contact';
     case 'expenses':
       return 'Expenses';
     case 'expenses-account':
@@ -267,6 +282,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Locations'
     case 'logs':
       return 'Logs';
+    case 'medical-contacts':
+      return 'Medical Contacts'
     case 'med-destruction':
       return 'Medication Destruction List';
     case 'med-pass':

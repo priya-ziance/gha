@@ -170,8 +170,10 @@ const AddMedication = (props: AddMedicationProps) => {
               isSubmitting,
               setFieldValue
             }) => {
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
+              const onFormDateChange = (field: string) => (date: Date | null) => {
+                if (date) {
+                  setFieldValue(field, moment(date).toISOString());
+                }
               }
 
               const onNewTimes = (times: string[]) => {

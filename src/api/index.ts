@@ -205,13 +205,8 @@ class ClientContactApi {
     this.normalizer = new Normalizer<IClientContactModel, IClientContact>(Models.ClientContact)
   }
 
-  async getMedicalClientContacts(clientId: string, options?: OPTIONS_TYPE) {
-    const page = get(options, 'page', 0);
-  
-    const clientContactsResult = await client.get(`/client_contacts/medicalContacts`, {
-      clientId,
-      page
-    });
+  async getMedicalClientContacts() {  
+    const clientContactsResult = await client.get('/client_contacts/medicalContacts');
   
     return this.normalizer.normalizeArray(clientContactsResult.data);
   }
@@ -235,8 +230,22 @@ class ClientContactApi {
     return this.normalizer.normalize(clientContactResult.data);
   }
 
+  async getMedicalContact(clientContactId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, 'params', {});
+
+    const clientContactResult = await client.get(`/client_contacts/medicalcontact/${clientContactId}`, params);
+  
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+
   async createClientContact(body = {}) {
     const clientContactResult = await client.post('/client_contacts', body);
+  
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+
+  async createMedicalContact(body = {}) {
+    const clientContactResult = await client.post('/client_contacts/medicalcontact', body);
   
     return this.normalizer.normalize(clientContactResult.data);
   }
@@ -252,6 +261,12 @@ class ClientContactApi {
 
   async updateClientContact(clientContactId = '', body = {}) {
     const clientContactResult = await client.patch(`/client_contacts/${clientContactId}`, body);
+  
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+
+  async updateMedicalContact(clientContactId = '', body = {}) {
+    const clientContactResult = await client.patch(`/client_contacts/medicalcontact/${clientContactId}`, body);
   
     return this.normalizer.normalize(clientContactResult.data);
   }

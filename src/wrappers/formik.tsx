@@ -55,11 +55,15 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     handleChange,
     setFieldValue
   } = formikProps;
-  const onFormDateChange = (field: string) => (date: Date) => {
-    setFieldValue(field, moment(date).toISOString());
+  const onFormDateChange = (field: string) => (date: Date | null) => {
+    if (date) {
+      setFieldValue(field, moment(date).toISOString());
+    }
   }
   
-  const getSwitchInputFormGroup = (key: string) => {
+  const getSwitchInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+
     const onChange = (e: any) => {
       setFieldValue(key, get(e, 'target.checked'))
     }
@@ -74,6 +78,7 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
           id={`switch-input__${key}`}
           large checked={values[key]}
           onChange={onChange}
+          {...cProps}
         />
       </FormGroup> 
     )
@@ -139,21 +144,26 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     )
   };
 
-  const getTextAreaInputFormGroup = (key: string) => (
-    <FormGroup
-      intent={getFormIntent(errors[key])}
-      label={get(fields, key, { name: '' }).name}
-      labelFor={`text-area__${key}`}
-      helperText={errors[key]}
-    >
-      <TextArea
-        id={`text-area__${key}`}
+  const getTextAreaInputFormGroup = (key: string, props?: IInputOptions) => {
+    const cProps = get(props, 'childProps', {});
+    return (
+
+      <FormGroup
         intent={getFormIntent(errors[key])}
-        onChange={handleChange(key)}
-        value={values[key]}
-      />
-    </FormGroup>
-  );
+        label={get(fields, key, { name: '' }).name}
+        labelFor={`text-area__${key}`}
+        helperText={errors[key]}
+      >
+        <TextArea
+          id={`text-area__${key}`}
+          intent={getFormIntent(errors[key])}
+          onChange={handleChange(key)}
+          value={values[key]}
+          {...cProps}
+        />
+      </FormGroup>
+    )
+  };
 
   const getNumericInputFormGroup = (key: string, props?: IInputOptions) => {
     const cProps = get(props, 'childProps', {});
@@ -179,7 +189,7 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
   }
 
   const getAutocompleteInputFormGroup = (key: string, props?: IInputOptions) => {
-    const cProps = get(props, 'childProps', {}) as any;
+    const { defaultAddress, ...otherProps } = get(props, 'childProps', {}) as any;
 
     const onSelect = (result: AutocompletResult) => {
       setFieldValue(key, result.address);
@@ -193,8 +203,9 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
         helperText={errors[key]}
       >
         <AutocompleteInput
-          defaultAddress={cProps.defaultAddress}
+          defaultAddress={defaultAddress}
           onSelect={onSelect}
+          {...otherProps}
         />
       </FormGroup>
     );
@@ -263,6 +274,7 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
           onFormSelectChange={(value: any) => {
             setFieldValue(key, value)
           }}
+          disabled={get(childProps, 'disabled')}
         />
       </FormGroup>
     )

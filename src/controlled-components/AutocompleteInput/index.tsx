@@ -1,5 +1,5 @@
 import { usePlacesWidget } from "react-google-autocomplete";
-import { InputGroup } from "@blueprintjs/core";
+import { InputGroup, InputGroupProps } from "@blueprintjs/core";
 
 import { GOOGLE_API_KEY } from '../../utils/config';
 
@@ -45,13 +45,14 @@ const normalizePlaceResult = (result: any) => {
   }
 }
 
-const AutocompleteInput = (props: AutocompleteInputProps) => {
-  const { ref } = usePlacesWidget({
+const AutocompleteInput = (props: AutocompleteInputProps & InputGroupProps) => {
+  const { onSelect, defaultAddress, ...otherProps } = props;
+  const { ref } = usePlacesWidget<InputGroup>({
     apiKey: GOOGLE_API_KEY,
     onPlaceSelected: (place) => {
       const normRes = normalizePlaceResult(place)
 
-      props.onSelect({
+      onSelect({
         address: normRes.address,
         city: normRes.city,
         country: normRes.country,
@@ -61,9 +62,10 @@ const AutocompleteInput = (props: AutocompleteInputProps) => {
     options: {
       types: ["street_address"],
     },
-  })
+  });
+
   return (
-    <InputGroup type="text" inputRef={ref} />
+    <InputGroup type="text" ref={ref} {...otherProps}/>
   )
 };
 

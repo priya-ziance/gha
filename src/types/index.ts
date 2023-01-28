@@ -2,6 +2,7 @@ import { IToasterProps, IToastProps } from '@blueprintjs/core';
 import { Moment } from 'moment';
 
 export type PAGE_TYPES =
+  'admins' |  
   'add-apd' |
   'add-appointment' |
   'add-bank-statement' |
@@ -17,6 +18,7 @@ export type PAGE_TYPES =
   'add-location' |
   'add-medication' |
   'add-sp-goals' |
+  'add-medical-contact' |
   'apd' |
   'appointments' |
   'bank-statement' |
@@ -42,6 +44,7 @@ export type PAGE_TYPES =
   'edit-expenses-list' |
   'edit-location' |
   'edit-medication' |
+  'edit-medical-contact' |
   'expenses' |
   'expenses-account' |
   'expenses-list' |
@@ -58,6 +61,7 @@ export type PAGE_TYPES =
   'locations' |
   'logs' |
   'med-destruction' |
+  'medical-contacts' |
   'med-pass' |
   'medication' |
   'medication-list' |
@@ -527,6 +531,8 @@ export interface IClientContactModel {
   phone?: string;
   medicalContact?: boolean;
   mobile?: string;
+  fax?: string;
+  email?: string;
   notes?: string;
   clientContact: IClientContact;
 }

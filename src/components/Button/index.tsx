@@ -2,10 +2,10 @@ import { ReactElement } from 'react';
 import { Button, ButtonProps as _ButtonProps } from '@blueprintjs/core';
 
 interface CustomButtonProps {
-  children: ReactElement | string
+  children?: ReactElement | string
 }
 
-const CustomButton = (props: _ButtonProps | CustomButtonProps) => {
+const CustomButton = (props: _ButtonProps & CustomButtonProps) => {
   return (
     <Button className='gha__button' {...props} />
   )

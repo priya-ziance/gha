@@ -34,7 +34,6 @@ import * as helpers from './helpers';
 
 import './index.scss';
 import { IClientContactModel } from '../../../types';
-import { ClientError } from '../../../api/client';
 
 
 interface AddAppointmentProps {
@@ -51,6 +50,8 @@ const AddAppointment = (props: AddAppointmentProps) => {
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
+  
+  // TODO: use useMemeo to optimize this
   const medicalContactsObj = Object.assign({}, ...medicalContacts.map(medicalContact => {
     return {
       [medicalContact.id]: medicalContact
@@ -74,11 +75,11 @@ const AddAppointment = (props: AddAppointmentProps) => {
   useEffect(() => {
     (async () => {
       try {
-        const contacts = await api.clientContacts.getMedicalClientContacts(clientId);
+        const contacts = await api.clientContacts.getMedicalClientContacts();
         setMedicalContacts(contacts)
       } catch(e: any) {}
     })()
-  }, [clientId])
+  }, [])
 
 
   const getErrorToast = (message: string) => {
@@ -162,6 +163,7 @@ const AddAppointment = (props: AddAppointmentProps) => {
 
               setSubmitting(true);
 
+              // Upload the file before attempting to create the appointment
               if (physicianFile) {
                 try {
                   let file = await uploadDocument(physicianFile);

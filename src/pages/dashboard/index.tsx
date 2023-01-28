@@ -38,6 +38,10 @@ import PersonalSupportPage from './personal-support';
 import PersonalSupportLogsPage from './personal-support-logs';
 import PersonalSupportPlacesDatabasePage from './personal-support-places-database';
 import PersonalSupportNotesDatabasePage from './personal-support-notes-database';
+import AdminsPage from './admins';
+import MedicalContactsPage from './medical-contacts';
+import AddMedicalContactPage from './add-medical-contact';
+import EditMedicalContactPage from './edit-medical-contact';
 
 import ClientNavigation from './client-navigation';
 
@@ -233,6 +237,11 @@ function Dashboard() {
           <Route path="/dashboard/locations" exact component={LocationsPage} />
           <Route path="/dashboard/locations/add" exact component={AddLocationPage} />
           <Route path="/dashboard/locations/:locationId/edit" exact component={EditLocationPage} />
+          
+          <Route path="/dashboard/admins" exact component={AdminsPage} />
+          <Route path="/dashboard/admins/medical-contacts" exact component={MedicalContactsPage} />
+          <Route path="/dashboard/admins/medical-contacts/add-medical-contact" exact component={AddMedicalContactPage} />
+          <Route path="/dashboard/admins/medical-contacts/:medicalContactId/edit" exact component={EditMedicalContactPage} />
         </Switch>
       </div>
     </div>

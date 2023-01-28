@@ -1,5 +1,5 @@
-import { Intent, MenuItem } from '@blueprintjs/core';
-import { Select, IItemRendererProps } from '@blueprintjs/select';
+import { Intent, Menu, MenuItem } from '@blueprintjs/core';
+import { Select2, ItemListRendererProps } from '@blueprintjs/select';
 
 import { Button, FormGroup } from '..';
 
@@ -11,13 +11,40 @@ interface FormItemSelectProps {
   label?: string,
   menuRenderer: (item: any) => string,
   onFormSelectChange: (item: any) => void
-  required?: boolean
+  required?: boolean,
+  disabled?: boolean
 }
 
 const FormItemSelect = (props: FormItemSelectProps) => {
-  const { buttonText, defaultButtonText, items, label, menuRenderer, onFormSelectChange, required } = props;
+  const { buttonText, defaultButtonText, disabled, items, label, menuRenderer, onFormSelectChange, required } = props;
 
-  const formSelectItemRenderer = (item: any, props: IItemRendererProps) => {
+  const listRenderer =  (props: ItemListRendererProps<string>) => {
+    const { items, renderItem, menuProps } = props;
+
+    const renderedItems = items.map(renderItem).filter(item => item != null);
+    return (
+        <Menu
+          role="listbox"
+          style={{
+            marginTop: -20,
+            marginLeft: -10
+          }}
+          {...menuProps}
+        >
+            <div
+              style={{
+                maxHeight: 300,
+                overflow: "scroll",
+                border: "1px solid rgba(0,0,0,0.1)"
+              }}
+            >
+              {renderedItems}
+            </div>
+        </Menu>
+    );
+  };
+
+  const formSelectItemRenderer = (item: any, props: any) => {
     return (
       <MenuItem
           text={menuRenderer(item)}
@@ -28,8 +55,6 @@ const FormItemSelect = (props: FormItemSelectProps) => {
     )
   }
 
-  const FormSelect = Select.ofType<any>();
-
   return (
     <FormGroup
       intent={Intent.PRIMARY}
@@ -37,16 +62,18 @@ const FormItemSelect = (props: FormItemSelectProps) => {
       labelFor="text-input"
       labelInfo={required ? "(required)" : ''}
     >
-      <FormSelect
+      <Select2
           items={items}
           filterable={false}
           itemRenderer={formSelectItemRenderer}
           noResults={<MenuItem disabled={true} text="No results." />}
           onItemSelect={onFormSelectChange}
+          itemListRenderer={listRenderer}
+          disabled={disabled}
       >
           {/* children become the popover target; render value here */}
           <Button text={buttonText || defaultButtonText} rightIcon="double-caret-vertical" />
-      </FormSelect>
+      </Select2>
     </FormGroup>
   )
 }

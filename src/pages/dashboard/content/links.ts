@@ -13,6 +13,12 @@ export const getLinks = () => {
     },
     {
       description: '',
+      title: 'Admins',
+      image: ClientsImage,
+      path: URLS.getPagePath('admins')
+    },
+    {
+      description: '',
       title: 'Logs',
       image: ListImage,
       path: URLS.getPagePath('logs')

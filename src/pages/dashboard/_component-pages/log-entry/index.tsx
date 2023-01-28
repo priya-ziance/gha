@@ -187,8 +187,10 @@ const LogEntry = (props: LogEntryProps) => {
     setSelectedLogToEdit(null);
   }
 
-  const onLogDate = (date: Date) => {
-    setLogDate(date);
+  const onLogDate = (date: Date | null) => {
+    if (date) {
+      setLogDate(date);
+    }
     setPage(0);
   }
 

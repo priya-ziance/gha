@@ -225,8 +225,10 @@ const Content = (props: AddGoalProps) => {
               isSubmitting,
               setFieldValue
             }) => {
-              const onFormDateChange = (field: string) => (date: Date) => {
-                setFieldValue(field, moment(date).toISOString());
+              const onFormDateChange = (field: string) => (date: Date | null) => {
+                if (date) {
+                  setFieldValue(field, moment(date).toISOString());
+                }
               }
 
               const onFormSelectChange = (field: string) => (value: any) => {

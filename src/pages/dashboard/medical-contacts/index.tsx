@@ -25,26 +25,18 @@ import {
 
 import './index.scss';
 
-const PAGE_SIZE = 10;
-
-const ClientContacts = () => {
-  const [clientContacts, setClientContacts] = useState<IClientContactModel[] | []>([]);
-  const [page, setPage] = useState(0);
+const MedicalClientContacts = () => {
+  const [clientContacts, setMedicalClientContacts] = useState<IClientContactModel[] | []>([]);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
-  const hasNextPage = clientContacts.length === PAGE_SIZE;
-  const hasPrevPage = page > 0;
-
-  console.log(clientContacts)
 
   useEffect(() => {
     (async () => {
       setLoading(true);
 
       try {
-        setClientContacts(
-          await api.clientContacts.getClientContacts(clientId, { page, pageSize: PAGE_SIZE })
+        setMedicalClientContacts(
+          await api.clientContacts.getMedicalClientContacts()
         )
       } catch(e: any){}
 
@@ -52,25 +44,12 @@ const ClientContacts = () => {
         setLoading(false);
       }, 200)
     })()
-  }, [clientId, page]);
-
-  const onNextPage = () => {
-    if (hasNextPage) {
-      setPage(page => page + 1)
-    }
-  }
-
-  const onPrevPage = () => {
-    if (hasPrevPage) {
-      setPage(page => page - 1)
-    }
-  }
+  }, []);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
-    { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
-    { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: URLS.getPagePathName('client-links') },
-    { text: URLS.getPagePathName('client-contacts') }
+    { href: URLS.getPagePath('admins'), icon: 'document', text: URLS.getPagePathName('admins') },
+    { text: URLS.getPagePathName('medical-contacts') }
   ];
 
   const getAddButton = () => {
@@ -81,10 +60,10 @@ const ClientContacts = () => {
           icon: IconNames.ADD
         }}
         linkProps={{
-          to: URLS.getPagePath('add-client-contact', { clientId })
+          to: URLS.getPagePath('add-medical-contact')
         }}
       >
-        Add client contact
+        Add medical contact
       </AnchorButton>
     );
   }
@@ -92,13 +71,13 @@ const ClientContacts = () => {
 
   return (
     <div>
-      <div className='client-contacts'>
+      <div className='medical-contacts'>
         <PageHeading
           title='Client Contacts'
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <div className='client-contacts__container'>
+        <div className='medical-contacts__container'>
           <Col>
             <Table
               loading={loading}
@@ -139,8 +118,8 @@ const ClientContacts = () => {
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-client-contact',
-                          { clientId, clientContactId: data.id })
+                          'edit-medical-contact',
+                          { clientId, medicalContactId: data.id })
                       }
                     )
                   },
@@ -149,15 +128,7 @@ const ClientContacts = () => {
               ]}
               data={clientContacts}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              onNextPage={onNextPage}
-              onPrevPage={onPrevPage}
-              page={page}
-              emptyTableMessage="No Client Contacts Found"
+              emptyTableMessage="No Medical Contacts Found"
             />
           </Col>
         </div>
@@ -166,4 +137,4 @@ const ClientContacts = () => {
   );
 }
 
-export default ClientContacts;
+export default MedicalClientContacts;
