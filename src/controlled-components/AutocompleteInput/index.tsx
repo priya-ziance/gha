@@ -1,14 +1,12 @@
-import { usePlacesWidget } from "react-google-autocomplete";
-import { InputGroup, InputGroupProps } from "@blueprintjs/core";
+import useGoogle from "react-google-autocomplete/lib/usePlacesAutocompleteService";
+import { InputGroup, InputGroupProps, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 
 import { GOOGLE_API_KEY } from '../../utils/config';
+import { useState } from "react";
 
 
 export type AutocompletResult = {
   address: string;
-  city: string;
-  country: string;
-  coord?: number[]
 }
 
 export type AutocompleteInputProps = {
@@ -16,56 +14,55 @@ export type AutocompleteInputProps = {
   defaultAddress?: string;
 }
 
-const normalizePlaceResult = (result: any) => {
-  let country = ''
-  let city = ''
-  let coord = [
-    result.geometry.location.lat(),
-    result.geometry.location.lng()
-  ]
-  let address = result.formatted_address
-
-  const addressComponents = result.address_components || [];
-  
-  addressComponents.forEach((comp: any) => {
-    const types = comp.types;
-
-    if (types.includes('country')) {
-      country = comp.long_name
-    } else if (types.includes('locality')) {
-      city = comp.long_name
-    }
-  });
-
-  return {
-    country,
-    city,
-    coord,
-    address
-  }
-}
-
 const AutocompleteInput = (props: AutocompleteInputProps & InputGroupProps) => {
+  const [value, setValue] = useState("");
   const { onSelect, defaultAddress, ...otherProps } = props;
-  const { ref } = usePlacesWidget<InputGroup>({
+  const {
+    placePredictions,
+    getPlacePredictions,
+    isPlacePredictionsLoading,
+  } = useGoogle({
     apiKey: GOOGLE_API_KEY,
-    onPlaceSelected: (place) => {
-      const normRes = normalizePlaceResult(place)
-
-      onSelect({
-        address: normRes.address,
-        city: normRes.city,
-        country: normRes.country,
-        coord: normRes.coord
-      })
-    },
     options: {
-      types: ["street_address"],
+      types: ["street_address"]
     },
   });
 
   return (
-    <InputGroup type="text" ref={ref} {...otherProps}/>
+    <div>
+      <InputGroup
+        type="text"
+        defaultValue={defaultAddress}
+        {...otherProps}
+        value={value}
+        onChange={(evt) => {
+          getPlacePredictions({ input: evt.target.value });
+          setValue(evt.target.value);
+        }}
+        rightElement={isPlacePredictionsLoading ? <Spinner size={20} /> : undefined}
+      />
+      {!isPlacePredictionsLoading && !!placePredictions.length &&
+        <Menu className="absolute z-30 border shadow-md">
+          {placePredictions.map(place => {
+            return (
+              <MenuItem
+                key={place.description}
+                text={place.description}
+                onClick={() => { 
+                  onSelect({
+                    address: place.description,
+                  })
+                  setValue(place.description)
+
+                  // This is to clear the predictions
+                  getPlacePredictions({ input: "" })
+                }}
+              />
+            )
+          })}
+        </Menu>
+      }
+    </div>
   )
 };
 
