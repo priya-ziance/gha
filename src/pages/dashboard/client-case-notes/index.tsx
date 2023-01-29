@@ -149,9 +149,7 @@ const ClientCaseNotes = () => {
               ]}
               data={caseNotes}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
+              
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}

@@ -72,7 +72,7 @@ const AddClient = (props: AddClientProps) => {
   const [witnesses, setWitnesses] = useState<IUserModel[] | []>([])
   const [trainers, setTrainers] = useState<IUserModel[] | []>([])
   const { addToast } = useContext(ToastsContext);
-  const { location } = useContext(LocationContext);
+  const { location, locations } = useContext(LocationContext);
   let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
@@ -273,7 +273,8 @@ const AddClient = (props: AddClientProps) => {
                 getDateInputFormGroup,
                 getTextAreaInputFormGroup,
                 getInputFormGroup,
-                getNumericInputFormGroup
+                getNumericInputFormGroup,
+                getSelectFieldInputFormGroup
               },
               formikProps: {
                 values,
@@ -300,8 +301,6 @@ const AddClient = (props: AddClientProps) => {
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
               const floridaFileUrl = get(props, 'client.floridaId.publicUrl', '')
               const healthInsuranceFileUrl = get(props, 'client.healthInsurance.publicUrl', '')
-
-              console.log('ID:', floridaFileUrl, props)
 
               return (
                 <form onSubmit={handleSubmit}>
@@ -344,7 +343,19 @@ const AddClient = (props: AddClientProps) => {
                         </FormSelect>
                       </FormGroup>
 
-                      {getInputFormGroup('address_line_1')}
+                      {
+                        getSelectFieldInputFormGroup(
+                          'address_line_1',
+                          {
+                            childProps: {
+                              // Allow the client to only select from the
+                              // current business locations
+                              selectOptions: locations?.map(loc => loc.address),
+                              capitalizeFirst: true
+                            }
+                          }
+                        )
+                      }
                       {getInputFormGroup('address_line_2')}
                       {getInputFormGroup('city')}
                       {getInputFormGroup('state')}
@@ -362,7 +373,12 @@ const AddClient = (props: AddClientProps) => {
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
-                        <Switch id="switch-input" large checked={values.active} onChange={handleChange('active')}/>
+                        <Switch
+                          id="switch-input"
+                          large
+                          checked={values.active}
+                          onChange={handleChange('active')}
+                        />
                       </FormGroup>
                       <FormGroup
                         intent={Intent.PRIMARY}

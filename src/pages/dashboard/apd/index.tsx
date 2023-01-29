@@ -138,9 +138,7 @@ const ClientContacts = () => {
               ]}
               data={clientContacts}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
+              
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}

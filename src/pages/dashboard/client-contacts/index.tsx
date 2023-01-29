@@ -36,8 +36,6 @@ const ClientContacts = () => {
   const hasNextPage = clientContacts.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  console.log(clientContacts)
-
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -149,9 +147,7 @@ const ClientContacts = () => {
               ]}
               data={clientContacts}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
+              
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}

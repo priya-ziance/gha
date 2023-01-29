@@ -13,7 +13,6 @@ import { NoLocation } from "../components";
 const withLocation = () => (Component: any) => (props: any) => {
   const { id: selectedLocationId } = useContext(LocationContext)
 
-  console.log(selectedLocationId)
   if (!selectedLocationId) {
     return (
       <NoLocation />

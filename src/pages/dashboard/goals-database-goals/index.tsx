@@ -144,9 +144,7 @@ const DatabaseGoals = () => {
               ]}
               data={goals}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
+              
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}

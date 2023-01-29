@@ -133,17 +133,17 @@ const Location = (props: LocationProps) => {
             }}
             >
               {formikWrapper(({
-              wrapperProps: {
-                getInputFormGroup
-              },
-              formikProps: {
-                handleSubmit,
-                isSubmitting,
-                setFieldValue,
-                errors,
-                values
-              }
-            }) => {
+                wrapperProps: {
+                  getInputFormGroup
+                },
+                formikProps: {
+                  handleSubmit,
+                  isSubmitting,
+                  setFieldValue,
+                  errors,
+                  values
+                }
+              }) => {
               return (
                 <form onSubmit={handleSubmit}>
 

@@ -280,9 +280,7 @@ const LogEntry = (props: LogEntryProps) => {
               ]}
               data={logs}
               enableRowHeader={false}
-              onSelection={(focusedCell) => {
-                console.log(focusedCell)
-              }}
+              
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               onNextPage={onNextPage}
