@@ -1,4 +1,7 @@
 .add-medication {
+  > * textarea {
+    width: 100%;
+  }
   .add-medication__container {
     .add-medication__submit-container {
       width: 100%;
