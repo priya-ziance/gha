@@ -63,7 +63,7 @@ const AddClientContact = (props: AddClientContactProps) => {
       if (props.update) {
         await api.clientContacts.updateMedicalContact(clientContactId, values);
         addToast({
-          message: 'Client Contact Updated',
+          message: 'Medical Contact Updated',
           intent: Intent.SUCCESS
         })
       } else {
