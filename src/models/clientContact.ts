@@ -4,6 +4,7 @@ import { IClientContact } from '../types'
 
 export default class ClientContact implements IBaseModel {
   address?: string;
+  active?: boolean;
   id: string;
   dateOfBirth?: Moment;
   name: string;
@@ -28,6 +29,7 @@ export default class ClientContact implements IBaseModel {
     this.fax = clientContact.fax;
     this.email = clientContact.email;
     this.dateOfBirth = clientContact.date_of_birth ? moment(clientContact.date_of_birth) : undefined;
+    this.active = clientContact.active;
 
    this.clientContact = clientContact;
   }
