@@ -231,7 +231,7 @@ const AddMedication = (props: AddMedicationProps) => {
                       label="Doctor"
                     >
                       <MedicalContactSelect
-                        onSelect={doc => setFieldValue("doctor", doc.id)}
+                        onSelect={(doc: any) => setFieldValue("doctor", doc.id)}
                         selectedMedicalContactId={values["doctor"]}
                         excludedTypes={["Nurse"]}
                       />
