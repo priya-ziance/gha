@@ -49,7 +49,9 @@ import {
   ITaskModel,
   ITask,
   IUser,
-  IUserModel
+  IUserModel,
+  IBehaviourAssignmentModel,
+  IBehaviourAssignment
 } from '../types';
 
 
@@ -58,8 +60,32 @@ import Normalizer from './normalizer';
 type OPTIONS_TYPE = {
   page?: number;
   pageSize?: number;
+  fetchAll?: boolean;
   params?: {} 
 }
+
+class BaseApi {
+  // TODO: Find everywhere this is used and consider taking it out
+  // There is a possibility the browser can get stuck if the server
+  // has an error where it keeps thinking there are more values to
+  // return when there isn't
+  async fetchAll(url: string, params: any) {
+    let page = 0;
+    let hasNext = true;
+    const results: any = [];
+
+    while(hasNext) {
+      const result = await client.get(url, { ...params, page } );
+
+      results.push(result.data.contents);
+      hasNext = result.data.hasNext;
+      page++;
+    }
+
+    return results;
+  }
+}
+
 
 //=============================APPOINTMENT API'S=========================
 
@@ -684,20 +710,26 @@ class BehavioursApi {
 
 
 //============================= CLIENT BEHAVIOUR'S API'S===========================
-class ClientBehavioursApi {
+class ClientBehavioursApi extends BaseApi {
   normalizer;
 
   constructor() {
+    super();
     this.normalizer = new Normalizer<IClientBehaviourModel, IClientBehaviour>(Models.ClientBehaviour)
   }
 
   async getClientBehaviours(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, 'page', 0);
+    const params = { clientId, page }
+    const url = '/client_behaviours';
+
+    if (options?.fetchAll) {
+      return this.normalizer.normalizeArray(
+          await this.fetchAll(url, params)
+      )
+    }
   
-    const behavioursResult = await client.get(`/client_behaviours`, {
-      clientId,
-      page
-    });
+    const behavioursResult = await client.get(url, params);
   
     return this.normalizer.normalizeArray(behavioursResult.data.contents);
   }
@@ -1076,6 +1108,22 @@ class UsersApi {
 }
 
 
+//======================= BEHAVIOUR ASSIGNMENT API'S======================
+class BehaviourAssignmentApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IBehaviourAssignmentModel, IBehaviourAssignment>(Models.BehaviourAssignment)
+  }
+
+  async getAssignments(clientId: string) {
+    const assignmentsResult = await client.get(`/client_behaviours_assignments`, { clientId });
+  
+    return this.normalizer.normalize(assignmentsResult?.data);
+  }
+}
+
+
 
 //========================================================================
 
@@ -1083,6 +1131,7 @@ export default (() => ({
   appointments: new AppointmentApi(),
   bankStatements: new BankStatementsApi(),
   behaviours: new BehavioursApi(),
+  behaviourAssignment: new BehaviourAssignmentApi(),
   clients: new ClientsApi(),
   clientBehaviours: new ClientBehavioursApi(),
   clientContacts: new ClientContactApi(),

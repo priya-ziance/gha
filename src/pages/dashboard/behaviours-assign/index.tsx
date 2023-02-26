@@ -1,61 +1,39 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps, Checkbox, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import get from 'lodash/get';
+import useSWR from 'swr';
 
 import { AnchorButton, Button, PageHeading, Row } from '../../../components';
 
 import LoadingWrapper from '../../../wrappers/loading';
 
 import ClientContext from '../../../contexts/client';
-import LocationContext from '../../../contexts/location';
 import ToastsContext from '../../../contexts/toasts';
 
 import URLS from '../../../utils/urls';
 
 import api from '../../../api';
 
-import Behaviour from '../../../models/behaviour';
-
 import './index.scss';
 
 const PAGE_SIZE = 10;
 
 const BehavioursAssign = () => {
-  const [behaviours, setBehaviours] = useState<Behaviour[] | []>([]);
-  const [selectedBehaviours, setSelectedBehaviours] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [page, setPage] = useState(0);
   const { id: clientId } = useContext(ClientContext);
-  const { id: selectedLocationId } = useContext(LocationContext);
   const { addToast } = useContext(ToastsContext)
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
+  const { data: behaviours, isValidating: behavioursLoading } = useSWR(
+    `/api/behaviours?page=${page}&clientId=${clientId}`,
+    () => api.behaviours.getBehaviours(clientId, { pageSize: PAGE_SIZE })
+  );
 
-      try {
-        setBehaviours(
-          await api.behaviours.getBehaviours(clientId, { pageSize: PAGE_SIZE })
-        )
-      } catch(e: any){}
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
-    })()
-  }, [clientId, selectedLocationId]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const clientBehaviours = await api.clientBehaviours.getClientBehaviours(clientId, { pageSize: PAGE_SIZE })
-        setSelectedBehaviours(
-          clientBehaviours.map(clientBehaviour => get(clientBehaviour, 'behaviour.id', ''))
-        )
-      } catch(e: any){}
-    })()
-  }, []);
+  const { data: assignedBehaviours, isValidating: assignedBehavioursLoading, mutate: mutateAssignments } = useSWR(
+    `/api/assigned_behaviours?page=${page}&clientId=${clientId}`,
+    () => api.behaviourAssignment.getAssignments(clientId)
+  );
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
@@ -81,7 +59,7 @@ const BehavioursAssign = () => {
     );
   }
 
-  const onSubmit = async () => {
+  const assignBehaviours = async (selectedBehaviours: string[]) => {
     setSubmitting(true);
     
     try {
@@ -92,6 +70,7 @@ const BehavioursAssign = () => {
         intent: 'primary'
       })
     } catch(e: any) {
+      console.log(e);
       addToast({
         message: 'Something went wrong',
         intent: 'danger'
@@ -101,6 +80,10 @@ const BehavioursAssign = () => {
     setSubmitting(false);
   }
 
+  const selectedIds = useMemo(() => {
+    return assignedBehaviours?.behaviours.map(b => b.id) || [];
+  }, [assignedBehaviours])
+
   return (
     <div>
       <div className='behaviours-assign'>
@@ -109,35 +92,29 @@ const BehavioursAssign = () => {
           breadCrumbs={BREADCRUMBS}
           renderRight={getAddButton}
         />
-        <LoadingWrapper loading={loading}>
+        <LoadingWrapper loading={behavioursLoading || assignedBehavioursLoading}>
           <div className='behaviours-assign__container'>
             <Row>
-              {behaviours.map(behaviour => {
-                const isSelected = selectedBehaviours.includes(behaviour.id);
+              {behaviours?.map(behaviour => {
+                const isSelected = selectedIds.includes(behaviour.id);
 
-                const handleChange = () => {
-                  if (isSelected) {
-                    setSelectedBehaviours(behaviours => {
-                      return [
-                        ...behaviours.filter(b => b !== behaviour.id)
-                      ]
-                    })
-                  } else {
-                    setSelectedBehaviours(behaviours => {
-                      return [...behaviours, behaviour.id];
-                    })
+                const handleChange = async () => {
+                  try {
+                    if (isSelected) {
+                      await assignBehaviours(selectedIds.filter(b => b !== behaviour.id))
+                    } else {
+                      await assignBehaviours([...selectedIds, behaviour.id])
+                    }  
+                  } finally {
+                    mutateAssignments()
                   }
                 }
                 
                 return (
-                  <Checkbox label={behaviour.behaviourType} onChange={handleChange} checked={isSelected} />
+                  <Checkbox key={behaviour.id} label={behaviour.behaviourType} onChange={handleChange} checked={isSelected} />
                 )
               })}
             </Row>
-
-            <Button intent={Intent.PRIMARY} large onClick={onSubmit} disabled={submitting} loading={submitting}>
-              Submit
-            </Button>
           </div>
         </LoadingWrapper>
       </div>

@@ -36,6 +36,11 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string().label('Route'),
   },
+  drug_link: {
+    name: 'Drug Link',
+    default: '',
+    validation: yup.string().label('Drug Link'),
+  },
   side_effect: {
     name: 'Side Effect',
     default: null,

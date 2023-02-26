@@ -1,6 +1,7 @@
 import Appointment from './appointment';
 import BankStatement from './bankStatement';
 import Behaviour from './behaviour';
+import BehaviourAssignment from './behaviourAssignment';
 import CaseNote from './caseNote';
 import Client from './client';
 import ClientBehaviour from './clientBehaviour';
@@ -26,6 +27,7 @@ const Exports = {
   Appointment,
   BankStatement,
   Behaviour,
+  BehaviourAssignment,
   CaseNote,
   Client,
   ClientBehaviour,

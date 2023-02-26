@@ -258,7 +258,8 @@ export type MEDICATION_FIELDS_TYPE =
   'taken_days' |
   'temp_med' |
   'med_time' |
-  'type' 
+  'type' |
+  'drug_link'
 
 export type EXPENSES_LIST_FIELDS_TYPE =
   'expense_description' |
@@ -727,6 +728,12 @@ export interface ILogQuestionModel {
   logQuestion: ILogQuestion;
 }
 
+export interface IBehaviourAssignmentModel {
+  id: string;
+  behaviours: IBehaviourModel[]
+  behaviourAssignment: IBehaviourAssignment;
+}
+
 
 
 /**
@@ -942,6 +949,7 @@ export interface IMedication {
   status?: string;
   refills?: number;
   doctor?: string;
+  drug_link?: string;
   script_date?: string;
 }
 
@@ -1042,6 +1050,11 @@ export interface ILogTemplateQuestion {
 export interface ILogQuestion {
   question_id: IQuestion;
   selected_answer: string;
+}
+
+export interface IBehaviourAssignment {
+  id: string;
+  behaviours: IBehaviour[]
 }
 
 /**

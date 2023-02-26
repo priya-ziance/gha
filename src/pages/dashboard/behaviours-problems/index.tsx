@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { BreadcrumbProps } from '@blueprintjs/core';
+import { BreadcrumbProps, Button } from '@blueprintjs/core';
 import get from 'lodash/get';
 import useSWR from 'swr'
 
@@ -31,7 +31,7 @@ const PAGE_SIZE = 10;
 
 const DatabaseBehavioursProblems = () => {
   const [isClientProblemDialogOpen, setIsClientProblemDialogOpen] = useState(false);
-  const [selectedProblem, setSelectedProblem] = useState<IClientBehaviourModel | null>(null)
+  const [selectedProblem, setSelectedProblem] = useState<IClientBehaviourModel | undefined>(undefined)
   const [page, setPage] = useState(0);
   const { id: clientId } = useContext(ClientContext);
 
@@ -61,7 +61,22 @@ const DatabaseBehavioursProblems = () => {
     setIsClientProblemDialogOpen(true);
   }
 
-  const onCancelClientProblemDialog = () => setIsClientProblemDialogOpen(false);
+  const onCancelClientProblemDialog = () => {
+    setIsClientProblemDialogOpen(false)
+    setSelectedProblem(undefined);
+  };
+
+  const getAddButton = () => {
+    return (
+      <Button
+        intent='primary'
+        icon="add"
+        onClick={() => setIsClientProblemDialogOpen(true)}
+      >
+        Add client behaviour
+      </Button>
+    );
+  }
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
@@ -77,6 +92,7 @@ const DatabaseBehavioursProblems = () => {
         <PageHeading
           title='Client Behaviour Problems'
           breadCrumbs={BREADCRUMBS}
+          renderRight={() => getAddButton()}
         />
         <div className='behaviours-problems__container'>
           <Col>
@@ -138,13 +154,11 @@ const DatabaseBehavioursProblems = () => {
           </Col>
         </div>
 
-        {selectedProblem &&
-          <BehaviourProblemDialog
-            isOpen={isClientProblemDialogOpen}
-            onClose={onCancelClientProblemDialog}
-            clientBehaviour={selectedProblem}
-          />
-        }
+        <BehaviourProblemDialog
+          isOpen={isClientProblemDialogOpen}
+          onClose={onCancelClientProblemDialog}
+          clientBehaviour={selectedProblem}
+        />
       </div>
     </div>
   );

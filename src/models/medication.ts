@@ -23,6 +23,7 @@ export default class Medication implements IBaseModel {
   status?: string;
   refills?: number;
   doctor?: string; 
+  drugLink?: string;
   scriptDate?: Moment;
   createdAt?: Moment;
   apiMedication: IMedication;
@@ -47,6 +48,7 @@ export default class Medication implements IBaseModel {
       this.takenDays = medication.taken_days;
       this.notes = medication.notes;
       this.quantity = medication.quantity;
+      this.drugLink = medication.drug_link;
 
       this.createdAt = moment(medication.created_at);
       this.apiMedication = medication;
