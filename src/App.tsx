@@ -6,6 +6,8 @@ import {
 
 import LoginPage from './pages/login';
 import DashboardPage from './pages/dashboard';
+import ClientWitness from './pages/client-witness';
+import StaffWitness from './pages/staff-witness';
 
 import ConnectivityListener from './components/ConnectionListener';
 
@@ -27,6 +29,9 @@ function App() {
           <Switch>
             <Route path="/" exact component={LoginPage} />
             <Route path="/dashboard" component={DashboardPage} />
+            <Route path="/client-witness" component={ClientWitness} />
+            <Route path="/staff-witness" component={StaffWitness} />
+            
           </Switch>
         </Router>
         <ConnectivityListener />

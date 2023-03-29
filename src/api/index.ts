@@ -51,7 +51,11 @@ import {
   IUser,
   IUserModel,
   IBehaviourAssignmentModel,
-  IBehaviourAssignment
+  IBehaviourAssignment,
+  IStaffWithnessModel,
+  IClientWithnessModel,
+  IClientWithness,
+  IStaffWithness
 } from '../types';
 
 
@@ -294,6 +298,54 @@ class ClientContactApi {
   async updateMedicalContact(clientContactId = '', body = {}) {
     const clientContactResult = await client.patch(`/client_contacts/medicalcontact/${clientContactId}`, body);
   
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+}
+
+//============================= CLIENT WITNESS API'S========================
+class ClientWitnessApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IClientWithnessModel, IClientWithness>(Models.ClientWitness)
+  }
+
+  async getClientWitness(clientId?: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const clientWitnessResult = await client.get(`/client-witness`, {
+      page
+    });
+  
+    return this.normalizer.normalizeArray(clientWitnessResult.data.contents);
+  }
+
+  async createClientContact(body = {}) {
+    const clientContactResult = await client.post('/client_contacts', body);
+    return this.normalizer.normalize(clientContactResult.data);
+  }
+}
+
+
+//============================= CLIENT WITNESS API'S========================
+class StaffWitnessApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IStaffWithnessModel, IStaffWithness>(Models.StaffWithness)
+  }
+
+  async getStaffWitness(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, 'page', 0);
+    const staffWitnessResult = await client.get(`/staff-witness`, {
+      clientId,
+      page
+    });
+  
+    return this.normalizer.normalizeArray(staffWitnessResult.data.contents);
+  }
+
+  async createClientContact(body = {}) {
+    const clientContactResult = await client.post('/client_contacts', body);
     return this.normalizer.normalize(clientContactResult.data);
   }
 }
@@ -1135,6 +1187,8 @@ export default (() => ({
   clients: new ClientsApi(),
   clientBehaviours: new ClientBehavioursApi(),
   clientContacts: new ClientContactApi(),
+  clientWitness: new ClientWitnessApi(),
+  staffWitness: new StaffWitnessApi(),
   caseNotes: new CaseNotesApi(),
   expenses: new ExpensesApi(),
   expensesList: new ExpensesListApi(),

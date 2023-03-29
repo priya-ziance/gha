@@ -6,6 +6,8 @@ import CaseNote from './caseNote';
 import Client from './client';
 import ClientBehaviour from './clientBehaviour';
 import ClientContact from './clientContact';
+import ClientWitness from './clientWitness';
+import StaffWithness from './staffWithness';
 import Expense from './expense';
 import ExpenseList from './expenseList';
 import File from './file';
@@ -32,6 +34,8 @@ const Exports = {
   Client,
   ClientBehaviour,
   ClientContact,
+  ClientWitness,
+  StaffWithness,
   Expense,
   ExpenseList,
   File,

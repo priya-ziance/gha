@@ -35,6 +35,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-case-notes/add`;
     case 'add-client-contact':
       return `${clientBase}/client-contacts/add`;
+      case 'add-client-witness':
+      return `${clientBase}/client-witness/add`;
+      case 'add-staff-witness':
+      return `${clientBase}/staff-witness/add`;
     case 'add-database-behaviour':
       return `${clientBase}/behaviours/database/add`;
     case 'add-database-goal':
@@ -182,6 +186,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return 'Add Database Behaviour';
     case 'add-client-contact':
       return `Add Client Contact`;
+      case 'add-client-witness':
+      return `Add Client Witness`;
+      case 'add-staff-witness':
+        return `Add Staff Witness`;
     case 'add-database-goal':
       return 'Add Database Goal';
     case 'add-database-subgoal':
@@ -226,6 +234,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Links`;
     case 'client-contacts':
       return `Client Contacts`;
+      case 'client-witness':
+      return `Client Witness`;
+      case 'staff-witness':
+        return `Staff Witness`;
     case 'edit-appointment':
       return 'Edit Appointment';
     case 'edit-bank-statement':

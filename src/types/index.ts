@@ -9,6 +9,8 @@ export type PAGE_TYPES =
   'add-clients' |
   'add-client-case-notes' |
   'add-client-contact' |
+  'add-staff-witness' |
+  'add-client-witness' |
   'add-database-behaviour' |
   'add-database-goal' |
   'add-database-subgoal' |
@@ -32,6 +34,8 @@ export type PAGE_TYPES =
   'client-info' |
   'client-links' |
   'client-contacts' |
+  'client-witness' |
+  'staff-witness' |
   'edit-appointment' |
   'edit-bank-statement' |
   'edit-case-note' |
@@ -797,6 +801,58 @@ export interface ICaseNote {
   significant_event_notes?: string;
   significant_event?: false;
   active?: false;
+}
+
+export interface IClientWithness {
+  _id: string;
+  email?: string;
+  contact_type?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string
+}
+
+export interface IClientWithnessModel {
+  id?: string;
+  email?: string;
+  contactType?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+}
+
+export interface IStaffWithnessModel {
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+}
+
+export interface IStaffWithness {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string
 }
 
 export interface IClientContact {
