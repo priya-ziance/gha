@@ -1,0 +1,22 @@
+.add-staff-witness {
+  .add-staff-witness__container {
+    .add-staff-witness__submit-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  }
+}

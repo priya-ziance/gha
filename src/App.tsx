@@ -8,6 +8,10 @@ import LoginPage from './pages/login';
 import DashboardPage from './pages/dashboard';
 import ClientWitness from './pages/client-witness';
 import StaffWitness from './pages/staff-witness';
+import AddClientWitness from './pages/add-client-witness'
+import AddStaffWitness from "./pages/add-staff-witness";
+import EditClientWitness from "./pages/edit-client-witness";
+import EditStaffWitness from './pages/edit-staff-witness'
 
 import ConnectivityListener from './components/ConnectionListener';
 
@@ -32,6 +36,11 @@ function App() {
             <Route path="/client-witness" component={ClientWitness} />
             <Route path="/staff-witness" component={StaffWitness} />
             
+            <Route path="/add-client-witness" component={AddClientWitness} />
+            <Route path="/edit-client-witness" component={EditClientWitness} />
+            <Route path="/add-staff-witness" component={AddStaffWitness} />
+            <Route path="/edit-staff-witness" component={EditStaffWitness} />
+
           </Switch>
         </Router>
         <ConnectivityListener />

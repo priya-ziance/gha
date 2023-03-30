@@ -137,7 +137,7 @@ const ClientWitness = () => {
                       title: "Actions",
                       cellRenderer: (data: any) => {
                         return actionColumn(data, {
-                          viewLink: URLS.getPagePath("edit-client-contact", {
+                          viewLink: URLS.getPagePath("edit-client-witness", {
                             clientId,
                             clientContactId: data.id,
                           }),

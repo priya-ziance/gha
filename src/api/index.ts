@@ -319,9 +319,19 @@ class ClientWitnessApi {
     return this.normalizer.normalizeArray(clientWitnessResult.data.contents);
   }
 
-  async createClientContact(body = {}) {
-    const clientContactResult = await client.post('/client_contacts', body);
+  async getClientWitnessById(clientWitnessId: string) {
+    const clientWitnessResult = await client.get(`/client-witness/${clientWitnessId}`);
+    return this.normalizer.normalize(clientWitnessResult.data);
+  }
+
+  async createClientWitness(body = {}) {
+    const clientContactResult = await client.post('/client-witness', body);
     return this.normalizer.normalize(clientContactResult.data);
+  }
+
+  async updateClientWitness(clientWitnessId = '', body = {}) {
+    const clientWitnessResult = await client.patch(`/client-witness/${clientWitnessId}`, body);
+    return this.normalizer.normalize(clientWitnessResult.data);
   }
 }
 
@@ -340,14 +350,25 @@ class StaffWitnessApi {
       clientId,
       page
     });
-  
+
     return this.normalizer.normalizeArray(staffWitnessResult.data.contents);
   }
 
-  async createClientContact(body = {}) {
-    const clientContactResult = await client.post('/client_contacts', body);
-    return this.normalizer.normalize(clientContactResult.data);
+  async createStaffWitness(body = {}) {
+    const clientStaffResult = await client.post('/staff-witness', body);
+    return this.normalizer.normalize(clientStaffResult.data);
   }
+
+  async updateStaffWitness(staffWitnessId = '', body = {}) {
+    const clientWitnessResult = await client.patch(`/staff-witness/${staffWitnessId}`, body);
+    return this.normalizer.normalize(clientWitnessResult.data);
+  }
+
+  async getStaffWitnessById(staffWitnessId: string) {
+    const staffWitnessResult = await client.get(`/staff-witness/${staffWitnessId}`);
+    return this.normalizer.normalize(staffWitnessResult.data);
+  }
+
 }
 
 //============================= GOAL API'S==================================

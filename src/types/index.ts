@@ -40,6 +40,8 @@ export type PAGE_TYPES =
   'edit-bank-statement' |
   'edit-case-note' |
   'edit-client-contact' |
+  'edit-client-witness' |
+  'edit-staff-witness' |
   'edit-database-behaviour' |
   'edit-database-goal' |
   'edit-database-subgoal' |
@@ -141,6 +143,24 @@ export type CLIENT_CONTACT_FIELDS_TYPE =
   'phone' |
   'medical_contact'
 
+  export type CLIENT_WITNESS_FIELDS_TYPE = 
+  'address' |
+  'contact_type' |
+  'hired_date' |
+  'email' |
+  'first_name' |
+  'last_name' |
+  'mobile' |
+  'location'
+  
+  export type STAFF_WITNESS_FIELDS_TYPE = 
+  'address' |
+  'hired_date' |
+  'email' |
+  'first_name' |
+  'last_name' |
+  'mobile' |
+  'location'
 
 export type CLIENT_FIELDS_TYPE = 
   'email' |
@@ -391,6 +411,22 @@ export type GOAL_FIELDS_FORM_TYPE = {
   [key in GOAL_FIELDS_TYPE]?: {
     name: string,
     default: string | null | boolean,
+    validation: any
+  }
+}
+
+export type CLIENT_WITNESS_FIELDS_FORM_TYPE = {
+  [key in CLIENT_WITNESS_FIELDS_TYPE]?: {
+    name: string,
+    default: any,
+    validation: any
+  }
+}
+
+export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
+  [key in STAFF_WITNESS_FIELDS_TYPE]?: {
+    name: string,
+    default: any,
     validation: any
   }
 }
@@ -827,6 +863,7 @@ export interface IClientWithnessModel {
   mobile?: string;
   location?: string;
   hiredDate?: Moment;
+  clientWitness: IClientWithness;
 }
 
 export interface IStaffWithnessModel {
@@ -838,6 +875,7 @@ export interface IStaffWithnessModel {
   mobile?: string;
   location?: string;
   hiredDate?: Moment;
+  staffWitness? : IStaffWithness
 }
 
 export interface IStaffWithness {
