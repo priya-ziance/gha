@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Spinner } from "@blueprintjs/core";
-import api from "../../api";
-import { IStaffWithnessModel } from "../../types";
-import withPathId from "../../hoc/withPathId";
-import AddStaffWitness from "../../pages/add-staff-witness";
+import api from "../../../api";
+import withPathId from "../../../hoc/withPathId";
+import AddStaffWitness from "../add-staff-witness";
+import { IStaffWithnessModel } from "../../../types";
+import ClientContext from "../../../contexts/client";
 
 interface StaffWitnessPathType {
   staffWitnessId: string;
@@ -14,10 +15,10 @@ const StaffWitnessInfo = (props: StaffWitnessPathType) => {
   const [staffWitness, setStaffWitness] = useState<
     IStaffWithnessModel | undefined
   >(undefined);
-  const clientId = "h9YwkW4gyE";
+  const { id: clientId } = useContext(ClientContext);
 
-  // const { staffWitnessId } = props;
-  const staffWitnessId = "tidJnPBFd";
+  const { staffWitnessId } = props;
+  
   useEffect(() => {
     (async () => {
       setLoading(true);

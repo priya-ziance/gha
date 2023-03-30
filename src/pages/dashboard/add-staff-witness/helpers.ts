@@ -3,19 +3,19 @@ import * as yup from 'yup';
 import moment from "moment";
 import get from 'lodash/get';
 import { FIELDS } from './constants';
-import { CLIENT_WITNESS_FIELDS_TYPE } from '../../types';
-import { DateInputProps } from '../../components/DateInput';
+import { DateInputProps } from '../../../components/DateInput';
+import { STAFF_WITNESS_FIELDS_TYPE } from '../../../types';
 
 const formFields: any = Object.keys(FIELDS);
 
-export const initialValues = Object.assign({}, ...formFields.map((formField: CLIENT_WITNESS_FIELDS_TYPE) => {
+export const initialValues = Object.assign({}, ...formFields.map((formField: STAFF_WITNESS_FIELDS_TYPE) => {
   return {
     [formField]: get(FIELDS,formField, { default: '' }).default
   }
 }))
 
 export const validationSchema = yup.object().shape(
-  Object.assign({}, ...formFields.map((formField: CLIENT_WITNESS_FIELDS_TYPE) => {
+  Object.assign({}, ...formFields.map((formField: STAFF_WITNESS_FIELDS_TYPE) => {
     return {
       [formField]: get(FIELDS,formField, { validation: '' }).validation
     }

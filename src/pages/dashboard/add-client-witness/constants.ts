@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { CLIENT_WITNESS_FIELDS_FORM_TYPE } from "../../types";
+import { CLIENT_WITNESS_FIELDS_FORM_TYPE } from "../../../types";
 
 export const FIELDS: CLIENT_WITNESS_FIELDS_FORM_TYPE = {
   address: {

@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react";
 import { BreadcrumbProps, Intent } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-import { AnchorButton, Col, PageHeading, Table } from "../../components";
-import URLS from "../../utils/urls";
-import api from "../../api";
-import * as helpers from "../../utils/helpers";
+import { AnchorButton, Col, PageHeading, Table } from "../../../components";
+import URLS from "../../../utils/urls";
+import api from "../../../api";
+import * as helpers from "../../../utils/helpers";
 import {
   actionColumn,
-  addressColumn,
+  contactTypeColumn,
   emailColumn,
   mobileColumn,
   nameColumn,
 } from "./helpers";
 import "./index.scss";
-import { IStaffWithnessModel } from "../../types";
+import { IClientWithnessModel } from "../../../types";
 
 const PAGE_SIZE = 10;
 
-const StaffWitness = () => {
-  const [staffWitness, setStaffWitness] = useState<IStaffWithnessModel[] | []>(
-    []
-  );
+const ClientWitness = () => {
+  const [clientWitness, setClientWitness] = useState<
+    IClientWithnessModel[] | []
+  >([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const clientId = "h9YwkW4gyE";
 
-  const hasNextPage = staffWitness.length === PAGE_SIZE;
+  const hasNextPage = clientWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -33,8 +33,8 @@ const StaffWitness = () => {
       setLoading(true);
 
       try {
-        setStaffWitness(
-          await api.staffWitness.getStaffWitness(clientId, {
+        setClientWitness(
+          await api.clientWitness.getClientWitness(clientId, {
             page,
             pageSize: PAGE_SIZE,
           })
@@ -75,7 +75,7 @@ const StaffWitness = () => {
       icon: "document",
       text: URLS.getPagePathName("client-links"),
     },
-    { text: URLS.getPagePathName("staff-witness") },
+    { text: URLS.getPagePathName("client-witness") },
   ];
 
   const getAddButton = () => {
@@ -86,10 +86,10 @@ const StaffWitness = () => {
           icon: IconNames.ADD,
         }}
         linkProps={{
-          to: URLS.getPagePath("add-staff-witness", { clientId }),
+          to: URLS.getPagePath("add-client-witness", { clientId }),
         }}
       >
-        {URLS.getPagePathName("add-staff-witness")}
+        {URLS.getPagePathName("add-client-witness")}
       </AnchorButton>
     );
   };
@@ -98,19 +98,19 @@ const StaffWitness = () => {
     <div className="dashboard">
       <div className="dashboard__container">
         <div>
-          <div className="staff-witness">
+          <div className="client-witness">
             <PageHeading
-              title="Staff Witness"
+              title="Client Witness"
               breadCrumbs={BREADCRUMBS}
               renderRight={getAddButton}
             />
-            <div className="staff-witness__container">
+            <div className="client-witness__container">
               <Col>
                 <Table
                   loading={loading}
-                  numRows={staffWitness.length}
+                  numRows={clientWitness.length}
                   getCellClipboardData={(row: any, col: any) => {
-                    return staffWitness[row];
+                    return clientWitness[row];
                   }}
                   columns={[
                     {
@@ -124,20 +124,20 @@ const StaffWitness = () => {
                       width: helpers.getTableWith(0.25),
                     },
                     {
-                      title: "Mobile",
-                      cellRenderer: mobileColumn,
+                      title: "Contact Type",
+                      cellRenderer: contactTypeColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
-                      title: "Address",
-                      cellRenderer: addressColumn,
+                      title: "Mobile",
+                      cellRenderer: mobileColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
                       title: "Actions",
                       cellRenderer: (data: any) => {
                         return actionColumn(data, {
-                          viewLink: URLS.getPagePath("edit-staff-witness", {
+                          viewLink: URLS.getPagePath("edit-client-witness", {
                             clientId,
                             clientContactId: data.id,
                           }),
@@ -146,14 +146,14 @@ const StaffWitness = () => {
                       width: helpers.getTableWith(0.1),
                     },
                   ]}
-                  data={staffWitness}
+                  data={clientWitness}
                   enableRowHeader={false}
                   hasNextPage={hasNextPage}
                   hasPrevPage={hasPrevPage}
                   onNextPage={onNextPage}
                   onPrevPage={onPrevPage}
                   page={page}
-                  emptyTableMessage="No Staff Witness Found"
+                  emptyTableMessage="No Client Witness Found"
                 />
               </Col>
             </div>
@@ -164,4 +164,4 @@ const StaffWitness = () => {
   );
 };
 
-export default StaffWitness;
+export default ClientWitness;

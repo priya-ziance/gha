@@ -2,17 +2,18 @@ import { useContext, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
-import { Col, PageHeading, Row } from "../../components";
-import OmniContactsInput from "../../controlled-components/OmniContactInput";
-import api from "../../api";
-import URLS from "../../utils/urls";
-import ToastsContext from "../../contexts/toasts";
+import { Col, PageHeading, Row } from "../../../components";
+import OmniContactsInput from "../../../controlled-components/OmniContactInput";
+import api from "../../../api";
+import URLS from "../../../utils/urls";
+import ToastsContext from "../../../contexts/toasts";
 import * as helpers from "./helpers";
-import formikWrapper from "../../wrappers/formik";
+import formikWrapper from "../../../wrappers/formik";
 import { FIELDS } from "./constants";
 import "./index.scss";
-import { IStaffWithnessModel } from "../../types";
+
 import { pick } from "lodash";
+import { IStaffWithnessModel } from "../../../types";
 
 interface AddStaffWitnessProps {
   staffWitness?: IStaffWithnessModel;

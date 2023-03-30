@@ -15,6 +15,14 @@ import AddClientCaseNotesPage from './add-client-case-notes';
 import ClientCaseNotesPage from './client-case-notes';
 import EditClientCaseNotePage from './edit-case-note';
 
+import AddClientWitnessPage from './add-client-witness';
+import ClientWitnessPage from './client-witness';
+import EditClientWitnessPage from './edit-client-witness';
+
+import AddStaffWitnessPage from './add-staff-witness';
+import StaffWitnessPage from './staff-witness';
+import EditStaffWitnessPage from './edit-staff-witness';
+
 import AddClientContactsPage from './add-client-contact';
 import ClientContactsPage from './client-contacts';
 import EditClientContactPage from './edit-client-contact';
@@ -143,6 +151,14 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/client-contacts/add" exact component={AddClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-contacts/:clientContactId/edit" exact component={EditClientContactPage} />
       
+      <Route path="/dashboard/clients/:clientId/client-witness" exact component={ClientWitnessPage} />
+      <Route path="/dashboard/clients/:clientId/client-witness/add" exact component={AddClientWitnessPage} />
+      <Route path="/dashboard/clients/:clientId/client-witness/:clientWitnessId/edit" exact component={EditClientWitnessPage} />
+
+      <Route path="/dashboard/clients/:clientId/staff-witness" exact component={StaffWitnessPage} />
+      <Route path="/dashboard/clients/:clientId/staff-witness/add" exact component={AddStaffWitnessPage} />
+      <Route path="/dashboard/clients/:clientId/staff-witness/:staffWitnessId/edit" exact component={EditStaffWitnessPage} />
+
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />
       <Route path="/dashboard/clients/:clientId/goals/database" exact component={GoalsDatabasePage} />

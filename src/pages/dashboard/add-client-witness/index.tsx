@@ -2,18 +2,19 @@ import { useContext, useState } from 'react';
 import { BreadcrumbProps, Button, Intent } from '@blueprintjs/core';
 import { Formik, FormikHelpers } from 'formik';
 import get from 'lodash/get';
-import { Col, PageHeading, Row } from '../../components';
-import OmniContactsInput from '../../controlled-components/OmniContactInput';
-import api from '../../api';
-import URLS from '../../utils/urls';
-import ToastsContext from '../../contexts/toasts';
+import { Col, PageHeading, Row } from '../../../components';
+import OmniContactsInput from '../../../controlled-components/OmniContactInput';
+import api from '../../../api';
+import URLS from '../../../utils/urls';
+import ToastsContext from '../../../contexts/toasts';
 import * as helpers from './helpers';
-import formikWrapper from '../../wrappers/formik';
+import formikWrapper from '../../../wrappers/formik';
 import { FIELDS } from './constants';
-import { FAMILY_CONTACT_LIST, MEDICAL_CONTACT_LIST } from '../../utils/constants';
+import { FAMILY_CONTACT_LIST, MEDICAL_CONTACT_LIST } from '../../../utils/constants';
 import './index.scss';
-import { IClientWithnessModel } from '../../types';
+
 import { pick } from 'lodash';
+import { IClientWithnessModel } from '../../../types';
 
 interface AddClientWitnessProps {
   clientWitness?: IClientWithnessModel;

@@ -1,6 +1,6 @@
 import * as yup from "yup";
+import { STAFF_WITNESS_FIELDS_FORM_TYPE } from "../../../types";
 
-import { STAFF_WITNESS_FIELDS_FORM_TYPE } from "../../types";
 
 export const FIELDS: STAFF_WITNESS_FIELDS_FORM_TYPE = {
   address: {

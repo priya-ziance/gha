@@ -1,6 +1,6 @@
 import { Intent } from '@blueprintjs/core';
-import  AnchorButton  from '../../components/AnchorButton';
-import { IStaffWithnessModel } from '../../types';
+import { AnchorButton } from '../../../components';
+import { IStaffWithnessModel } from '../../../types';
 
 export const nameColumn = (data: IStaffWithnessModel) => {
   return (
