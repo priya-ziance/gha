@@ -129,6 +129,20 @@ export const getLinks = (clientId: string) => {
       image: ClientsImage,
       // path: '/dashboard/clients',
       interactive: false
-    }
+    },
+    {
+      description: '',
+      title: 'Client Witness',
+      image: ClientsImage,
+      path: URLS.getPagePath('client-witness', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
+      title: 'Staff Witness',
+      image: ClientsImage,
+      path: URLS.getPagePath('staff-witness', { clientId }),
+      interactive: true
+    },
   ]
 }
