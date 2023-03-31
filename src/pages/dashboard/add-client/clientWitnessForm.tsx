@@ -42,7 +42,7 @@ const ClientWitnessForm = (props: IDialog) => {
         message: "Client Witness Created",
         intent: Intent.SUCCESS,
       });
-
+      handleClose()
       // Reset the form
       resetForm();
     } catch (e: any) {
