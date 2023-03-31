@@ -1,43 +1,35 @@
-import {
-  Classes,
-  Intent,
-} from "@blueprintjs/core";
+import { Classes, Intent } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import {
-  AnchorButton,
-  Button,
-  Col,
-  Dialog,
-  Row,
-} from "../../../components";
-import {
-  FIELDS,
-} from "./constants";
+import { AnchorButton, Button, Col, Dialog, Row } from "../../../components";
+import { FIELDS } from "./constants";
 import { IDialog } from "./types";
 import { IClientWithnessModel } from "../../../types";
 import { useContext, useState } from "react";
 import ToastsContext from "../../../contexts/toasts";
-import * as helpers from '../add-client-witness/helpers';
-import api from '../../../api';
+import * as helpers from "../add-client-witness/helpers";
+import api from "../../../api";
 import { Formik, FormikHelpers } from "formik";
-import get from 'lodash/get';
 import formikWrapper from "../../../wrappers/formik";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
-import { FAMILY_CONTACT_LIST, MEDICAL_CONTACT_LIST } from "../../../utils/constants";
-
+import {
+  FAMILY_CONTACT_LIST,
+  MEDICAL_CONTACT_LIST,
+} from "../../../utils/constants";
 
 const ClientWitnessForm = (props: IDialog) => {
   const { isOpen, handleClose } = props;
 
   const [isOmniOpen, setIsOmniOpen] = useState(false);
-  const [selectedMedical, setSelectedMedical] = useState<IClientWithnessModel | undefined>(undefined)
-  const clientId = "h9YwkW4gyE"
+  const [selectedMedical, setSelectedMedical] = useState<
+    IClientWithnessModel | undefined
+  >(undefined);
+  const clientId = "h9YwkW4gyE";
   const { addToast } = useContext(ToastsContext);
   let initialValues = helpers.initialValues;
 
   const handleSelectClientWitnessClose = () => {
     setIsOmniOpen(false);
-  }
+  };
 
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
     const { resetForm, setSubmitting } = options;
@@ -45,23 +37,23 @@ const ClientWitnessForm = (props: IDialog) => {
     values.client = clientId;
 
     try {
-        await api.clientWitness.createClientWitness(values);
-        addToast({
-          message: 'Client Witness Created',
-          intent: Intent.SUCCESS
-        })
+      await api.clientWitness.createClientWitness(values);
+      addToast({
+        message: "Client Witness Created",
+        intent: Intent.SUCCESS,
+      });
 
-        // Reset the form
-        resetForm();
+      // Reset the form
+      resetForm();
     } catch (e: any) {
       addToast({
-        message: 'Something went wrong',
-        intent: Intent.DANGER
-      })
+        message: "Something went wrong",
+        intent: Intent.DANGER,
+      });
     }
 
     setSubmitting(false);
-  }
+  };
 
   return (
     <Dialog
@@ -72,42 +64,42 @@ const ClientWitnessForm = (props: IDialog) => {
     >
       <>
         <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
-        <Formik
-              initialValues={initialValues}
-              validationSchema={helpers.validationSchema}
-              onSubmit={onSubmit}
-            >
-
-              {formikWrapper(({
+          <Formik
+            initialValues={initialValues}
+            validationSchema={helpers.validationSchema}
+            onSubmit={onSubmit}
+          >
+            {formikWrapper(
+              ({
                 wrapperProps: {
                   getDateInputFormGroup,
                   getSelectFieldInputFormGroup,
                   getInputFormGroup,
                   getAutocompleteInputFormGroup,
-                  getPhoneInputFormGroup
+                  getPhoneInputFormGroup,
                 },
                 formikProps: {
                   handleSubmit,
                   isSubmitting,
                   setFieldValue,
-                  validateForm
-                }
+                  validateForm,
+                },
               }) => {
-
                 return (
-                  <form
-                    onSubmit={handleSubmit}
-                  >
+                  <form onSubmit={handleSubmit}>
                     <OmniContactsInput
                       isOpen={isOmniOpen}
                       onClose={handleSelectClientWitnessClose}
                       onSelect={(clientWitness: any) => {
-                        setFieldValue("first_name", clientWitness.first_name)
-                        setFieldValue("last_name", clientWitness.lastName)
-                        setFieldValue("address", clientWitness.add)
-                        setFieldValue("mobile", clientWitness.mobile)
-                        setFieldValue("email", clientWitness.email)
-                        setFieldValue("contact_type", clientWitness.contactType);
+                        setFieldValue("first_name", clientWitness.first_name);
+                        setFieldValue("last_name", clientWitness.lastName);
+                        setFieldValue("address", clientWitness.add);
+                        setFieldValue("mobile", clientWitness.mobile);
+                        setFieldValue("email", clientWitness.email);
+                        setFieldValue(
+                          "contact_type",
+                          clientWitness.contactType
+                        );
                         setFieldValue("hired_date", clientWitness.hiredDate);
                         setFieldValue("location", clientWitness.location);
                         validateForm();
@@ -116,85 +108,93 @@ const ClientWitnessForm = (props: IDialog) => {
                       }}
                     />
 
-                    <div className='flex flex-row items-center gap-4'>
+                    <div className="flex flex-row items-center gap-4">
                       <div>
-                        {
-                          getSelectFieldInputFormGroup(
-                            'contact_type',
-                            {
-                              childProps: {
-                                selectOptions: [...MEDICAL_CONTACT_LIST, ...FAMILY_CONTACT_LIST],
-                                capitalizeFirst: true,
-                                disabled: selectedMedical
-                              }
-                            }
-                          )
-                        }
+                        {getSelectFieldInputFormGroup("contact_type", {
+                          childProps: {
+                            selectOptions: [
+                              ...MEDICAL_CONTACT_LIST,
+                              ...FAMILY_CONTACT_LIST,
+                            ],
+                            capitalizeFirst: true,
+                            disabled: selectedMedical,
+                          },
+                        })}
                       </div>
-
                     </div>
                     <Row>
                       <Col xs={12} md={6}>
-                        {getInputFormGroup('first_name', { childProps: { disabled: !!selectedMedical } })}
+                        {getInputFormGroup("first_name", {
+                          childProps: { disabled: !!selectedMedical },
+                        })}
                       </Col>
                       <Col xs={12} md={6}>
-                        {getInputFormGroup('last_name', { childProps: { disabled: !!selectedMedical } })}
+                        {getInputFormGroup("last_name", {
+                          childProps: { disabled: !!selectedMedical },
+                        })}
                       </Col>
                     </Row>
                     <Row>
                       <Col xs={12} md={6}>
-                        {getInputFormGroup('email', { childProps: { disabled: !!selectedMedical } })}
+                        {getInputFormGroup("email", {
+                          childProps: { disabled: !!selectedMedical },
+                        })}
                       </Col>
 
                       <Col xs={12} md={6}>
-                        {getPhoneInputFormGroup('mobile', { childProps: { type: "tel", disabled: !!selectedMedical } })}
+                        {getPhoneInputFormGroup("mobile", {
+                          childProps: {
+                            type: "tel",
+                            disabled: !!selectedMedical,
+                          },
+                        })}
                       </Col>
                     </Row>
                     <Row>
                       <Col xs={6}>
-                        {getInputFormGroup('location', { childProps: { disabled: !!selectedMedical } })}
+                        {getInputFormGroup("location", {
+                          childProps: { disabled: !!selectedMedical },
+                        })}
                       </Col>
                       <Col xs={6}>
-                        {getDateInputFormGroup('hired_date', { childProps: { type: "date", disabled: !!selectedMedical } })}
+                        {getDateInputFormGroup("hired_date", {
+                          childProps: {
+                            type: "date",
+                            disabled: !!selectedMedical,
+                          },
+                        })}
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs={12} md={12}>
-                        {getAutocompleteInputFormGroup('address', { childProps: { disabled: !!selectedMedical } })}
+                        {getAutocompleteInputFormGroup("address", {
+                          childProps: { disabled: !!selectedMedical },
+                        })}
                       </Col>
                     </Row>
-                    
-                    <div className='add-client-witness__submit-container'>
-                      <Button type="submit"
-                        disabled={isSubmitting} loading={isSubmitting}
-                        intent={Intent.PRIMARY} large>
-                        <b>
-                          'Submit'
-                        </b>
+
+                    <div className="add-client-witness__submit-container">
+                      <Tooltip2 content="This button is hooked up to close the dialog.">
+                        <Button onClick={handleClose}>Close</Button>
+                      </Tooltip2>
+                      &nbsp;
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        loading={isSubmitting}
+                        intent={Intent.PRIMARY}
+                        large
+                      >
+                        Submit
                       </Button>
                     </div>
                   </form>
-                )
-              }, FIELDS)}
-            </Formik>
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Tooltip2 content="This button is hooked up to close the dialog.">
-              <Button onClick={handleClose}>Close</Button>
-            </Tooltip2>
-            <AnchorButton
-              linkProps={{
-                to: "",
-              }}
-              buttonProps={{
-                intent: Intent.PRIMARY,
-              }}
-            >
-              Add Client Witness
-            </AnchorButton>
-          </div>
+                );
+              },
+              FIELDS
+            )}
+          </Formik>
         </div>
       </>
     </Dialog>
