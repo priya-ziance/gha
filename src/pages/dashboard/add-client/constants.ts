@@ -34,7 +34,9 @@ export const DIALOG_NAMES = {
   levelsOfService: 'levelsOfService',
   services: 'services',
   witnesses: 'witnesses',
-  trainers: 'trainers'
+  trainers: 'trainers',
+  clientWitness : "clientWitness",
+  staffWitness : "staffWitness"
 }
 
 export const FUNDS_METHODS_OPTIONS = [

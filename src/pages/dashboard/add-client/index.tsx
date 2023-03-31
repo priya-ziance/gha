@@ -10,6 +10,8 @@ import LocationContext from '../../../contexts/location';
 
 import LevelsOfServiceDialog from './levelsOfService';
 import ClientCustomDialog from './clientCustomForm';
+import ClientWitnessDialog from './clientWitnessForm';
+import StaffWitnessDialog from './staffWitnessForm';
 import Signature from './signature';
 import Services from './servicesDialog';
 import Witnesses from './witnessesDialog';
@@ -106,7 +108,8 @@ const AddClient = (props: AddClientProps) => {
   const onServicesForm = () => setCurrentDialog(DIALOG_NAMES.services);
   const onWitnessesForm = () => setCurrentDialog(DIALOG_NAMES.witnesses);
   const onTrainersForm = () => setCurrentDialog(DIALOG_NAMES.trainers);
-
+  const onClientWitnessForm = () => setCurrentDialog(DIALOG_NAMES.clientWitness);
+  const onStaffWitnessForm = () => setCurrentDialog(DIALOG_NAMES.staffWitness);
 
   const uploadFile = async (file: File) => {
     if (file) {
@@ -297,6 +300,8 @@ const AddClient = (props: AddClientProps) => {
               const servicesDialogOpen = currentDialog === DIALOG_NAMES.services;
               const witnessesDialogOpen = currentDialog === DIALOG_NAMES.witnesses;
               const trainersDialogOpen = currentDialog === DIALOG_NAMES.trainers;
+              const clientWitnessesDialogOpen = currentDialog === DIALOG_NAMES.clientWitness;
+              const staffWitnessesDialogOpen = currentDialog === DIALOG_NAMES.staffWitness;
 
               const profilePictureUrl = get(props, 'client.profilePicture.publicUrl', '')
               const floridaFileUrl = get(props, 'client.floridaId.publicUrl', '')
@@ -492,7 +497,7 @@ const AddClient = (props: AddClientProps) => {
                         label={"Add Client Witness"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
+                        <Button intent={Intent.PRIMARY} onClick={onClientWitnessForm}>
                           <b>Add Client Witness</b>
                         </Button>
                       </FormGroup>
@@ -502,7 +507,7 @@ const AddClient = (props: AddClientProps) => {
                         label={"Add Staff Witness"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
+                        <Button intent={Intent.PRIMARY} onClick={onStaffWitnessForm}>
                           <b>Add Staff Witness</b>
                         </Button>
                       </FormGroup>
@@ -581,6 +586,10 @@ const AddClient = (props: AddClientProps) => {
                   <Witnesses handleWitnessesChange={handleWitnessesChange} witnesses={witnesses} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
                   
                   <Trainers handleTrainersChange={handleTrainersChange} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
+
+                  <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
+
+                  <StaffWitnessDialog isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
                 </form>
               )
             }, FIELDS)}
