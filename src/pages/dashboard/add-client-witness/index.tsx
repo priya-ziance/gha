@@ -137,8 +137,8 @@ const AddClientWitness = (props: AddClientWitnessProps) => {
                       onClose={handleSelectClientWitnessClose}
                       onSelect={(clientWitness: any) => {
                         setFieldValue("first_name", clientWitness.first_name)
-                        setFieldValue("last_name", clientWitness.lastName)
-                        setFieldValue("address", clientWitness.add)
+                        setFieldValue("last_name", clientWitness.last_name)
+                        setFieldValue("address", clientWitness.address)
                         setFieldValue("mobile", clientWitness.mobile)
                         setFieldValue("email", clientWitness.email)
                         setFieldValue("contact_type", clientWitness.contactType);

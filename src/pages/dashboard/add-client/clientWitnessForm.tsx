@@ -1,6 +1,6 @@
 import { Classes, Intent } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import { AnchorButton, Button, Col, Dialog, Row } from "../../../components";
+import { Button, Col, Dialog, Row } from "../../../components";
 import { FIELDS } from "./constants";
 import { IDialog } from "./types";
 import { IClientWithnessModel } from "../../../types";
@@ -93,7 +93,7 @@ const ClientWitnessForm = (props: IDialog) => {
                       onSelect={(clientWitness: any) => {
                         setFieldValue("first_name", clientWitness.first_name);
                         setFieldValue("last_name", clientWitness.lastName);
-                        setFieldValue("address", clientWitness.add);
+                        setFieldValue("address", clientWitness.address);
                         setFieldValue("mobile", clientWitness.mobile);
                         setFieldValue("email", clientWitness.email);
                         setFieldValue(
@@ -184,7 +184,6 @@ const ClientWitnessForm = (props: IDialog) => {
                         disabled={isSubmitting}
                         loading={isSubmitting}
                         intent={Intent.PRIMARY}
-                        large
                       >
                         Submit
                       </Button>
