@@ -486,6 +486,26 @@ const AddClient = (props: AddClientProps) => {
                           <b>Services</b>
                         </Button>
                       </FormGroup>
+
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={"Add Client Witness"}
+                        labelFor="text-input"
+                      >
+                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
+                          <b>Add Client Witness</b>
+                        </Button>
+                      </FormGroup>
+
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={"Add Staff Witness"}
+                        labelFor="text-input"
+                      >
+                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
+                          <b>Add Staff Witness</b>
+                        </Button>
+                      </FormGroup>
                     </Col>
   
                     {/* ---------------------------COL 3------------------------------- */}
