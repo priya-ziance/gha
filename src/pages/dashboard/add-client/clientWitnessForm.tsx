@@ -1,200 +1,116 @@
-import { Classes, Intent } from "@blueprintjs/core";
-import { Tooltip2 } from "@blueprintjs/popover2";
-import { Button, Col, Dialog, Row } from "../../../components";
-import { FIELDS } from "./constants";
+import { Classes } from "@blueprintjs/core";
+import { Dialog , Table } from "../../../components";
 import { IDialog } from "./types";
-import { IClientWithnessModel } from "../../../types";
-import { useContext, useState } from "react";
-import ToastsContext from "../../../contexts/toasts";
-import * as helpers from "../add-client-witness/helpers";
-import api from "../../../api";
-import { Formik, FormikHelpers } from "formik";
-import formikWrapper from "../../../wrappers/formik";
-import OmniContactsInput from "../../../controlled-components/OmniContactInput";
-import {
-  FAMILY_CONTACT_LIST,
-  MEDICAL_CONTACT_LIST,
-} from "../../../utils/constants";
+import { useContext, useEffect, useState } from "react";
 import ClientContext from "../../../contexts/client";
+import { IClientWithnessModel } from "../../../types";
+import api from "../../../api";
+import { actionColumn, contactTypeColumn, emailColumn, mobileColumn, nameColumn } from "../client-witness/helpers";
+import * as helpers from "../../../utils/helpers";
+import URLS from "../../../utils/urls";
+
+const PAGE_SIZE = 10;
 
 const ClientWitnessForm = (props: IDialog) => {
   const { isOpen, handleClose } = props;
-
-  const [isOmniOpen, setIsOmniOpen] = useState(false);
-  const [selectedMedical, setSelectedMedical] = useState<
-    IClientWithnessModel | undefined
-  >(undefined);
+  const [clientWitness, setClientWitness] = useState<
+    IClientWithnessModel[] | []
+  >([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-  const { addToast } = useContext(ToastsContext);
-  let initialValues = helpers.initialValues;
+  const hasNextPage = clientWitness.length === PAGE_SIZE;
+  const hasPrevPage = page > 0;
 
-  const handleSelectClientWitnessClose = () => {
-    setIsOmniOpen(false);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+
+      try {
+        setClientWitness(
+          await api.clientWitness.getClientWitness(clientId, {
+            page,
+            pageSize: PAGE_SIZE,
+          })
+        );
+      } catch (e: any) {}
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 200);
+    })();
+  }, [clientId, page]);
+
+  const onNextPage = () => {
+    if (hasNextPage) {
+      setPage((page) => page + 1);
+    }
   };
 
-  const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    const { resetForm, setSubmitting } = options;
-    setSubmitting(true);
-    values.client = clientId;
-
-    try {
-      await api.clientWitness.createClientWitness(values);
-      addToast({
-        message: "Client Witness Created",
-        intent: Intent.SUCCESS,
-      });
-      handleClose()
-      // Reset the form
-      resetForm();
-    } catch (e: any) {
-      addToast({
-        message: "Something went wrong",
-        intent: Intent.DANGER,
-      });
+  const onPrevPage = () => {
+    if (hasPrevPage) {
+      setPage((page) => page - 1);
     }
-
-    setSubmitting(false);
   };
 
   return (
     <Dialog
       icon="info-sign"
       onClose={handleClose}
-      title="Add Client Witness Form"
+      title="Client Witness"
       isOpen={isOpen}
     >
       <>
         <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={helpers.validationSchema}
-            onSubmit={onSubmit}
-          >
-            {formikWrapper(
-              ({
-                wrapperProps: {
-                  getDateInputFormGroup,
-                  getSelectFieldInputFormGroup,
-                  getInputFormGroup,
-                  getAutocompleteInputFormGroup,
-                  getPhoneInputFormGroup,
-                },
-                formikProps: {
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  validateForm,
-                },
-              }) => {
-                return (
-                  <form onSubmit={handleSubmit}>
-                    <OmniContactsInput
-                      isOpen={isOmniOpen}
-                      onClose={handleSelectClientWitnessClose}
-                      onSelect={(clientWitness: any) => {
-                        setFieldValue("first_name", clientWitness.first_name);
-                        setFieldValue("last_name", clientWitness.lastName);
-                        setFieldValue("address", clientWitness.address);
-                        setFieldValue("mobile", clientWitness.mobile);
-                        setFieldValue("email", clientWitness.email);
-                        setFieldValue(
-                          "contact_type",
-                          clientWitness.contactType
-                        );
-                        setFieldValue("hired_date", clientWitness.hiredDate);
-                        setFieldValue("location", clientWitness.location);
-                        validateForm();
-                        setIsOmniOpen(false);
-                        setSelectedMedical(clientWitness);
-                      }}
-                    />
-
-                    <div className="flex flex-row items-center gap-4">
-                      <div>
-                        {getSelectFieldInputFormGroup("contact_type", {
-                          childProps: {
-                            selectOptions: [
-                              ...MEDICAL_CONTACT_LIST,
-                              ...FAMILY_CONTACT_LIST,
-                            ],
-                            capitalizeFirst: true,
-                            disabled: selectedMedical,
-                          },
-                        })}
-                      </div>
-                    </div>
-                    <Row>
-                      <Col xs={12} md={6}>
-                        {getInputFormGroup("first_name", {
-                          childProps: { disabled: !!selectedMedical },
-                        })}
-                      </Col>
-                      <Col xs={12} md={6}>
-                        {getInputFormGroup("last_name", {
-                          childProps: { disabled: !!selectedMedical },
-                        })}
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col xs={12} md={6}>
-                        {getInputFormGroup("email", {
-                          childProps: { disabled: !!selectedMedical },
-                        })}
-                      </Col>
-
-                      <Col xs={12} md={6}>
-                        {getPhoneInputFormGroup("mobile", {
-                          childProps: {
-                            type: "tel",
-                            disabled: !!selectedMedical,
-                          },
-                        })}
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col xs={6}>
-                        {getInputFormGroup("location", {
-                          childProps: { disabled: !!selectedMedical },
-                        })}
-                      </Col>
-                      <Col xs={6}>
-                        {getDateInputFormGroup("hired_date", {
-                          childProps: {
-                            type: "date",
-                            disabled: !!selectedMedical,
-                          },
-                        })}
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col xs={12} md={12}>
-                        {getAutocompleteInputFormGroup("address", {
-                          childProps: { disabled: !!selectedMedical },
-                        })}
-                      </Col>
-                    </Row>
-
-                    <div className="add-client-witness__submit-container">
-                      <Tooltip2 content="This button is hooked up to close the dialog.">
-                        <Button onClick={handleClose}>Close</Button>
-                      </Tooltip2>
-                      &nbsp;
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        loading={isSubmitting}
-                        intent={Intent.PRIMARY}
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </form>
-                );
+          <Table
+            loading={loading}
+            numRows={clientWitness.length}
+            getCellClipboardData={(row: any, col: any) => {
+              return clientWitness[row];
+            }}
+            columns={[
+              {
+                title: "Name",
+                cellRenderer: nameColumn,
+                width: helpers.getTableWith(0.25),
               },
-              FIELDS
-            )}
-          </Formik>
+              {
+                title: "Email",
+                cellRenderer: emailColumn,
+                width: helpers.getTableWith(0.25),
+              },
+              {
+                title: "Contact Type",
+                cellRenderer: contactTypeColumn,
+                width: helpers.getTableWith(0.2),
+              },
+              {
+                title: "Mobile",
+                cellRenderer: mobileColumn,
+                width: helpers.getTableWith(0.2),
+              },
+              {
+                title: "Actions",
+                cellRenderer: (data: any) => {
+                  return actionColumn(data, {
+                    viewLink: URLS.getPagePath("edit-client-witness", {
+                      clientId,
+                      clientContactId: data.id,
+                    }),
+                  });
+                },
+                width: helpers.getTableWith(0.1),
+              },
+            ]}
+            data={clientWitness}
+            enableRowHeader={false}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            onNextPage={onNextPage}
+            onPrevPage={onPrevPage}
+            page={page}
+            emptyTableMessage="No Client Witness Found"
+          />
         </div>
       </>
     </Dialog>
