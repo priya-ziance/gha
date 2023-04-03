@@ -1,15 +1,23 @@
 import { Classes, Icon, Intent } from "@blueprintjs/core";
-import { Dialog, FormMultiItemSelect, Table } from "../../../components";
+import {
+  Col,
+  Dialog,
+  FormMultiItemSelect,
+  Row,
+  Table,
+} from "../../../components";
 import { IDialog } from "./types";
 import { useContext, useEffect, useMemo, useState } from "react";
 import ClientContext from "../../../contexts/client";
 import { IClientWithnessModel } from "../../../types";
 import api from "../../../api";
-import {
-  nameColumn,
-} from "../client-witness/helpers";
+import { nameColumn } from "../client-witness/helpers";
 import * as helpers from "../../../utils/helpers";
 import { debounce } from "lodash";
+import { Formik } from "formik";
+import formikWrapper from "../../../wrappers/formik";
+import OmniContactsInput from "../../../controlled-components/OmniContactInput";
+import { FIELDS } from "./constants";
 
 const PAGE_SIZE = 10;
 
@@ -18,8 +26,10 @@ const ClientWitnessForm = (props: IDialog) => {
   const [clientWitness, setClientWitness] = useState<
     IClientWithnessModel[] | []
   >([]);
-  const [clientWitnessResults, setClientWitnessResults] = useState<IClientWithnessModel[] | []>([])
-  const [clientWitnessQuery, setClientWitnessQuery] = useState('')
+  const [clientWitnessResults, setClientWitnessResults] = useState<
+    IClientWithnessModel[] | []
+  >([]);
+  const [clientWitnessQuery, setClientWitnessQuery] = useState("");
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
@@ -27,24 +37,28 @@ const ClientWitnessForm = (props: IDialog) => {
   const hasPrevPage = page > 0;
 
   const debouncedCallback = useMemo(() => {
-    const debounced = debounce(async () => {
-      if (clientWitnessQuery) {
-        try {
-          // const results = await api.users.search(clientWitnessQuery)
-          // setClientWitnessResults(results)
-        } catch(e: any) {}
-      } else {
-        setClientWitnessResults([])
-        debounced.cancel()
-      }
-    }, 200, { leading: true, trailing: false })
+    const debounced = debounce(
+      async () => {
+        if (clientWitnessQuery) {
+          try {
+            // const results = await api.users.search(clientWitnessQuery)
+            // setClientWitnessResults(results)
+          } catch (e: any) {}
+        } else {
+          setClientWitnessResults([]);
+          debounced.cancel();
+        }
+      },
+      200,
+      { leading: true, trailing: false }
+    );
 
-    return debounced
-  }, [clientWitnessQuery])
+    return debounced;
+  }, [clientWitnessQuery]);
 
   const onClientWitnessChange = (q: string) => {
-    setClientWitnessQuery(q)
-  }
+    setClientWitnessQuery(q);
+  };
 
   useEffect(() => {
     (async () => {
@@ -81,29 +95,27 @@ const ClientWitnessForm = (props: IDialog) => {
     if (clientWitness[item.id]) {
       return (
         <span>
-          <Icon icon={'tick'} />
-          {' '}
-          {item.firstName}
+          <Icon icon={"tick"} /> {item.firstName}
         </span>
-      )
+      );
     }
-    return item.firstName
-  }
+    return item.firstName;
+  };
 
   const tagRenderer = (item: any) => {
     if (item && clientWitness[item]) {
-      return clientWitness[item].firstName
+      return clientWitness[item].firstName;
     }
-    return ''
-  }
+    return "";
+  };
 
   const onRemoveClientWitness = (val: any) => {
     setClientWitnessResults((users: any) => {
       delete users[val];
 
-      return {...users}
-    })
-  }
+      return { ...users };
+    });
+  };
 
   const handleItemChange = (e: any) => {
     const id = e.id;
@@ -111,11 +123,12 @@ const ClientWitnessForm = (props: IDialog) => {
       setClientWitnessResults((users: any) => {
         users[id] = e;
 
-        return { ...users }
-      })
+        return { ...users };
+      });
     }
-  }
+  };
 
+  const initialValues = {};
   return (
     <Dialog
       icon="info-sign"
@@ -126,7 +139,32 @@ const ClientWitnessForm = (props: IDialog) => {
       <>
         <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
           <div className="gha__users-input">
-            <FormMultiItemSelect
+            <Formik
+              initialValues={initialValues}
+              onSubmit={async (values, { setSubmitting }) => {
+                console.log("values........... : ", values);
+              }}
+            >
+              {formikWrapper(
+                ({
+                  wrapperProps: { getInputFormGroup },
+                  formikProps: { handleSubmit },
+                }) => {
+                  return (
+                    <form onSubmit={handleSubmit}>
+                      <Row>
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("first_name")}
+                        </Col>
+                      </Row>
+                    </form>
+                  );
+                },
+                FIELDS
+              )}
+            </Formik>
+
+            {/* <FormMultiItemSelect
               intent={Intent.PRIMARY}
               label={"Select Client Witness"}
               menuRenderer={menuRenderer}
@@ -138,7 +176,7 @@ const ClientWitnessForm = (props: IDialog) => {
                 onRemove: onRemoveClientWitness,
                 onQueryChange: onClientWitnessChange,
               }}
-            />
+            /> */}
           </div>
 
           <Table
@@ -151,8 +189,8 @@ const ClientWitnessForm = (props: IDialog) => {
               {
                 title: "Name",
                 cellRenderer: nameColumn,
-                width: helpers.getTableWith(0.50),
-              }
+                width: helpers.getTableWith(0.5),
+              },
             ]}
             data={clientWitness}
             enableRowHeader={false}

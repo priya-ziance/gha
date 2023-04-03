@@ -303,6 +303,7 @@ export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE |
   GOAL_FIELDS_TYPE |
   SUBGOAL_FIELDS_TYPE;
 
+  
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
     name: string,
