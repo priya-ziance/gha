@@ -19,9 +19,9 @@ const StaffWitnessForm = (props: IDialog) => {
   const [staffWitness, setStaffWitness] = useState<IStaffWithnessModel[] | []>(
     []
   );
-  const [staffWitnessActual, setStaffWitnessActual] = useState<IStaffWithnessModel[] | []>(
-    []
-  );
+  const [staffWitnessActual, setStaffWitnessActual] = useState<
+    IStaffWithnessModel[] | []
+  >([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
@@ -34,12 +34,12 @@ const StaffWitnessForm = (props: IDialog) => {
       setLoading(true);
 
       try {
-        setStaffWitness(
-          await api.staffWitness.getStaffWitness(clientId, {
-            page,
-            pageSize: PAGE_SIZE,
-          })
-        );
+        const results = await api.staffWitness.getStaffWitness(clientId, {
+          page,
+          pageSize: PAGE_SIZE,
+        });
+        setStaffWitness(results);
+        setStaffWitnessActual(results);
       } catch (e: any) {}
 
       setTimeout(() => {
