@@ -5,7 +5,7 @@ import { ChangeEvent } from 'react';
 import { FormGroup } from '..';
 
 interface IFormSelectProps {
-  tagRenderer: (item: any) => string;
+  tagRenderer: (item: any) => string | undefined;
   items: any[];
   onItemSelect: (e: any | ChangeEvent) => void;
   onRemove?: (value: any, index: number) => void;

@@ -854,7 +854,7 @@ export interface IClientWithness {
 }
 
 export interface IClientWithnessModel {
-  id?: string;
+  id : string;
   email?: string;
   contactType?: string;
   firstName?: string;

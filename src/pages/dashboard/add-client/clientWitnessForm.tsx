@@ -18,8 +18,8 @@ const ClientWitnessForm = (props: IDialog) => {
   const [clientWitness, setClientWitness] = useState<
     IClientWithnessModel[] | []
   >([]);
-  const [userResults, setClientWitnessResults] = useState<IClientWithnessModel[] | []>([])
-  const [userQuery, setUserQuery] = useState('')
+  const [clientWitnessResults, setClientWitnessResults] = useState<IClientWithnessModel[] | []>([])
+  const [clientWitnessQuery, setClientWitnessQuery] = useState('')
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
@@ -28,10 +28,10 @@ const ClientWitnessForm = (props: IDialog) => {
 
   const debouncedCallback = useMemo(() => {
     const debounced = debounce(async () => {
-      if (userQuery) {
+      if (clientWitnessQuery) {
         try {
-          const results = await api.users.search(userQuery)
-          setClientWitnessResults(results)
+          // const results = await api.users.search(clientWitnessQuery)
+          // setClientWitnessResults(results)
         } catch(e: any) {}
       } else {
         setClientWitnessResults([])
@@ -40,12 +40,12 @@ const ClientWitnessForm = (props: IDialog) => {
     }, 200, { leading: true, trailing: false })
 
     return debounced
-  }, [userQuery])
+  }, [clientWitnessQuery])
 
-  const onUserQueryChange = (q: string) => {
-    setUserQuery(q)
+  const onClientWitnessChange = (q: string) => {
+    setClientWitnessQuery(q)
   }
-  
+
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -77,8 +77,8 @@ const ClientWitnessForm = (props: IDialog) => {
     }
   };
 
-  const menuRenderer = (item: IClientWithnessModel) => {
-    if (clientWitness[0]) {
+  const menuRenderer = (item: any) => {
+    if (clientWitness[item.id]) {
       return (
         <span>
           <Icon icon={'tick'} />
@@ -87,16 +87,33 @@ const ClientWitnessForm = (props: IDialog) => {
         </span>
       )
     }
-
     return item.firstName
   }
 
-  const tagRenderer = (item: string) => {
+  const tagRenderer = (item: any) => {
     if (item && clientWitness[item]) {
-      return clientWitness[item].name
+      return clientWitness[item].firstName
     }
-
     return ''
+  }
+
+  const onRemoveClientWitness = (val: any) => {
+    setClientWitnessResults((users: any) => {
+      delete users[val];
+
+      return {...users}
+    })
+  }
+
+  const handleItemChange = (e: any) => {
+    const id = e.id;
+    if (!clientWitness[id]) {
+      setClientWitnessResults((users: any) => {
+        users[id] = e;
+
+        return { ...users }
+      })
+    }
   }
 
   return (
@@ -115,11 +132,11 @@ const ClientWitnessForm = (props: IDialog) => {
               menuRenderer={menuRenderer}
               formSelectProps={{
                 tagRenderer,
-                items: userResults,
+                items: clientWitnessResults,
                 onItemSelect: handleItemChange,
                 selectedItems: Object.keys(clientWitness),
-                onRemove: onRemoveUser,
-                onQueryChange: onUserQueryChange,
+                onRemove: onRemoveClientWitness,
+                onQueryChange: onClientWitnessChange,
               }}
             />
           </div>
