@@ -135,6 +135,7 @@ const ClientWitnessForm = (props: IDialog) => {
   const initialValues = {
     search: "",
   };
+  
   return (
     <Dialog
       icon="info-sign"
@@ -148,7 +149,6 @@ const ClientWitnessForm = (props: IDialog) => {
             <Formik
               initialValues={initialValues}
               onSubmit={async (values, { setSubmitting }) => {
-                console.log("values........... : ", values);
                 if (values.search) {
                   const filteredClientWitness = [...clientWitnessActual].filter((item) => {
                     return (
