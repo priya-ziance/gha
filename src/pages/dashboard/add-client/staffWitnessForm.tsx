@@ -11,10 +11,7 @@ import api from "../../../api";
 import { Formik, FormikHelpers } from "formik";
 import formikWrapper from "../../../wrappers/formik";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
-import {
-  FAMILY_CONTACT_LIST,
-  MEDICAL_CONTACT_LIST,
-} from "../../../utils/constants";
+import ClientContext from "../../../contexts/client";
 
 const StaffWitnessForm = (props: IDialog) => {
   const { isOpen, handleClose } = props;
@@ -22,7 +19,7 @@ const StaffWitnessForm = (props: IDialog) => {
   const [selectedMedical, setSelectedMedical] = useState<
     IStaffWithnessModel | undefined
   >(undefined);
-  const clientId = "h9YwkW4gyE";
+  const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues = helpers.initialValues;
 

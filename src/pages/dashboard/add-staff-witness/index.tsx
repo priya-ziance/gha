@@ -14,6 +14,7 @@ import "./index.scss";
 
 import { pick } from "lodash";
 import { IStaffWithnessModel } from "../../../types";
+import ClientContext from "../../../contexts/client";
 
 interface AddStaffWitnessProps {
   staffWitness?: IStaffWithnessModel;
@@ -25,7 +26,7 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
   const [selectedMedical, setSelectedMedical] = useState<
     IStaffWithnessModel | undefined
   >(undefined);
-  const clientId = "h9YwkW4gyE";
+  const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 

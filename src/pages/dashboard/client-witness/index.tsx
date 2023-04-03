@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Intent } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { AnchorButton, Col, PageHeading, Table } from "../../../components";
@@ -14,6 +14,7 @@ import {
 } from "./helpers";
 import "./index.scss";
 import { IClientWithnessModel } from "../../../types";
+import ClientContext from "../../../contexts/client";
 
 const PAGE_SIZE = 10;
 
@@ -23,7 +24,7 @@ const ClientWitness = () => {
   >([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const clientId = "h9YwkW4gyE";
+  const { id: clientId } = useContext(ClientContext);
 
   const hasNextPage = clientWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;

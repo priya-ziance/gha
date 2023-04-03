@@ -15,6 +15,7 @@ import {
   FAMILY_CONTACT_LIST,
   MEDICAL_CONTACT_LIST,
 } from "../../../utils/constants";
+import ClientContext from "../../../contexts/client";
 
 const ClientWitnessForm = (props: IDialog) => {
   const { isOpen, handleClose } = props;
@@ -23,7 +24,7 @@ const ClientWitnessForm = (props: IDialog) => {
   const [selectedMedical, setSelectedMedical] = useState<
     IClientWithnessModel | undefined
   >(undefined);
-  const clientId = "h9YwkW4gyE";
+  const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues = helpers.initialValues;
 

@@ -15,6 +15,7 @@ import './index.scss';
 
 import { pick } from 'lodash';
 import { IClientWithnessModel } from '../../../types';
+import ClientContext from '../../../contexts/client';
 
 interface AddClientWitnessProps {
   clientWitness?: IClientWithnessModel;
@@ -24,7 +25,7 @@ interface AddClientWitnessProps {
 const AddClientWitness = (props: AddClientWitnessProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedMedical, setSelectedMedical] = useState<IClientWithnessModel | undefined>(undefined)
-  const clientId = "h9YwkW4gyE"
+  const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
