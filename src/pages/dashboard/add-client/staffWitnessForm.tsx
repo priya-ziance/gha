@@ -6,8 +6,7 @@ import { IStaffWithnessModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 import api from "../../../api";
 import * as helpers from "../../../utils/helpers";
-import { actionColumn, addressColumn, emailColumn, mobileColumn, nameColumn } from "../staff-witness/helpers";
-import URLS from "../../../utils/urls";
+import { nameColumn } from "../staff-witness/helpers";
 
 const PAGE_SIZE = 10;
 
@@ -76,34 +75,7 @@ const StaffWitnessForm = (props: IDialog) => {
                       title: "Name",
                       cellRenderer: nameColumn,
                       width: helpers.getTableWith(0.25),
-                    },
-                    {
-                      title: "Email",
-                      cellRenderer: emailColumn,
-                      width: helpers.getTableWith(0.25),
-                    },
-                    {
-                      title: "Mobile",
-                      cellRenderer: mobileColumn,
-                      width: helpers.getTableWith(0.2),
-                    },
-                    {
-                      title: "Address",
-                      cellRenderer: addressColumn,
-                      width: helpers.getTableWith(0.2),
-                    },
-                    {
-                      title: "Actions",
-                      cellRenderer: (data: any) => {
-                        return actionColumn(data, {
-                          viewLink: URLS.getPagePath("edit-staff-witness", {
-                            clientId,
-                            clientContactId: data.id,
-                          }),
-                        });
-                      },
-                      width: helpers.getTableWith(0.1),
-                    },
+                    }
                   ]}
                   data={staffWitness}
                   enableRowHeader={false}

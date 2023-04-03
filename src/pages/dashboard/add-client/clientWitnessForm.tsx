@@ -1,13 +1,14 @@
-import { Classes } from "@blueprintjs/core";
-import { Dialog , Table } from "../../../components";
+import { Classes, Intent } from "@blueprintjs/core";
+import { Dialog, FormMultiItemSelect, Table } from "../../../components";
 import { IDialog } from "./types";
 import { useContext, useEffect, useState } from "react";
 import ClientContext from "../../../contexts/client";
 import { IClientWithnessModel } from "../../../types";
 import api from "../../../api";
-import { actionColumn, contactTypeColumn, emailColumn, mobileColumn, nameColumn } from "../client-witness/helpers";
+import {
+  nameColumn,
+} from "../client-witness/helpers";
 import * as helpers from "../../../utils/helpers";
-import URLS from "../../../utils/urls";
 
 const PAGE_SIZE = 10;
 
@@ -53,6 +54,20 @@ const ClientWitnessForm = (props: IDialog) => {
     }
   };
 
+  // const menuRenderer = (item: IUserModel) => {
+  //   if (selectedUsers[item.id]) {
+  //     return (
+  //       <span>
+  //         <Icon icon={'tick'} />
+  //         {' '}
+  //         {item.name}
+  //       </span>
+  //     )
+  //   }
+
+  //   return item.name
+  // }
+
   return (
     <Dialog
       icon="info-sign"
@@ -62,6 +77,22 @@ const ClientWitnessForm = (props: IDialog) => {
     >
       <>
         <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
+          <div className="gha__users-input">
+            {/* <FormMultiItemSelect
+              intent={Intent.PRIMARY}
+              label={"Select Users"}
+              menuRenderer={menuRenderer}
+              formSelectProps={{
+                tagRenderer,
+                items: userResults,
+                onItemSelect: handleItemChange,
+                selectedItems: Object.keys(selectedUsers),
+                onRemove: onRemoveUser,
+                onQueryChange: onUserQueryChange,
+              }}
+            /> */}
+          </div>
+
           <Table
             loading={loading}
             numRows={clientWitness.length}
@@ -73,34 +104,7 @@ const ClientWitnessForm = (props: IDialog) => {
                 title: "Name",
                 cellRenderer: nameColumn,
                 width: helpers.getTableWith(0.25),
-              },
-              {
-                title: "Email",
-                cellRenderer: emailColumn,
-                width: helpers.getTableWith(0.25),
-              },
-              {
-                title: "Contact Type",
-                cellRenderer: contactTypeColumn,
-                width: helpers.getTableWith(0.2),
-              },
-              {
-                title: "Mobile",
-                cellRenderer: mobileColumn,
-                width: helpers.getTableWith(0.2),
-              },
-              {
-                title: "Actions",
-                cellRenderer: (data: any) => {
-                  return actionColumn(data, {
-                    viewLink: URLS.getPagePath("edit-client-witness", {
-                      clientId,
-                      clientContactId: data.id,
-                    }),
-                  });
-                },
-                width: helpers.getTableWith(0.1),
-              },
+              }
             ]}
             data={clientWitness}
             enableRowHeader={false}
