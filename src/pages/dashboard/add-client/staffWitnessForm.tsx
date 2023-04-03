@@ -74,7 +74,7 @@ const StaffWitnessForm = (props: IDialog) => {
                     {
                       title: "Name",
                       cellRenderer: nameColumn,
-                      width: helpers.getTableWith(1),
+                      width: helpers.getTableWith(0.5),
                     }
                   ]}
                   data={staffWitness}
