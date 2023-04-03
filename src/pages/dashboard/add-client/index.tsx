@@ -494,21 +494,21 @@ const AddClient = (props: AddClientProps) => {
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Add Client Witness"}
+                        label={"Client Witness"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY} onClick={onClientWitnessForm}>
-                          <b>Add Client Witness</b>
+                          <b>Client Witness</b>
                         </Button>
                       </FormGroup>
 
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={"Add Staff Witness"}
+                        label={"Staff Witness"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY} onClick={onStaffWitnessForm}>
-                          <b>Add Staff Witness</b>
+                          <b>Staff Witness</b>
                         </Button>
                       </FormGroup>
                     </Col>
