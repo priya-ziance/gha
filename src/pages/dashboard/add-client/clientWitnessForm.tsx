@@ -26,6 +26,10 @@ const ClientWitnessForm = (props: IDialog) => {
   const [clientWitness, setClientWitness] = useState<
     IClientWithnessModel[] | []
   >([]);
+  const [clientWitnessActual, setClientWitnessActual] = useState<
+    IClientWithnessModel[] | []
+  >([]);
+
   const [clientWitnessResults, setClientWitnessResults] = useState<
     IClientWithnessModel[] | []
   >([]);
@@ -65,12 +69,12 @@ const ClientWitnessForm = (props: IDialog) => {
       setLoading(true);
 
       try {
-        setClientWitness(
-          await api.clientWitness.getClientWitness(clientId, {
-            page,
-            pageSize: PAGE_SIZE,
-          })
-        );
+        const results = await api.clientWitness.getClientWitness(clientId, {
+          page,
+          pageSize: PAGE_SIZE,
+        });
+        setClientWitness(results);
+        setClientWitnessActual(results);
       } catch (e: any) {}
 
       setTimeout(() => {
@@ -128,7 +132,9 @@ const ClientWitnessForm = (props: IDialog) => {
     }
   };
 
-  const initialValues = {};
+  const initialValues = {
+    search: "",
+  };
   return (
     <Dialog
       icon="info-sign"
@@ -143,6 +149,21 @@ const ClientWitnessForm = (props: IDialog) => {
               initialValues={initialValues}
               onSubmit={async (values, { setSubmitting }) => {
                 console.log("values........... : ", values);
+                if (values.search) {
+                  const filteredClientWitness = [...clientWitnessActual].filter((item) => {
+                    return (
+                      item?.firstName
+                        ?.toLowerCase()
+                        .includes(values.search.toLowerCase()) ||
+                      item?.lastName
+                        ?.toLowerCase()
+                        .includes(values.search.toLowerCase())
+                    );
+                  });
+                  setClientWitness(filteredClientWitness);
+                } else {
+                  setClientWitness(clientWitnessActual);
+                }
               }}
             >
               {formikWrapper(
@@ -154,7 +175,7 @@ const ClientWitnessForm = (props: IDialog) => {
                     <form onSubmit={handleSubmit}>
                       <Row>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("first_name")}
+                          {getInputFormGroup("search")}
                         </Col>
                       </Row>
                     </form>
