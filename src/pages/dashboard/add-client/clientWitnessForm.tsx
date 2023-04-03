@@ -1,7 +1,7 @@
-import { Classes, Intent } from "@blueprintjs/core";
+import { Classes, Icon, Intent } from "@blueprintjs/core";
 import { Dialog, FormMultiItemSelect, Table } from "../../../components";
 import { IDialog } from "./types";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import ClientContext from "../../../contexts/client";
 import { IClientWithnessModel } from "../../../types";
 import api from "../../../api";
@@ -9,6 +9,7 @@ import {
   nameColumn,
 } from "../client-witness/helpers";
 import * as helpers from "../../../utils/helpers";
+import { debounce } from "lodash";
 
 const PAGE_SIZE = 10;
 
@@ -17,12 +18,34 @@ const ClientWitnessForm = (props: IDialog) => {
   const [clientWitness, setClientWitness] = useState<
     IClientWithnessModel[] | []
   >([]);
+  const [userResults, setClientWitnessResults] = useState<IClientWithnessModel[] | []>([])
+  const [userQuery, setUserQuery] = useState('')
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const hasNextPage = clientWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
+  const debouncedCallback = useMemo(() => {
+    const debounced = debounce(async () => {
+      if (userQuery) {
+        try {
+          const results = await api.users.search(userQuery)
+          setClientWitnessResults(results)
+        } catch(e: any) {}
+      } else {
+        setClientWitnessResults([])
+        debounced.cancel()
+      }
+    }, 200, { leading: true, trailing: false })
+
+    return debounced
+  }, [userQuery])
+
+  const onUserQueryChange = (q: string) => {
+    setUserQuery(q)
+  }
+  
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -54,19 +77,27 @@ const ClientWitnessForm = (props: IDialog) => {
     }
   };
 
-  // const menuRenderer = (item: IUserModel) => {
-  //   if (selectedUsers[item.id]) {
-  //     return (
-  //       <span>
-  //         <Icon icon={'tick'} />
-  //         {' '}
-  //         {item.name}
-  //       </span>
-  //     )
-  //   }
+  const menuRenderer = (item: IClientWithnessModel) => {
+    if (clientWitness[0]) {
+      return (
+        <span>
+          <Icon icon={'tick'} />
+          {' '}
+          {item.firstName}
+        </span>
+      )
+    }
 
-  //   return item.name
-  // }
+    return item.firstName
+  }
+
+  const tagRenderer = (item: string) => {
+    if (item && clientWitness[item]) {
+      return clientWitness[item].name
+    }
+
+    return ''
+  }
 
   return (
     <Dialog
@@ -78,19 +109,19 @@ const ClientWitnessForm = (props: IDialog) => {
       <>
         <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
           <div className="gha__users-input">
-            {/* <FormMultiItemSelect
+            <FormMultiItemSelect
               intent={Intent.PRIMARY}
-              label={"Select Users"}
+              label={"Select Client Witness"}
               menuRenderer={menuRenderer}
               formSelectProps={{
                 tagRenderer,
                 items: userResults,
                 onItemSelect: handleItemChange,
-                selectedItems: Object.keys(selectedUsers),
+                selectedItems: Object.keys(clientWitness),
                 onRemove: onRemoveUser,
                 onQueryChange: onUserQueryChange,
               }}
-            /> */}
+            />
           </div>
 
           <Table
