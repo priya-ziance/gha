@@ -8,6 +8,7 @@ import ClientBehaviour from './clientBehaviour';
 import ClientContact from './clientContact';
 import ClientWitness from './clientWitness';
 import StaffWithness from './staffWithness';
+import AddTrainers from './addTrainer';
 import Expense from './expense';
 import ExpenseList from './expenseList';
 import File from './file';
@@ -36,6 +37,7 @@ const Exports = {
   ClientContact,
   ClientWitness,
   StaffWithness,
+  AddTrainers,
   Expense,
   ExpenseList,
   File,

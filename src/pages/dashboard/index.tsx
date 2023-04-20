@@ -193,7 +193,7 @@ function Dashboard() {
         // const tokenPermissions: string[] = get(jwt(token), 'permissions');
 
         // TODO: Remove log
-        // console.log('TOKEN:', token, permissions.compilePermissions(tokenPermissions));
+        console.log('TOKEN:', token);
         client.defaults.setToken(token)
       } catch(e: any) {}
 

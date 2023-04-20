@@ -23,6 +23,10 @@ import AddStaffWitnessPage from './add-staff-witness';
 import StaffWitnessPage from './staff-witness';
 import EditStaffWitnessPage from './edit-staff-witness';
 
+import AddTrainersPage from './add-trainers';
+import Trainer from './trainer';
+import EditTrainers from './edit-trainers';
+
 import AddClientContactsPage from './add-client-contact';
 import ClientContactsPage from './client-contacts';
 import EditClientContactPage from './edit-client-contact';
@@ -77,6 +81,7 @@ import AppointmentsPage from './appointments';
 import EditAppointmentPage from './edit-appointment';
 
 import api from '../../api';
+
 
 interface ClientPathsType {
   clientId?: string
@@ -158,6 +163,12 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/staff-witness" exact component={StaffWitnessPage} />
       <Route path="/dashboard/clients/:clientId/staff-witness/add" exact component={AddStaffWitnessPage} />
       <Route path="/dashboard/clients/:clientId/staff-witness/:staffWitnessId/edit" exact component={EditStaffWitnessPage} />
+
+
+      <Route path="/dashboard/clients/:clientId/trainer" exact component={Trainer} />
+      <Route path="/dashboard/clients/:clientId/trainer/add" exact component={AddTrainersPage} />
+      <Route path="/dashboard/clients/:clientId/trainer/:trainerId/edit" exact component={EditTrainers} />
+
 
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />

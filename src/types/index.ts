@@ -1,455 +1,474 @@
-import { IToasterProps, IToastProps } from '@blueprintjs/core';
-import { Moment } from 'moment';
+import { IToasterProps, IToastProps } from "@blueprintjs/core";
+import { Moment } from "moment";
 
 export type PAGE_TYPES =
-  'admins' |  
-  'add-apd' |
-  'add-appointment' |
-  'add-bank-statement' |
-  'add-clients' |
-  'add-client-case-notes' |
-  'add-client-contact' |
-  'add-staff-witness' |
-  'add-client-witness' |
-  'add-database-behaviour' |
-  'add-database-goal' |
-  'add-database-subgoal' |
-  'add-database-task' |
-  'add-expenses-account' |
-  'add-expenses-list' |
-  'add-location' |
-  'add-medication' |
-  'add-sp-goals' |
-  'add-medical-contact' |
-  'apd' |
-  'appointments' |
-  'bank-statement' |
-  'behaviours' |
-  'behaviours-problems' |
-  'behaviours-assign' |
-  'behaviours-database' |
-  'dashboard' |
-  'clients' |
-  'client-case-notes' |
-  'client-info' |
-  'client-links' |
-  'client-contacts' |
-  'client-witness' |
-  'staff-witness' |
-  'edit-appointment' |
-  'edit-bank-statement' |
-  'edit-case-note' |
-  'edit-client-contact' |
-  'edit-client-witness' |
-  'edit-staff-witness' |
-  'edit-database-behaviour' |
-  'edit-database-goal' |
-  'edit-database-subgoal' |
-  'edit-database-task' |
-  'edit-expense-account' |
-  'edit-expenses-list' |
-  'edit-location' |
-  'edit-medication' |
-  'edit-medical-contact' |
-  'expenses' |
-  'expenses-account' |
-  'expenses-list' |
-  'goals' |
-  'goals-data-collection' |
-  'goals-database' |
-  'goals-database-goals' |
-  'goals-database-subgoals' |
-  'goals-database-tasks' |
-  'life-skills' |
-  'life-skills-logs' |
-  'life-skills-places-database' |
-  'life-skills-notes-database' |
-  'locations' |
-  'logs' |
-  'med-destruction' |
-  'medical-contacts' |
-  'med-pass' |
-  'medication' |
-  'medication-list' |
-  'personal-support' |
-  'personal-support-logs' |
-  'personal-support-places-database' |
-  'personal-support-notes-database' |
-  'reshab-logs' |
-  'respite-logs' |
-  'sp-goals';
-
+  | "admins"
+  | "add-apd"
+  | "add-appointment"
+  | "add-bank-statement"
+  | "add-clients"
+  | "add-client-case-notes"
+  | "add-client-contact"
+  | "add-staff-witness"
+  | "add-client-witness"
+  | "add-add-trainers"
+  | "add-database-behaviour"
+  | "add-database-goal"
+  | "add-database-subgoal"
+  | "add-database-task"
+  | "add-expenses-account"
+  | "add-expenses-list"
+  | "add-location"
+  | "add-medication"
+  | "add-sp-goals"
+  | "add-medical-contact"
+  | "apd"
+  | "appointments"
+  | "bank-statement"
+  | "behaviours"
+  | "behaviours-problems"
+  | "behaviours-assign"
+  | "behaviours-database"
+  | "dashboard"
+  | "clients"
+  | "client-case-notes"
+  | "client-info"
+  | "client-links"
+  | "client-contacts"
+  | "client-witness"
+  | "staff-witness"
+  | "trainer"
+  | "add-trainer"
+  | "edit-appointment"
+  | "edit-bank-statement"
+  | "edit-case-note"
+  | "edit-client-contact"
+  | "edit-client-witness"
+  | "edit-staff-witness"
+  | "edit-trainer"
+  | "edit-database-behaviour"
+  | "edit-database-goal"
+  | "edit-database-subgoal"
+  | "edit-database-task"
+  | "edit-expense-account"
+  | "edit-expenses-list"
+  | "edit-location"
+  | "edit-medication"
+  | "edit-medical-contact"
+  | "expenses"
+  | "expenses-account"
+  | "expenses-list"
+  | "goals"
+  | "goals-data-collection"
+  | "goals-database"
+  | "goals-database-goals"
+  | "goals-database-subgoals"
+  | "goals-database-tasks"
+  | "life-skills"
+  | "life-skills-logs"
+  | "life-skills-places-database"
+  | "life-skills-notes-database"
+  | "locations"
+  | "logs"
+  | "med-destruction"
+  | "medical-contacts"
+  | "med-pass"
+  | "medication"
+  | "medication-list"
+  | "personal-support"
+  | "personal-support-logs"
+  | "personal-support-places-database"
+  | "personal-support-notes-database"
+  | "reshab-logs"
+  | "respite-logs"
+  | "sp-goals";
 
 export type APD_FIELDS_TYPE =
-  'critical_incident' |
-  'county' |
-  'incident_date_time' |
-  'reportable_incident'
+  | "critical_incident"
+  | "county"
+  | "incident_date_time"
+  | "reportable_incident";
 
-
-export type APPOINTMENT_FIELDS_TYPE = 
-  'appointment_date' |
-  'time' |
-  'doctor' |
-  'contact_type' |
-  'type_of_appointment' |
-  'staff_notes' |
-  'physician_notes' |
-  'app_notes' |
-  'physician_document' |
-  'follow_up_date' |
-  'active' |
-  'annual_dental' |
-  'annual_medical' |
-  'reporgram_medication' |
-  'labs'
-
+export type APPOINTMENT_FIELDS_TYPE =
+  | "appointment_date"
+  | "time"
+  | "doctor"
+  | "contact_type"
+  | "type_of_appointment"
+  | "staff_notes"
+  | "physician_notes"
+  | "app_notes"
+  | "physician_document"
+  | "follow_up_date"
+  | "active"
+  | "annual_dental"
+  | "annual_medical"
+  | "reporgram_medication"
+  | "labs";
 
 export type BANK_STATEMENT_FIELDS_TYPE =
-  'active' |
-  'document' |
-  'from_date' |
-  'statement_name' |
-  'statement_description' |
-  'to_date' |
-  'type'
+  | "active"
+  | "document"
+  | "from_date"
+  | "statement_name"
+  | "statement_description"
+  | "to_date"
+  | "type";
 
 export type CASE_NOTE_FIELDS_TYPE =
-  'active' |
-  'date' |
-  'title' |
-  'notes' |
-  'significant_event' |
-  'significant_event_notes'
+  | "active"
+  | "date"
+  | "title"
+  | "notes"
+  | "significant_event"
+  | "significant_event_notes";
 
 export type LOCATION_FIELDS_TYPE =
-  'phoneNumber' |
-  'address' |
-  'city' |
-  'country'
+  | "phoneNumber"
+  | "address"
+  | "city"
+  | "country";
 
-export type CLIENT_CONTACT_FIELDS_TYPE = 
-  'active' |
-  'address' |
-  'company' |
-  'contact_type' |
-  'date_of_birth' |
-  'email' |
-  'fax' |
-  'first_name' |
-  'last_name' |
-  'mobile' |
-  'notes' |
-  'phone' |
-  'medical_contact'
+export type CLIENT_CONTACT_FIELDS_TYPE =
+  | "active"
+  | "address"
+  | "company"
+  | "contact_type"
+  | "date_of_birth"
+  | "email"
+  | "fax"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "notes"
+  | "phone"
+  | "medical_contact";
 
-  export type CLIENT_WITNESS_FIELDS_TYPE = 
-  'address' |
-  'contact_type' |
-  'hired_date' |
-  'email' |
-  'first_name' |
-  'last_name' |
-  'mobile' |
-  'location'
-  
-  export type STAFF_WITNESS_FIELDS_TYPE = 
-  'address' |
-  'hired_date' |
-  'email' |
-  'first_name' |
-  'last_name' |
-  'mobile' |
-  'location'
+export type CLIENT_WITNESS_FIELDS_TYPE =
+  | "address"
+  | "contact_type"
+  | "hired_date"
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "location";
 
-export type CLIENT_FIELDS_TYPE = 
-  'email' |
-  'first_name' |
-  'middle_name' |
-  'last_name' |
-  'date_of_birth' |
-  'sex' |
-  'address_line_1' |
-  'address_line_2' |
-  'city' |
-  'state' |
-  'zip_code' |
-  'phone' |
-  'mobile' |
-  'ssn' |
-  'florida_id' |
-  'medicaid' |
-  'medicare' |
-  'medicaid_waiver' |
-  'height' |
-  'eye_color' |
-  'hair_color' |
-  'legal_status' |
-  'language' |
-  'primary_diagnosis' |
-  'secondary_diagnosis' |
-  'allergies' |
-  'location' |
-  'health_insurance' |
-  'effective_date' |
-  'funds_method' |
-  'special_equipments' |
-  'race' |
-  'home_entry_date' |
-  'home_discharge_date' |
-  'religion' |
-  'mobility' |
-  'behaviours' |
-  'likes' |
-  'dislikes' |
-  'active' |
-  'definition_of_abuse' |
-  'notes';
+export type STAFF_WITNESS_FIELDS_TYPE =
+  | "address"
+  | "trainer_id"
+  | "hired_date"
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "location";
+
+  export type ADD_TRAINERS_FIELDS_TYPE =
+  | "image"
+  | "address"
+  | "trainer_id"
+  | "hired_date"
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "location";
+// export type ADD_TRAINERS_FIELDS_TYPE =
+//   | "address"
+//   | "trainer_id"
+//   // | "hired_date"
+//   | "hiredDate"
+//   | "email"
+//   | "first_name"
+//   | "last_name"
+//   // | "firstName"
+//   // | "lastName"
+//   | "mobile"
+//   | "location";
+
+export type CLIENT_FIELDS_TYPE =
+  | "email"
+  | "first_name"
+  | "middle_name"
+  | "last_name"
+  | "date_of_birth"
+  | "sex"
+  | "address_line_1"
+  | "address_line_2"
+  | "city"
+  | "state"
+  | "monthly_SSI_amount"
+  | "Special_equipments"
+  | "Bank_account_name"
+  | "Bank_Routing_Number"
+  | "Bank_account_number"
+  | "Funds_method"
+  | "zip_code"
+  | "phone"
+  | "mobile"
+  | "ssn"
+  | "florida_id"
+  | "medicaid"
+  | "medicare"
+  | "medicaid_waiver"
+  | "height"
+  | "eye_color"
+  | "hair_color"
+  | "legal_status"
+  | "language"
+  | "primary_diagnosis"
+  | "secondary_diagnosis"
+  | "allergies"
+  | "location"
+  | "health_insurance"
+  | "effective_date"
+  | "funds_method"
+  | "special_equipments"
+  | "race"
+  | "home_entry_date"
+  | "home_discharge_date"
+  | "religion"
+  | "mobility"
+  | "behaviours"
+  | "likes"
+  | "dislikes"
+  | "active"
+  | "definition_of_abuse"
+  | "notes";
 
 export type ACCOUNT_EXPENSE_FIELDS_TYPE =
-  'active' |
-  'community_activity_save' |
-  'document' |
-  'expense' |
-  'expense_date' |
-  'expense_description' |
-  'expense_type' |
-  'inventory_save' |
-  'location' |
-  'type';
+  | "active"
+  | "community_activity_save"
+  | "document"
+  | "expense"
+  | "expense_date"
+  | "expense_description"
+  | "expense_type"
+  | "inventory_save"
+  | "location"
+  | "type";
 
 export type BEHAVIOUR_FIELDS_TYPE =
-  'active' |
-  'description' |
-  'behaviour_type' |
-  'behaviour_description'
+  | "active"
+  | "description"
+  | "behaviour_type"
+  | "behaviour_description";
 
-export type GOAL_FIELDS_TYPE =
-  'active' |
-  'description'
+export type GOAL_FIELDS_TYPE = "active" | "description";
 
-export type SUBGOAL_FIELDS_TYPE =
-  'active' |
-  'description' |
-  'goal'
+export type SUBGOAL_FIELDS_TYPE = "active" | "description" | "goal";
 
-export type TASK_FIELDS_TYPE =
-  'active' |
-  'description' |
-  'goal' |
-  'sub_goal'
+export type TASK_FIELDS_TYPE = "active" | "description" | "goal" | "sub_goal";
 
-export type INSTRUCTION_FIELDS_TYPE =
-  'active' |
-  'description' |
-  'task'
+export type INSTRUCTION_FIELDS_TYPE = "active" | "description" | "task";
 
-export type PLACES_FIELDS_TYPE =
-  'active' |
-  'description'
+export type PLACES_FIELDS_TYPE = "active" | "description";
 
-  export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE =
-  'notes' |
-  'uri' |
-  'frequency'
+export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE = "notes" | "uri" | "frequency";
 
 export type SP_GOALS_FIELDS_TYPE =
-  'active' |
-  'description' |
-  'end_date' |
-  'entries' |
-  'notes' |
-  'start_date' |
-  'sub_goals'
+  | "active"
+  | "description"
+  | "end_date"
+  | "entries"
+  | "notes"
+  | "start_date"
+  | "sub_goals";
 
-
-export type MEDICATION_FIELDS_TYPE = 
-  'control_meds' |
-  'directions' |
-  'doctor' |
-  'dosage' |
-  'medication' |
-  'medication_reason' |
-  'notes' |
-  'off_cycyle_meds' |
-  'prn_med' |
-  'quantity' |
-  'refills' |
-  'route_name' |
-  'script_date' |
-  'side_effect' |
-  'status' |
-  'taken_days' |
-  'temp_med' |
-  'med_time' |
-  'type' |
-  'drug_link'
+export type MEDICATION_FIELDS_TYPE =
+  | "control_meds"
+  | "directions"
+  | "doctor"
+  | "dosage"
+  | "medication"
+  | "medication_reason"
+  | "notes"
+  | "off_cycyle_meds"
+  | "prn_med"
+  | "quantity"
+  | "refills"
+  | "route_name"
+  | "script_date"
+  | "side_effect"
+  | "status"
+  | "taken_days"
+  | "temp_med"
+  | "med_time"
+  | "type"
+  | "drug_link";
 
 export type EXPENSES_LIST_FIELDS_TYPE =
-  'expense_description' |
-  'expense_type' |
-  'expense' |
-  'active' |
-  'type'
+  | "expense_description"
+  | "expense_type"
+  | "expense"
+  | "active"
+  | "type";
 
+export type DeviceType = "sm" | "xs" | "md" | "lg";
 
-export type DeviceType = 'sm' | 'xs' | 'md' | 'lg'
+export type JOINED_FIELDS_TYPE =
+  | APD_FIELDS_TYPE
+  | CLIENT_CONTACT_FIELDS_TYPE
+  | CLIENT_FIELDS_TYPE
+  | CASE_NOTE_FIELDS_TYPE
+  | SP_GOALS_FIELDS_TYPE
+  | GOAL_FIELDS_TYPE
+  | SUBGOAL_FIELDS_TYPE;
 
-export type JOINED_FIELDS_TYPE = APD_FIELDS_TYPE |
-  CLIENT_CONTACT_FIELDS_TYPE |
-  CLIENT_FIELDS_TYPE |
-  CASE_NOTE_FIELDS_TYPE |
-  SP_GOALS_FIELDS_TYPE |
-  GOAL_FIELDS_TYPE |
-  SUBGOAL_FIELDS_TYPE;
-
-  
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type ACCOUNT_EXPENSE_FIELDS_FORM_TYPE = {
   [key in ACCOUNT_EXPENSE_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean | number,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean | number;
+    validation: any;
+  };
+};
 
 export type APPOINTMENT_FIELDS_FORM_TYPE = {
   [key in APPOINTMENT_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean | number,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean | number;
+    validation: any;
+  };
+};
 
 export type BANK_STATEMENT_FIELDS_FORM_TYPE = {
   [key in BANK_STATEMENT_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean | number,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean | number;
+    validation: any;
+  };
+};
 
 export type BEHAVIOUR_FIELDS_FORM_TYPE = {
   [key in BEHAVIOUR_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type CASE_NOTE_FIELDS_FORM_TYPE = {
   [key in CASE_NOTE_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type LOCATION_FIELDS_FORM_TYPE = {
   [key in LOCATION_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type EXPENSES_LIST_FIELDS_FORM_TYPE = {
   [key in EXPENSES_LIST_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type SUBGOAL_FIELDS_FORM_TYPE = {
   [key in SUBGOAL_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type TASK_FIELDS_FORM_TYPE = {
   [key in TASK_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type INSTRUCTION_FIELDS_FORM_TYPE = {
   [key in INSTRUCTION_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type PLACES_FIELDS_FORM_TYPE = {
   [key in PLACES_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type BEHAVIOUR_PROBLEMS_FIELDS_FORM_TYPE = {
   [key in BEHAVIOUR_PROBLEMS_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type GOAL_FIELDS_FORM_TYPE = {
   [key in GOAL_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type CLIENT_WITNESS_FIELDS_FORM_TYPE = {
   [key in CLIENT_WITNESS_FIELDS_TYPE]?: {
-    name: string,
-    default: any,
-    validation: any
-  }
-}
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
 
 export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
   [key in STAFF_WITNESS_FIELDS_TYPE]?: {
-    name: string,
-    default: any,
-    validation: any
-  }
-}
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type TRAINER_FIELDS_FORM_TYPE = {
+  [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
 
 export type CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   [key in CLIENT_CONTACT_FIELDS_TYPE]?: {
-    name: string,
-    default: string | null | boolean,
-    validation: any
-  }
-}
+    name: string;
+    default: string | null | boolean;
+    validation: any;
+  };
+};
 
 export type MEDICATION_FIELDS_FORM_TYPE = {
-  [key in MEDICATION_FIELDS_TYPE]? : {
-    name: string,
-    default: string | null | boolean | string[],
-    validation: any
-  }
-}
+  [key in MEDICATION_FIELDS_TYPE]?: {
+    name: string;
+    default: string | null | boolean | string[];
+    validation: any;
+  };
+};
 
 export interface IDimensionsContext {
-  deviceType: DeviceType
+  deviceType: DeviceType;
 }
 
 export interface IClientContext {
@@ -458,24 +477,22 @@ export interface IClientContext {
   loading?: boolean;
   name: string;
   onSetClient?: (client: IClientModel) => void;
-  setLoadingClient?: (loading: boolean) => void
+  setLoadingClient?: (loading: boolean) => void;
 }
 
 export interface ILocationContext {
   address?: string;
   id?: string;
-  setLocation?: (locationId: string) => void
+  setLocation?: (locationId: string) => void;
   loading?: boolean;
   location?: ILocationModel;
-  locations?: ILocationModel[]
+  locations?: ILocationModel[];
 }
 
 export interface IToastsContext {
   addToast: (toast: IToastProps, toaster?: IToasterProps) => string;
-  removeToast?: (toastId: string) => void
+  removeToast?: (toastId: string) => void;
 }
-
-
 
 /**
  * App Models
@@ -493,11 +510,11 @@ export interface IAppointmentModel {
   physicianNotes?: string;
   appNotes?: string;
   active?: boolean;
-  annualDental? : boolean;
-  annualMedical? : boolean;
+  annualDental?: boolean;
+  annualMedical?: boolean;
   physicianDocument?: IFileModel;
   followUpDate?: Moment;
-  appointment: IAppointment
+  appointment: IAppointment;
 }
 
 export interface IBankStatementModel {
@@ -533,7 +550,7 @@ export interface IClientBehaviourModel {
   createdAt: Moment;
 }
 
- export interface IClientModel {
+export interface IClientModel {
   id: string;
   name: string;
   client: IClient;
@@ -557,7 +574,7 @@ export interface ICaseNoteModel {
   significantEvent?: boolean;
   significantEventNotes?: string;
   title?: string;
-  caseNote: ICaseNote; 
+  caseNote: ICaseNote;
 }
 
 export interface IClientContactModel {
@@ -615,7 +632,7 @@ export interface IFileModel {
   publicUrl?: string;
   url?: string;
   key?: string;
-  loadFile: () => Promise<void>
+  loadFile: () => Promise<void>;
   updatedAt?: string;
 }
 
@@ -632,7 +649,7 @@ export interface ILogTemplateModel {
   type: string;
   questions: ILogTemplateQuestionModel[];
   logNotes: string;
-  logTemplate: ILogTemplate
+  logTemplate: ILogTemplate;
 }
 
 export interface IMedicationModel {
@@ -657,7 +674,7 @@ export interface IMedicationModel {
   refills?: number;
   doctor?: string;
   scriptDate?: Moment;
-  apiMedication: IMedication
+  apiMedication: IMedication;
 }
 
 export interface ISubGoalModel {
@@ -666,7 +683,7 @@ export interface ISubGoalModel {
   createdAt: Moment;
   description: string;
   goal: IGoalModel;
-  subGoal: ISubGoal
+  subGoal: ISubGoal;
 }
 
 export interface ISpGoalModel {
@@ -679,7 +696,7 @@ export interface ISpGoalModel {
   startDate?: Moment;
   spGoal: ISpGoal;
   goal: IGoalModel;
-  subGoals: ISubGoalModel[]
+  subGoals: ISubGoalModel[];
 }
 
 export interface ILocationModel {
@@ -687,8 +704,8 @@ export interface ILocationModel {
   id: string;
   city?: string;
   country?: string;
-  coordinates?: [number, number]
-  phoneNumber?: string
+  coordinates?: [number, number];
+  phoneNumber?: string;
   createdAt?: string;
   updatedAt?: string;
   location: ILocation;
@@ -700,43 +717,43 @@ export interface ILogModel {
   client: IClientModel;
   type: string;
   log: ILog;
-  createdAt: Moment
+  createdAt: Moment;
 }
 
 export interface IInstructionModel {
-  id: string,
-  description: string,
-  active: boolean,
-  instruction: IInstruction,
-  task?: ITaskModel,
-  createdAt: Moment
+  id: string;
+  description: string;
+  active: boolean;
+  instruction: IInstruction;
+  task?: ITaskModel;
+  createdAt: Moment;
 }
 
 export interface INotesDatabaseModel {
-  id: string,
-  description: string,
-  active: boolean,
-  noteDatabase: INotesDatabase,
-  createdAt: Moment
+  id: string;
+  description: string;
+  active: boolean;
+  noteDatabase: INotesDatabase;
+  createdAt: Moment;
 }
 
 export interface IPlaceDatabaseModel {
-  id: string,
-  description: string,
-  active: boolean,
-  placeDatabase: IPlaceDatabase,
-  createdAt: Moment
+  id: string;
+  description: string;
+  active: boolean;
+  placeDatabase: IPlaceDatabase;
+  createdAt: Moment;
 }
 
 export interface ITaskModel {
-  instructions: IInstructionModel[],
-  id: string,
-  description: string,
-  active: boolean,
-  goal: IGoalModel,
-  subGoal?: ISubGoalModel,
-  task: ITask,
-  createdAt: Moment
+  instructions: IInstructionModel[];
+  id: string;
+  description: string;
+  active: boolean;
+  goal: IGoalModel;
+  subGoal?: ISubGoalModel;
+  task: ITask;
+  createdAt: Moment;
 }
 
 export interface IUserModel {
@@ -771,17 +788,15 @@ export interface ILogQuestionModel {
 
 export interface IBehaviourAssignmentModel {
   id: string;
-  behaviours: IBehaviourModel[]
+  behaviours: IBehaviourModel[];
   behaviourAssignment: IBehaviourAssignment;
 }
-
-
 
 /**
  * API Models
  */
 
- export interface IAppointment {
+export interface IAppointment {
   _id: string;
   appointment_date?: Moment;
   client?: IClient;
@@ -794,8 +809,8 @@ export interface IBehaviourAssignmentModel {
   app_notes?: string;
   active?: boolean;
   physician_document?: IFile;
-  annual_dental? : boolean;
-  annual_medical? : boolean;
+  annual_dental?: boolean;
+  annual_medical?: boolean;
   follow_up_date?: string;
 }
 
@@ -851,11 +866,11 @@ export interface IClientWithness {
   location?: string;
   hired_date?: string;
   created_at?: string;
-  updated_at?: string
+  updated_at?: string;
 }
 
 export interface IClientWithnessModel {
-  id : string;
+  id: string;
   email?: string;
   contactType?: string;
   firstName?: string;
@@ -865,18 +880,6 @@ export interface IClientWithnessModel {
   location?: string;
   hiredDate?: Moment;
   clientWitness: IClientWithness;
-}
-
-export interface IStaffWithnessModel {
-  id?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: string;
-  mobile?: string;
-  location?: string;
-  hiredDate?: Moment;
-  staffWitness? : IStaffWithness
 }
 
 export interface IStaffWithness {
@@ -891,7 +894,47 @@ export interface IStaffWithness {
   location?: string;
   hired_date?: string;
   created_at?: string;
-  updated_at?: string
+  updated_at?: string;
+}
+
+export interface IStaffWithnessModel {
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  staffWitness?: IStaffWithness;
+}
+
+export interface IAddTrainer {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface IAddTrainerModel {
+  image?: string;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  trainer?: IAddTrainer;
 }
 
 export interface IClientContact {
@@ -913,7 +956,7 @@ export interface IClientContact {
   notes?: string;
   active?: true;
   created_at?: string;
-  updated_at?: string
+  updated_at?: string;
 }
 
 export interface IClient {
@@ -964,8 +1007,8 @@ export interface IClient {
   profile_picture?: IFile;
   signature?: IFile;
   services: object;
-  trainers?: IUser[]
-  witnesses?: IUser[]
+  trainers?: IUser[];
+  witnesses?: IUser[];
 }
 
 export interface IExpense {
@@ -986,13 +1029,13 @@ export interface IExpense {
 
 export interface IExpenseList {
   _id: string;
-  client: IClient,
-  expense_description: string,
-  expense_type: string,
-  expense: number,
-  active: boolean,
-  type: string,
-  created_at: string
+  client: IClient;
+  expense_description: string;
+  expense_type: string;
+  expense: number;
+  active: boolean;
+  type: string;
+  created_at: string;
 }
 
 export interface IFile {
@@ -1003,13 +1046,13 @@ export interface IFile {
   url?: string;
   type?: string;
   created_at?: string;
-  updated_at?: string
+  updated_at?: string;
 }
 
 export interface IGoal {
   _id: string;
   created_at: Moment;
-  description: string; 
+  description: string;
   active: false;
 }
 
@@ -1074,20 +1117,20 @@ export interface ILocation {
   city?: string;
   country?: string;
   loc?: {
-    coordinates? :[number, number]
-  },
+    coordinates?: [number, number];
+  };
   created_at?: string;
   updated_at?: string;
 }
 
 export interface ITask {
-  instructions: IInstruction[],
-  _id: string,
-  description: string,
-  active: boolean,
-  goal: IGoal,
-  sub_goal: ISubGoal,
-  created_at: string
+  instructions: IInstruction[];
+  _id: string;
+  description: string;
+  active: boolean;
+  goal: IGoal;
+  sub_goal: ISubGoal;
+  created_at: string;
 }
 
 export interface IInstruction {
@@ -1134,7 +1177,7 @@ export interface IQuestion {
   selected_answers: string[];
   question_value: string;
   type: string;
-  answers: string[]
+  answers: string[];
 }
 
 export interface ILogTemplateQuestion {
@@ -1149,14 +1192,11 @@ export interface ILogQuestion {
 
 export interface IBehaviourAssignment {
   id: string;
-  behaviours: IBehaviour[]
+  behaviours: IBehaviour[];
 }
 
 /**
  * Permissions
  */
 
-export type PermissionsModuleType =
-  'case_notes' |
-  'client_contacts' |
-  'info';
+export type PermissionsModuleType = "case_notes" | "client_contacts" | "info";

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
-import { Col, PageHeading, Row } from "../../../components";
+import { Col, FileDropzone, FormGroup, ImageDropzone, PageHeading, Row } from "../../../components";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
 import api from "../../../api";
 import URLS from "../../../utils/urls";
@@ -11,21 +11,21 @@ import * as helpers from "./helpers";
 import formikWrapper from "../../../wrappers/formik";
 import { FIELDS } from "./constants";
 import "./index.scss";
-
 import { pick } from "lodash";
-import { IStaffWithnessModel } from "../../../types";
+import { IAddTrainerModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 
-interface AddStaffWitnessProps {
-  staffWitness?: IStaffWithnessModel;
+interface AddTrainersProps {
+  trainers?: IAddTrainerModel;
   update?: boolean;
 }
 
-const AddStaffWitness = (props: AddStaffWitnessProps) => {
+const AddTrainers = (props: AddTrainersProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedMedical, setSelectedMedical] = useState<
-    IStaffWithnessModel | undefined
+    IAddTrainerModel | undefined
   >(undefined);
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
@@ -47,58 +47,80 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
       text: URLS.getPagePathName("client-links"),
     },
     {
-      href: URLS.getPagePath("staff-witness", { clientId }),
+      href: URLS.getPagePath("trainer", { clientId }),
       icon: "document",
-      text: URLS.getPagePathName("staff-witness"),
+      text: URLS.getPagePathName("trainer"),
     },
   ];
 
   if (props.update) {
-    BREADCRUMBS.push({ text: URLS.getPagePathName("edit-staff-witness") });
+    BREADCRUMBS.push({ text: URLS.getPagePathName("edit-trainer") });
   } else {
-    BREADCRUMBS.push({ text: URLS.getPagePathName("add-staff-witness") });
+    BREADCRUMBS.push({ text: URLS.getPagePathName("add-trainer") });
   }
 
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
-  if (props.staffWitness) {
-    // console.log("props.staffWitness : ", props.staffWitness)
 
+
+  if (props.trainers) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.staffWitness.staffWitness, Object.keys(helpers.initialValues))
+      pick(props.trainers.trainer, Object.keys(helpers.initialValues))
     );
-    console.log("helper.staffWitness", initialValues);
-
+    console.log("helper.addTrainer", initialValues);    
   } else {
     initialValues = helpers.initialValues;
   }
 
-  const handleSelectStaffWitnessClose = () => {
+
+
+  const handleSelectTrainersClose = () => {
     setIsOmniOpen(false);
   };
 
+  const uploadFile = async (file: File) => {
+    if (file) {
+      // const filess = api.files.uploadFile(get(props, 'addTrainer.id'), 'image', file);
+      // return console.log("file hi file", filess);
+      return console.log("file hi file");
+
+    }
+  }
+  const setProfilePicture = (files: File[]) => {
+    console.log("all sert");
+
+    setProfilePictureFile(files[0]);
+    console.log("setted");
+
+  }
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
+    console.log("values", values);
+
+    if (profilePictureFile) {
+      let file = await uploadFile(profilePictureFile);
+      values.image = file;
+    }
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    const staffWitnessId = get(props, "staffWitness.id", "");
+    const addTrianersId = get(props, "addTrainers.id", "");
+    console.log("id", addTrianersId);
+
     try {
       if (props.update) {
-        await api.staffWitness.updateStaffWitness(staffWitnessId, values);
+        await api.Trainers.updateTrainer(addTrianersId, values);
         addToast({
-          message: "Staff Witness Updated",
+          message: "Add Trainer Updated",
           intent: Intent.SUCCESS,
         });
       } else {
-        values.emp_id = clientId;
-        values.image = "dasd";
-
-        await api.staffWitness.createStaffWitness(values);
+        values.image = "";
+        await api.Trainers.createTrainer(values);
         addToast({
-          message: "Staff Witness Created",
+          message: "Add Trainer Created",
           intent: Intent.SUCCESS,
         });
 
@@ -114,20 +136,21 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
 
     setSubmitting(false);
   };
+  const profilePictureUrl = get(props, 'addTrainer.image', '')
 
   return (
     <div className="dashboard">
       <div className="dashboard_container">
-        <div className="add-staff-witness">
+        <div className="add-trainers">
           <PageHeading
             title={
               props.update
-                ? "Update Staff Witness Detail"
-                : "Add Staff Witness Detail"
+                ? "Update Trainer's Detail"
+                : "Add Trainer's Detail"
             }
             breadCrumbs={BREADCRUMBS}
           />
-          <div className="add-staff-witness__container">
+          <div className="add-trainers__container">
             <Formik
               initialValues={initialValues}
               validationSchema={helpers.validationSchema}
@@ -153,21 +176,42 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
                         isOpen={isOmniOpen}
-                        onClose={handleSelectStaffWitnessClose}
-                        onSelect={(staffWitness: IStaffWithnessModel) => {
-                          setFieldValue("first_name", staffWitness.firstName);
-                          setFieldValue("last_name", staffWitness.lastName);
-                          setFieldValue("address", staffWitness.address);
-                          setFieldValue("mobile", staffWitness.mobile);
-                          setFieldValue("email", staffWitness.email);
-                          setFieldValue("hired_date", staffWitness.hiredDate);
-                          setFieldValue("location", staffWitness.location);
+                        onClose={handleSelectTrainersClose}
+                        onSelect={(addTrainer: IAddTrainerModel) => {
+                          setFieldValue("first_name", addTrainer.firstName);
+                          setFieldValue("last_name", addTrainer.lastName);
+                          setFieldValue("address", addTrainer.address);
+                          setFieldValue("mobile", addTrainer.mobile);
+                          setFieldValue("email", addTrainer.email);
+                          setFieldValue("hired_date", addTrainer.hiredDate);
+                          setFieldValue("location", addTrainer.location);
                           validateForm();
                           setIsOmniOpen(false);
-                          setSelectedMedical(staffWitness);
+                          setSelectedMedical(addTrainer);
                         }}
                       />
 
+                      <Row>
+                        <Col xs={12} md={12}>
+                          <FormGroup
+                            intent={Intent.PRIMARY}
+                            label={'Trainer Image'}
+                          >
+                            <ImageDropzone
+                              files={profilePictureFile ? [profilePictureFile] : []}
+                              setFiles={setProfilePicture}
+                              imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      {/* <Row>
+                        <Col xs={12} md={12}>
+                          {getInputFormGroup("trainer_id", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
+                      </Row> */}
                       <Row>
                         <Col xs={12} md={6}>
                           {getInputFormGroup("first_name", {
@@ -197,13 +241,13 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col xs={6}>
+                        <Col xs={12} md={6}>
                           {getInputFormGroup("location", {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
-                        <Col xs={6}>
-                          {getDateInputFormGroup("hired_date", {
+                        <Col xs={12} md={6}>
+                        {getDateInputFormGroup("hired_date", {
                             childProps: {
                               type: "date",
                               disabled: !!selectedMedical,
@@ -220,7 +264,7 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
                         </Col>
                       </Row>
 
-                      <div className="add-staff-witness__submit-container">
+                      <div className="add-trianers__submit-container">
                         <Button
                           type="submit"
                           disabled={isSubmitting}
@@ -244,4 +288,4 @@ const AddStaffWitness = (props: AddStaffWitnessProps) => {
   );
 };
 
-export default AddStaffWitness;
+export default AddTrainers;

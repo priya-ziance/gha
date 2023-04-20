@@ -38,6 +38,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-witness/add`;
     case "add-staff-witness":
       return `${clientBase}/staff-witness/add`;
+    case "trainer":
+      return `${clientBase}/trainer`;
+    case "add-trainer":
+        return `${clientBase}/trainer/add`;
     case "add-database-behaviour":
       return `${clientBase}/behaviours/database/add`;
     case "add-database-goal":
@@ -100,6 +104,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/client-witness/${options.clientContactId}/edit`;
     case "edit-staff-witness":
       return `${clientBase}/staff-witness/${options.clientContactId}/edit`;
+    case "edit-trainer":
+      return `${clientBase}/trainer/${options.clientContactId}/edit`;
     case "edit-database-behaviour":
       return `${clientBase}/behaviours/database/${options.behaviourId}/edit`;
     case "edit-database-goal":
@@ -197,6 +203,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Add Client Witness`;
     case "add-staff-witness":
       return `Add Staff Witness`;
+    case "trainer":
+        return `Trainer`;
+    case "add-trainer":
+      return `Add Trainer`;
     case "add-database-goal":
       return "Add Database Goal";
     case "add-database-subgoal":
@@ -245,6 +255,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return `Client Witness`;
     case "staff-witness":
       return `Staff Witness`;
+    // case "add-trainer":
+    //   return `Add Trainer`;
     case "edit-appointment":
       return "Edit Appointment";
     case "edit-bank-statement":
@@ -255,6 +267,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Edit Client Witness";
     case "edit-staff-witness":
       return "Edit Staff Witness";
+    case "edit-trainer":
+        return "Edit Trainer";
     case "edit-database-behaviour":
       return "Edit Behaviour";
     case "edit-database-goal":

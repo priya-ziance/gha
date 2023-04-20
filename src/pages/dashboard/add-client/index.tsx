@@ -44,6 +44,7 @@ import {
   FIELDS,
   LEGAL_STATUS_OPTIONS,
   PRIMARY_DIAGNOSIS_OPTIONS,
+  FUNDS_METHODS_OPTIONS,
   SEX_OPTIONS
 } from './constants';
 
@@ -95,6 +96,8 @@ const AddClient = (props: AddClientProps) => {
 
   useEffect(() => {
     if (props.client) {
+      console.log("client data",props );
+      
       setServices(props.client.services)
       setWitnesses(props.client.witnesses || [])
       setTrainers(props.client.trainers || [])
@@ -102,7 +105,6 @@ const AddClient = (props: AddClientProps) => {
   }, [props.client])
 
   const handleDialogClose = () => setCurrentDialog('');
-
   const onLevelOfService = () => setCurrentDialog(DIALOG_NAMES.levelsOfService);
   const onClientCustomForm = () => setCurrentDialog(DIALOG_NAMES.clientCustomForm);
   const onServicesForm = () => setCurrentDialog(DIALOG_NAMES.services);
@@ -110,6 +112,8 @@ const AddClient = (props: AddClientProps) => {
   const onTrainersForm = () => setCurrentDialog(DIALOG_NAMES.trainers);
   const onClientWitnessForm = () => setCurrentDialog(DIALOG_NAMES.clientWitness);
   const onStaffWitnessForm = () => setCurrentDialog(DIALOG_NAMES.staffWitness);
+  
+
 
   const uploadFile = async (file: File) => {
     if (file) {
@@ -364,7 +368,28 @@ const AddClient = (props: AddClientProps) => {
                       {getInputFormGroup('address_line_2')}
                       {getInputFormGroup('city')}
                       {getInputFormGroup('state')}
-
+                      {getInputFormGroup('monthly_SSI_amount')}
+                      {getInputFormGroup("Special_equipments")}
+                      {getInputFormGroup("Bank_account_name")}
+                      {getInputFormGroup("Bank_Routing_Number")}
+                      {getInputFormGroup("Bank_account_number")}
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={get(FIELDS, 'Funds_method', { name: '' }).name}
+                        labelFor="text-input"
+                        labelInfo={"(required)"}
+                      >
+                        <FormSelect
+                            items={FUNDS_METHODS_OPTIONS}
+                            filterable={false}
+                            itemRenderer={formSelectItemRenderer}
+                            noResults={<MenuItem disabled={true} text="No results." />}
+                            onItemSelect={onFormSelectChange('Funds_method')}
+                        >
+                            {/* children become the popover target; render value here */}
+                            <Button text={values.Funds_method} rightIcon="double-caret-vertical" />
+                        </FormSelect>
+                      </FormGroup>
                       {getInputFormGroup('zip_code')}
                       {getInputFormGroup('phone')}
                       {getInputFormGroup('mobile')}
@@ -402,14 +427,7 @@ const AddClient = (props: AddClientProps) => {
                           </Button>
                         </div>
                       </FormGroup>
-                      <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Staff that can be called Trainers"}
-                      >
-                        <Button intent={Intent.PRIMARY} onClick={onTrainersForm}>
-                          <b>Add Trainers ({trainers.length})</b>
-                        </Button>
-                      </FormGroup>
+                    
                     </Col>
   
                     {/* ---------------------------COL 2------------------------------- */}
@@ -507,8 +525,19 @@ const AddClient = (props: AddClientProps) => {
                         label={"Staff Witness"}
                         labelFor="text-input"
                       >
-                        <Button intent={Intent.PRIMARY} onClick={onStaffWitnessForm}>
-                          <b>Staff Witness</b>
+                        <Button intent={Intent.PRIMARY} 
+                        onClick={onStaffWitnessForm}
+                        >
+                          <b>Staff itness ({witnesses.length})</b>
+                        </Button>
+                      </FormGroup>
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={"Staff that can be called Trainers"}
+                      >
+                        <Button intent={Intent.PRIMARY} 
+                        onClick={onTrainersForm}>
+                          <b>Add Trainers ({trainers.length})</b>
                         </Button>
                       </FormGroup>
                     </Col>

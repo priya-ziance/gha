@@ -144,5 +144,12 @@ export const getLinks = (clientId: string) => {
       path: URLS.getPagePath('staff-witness', { clientId }),
       interactive: true
     },
+    {
+      description: '',
+      title: 'Trainer',
+      image: ClientsImage,
+      path: URLS.getPagePath('trainer', { clientId }),
+      interactive: true
+    },
   ]
 }

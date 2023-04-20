@@ -39,11 +39,11 @@ export const DIALOG_NAMES = {
   staffWitness : "staffWitness"
 }
 
-export const FUNDS_METHODS_OPTIONS = [
-  'SSI',
-  'SSA',
-  'Other'
-];
+// export const FUNDS_METHODS_OPTIONS = [
+//   'SSI',
+//   'SSA',
+//   'Other'
+// ];
 
 export const LEGAL_STATUS_OPTIONS = [
   'Competent',
@@ -56,6 +56,11 @@ export const PRIMARY_DIAGNOSIS_OPTIONS = [
   'Intelectual Disability',
   'Prada Willi Syndrome',
   'Spina Bifida'
+];
+export const FUNDS_METHODS_OPTIONS = [
+  'Credit Card',
+  'Debit Card',
+  'Bank Account',
 ];
 
 export const SEX_OPTIONS = [
@@ -111,6 +116,36 @@ export const FIELDS : FIELDS_TYPE = {
   },
   state: {
     name: 'State',
+    default: '',
+    validation: yup.string(),
+  },
+  monthly_SSI_amount: {
+    name: 'monthly SSI amount',
+    default: '',
+    validation: yup.string(),
+  },
+  Special_equipments: {
+    name: ' Special equipments',
+    default: '',
+    validation: yup.string(),
+  },
+  Bank_account_name: {
+    name: 'Bank account name',
+    default: '',
+    validation: yup.string(),
+  },
+  Bank_Routing_Number: {
+    name: 'Bank Routing Number',
+    default: '',
+    validation: yup.string(),
+  },
+  Bank_account_number: {
+    name: 'Bank account number',
+    default: '',
+    validation: yup.string(),
+  },
+  Funds_method:{
+    name: 'Funds method',
     default: '',
     validation: yup.string(),
   },
