@@ -17,7 +17,7 @@ interface EditLogProps {
   onClose: () => void;
   onUpdate: (answers: any, logTemplate: ILogTemplateModel, clientId: string) => Promise<any>;
   log: ILogModel | null;
-  template: ILogTemplateModel | undefined;
+  template?: ILogTemplateModel;
 }
 
 const EditLog = (props: EditLogProps) => {
@@ -62,7 +62,7 @@ const EditLog = (props: EditLogProps) => {
 
     try {
       if (template) {
-        await onUpdate(selectedAnswers, template, get(template, 'client.id'));
+        await onUpdate(selectedAnswers, template, get(template, 'id'));
         addToast({
           message: 'Successfully Updated Log',
           intent: 'primary'

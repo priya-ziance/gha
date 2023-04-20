@@ -31,7 +31,7 @@ export const medicaidColumn = (data: ILogModel) => {
 }
 
 export const locationColumn = (data: ILogModel) => {
-  const date = get(data, 'date');
+  const date = get(data, 'createdAt');
   
   if (date) {
     return (

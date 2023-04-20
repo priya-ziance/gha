@@ -243,7 +243,7 @@ const formikWrapper = (child: (props: ChildrenProps) => JSX.Element, fields: any
     let btnTxt = ''
 
     if (btnTextRenderer) {
-      btnTxt = btnTextRenderer(values[key])
+      btnTxt = (btnTextRenderer as (args: string) => string)?.(values[key])
     } else {
       btnTxt = values[key]
 

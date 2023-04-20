@@ -43,7 +43,7 @@ import { Classes } from "@blueprintjs/core";
 import { Col, Dialog, Table } from "../../../components";
 import { IDialog } from "./types";
 import { useContext, useEffect, useState } from "react";
-import { IAddTrainerModel} from "../../../types";
+import { IAddTrainerModel, IUserModel} from "../../../types";
 import ClientContext from "../../../contexts/client";
 import api from "../../../api";
 import * as helpers from "../../../utils/helpers";
@@ -55,7 +55,11 @@ import { FIELDS } from "./constants";
 
 const PAGE_SIZE = 10;
 
-const Trainers = (props: IDialog) => {
+interface TrainerProps {
+  trainers: IUserModel[];
+}
+
+const Trainers = (props: IDialog & TrainerProps) => {
   const { isOpen, handleClose } = props;
   const [Trainer, setTrainer] = useState<IAddTrainerModel[] | []>(
     []

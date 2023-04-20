@@ -58,7 +58,7 @@ import './index.scss';
 const FormSelect = Select.ofType<string>();
 
 interface AddClientProps {
-  client?: IClientModel | undefined;
+  client?: IClientModel;
   update?: boolean;
 }
 
@@ -116,14 +116,14 @@ const AddClient = (props: AddClientProps) => {
 
 
   const uploadFile = async (file: File) => {
-    if (file) {
-      return api.files.uploadFile(get(props, 'client.id'), 'image', file);
+    if (file && props.client) {
+      return api.files.uploadFile(get(props.client, 'id'), 'image', file);
     }
   }
 
   const uploadSignature = async () => {
-    if (signatureDataURL) {
-      return api.files.uploadFile(get(props, 'client.id'), 'image', dataURItoBlob(signatureDataURL));
+    if (signatureDataURL && props.client) {
+      return api.files.uploadFile(get(props.client, 'id'), 'image', dataURItoBlob(signatureDataURL));
     }
   }
 
@@ -614,7 +614,7 @@ const AddClient = (props: AddClientProps) => {
 
                   <Witnesses handleWitnessesChange={handleWitnessesChange} witnesses={witnesses} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
                   
-                  <Trainers handleTrainersChange={handleTrainersChange} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
+                  <Trainers trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
 
                   <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
 

@@ -44,7 +44,7 @@ const Content = (props: AddGoalProps) => {
   const [client, setClient] = useState<Client | {}>({});
   const [goals, setGoals] = useState<Goal[] | []>([]);
   const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
-  const [selectedSubGoals, setSelectedSubgoals] = useState<{ [key: string]: boolean }>({});
+  const [selectedSubGoals, setSelectedSubgoals] = useState<string[]>([]);
   const [loadingClient, setLoadingClient] = useState(false);
 
   const { addToast } = useContext(ToastsContext);
@@ -136,11 +136,8 @@ const Content = (props: AddGoalProps) => {
         pick(props.spGoal.spGoal, Object.keys(helpers.initialValues))
       );
       initialValues.goal = get(props, 'goal._id', '')
-      
-      setSelectedSubgoals(
-        get(props, 'sub_goals', [])
-          .map((sg: any) => sg.id)
-      )
+      setSelectedSubgoals(props.subGoals?.map(item => item.id) || []);
+     
     } else {
       initialValues = helpers.initialValues;
     }
@@ -201,7 +198,7 @@ const Content = (props: AddGoalProps) => {
                   }
                 );
 
-                setSelectedSubgoals({});
+                setSelectedSubgoals([]);
                 resetForm()
               } catch(e: any) {
                 addToast(
@@ -321,7 +318,7 @@ const Content = (props: AddGoalProps) => {
                   <div>
                     <H4>Subgoals</H4>
                     {subGoals.map(subGoal => {
-                      const isSelected = selectedSubGoals[subGoal.id]
+                      const isSelected = selectedSubGoals.includes(subGoal.id);
 
                       const onChange = () => {
                         if (!isSelected) {
