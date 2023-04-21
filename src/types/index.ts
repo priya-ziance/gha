@@ -1,5 +1,5 @@
 import { IToasterProps, IToastProps } from "@blueprintjs/core";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 
 export type PAGE_TYPES =
   | "admins"
@@ -79,6 +79,12 @@ export type PAGE_TYPES =
   | "personal-support-logs"
   | "personal-support-places-database"
   | "personal-support-notes-database"
+  | "seizure-logs"
+  | "add-seizure-logs"
+  | "edit-seizure-logs"
+  | "seizure-logs-logs"
+  | "seizure-logs-places-database"
+  | "seizure-logs-notes-database"
   | "reshab-logs"
   | "respite-logs"
   | "sp-goals";
@@ -186,6 +192,16 @@ export type STAFF_WITNESS_FIELDS_TYPE =
 //   // | "lastName"
 //   | "mobile"
 //   | "location";
+
+export type ADD_SEIZURELOGS_FIELDS_TYPE =
+  | "date"
+  | "time"
+  | "Injuries"
+  | "activity_preceding"
+  | "duration"
+  | "notes"
+  | "active"
+  | "patient_have_seizure"
 
 export type CLIENT_FIELDS_TYPE =
   | "email"
@@ -445,6 +461,13 @@ export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
 };
 export type TRAINER_FIELDS_FORM_TYPE = {
   [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type SEIZURELOGS_FIELDS_FORM_TYPE = {
+  [key in ADD_SEIZURELOGS_FIELDS_TYPE]?: {
     name: string;
     default: any;
     validation: any;
@@ -909,6 +932,30 @@ export interface IStaffWithnessModel {
   staffWitness?: IStaffWithness;
 }
 
+export interface ISeizurelogs {
+  emp_id?: string;
+  date?: Moment;
+  notes?: string;
+  time?: string;
+  Injuries?: string;
+  activity_preceding?: string;
+  duration?: string;
+  active?: boolean;
+  patient_have_seizure?: IStaffWithness;
+}
+
+export interface ISeizureLogsModel {
+  emp_id?: string;
+  date?: Moment;
+  notes?: string;
+  time?: string;
+  Injuries?: string;
+  activity_preceding?: string;
+  duration?: string;
+  active?: boolean;
+  patient_have_seizure?: IStaffWithness;
+  seizurelogs?: ISeizurelogs;
+}
 export interface IAddTrainer {
   _id: string;
   emp_id?: string;

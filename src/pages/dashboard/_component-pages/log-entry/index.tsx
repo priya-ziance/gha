@@ -173,6 +173,10 @@ const LogEntry = (props: LogEntryProps) => {
       BREADCRUMBS.push({ href: URLS.getPagePath('personal-support'), icon: 'document', text: URLS.getPagePathName('personal-support') },);
       BREADCRUMBS.push({ text: URLS.getPagePathName('personal-support-logs') });
       break;
+      case 'seizurelog':
+        BREADCRUMBS.push({ href: URLS.getPagePath('seizure-logs'), icon: 'document', text: URLS.getPagePathName('seizure-logs') },);
+        BREADCRUMBS.push({ text: URLS.getPagePathName('seizure-logs-logs') });
+        break;
     default:
       break;
   }
@@ -204,6 +208,8 @@ const LogEntry = (props: LogEntryProps) => {
         return 'Life Skills Logs'
       case 'personalsupport':
         return 'Personal Support Logs'
+        case 'seizurelog':
+        return 'Seizure Logs'
       default:
         return ''
     }

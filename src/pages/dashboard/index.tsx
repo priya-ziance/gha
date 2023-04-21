@@ -28,8 +28,11 @@ import AddLocationPage from './add-location';
 import EditLocationPage from './edit-location';
 
 import LogsPage from './logs';
-import ReshabLogsPage from './reshab-logs';
+import ReshabLogs from './reshab-logs';
 import RespiteLogsPage from './respite-logs';
+import SeizureLogs from './Siezure-log'
+import AddSeizureLogs from './add-seozure-logs';
+import EditSeizureLogs from './edit-seizure-logs';
 import LifeSkillsPage from './life-skills';
 import LifeSkillsLogsPage from './life-skills-logs';
 import LifeSkillsNotesDatabasePage from './life-skills-notes-database';
@@ -223,7 +226,12 @@ function Dashboard() {
           <Route path="/dashboard/clients/:clientId" component={ClientNavigation} />
 
           <Route path="/dashboard/logs" exact component={LogsPage} />
-          <Route path="/dashboard/logs/reshab-logs" exact component={ReshabLogsPage} />
+          <Route path="/dashboard/logs/reshab-logs" exact component={ReshabLogs} />
+
+          <Route path="/dashboard/logs/seizure-logs" exact component={SeizureLogs} />
+          <Route path="/dashboard/logs/seizure-logs/add" exact component={AddSeizureLogs} />
+          <Route path="/dashboard/logs/seizure-logs/edit" exact component={EditSeizureLogs} />
+
           <Route path="/dashboard/logs/respite-logs" exact component={RespiteLogsPage} />
           <Route path="/dashboard/logs/life-skills" exact component={LifeSkillsPage} />
           <Route path="/dashboard/logs/life-skills/logs" exact component={LifeSkillsLogsPage} />

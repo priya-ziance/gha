@@ -172,6 +172,19 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs/personal-support/places-database`;
     case "personal-support-notes-database":
       return `${dashboardBase}/logs/personal-support/notes-database`;
+
+      case "seizure-logs":
+        return `${dashboardBase}/logs/seizure-logs`;
+      case "add-seizure-logs":
+        return `${dashboardBase}/logs/seizure-logs/add`;
+      case "edit-seizure-logs":
+        return `${dashboardBase}/logs/seizure-logs/edit`;
+      case "seizure-logs-logs":
+        return `${dashboardBase}/logs/seizure-logs/logs`;
+      case "seizure-logs-places-database":
+        return `${dashboardBase}/logs/seizure-logs/places-database`;
+      case "seizure-logs-notes-database":
+        return `${dashboardBase}/logs/seizure-logs/notes-database`;
     case "reshab-logs":
       return `${dashboardBase}/logs/reshab-logs`;
     case "respite-logs":
@@ -337,6 +350,18 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Personal Support Places Database";
     case "personal-support-notes-database":
       return "Personal Support Notes Database";
+      case "seizure-logs":
+        return "Seizure Logs";
+        case "add-seizure-logs":
+        return "Add Seizure Logs";
+        case "edit-seizure-logs":
+          return "Edit Seizure Logs"
+      case "seizure-logs-logs":
+        return "Seizure Logs Logs";
+      case "seizure-logs-places-database":
+        return "Seizure Logs Places Database";
+      case "seizure-logs-notes-database":
+        return "Seizure Logs Notes Database";
     case "reshab-logs":
       return "Reshab Logs";
     case "respite-logs":

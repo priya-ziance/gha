@@ -27,5 +27,11 @@ export const getLinks = (clientId: string) => {
       image: ClientsImage,
       path: URLS.getPagePath('personal-support', { clientId })
     },
+    {
+      description: 'Add client\'s Seizure Log. Daily task',
+      title: 'Seizure Log',
+      image: ClientsImage,
+      path: URLS.getPagePath('seizure-logs', { clientId })
+    },
   ]
 }

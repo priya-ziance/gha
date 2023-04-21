@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
-import { Col, FileDropzone, FormGroup, ImageDropzone, PageHeading, Row } from "../../../components";
+import { Col, PageHeading, Row } from "../../../components";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
 import api from "../../../api";
 import URLS from "../../../utils/urls";
@@ -11,21 +11,21 @@ import * as helpers from "./helpers";
 import formikWrapper from "../../../wrappers/formik";
 import { FIELDS } from "./constants";
 import "./index.scss";
+
 import { pick } from "lodash";
-import { IAddTrainerModel } from "../../../types";
+import { ISeizureLogsModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 
-interface AddTrainersProps {
-  trainers?: IAddTrainerModel;
+interface AddSeizureLogsProps {
+  SeizureLogs?: ISeizureLogsModel;
   update?: boolean;
 }
 
-const AddTrainers = (props: AddTrainersProps) => {
+const AddSeizureLogs = (props: AddSeizureLogsProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedMedical, setSelectedMedical] = useState<
-    IAddTrainerModel | undefined
+    ISeizureLogsModel | undefined
   >(undefined);
-  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
@@ -37,91 +37,63 @@ const AddTrainers = (props: AddTrainersProps) => {
       text: URLS.getPagePathName("dashboard"),
     },
     {
-      href: URLS.getPagePath("clients"),
+      href: URLS.getPagePath("logs"),
       icon: "document",
-      text: URLS.getPagePathName("clients"),
+      text: URLS.getPagePathName("logs"),
     },
     {
-      href: URLS.getPagePath("client-links", { clientId }),
+      href: URLS.getPagePath("seizure-logs", { clientId }),
       icon: "document",
-      text: URLS.getPagePathName("client-links"),
-    },
-    {
-      href: URLS.getPagePath("trainer", { clientId }),
-      icon: "document",
-      text: URLS.getPagePathName("trainer"),
+      text: URLS.getPagePathName("seizure-logs"),
     },
   ];
 
   if (props.update) {
-    BREADCRUMBS.push({ text: URLS.getPagePathName("edit-trainer") });
+    BREADCRUMBS.push({ text: URLS.getPagePathName("edit-seizure-logs") });
   } else {
-    BREADCRUMBS.push({ text: URLS.getPagePathName("add-trainer") });
+    BREADCRUMBS.push({ text: URLS.getPagePathName("add-seizure-logs") });
   }
 
   /**
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
+  if (props.SeizureLogs) {
+    // console.log("props.staffWitness : ", props.staffWitness)
 
-
-  if (props.trainers) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.trainers.trainer, Object.keys(helpers.initialValues))
+      pick(props.SeizureLogs.seizurelogs, Object.keys(helpers.initialValues))
     );
-    console.log("helper.addTrainer", initialValues);    
+    console.log("helper.staffWitness", initialValues);
+
   } else {
     initialValues = helpers.initialValues;
   }
 
-
-
-  const handleSelectTrainersClose = () => {
+  const handleSelectStaffWitnessClose = () => {
     setIsOmniOpen(false);
   };
 
-  const uploadFile = async (file: File) => {
-    if (file) {
-      // const filess = api.files.uploadFile(get(props, 'addTrainer.id'), 'image', file);
-      // return console.log("file hi file", filess);
-      return console.log("file hi file");
-
-    }
-  }
-  const setProfilePicture = (files: File[]) => {
-    console.log("all sert");
-
-    setProfilePictureFile(files[0]);
-    console.log("setted");
-
-  }
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    console.log("values", values);
-
-    // if (profilePictureFile) {
-    //   let file = await uploadFile(profilePictureFile);
-    //   values.image = file;
-    // }
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    const trianersId :any= get(props, "trainers.id", "");
-    console.log("id", trianersId);
-
+    const staffWitnessId = get(props, "staffWitness.id", "");
     try {
       if (props.update) {
-        await api.Trainers.updateTrainer(trianersId, values);
+        await api.staffWitness.updateStaffWitness(staffWitnessId, values);
         addToast({
-          message: "Add Trainer Updated",
+          message: "seizure log Updated",
           intent: Intent.SUCCESS,
         });
-      }else {
-        values.emp_id = clientId;
-        values.image = "new";
-        await api.Trainers.createTrainer(values);
+      } else {
+        // values.emp_id = staffWitnessId;
+        values.image = "dasd";
+
+        await api.logs.createLog(values);
         addToast({
-          message: "Add Trainer Created",
+          message: "seizure logCreated",
           intent: Intent.SUCCESS,
         });
 
@@ -135,23 +107,22 @@ const AddTrainers = (props: AddTrainersProps) => {
       });
     }
 
-    // setSubmitting(false);
+    setSubmitting(false);
   };
-  const profilePictureUrl = get(props, 'addTrainer.image', '')
 
   return (
     <div className="dashboard">
       <div className="dashboard_container">
-        <div className="add-trainers">
+        <div className="add-seizure-log">
           <PageHeading
             title={
               props.update
-                ? "Update Trainer's Detail"
-                : "Add Trainer's Detail"
+                ? "Update Seizure Log"
+                : "Add Seizure Log"
             }
             breadCrumbs={BREADCRUMBS}
           />
-          <div className="add-trainers__container">
+          <div className="add-seizure-log__container">
             <Formik
               initialValues={initialValues}
               validationSchema={helpers.validationSchema}
@@ -177,78 +148,62 @@ const AddTrainers = (props: AddTrainersProps) => {
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
                         isOpen={isOmniOpen}
-                        onClose={handleSelectTrainersClose}
-                        onSelect={(addTrainer: IAddTrainerModel) => {
-                          setFieldValue("first_name", addTrainer.firstName);
-                          setFieldValue("last_name", addTrainer.lastName);
-                          setFieldValue("address", addTrainer.address);
-                          setFieldValue("mobile", addTrainer.mobile);
-                          setFieldValue("email", addTrainer.email);
-                          setFieldValue("hired_date", addTrainer.hiredDate);
-                          setFieldValue("location", addTrainer.location);
+                        onClose={handleSelectStaffWitnessClose}
+                        onSelect={(SeizureLogs: ISeizureLogsModel) => {
+                          setFieldValue("emp_id",SeizureLogs.emp_id)
+                          setFieldValue("date", SeizureLogs.date);
+                          setFieldValue("time", SeizureLogs.time);
+                          setFieldValue("Injuries", SeizureLogs.Injuries);
+                          setFieldValue("activity_preceding", SeizureLogs.activity_preceding);
+                          setFieldValue("duration", SeizureLogs.duration);
+                          setFieldValue("notes", SeizureLogs.notes);
+                          setFieldValue("active", SeizureLogs.active);
+                          setFieldValue("patient_have_seizure", SeizureLogs.patient_have_seizure);
                           validateForm();
                           setIsOmniOpen(false);
-                          setSelectedMedical(addTrainer);
+                          setSelectedMedical(SeizureLogs);
                         }}
                       />
 
-                      {/* <Row>
-                        <Col xs={12} md={12}>
-                          <FormGroup
-                            intent={Intent.PRIMARY}
-                            label={'Trainer Image'}
-                          >
-                            <ImageDropzone
-                              files={profilePictureFile ? [profilePictureFile] : []}
-                              setFiles={setProfilePicture}
-                              imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row> */}
-                      {/* <Row>
-                        <Col xs={12} md={12}>
-                          {getInputFormGroup("trainer_id", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                      </Row> */}
                       <Row>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("first_name", {
+                      <Col xs={12} md={6}>
+                          {getInputFormGroup("emp_id", {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("last_name", {
+                          {getInputFormGroup("active", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("time", {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
                       </Row>
                       <Row>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("email", {
+                          {getInputFormGroup("duration", {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
-
                         <Col xs={12} md={6}>
-                          {getPhoneInputFormGroup("mobile", {
+                          {getInputFormGroup("Injuries", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("activity_preceding", {
                             childProps: {
-                              type: "tel",
                               disabled: !!selectedMedical,
                             },
                           })}
                         </Col>
-                      </Row>
-                      <Row>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("location", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                        <Col xs={12} md={6}>
-                        {getDateInputFormGroup("hired_date", {
+                        <Col xs={6}>
+                          {getDateInputFormGroup("date", {
                             childProps: {
                               type: "date",
                               disabled: !!selectedMedical,
@@ -256,16 +211,30 @@ const AddTrainers = (props: AddTrainersProps) => {
                           })}
                         </Col>
                       </Row>
-
                       <Row>
-                        <Col xs={12} md={12}>
-                          {getAutocompleteInputFormGroup("address", {
+                        <Col xs={6}>
+                          {getInputFormGroup("patient_have_seizure", {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
+                        <Col xs={6}>
+                          {getInputFormGroup("notes", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
+                        
                       </Row>
 
-                      <div className="add-trianers__submit-container">
+                      {/* <Row>
+                        <Col xs={12} md={12}>
+                          {getAutocompleteInputFormGroup("Inguries", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
+                       
+                      </Row> */}
+
+                      <div className="add-seizure-log__submit-container">
                         <Button
                           type="submit"
                           disabled={isSubmitting}
@@ -289,4 +258,4 @@ const AddTrainers = (props: AddTrainersProps) => {
   );
 };
 
-export default AddTrainers;
+export default AddSeizureLogs;

@@ -5,6 +5,7 @@ import { AnchorButton, Col, PageHeading, Table } from "../../../components";
 import URLS from "../../../utils/urls";
 import api from "../../../api";
 import * as helpers from "../../../utils/helpers";
+import LogEntry from "../_component-pages/log-entry";
 import {
   actionColumn,
   addressColumn,
@@ -18,15 +19,15 @@ import ClientContext from "../../../contexts/client";
 
 const PAGE_SIZE = 10;
 
-const Trainer = () => {
-  const [trainer, setTrainer] = useState<IStaffWithnessModel[] | []>(
+const SeizureLogs = () => {
+  const [staffWitness, setStaffWitness] = useState<IStaffWithnessModel[] | []>(
     []
   );
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
 
-  const hasNextPage = trainer.length === PAGE_SIZE;
+  const hasNextPage = staffWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {
@@ -34,14 +35,14 @@ const Trainer = () => {
       setLoading(true);
 
       try {
-        setTrainer(
-          await api.Trainers.getTrainer(clientId, {
+        setStaffWitness(
+          await api.logs.getLogsForDate(clientId, {
             page,
             pageSize: PAGE_SIZE,
+
           })
         );
       } catch (e: any) {}
-
 
       setTimeout(() => {
         setLoading(false);
@@ -60,7 +61,6 @@ const Trainer = () => {
       setPage((page) => page - 1);
     }
   };
-console.log("trianer data ",trainer);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
@@ -69,18 +69,13 @@ console.log("trianer data ",trainer);
       text: URLS.getPagePathName("dashboard"),
     },
     {
-      href: URLS.getPagePath("clients"),
+      href: URLS.getPagePath("logs"),
       icon: "document",
-      text: URLS.getPagePathName("clients"),
+      text: URLS.getPagePathName("logs"),
     },
-    {
-      href: URLS.getPagePath("client-links", { clientId }),
-      icon: "document",
-      text: URLS.getPagePathName("client-links"),
-    },
-    { text: URLS.getPagePathName("trainer") },
-  ];
 
+    { text: URLS.getPagePathName("seizure-logs") },
+  ];
 
   const getAddButton = () => {
     return (
@@ -90,10 +85,10 @@ console.log("trianer data ",trainer);
           icon: IconNames.ADD,
         }}
         linkProps={{
-          to: URLS.getPagePath("add-trainer", { clientId }),
+          to: URLS.getPagePath("add-seizure-logs", { clientId }),
         }}
       >
-        {URLS.getPagePathName("add-trainer")}
+        {URLS.getPagePathName("add-seizure-logs")}
       </AnchorButton>
     );
   };
@@ -102,19 +97,19 @@ console.log("trianer data ",trainer);
     <div className="dashboard">
       <div className="dashboard__container">
         <div>
-          <div className="trainer">
+          <div className="seizure-log">
             <PageHeading
-              title="Trainer"
+              title="Seizure Logs"
               breadCrumbs={BREADCRUMBS}
               renderRight={getAddButton}
             />
-            <div className="trainer__container">
+            <div className="seizure-log__container">
               <Col>
                 <Table
                   loading={loading}
-                  numRows={trainer.length}
+                  numRows={staffWitness.length}
                   getCellClipboardData={(row: any, col: any) => {
-                    return trainer[row];
+                    return staffWitness[row];
                   }}
                   columns={[
                     {
@@ -141,7 +136,7 @@ console.log("trianer data ",trainer);
                       title: "Actions",
                       cellRenderer: (data: any) => {
                         return actionColumn(data, {
-                          viewLink: URLS.getPagePath("edit-trainer", {
+                          viewLink: URLS.getPagePath("edit-seizure-logs", {
                             clientId,
                             clientContactId: data.id,
                           }),
@@ -150,14 +145,14 @@ console.log("trianer data ",trainer);
                       width: helpers.getTableWith(0.1),
                     },
                   ]}
-                  data={trainer}
+                  data={staffWitness}
                   enableRowHeader={false}
                   hasNextPage={hasNextPage}
                   hasPrevPage={hasPrevPage}
                   onNextPage={onNextPage}
                   onPrevPage={onPrevPage}
                   page={page}
-                  emptyTableMessage="No trainer Found"
+                  emptyTableMessage="No logs Found"
                 />
               </Col>
             </div>
@@ -168,4 +163,5 @@ console.log("trianer data ",trainer);
   );
 };
 
-export default Trainer;
+export default SeizureLogs;
+

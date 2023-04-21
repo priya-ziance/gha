@@ -414,6 +414,8 @@ class StaffWitnessApi {
       `/staff-witness/${staffWitnessId}`,
       body
     );
+    console.log("client witness result", clientWitnessResult);
+    
     return this.normalizer.normalize(clientWitnessResult.data);
   }
 
@@ -447,16 +449,21 @@ class AddTrainerApi {
   
   async createTrainer(body = {}) {
     console.log("createAddTrainer : ", body);
-    const clientStaffResult = await client.post("/trainer", body);
-    return this.normalizer.normalize(clientStaffResult.data);
+    const addTrainerResult = await client.post("/trainer", body);
+    console.log("clientStaffResult",addTrainerResult);
+    
+    return this.normalizer.normalize(addTrainerResult.data);
   }
 
-  async updateTrainer(trainerId = "", body = {}) {
-    const clientWitnessResult = await client.patch(
+  async updateTrainer(trainerId = String, body = {}) {
+    console.log("witness id",trainerId);
+    const clientTrainerResult = await client.patch(
       `/trainer/${trainerId}`,
       body
     );
-    return this.normalizer.normalize(clientWitnessResult.data);
+    console.log("client trainer",clientTrainerResult);
+    
+    return this.normalizer.normalize(clientTrainerResult.data);
   }
 
   async getTrainerById(clientId: string) {
@@ -1183,7 +1190,7 @@ class QuestionsApi {
 class LogsApi {
   normalizer;
 
-  constructor() {
+   constructor() {
     this.normalizer = new Normalizer<ILogModel, ILog>(Models.Log);
   }
 
@@ -1207,11 +1214,17 @@ class LogsApi {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
 
-    const logsResult = await client.get(`/logs/date`, {
+    // const logsResult = await client.get(`/logs/date`, {
+    //   page,
+    //   log_date,
+    //   ...params,
+    // });
+    const logsResult = await client.get(`/seizure-logs`, {
       page,
-      log_date,
+      // log_date,
       ...params,
     });
+    console.log("log result ",logsResult);
 
     return this.normalizer.normalizeArray(logsResult.data.contents);
   }
@@ -1238,6 +1251,18 @@ class LogsApi {
     return this.normalizer.normalize(logResult.data);
   }
 
+  // async createLog(logId: "", body = {}, params = {}) {
+  //   const createLogResult = await client.post(`/seizure-logs`, body);
+  //   console.log("create result", createLogResult);
+
+  //   return this.normalizer.normalize(createLogResult.data);
+  // }
+  async createLog(body = {}) {
+    const clientStaffResult = await client.post("/seizure-logs", body);
+    console.log("result",clientStaffResult);
+    
+    return this.normalizer.normalize(clientStaffResult.data);
+  }
   async updateLog(logId = "", body = {}, params = {}) {
     const logResult = await client.patch(`/logs/${logId}`, body, { params });
 
