@@ -171,9 +171,9 @@ export type STAFF_WITNESS_FIELDS_TYPE =
   | "location";
 
   export type ADD_TRAINERS_FIELDS_TYPE =
-  | "image"
+  // | "image"
   | "address"
-  | "trainer_id"
+  // | "trainer_id"
   | "hired_date"
   | "email"
   | "first_name"
@@ -202,6 +202,7 @@ export type ADD_SEIZURELOGS_FIELDS_TYPE =
   | "notes"
   | "active"
   | "patient_have_seizure"
+  | "emp_id"
 
 export type CLIENT_FIELDS_TYPE =
   | "email"
@@ -214,12 +215,12 @@ export type CLIENT_FIELDS_TYPE =
   | "address_line_2"
   | "city"
   | "state"
-  | "monthly_SSI_amount"
-  | "Special_equipments"
-  | "Bank_account_name"
-  | "Bank_Routing_Number"
-  | "Bank_account_number"
-  | "Funds_method"
+  | "monthly_ssi_amount"
+  | "special_equipments"
+  | "bank_account_name"
+  | "bank_routing_number"
+  | "bank_account_number"
+  | "funds_method"
   | "zip_code"
   | "phone"
   | "mobile"
@@ -236,9 +237,12 @@ export type CLIENT_FIELDS_TYPE =
   | "primary_diagnosis"
   | "secondary_diagnosis"
   | "allergies"
+  | "vision"
+  | "hearing"
   | "location"
   | "health_insurance"
   | "effective_date"
+  | "client_support_plan_starting_month"
   | "funds_method"
   | "special_equipments"
   | "race"
@@ -933,7 +937,7 @@ export interface IStaffWithnessModel {
 }
 
 export interface ISeizurelogs {
-  emp_id?: string;
+  id?: string;
   date?: Moment;
   notes?: string;
   time?: string;
@@ -941,7 +945,7 @@ export interface ISeizurelogs {
   activity_preceding?: string;
   duration?: string;
   active?: boolean;
-  patient_have_seizure?: IStaffWithness;
+  patient_have_seizure?: string;
 }
 
 export interface ISeizureLogsModel {
@@ -953,7 +957,7 @@ export interface ISeizureLogsModel {
   activity_preceding?: string;
   duration?: string;
   active?: boolean;
-  patient_have_seizure?: IStaffWithness;
+  patient_have_seizure?: string;
   seizurelogs?: ISeizurelogs;
 }
 export interface IAddTrainer {
@@ -1034,9 +1038,15 @@ export interface IClient {
   primary_diagnosis?: string;
   secondary_diagnosis?: string;
   allergies?: string;
+  vision?: string;
+  hearing?: string;
   location?: ILocation;
   health_insurance?: IFile;
   effective_date?: string;
+  client_support_plan_starting_month?: string;
+  bank_account_number?: string
+  bank_account_name?: string
+  bank_routing_number?: string
   funds_method?: string;
   special_equipments?: string;
   race?: string;

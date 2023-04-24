@@ -3,16 +3,12 @@ import {TRAINER_FIELDS_FORM_TYPE } from "../../../types";
 
 
 export const FIELDS: TRAINER_FIELDS_FORM_TYPE  = {
-  address: {
-    name: "Address #",
-    default: "",
-    validation: yup.string().label("Address").required(),
-  },
-  image: {
-    name: "Image #",
-    default: "",
-    validation: yup.string().label("Image").required(),
-  },
+
+  // image: {
+  //   name: "Image #",
+  //   default: "",
+  //   validation: yup.string().label("Image").required(),
+  // },
   email: {
     name: "Email #",
     default: "",
@@ -47,5 +43,10 @@ export const FIELDS: TRAINER_FIELDS_FORM_TYPE  = {
     name: "location #",
     default: "",
     validation: yup.string().label("Location").required(),
+  },
+  address: {
+    name: "Address #",
+    default: "",
+    validation: yup.string().label("Address").required(),
   },
 };

@@ -14,41 +14,40 @@ import {
   nameColumn,
 } from "./helpers";
 import "./index.scss";
-import { IStaffWithnessModel } from "../../../types";
+import { ISeizureLogsModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 
 const PAGE_SIZE = 10;
 
 const SeizureLogs = () => {
-  const [staffWitness, setStaffWitness] = useState<IStaffWithnessModel[] | []>(
+  const [seizureLog, setSeizureLog] = useState<ISeizureLogsModel [] | []>(
     []
   );
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
 
-  const hasNextPage = staffWitness.length === PAGE_SIZE;
+  const hasNextPage = seizureLog.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
+  // useEffect(() => {
+  //   (async () => {
+  //     setLoading(true);
 
-      try {
-        setStaffWitness(
-          await api.logs.getLogsForDate(clientId, {
-            page,
-            pageSize: PAGE_SIZE,
+  //     try {
+  //       setSeizureLog(
+  //         await api.seizureLogs.getSeizureLogs(clientId, {
+  //           page,
+  //           pageSize: PAGE_SIZE,
+  //         })
+  //       );
+  //     } catch (e: any) {}
 
-          })
-        );
-      } catch (e: any) {}
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 200);
-    })();
-  }, [clientId, page]);
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 200);
+  //   })();
+  // }, [clientId, page]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -107,9 +106,9 @@ const SeizureLogs = () => {
               <Col>
                 <Table
                   loading={loading}
-                  numRows={staffWitness.length}
+                  numRows={seizureLog.length}
                   getCellClipboardData={(row: any, col: any) => {
-                    return staffWitness[row];
+                    return seizureLog[row];
                   }}
                   columns={[
                     {
@@ -145,7 +144,7 @@ const SeizureLogs = () => {
                       width: helpers.getTableWith(0.1),
                     },
                   ]}
-                  data={staffWitness}
+                  data={seizureLog}
                   enableRowHeader={false}
                   hasNextPage={hasNextPage}
                   hasPrevPage={hasPrevPage}

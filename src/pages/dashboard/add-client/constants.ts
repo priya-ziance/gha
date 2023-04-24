@@ -119,32 +119,32 @@ export const FIELDS : FIELDS_TYPE = {
     default: '',
     validation: yup.string(),
   },
-  monthly_SSI_amount: {
+  monthly_ssi_amount: {
     name: 'monthly SSI amount',
     default: '',
     validation: yup.string(),
   },
-  Special_equipments: {
+  special_equipments: {
     name: ' Special equipments',
     default: '',
     validation: yup.string(),
   },
-  Bank_account_name: {
+  bank_account_name: {
     name: 'Bank account name',
     default: '',
     validation: yup.string(),
   },
-  Bank_Routing_Number: {
+  bank_routing_number: {
     name: 'Bank Routing Number',
     default: '',
     validation: yup.string(),
   },
-  Bank_account_number: {
+  bank_account_number: {
     name: 'Bank account number',
     default: '',
     validation: yup.string(),
   },
-  Funds_method:{
+  funds_method:{
     name: 'Funds method',
     default: '',
     validation: yup.string(),
@@ -224,15 +224,25 @@ export const FIELDS : FIELDS_TYPE = {
     default: '',
     validation: yup.string(),
   },
+  hearing: {
+    name: 'hearing',
+    default: '',
+    validation: yup.string(),
+  },
+  vision:{
+    name: 'vision',
+    default: '',
+    validation: yup.string(),
+  },
   effective_date: {
     name: 'Insurance effective date',
     default: '',
     validation: yup.string(),
   },
-  special_equipments: {
-    name: 'Special adaptive equipment',
+  client_support_plan_starting_month:{
+    name: 'client support plan starting month',
     default: '',
-    validation: yup.string(),
+    validation: yup.string()
   },
   race: {
     name: 'Race',

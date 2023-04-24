@@ -426,6 +426,48 @@ class StaffWitnessApi {
     return this.normalizer.normalize(staffWitnessResult.data);
   }
 }
+//============================= Seizure Logs API'S========================
+class SeizureLogsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IStaffWithnessModel, IStaffWithness>(
+      Models.StaffWithness
+    );
+  }
+
+  async getSeizureLogs(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const SeizureLogsResult = await client.get(`/seizure-log`, {
+      clientId,
+      page,
+    });
+
+    return this.normalizer.normalizeArray(SeizureLogsResult.data.contents);
+  }
+
+  async createSeizureLogs(body = {}) {
+    const clientStaffResult = await client.post("/staff-witness", body);
+    return this.normalizer.normalize(clientStaffResult.data);
+  }
+
+  async updateStaffWitness(staffWitnessId = "", body = {}) {
+    const clientWitnessResult = await client.patch(
+      `/staff-witness/${staffWitnessId}`,
+      body
+    );
+    console.log("client witness result", clientWitnessResult);
+    
+    return this.normalizer.normalize(clientWitnessResult.data);
+  }
+
+  async getStaffWitnessById(staffWitnessId: string) {
+    const staffWitnessResult = await client.get(
+      `/staff-witness/${staffWitnessId}`
+    );
+    return this.normalizer.normalize(staffWitnessResult.data);
+  }
+}
 //============================= ADD TRAINERS API'S========================================
 class AddTrainerApi {
   normalizer;
@@ -1213,15 +1255,9 @@ class LogsApi {
   async getLogsForDate(log_date: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
-    // const logsResult = await client.get(`/logs/date`, {
-    //   page,
-    //   log_date,
-    //   ...params,
-    // });
-    const logsResult = await client.get(`/seizure-logs`, {
+    const logsResult = await client.get(`/`, {
       page,
-      // log_date,
+      log_date,
       ...params,
     });
     console.log("log result ",logsResult);
@@ -1428,6 +1464,7 @@ export default (() => ({
   locations: new LocationApi(),
   logTemplates: new LogTemplatesApi(),
   logs: new LogsApi(),
+  seizureLogs: new  SeizureLogsApi(),
   medications: new MedicationApi(),
   notes: new NoteDatabasesApi(),
   places: new PlaceDatabasesApi(),

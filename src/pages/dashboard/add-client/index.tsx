@@ -73,7 +73,7 @@ const AddClient = (props: AddClientProps) => {
   const [signatureDataURL, setSignatureDataURL] = useState('');
   const [services, setServices] = useState<any>({})
   const [witnesses, setWitnesses] = useState<IUserModel[] | []>([])
-  const [trainers, setTrainers] = useState<IUserModel[] | []>([])
+  const [trainers, setTrainers] = useState<any[] | []>([])
   const { addToast } = useContext(ToastsContext);
   const { location, locations } = useContext(LocationContext);
   let initialValues;
@@ -313,7 +313,11 @@ const AddClient = (props: AddClientProps) => {
 
               return (
                 <form onSubmit={handleSubmit}>
-                  <FormGroup
+                
+                  <Row>
+                    {/* ---------------------------COL 1------------------------------- */}
+                    <Col>
+                    <FormGroup
                     intent={Intent.PRIMARY}
                     label={'User Image'}
                   >
@@ -323,9 +327,6 @@ const AddClient = (props: AddClientProps) => {
                       imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
                     />
                   </FormGroup>
-                  <Row>
-                    {/* ---------------------------COL 1------------------------------- */}
-                    <Col>
                       {getInputFormGroup('first_name')}
                       {getInputFormGroup('middle_name')}
                       {getInputFormGroup('last_name')}
@@ -368,14 +369,14 @@ const AddClient = (props: AddClientProps) => {
                       {getInputFormGroup('address_line_2')}
                       {getInputFormGroup('city')}
                       {getInputFormGroup('state')}
-                      {getInputFormGroup('monthly_SSI_amount')}
-                      {getInputFormGroup("Special_equipments")}
-                      {getInputFormGroup("Bank_account_name")}
-                      {getInputFormGroup("Bank_Routing_Number")}
-                      {getInputFormGroup("Bank_account_number")}
+                      {getInputFormGroup('monthly_ssi_amount')}
+                      {getInputFormGroup("special_equipments")}
+                      {getInputFormGroup("bank_account_name")}
+                      {getInputFormGroup("bank_routing_number")}
+                      {getInputFormGroup("bank_account_number")}
                       <FormGroup
                         intent={Intent.PRIMARY}
-                        label={get(FIELDS, 'Funds_method', { name: '' }).name}
+                        label={get(FIELDS, 'funds_method', { name: '' }).name}
                         labelFor="text-input"
                         labelInfo={"(required)"}
                       >
@@ -384,10 +385,9 @@ const AddClient = (props: AddClientProps) => {
                             filterable={false}
                             itemRenderer={formSelectItemRenderer}
                             noResults={<MenuItem disabled={true} text="No results." />}
-                            onItemSelect={onFormSelectChange('Funds_method')}
+                            onItemSelect={onFormSelectChange('funds_method')}
                         >
-                            {/* children become the popover target; render value here */}
-                            <Button text={values.Funds_method} rightIcon="double-caret-vertical" />
+                            <Button text={values.funds_method} rightIcon="double-caret-vertical" />
                         </FormSelect>
                       </FormGroup>
                       {getInputFormGroup('zip_code')}
@@ -450,7 +450,7 @@ const AddClient = (props: AddClientProps) => {
                       {getInputFormGroup('height')}
                       {getInputFormGroup('eye_color')}
                       {getInputFormGroup('hair_color')}
-
+                      {getDateInputFormGroup('client_support_plan_starting_month')}
                       {getInputFormGroup('religion')}
                       {getInputFormGroup('mobility')}
                       <FormGroup
@@ -557,7 +557,7 @@ const AddClient = (props: AddClientProps) => {
                       </FormGroup>
                       
                       {getDateInputFormGroup('effective_date')}
-
+ 
                       {getInputFormGroup('special_equipments')}
                       {getInputFormGroup('race')}
                       
@@ -566,7 +566,8 @@ const AddClient = (props: AddClientProps) => {
 
                       {getInputFormGroup('secondary_diagnosis')}
                       {getInputFormGroup('allergies')}
-                      
+                      {getInputFormGroup('vision')}
+                      {getInputFormGroup('hearing')}
                       {getTextAreaInputFormGroup('likes')}
                       {getTextAreaInputFormGroup('definition_of_abuse')}
                       
@@ -614,7 +615,7 @@ const AddClient = (props: AddClientProps) => {
 
                   <Witnesses handleWitnessesChange={handleWitnessesChange} witnesses={witnesses} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
                   
-                  <Trainers trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
+                  <Trainers handleTrainerChange={handleTrainersChange} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
 
                   <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
 

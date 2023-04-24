@@ -82,28 +82,23 @@ const AddTrainers = (props: AddTrainersProps) => {
     setIsOmniOpen(false);
   };
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = async (file: any) => {
     if (file) {
-      // const filess = api.files.uploadFile(get(props, 'addTrainer.id'), 'image', file);
-      // return console.log("file hi file", filess);
-      return console.log("file hi file");
-
+      return api.files.uploadFile("h9YwkW4gyE", 'image', file);
     }
   }
   const setProfilePicture = (files: File[]) => {
-    console.log("all sert");
-
     setProfilePictureFile(files[0]);
-    console.log("setted");
-
-  }
+  };
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
     console.log("values", values);
+    if (profilePictureFile) {
+      console.log("profilePictureFile : " , profilePictureFile)
+      let file: any = await uploadFile(profilePictureFile);
+      console.log("upload profilePictureFile : ", JSON.stringify(file));
+      values.image = file?.id;
+    }
 
-    // if (profilePictureFile) {
-    //   let file = await uploadFile(profilePictureFile);
-    //   values.image = file;
-    // }
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
     const trianersId :any= get(props, "trainers.id", "");
@@ -117,9 +112,20 @@ const AddTrainers = (props: AddTrainersProps) => {
           intent: Intent.SUCCESS,
         });
       }else {
-        values.emp_id = clientId;
-        values.image = "new";
-        await api.Trainers.createTrainer(values);
+        // values.emp_id = clientId;
+        // values.image = "new";
+        // await api.Trainers.createTrainer({values,image: values?.image});
+        await api.Trainers.createTrainer({
+          id: values.id,
+          image: values?.image,
+          email: values?.email,
+          first_name: values?.first_name,
+          last_name: values?.last_name,
+          address: values?.address,
+          mobile: values?.mobile,
+          location: values?.location,
+          hired_date: values?.hired_date,
+        });
         addToast({
           message: "Add Trainer Created",
           intent: Intent.SUCCESS,
@@ -135,9 +141,9 @@ const AddTrainers = (props: AddTrainersProps) => {
       });
     }
 
-    // setSubmitting(false);
+    setSubmitting(false); 
   };
-  const profilePictureUrl = get(props, 'addTrainer.image', '')
+  // const profilePictureUrl = get(props, 'addTrainer.image', '')
 
   return (
     <div className="dashboard">
@@ -173,6 +179,11 @@ const AddTrainers = (props: AddTrainersProps) => {
                     validateForm,
                   },
                 }) => {
+                  const profilePictureUrl = get(
+                    props,
+                    "client.profilePicture.publicUrl",
+                    ""
+                  );
                   return (
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
@@ -192,20 +203,24 @@ const AddTrainers = (props: AddTrainersProps) => {
                         }}
                       />
 
-                      {/* <Row>
+                      <Row>
                         <Col xs={12} md={12}>
-                          <FormGroup
+                        <FormGroup
                             intent={Intent.PRIMARY}
-                            label={'Trainer Image'}
+                            label={"User Image"}
                           >
                             <ImageDropzone
-                              files={profilePictureFile ? [profilePictureFile] : []}
+                              files={
+                                profilePictureFile ? [profilePictureFile] : []
+                              }
                               setFiles={setProfilePicture}
-                              imagesUrls={profilePictureUrl ? [profilePictureUrl] : []}
+                              imagesUrls={
+                                profilePictureUrl ? [profilePictureUrl] : []
+                              }
                             />
                           </FormGroup>
                         </Col>
-                      </Row> */}
+                      </Row>
                       {/* <Row>
                         <Col xs={12} md={12}>
                           {getInputFormGroup("trainer_id", {

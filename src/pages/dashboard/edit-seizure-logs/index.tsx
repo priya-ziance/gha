@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { Spinner } from "@blueprintjs/core";
 import api from "../../../api";
 import withPathId from "../../../hoc/withPathId";
-import { IStaffWithnessModel } from "../../../types";
+import { ISeizureLogsModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
-import AddSeizureLogs from "../add-seozure-logs";
+import AddSeizureLogs from "../add-seizure-logs";
 
 interface seizurelogPathType {
   seizurelogId: string;
@@ -12,20 +12,22 @@ interface seizurelogPathType {
 
 const EditSeizureLogs = (props: seizurelogPathType) => {
   const [loading, setLoading] = useState(true);
-  const [seizurelog, setSeizurelog] = useState<
-    IStaffWithnessModel | undefined
-  >(undefined);
+  const [seizureLog, setSeizureLog] = useState<ISeizureLogsModel | undefined>(undefined);
   const { id: clientId } = useContext(ClientContext);
 
   const { seizurelogId } = props;
+  console.log("seizure id", seizurelogId);
+  
   
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
-        const fetchedseizurelog =
-          await api.logs.getLog(seizurelogId);
-        setSeizurelog(fetchedseizurelog);
+        const fetchedSeizurelog =
+         await api.logs.getLog(seizurelogId);
+        //  setSeizureLog(fetchedSeizurelog);
+       
+       
       } catch (e: any) {
         console.log(e);
       }
@@ -37,9 +39,7 @@ const EditSeizureLogs = (props: seizurelogPathType) => {
     return <Spinner />;
   }
 
-  return <AddSeizureLogs
-  //  seizurelog={seizurelog}
-   update />;
+  return <AddSeizureLogs SeizureLogs={seizureLog} update />;
 };
 
 export default withPathId({ pathSlugs: ["seizurelogId"] })(

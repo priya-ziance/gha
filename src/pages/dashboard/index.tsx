@@ -31,7 +31,7 @@ import LogsPage from './logs';
 import ReshabLogs from './reshab-logs';
 import RespiteLogsPage from './respite-logs';
 import SeizureLogs from './Siezure-log'
-import AddSeizureLogs from './add-seozure-logs';
+import AddSeizureLogs from './add-seizure-logs';
 import EditSeizureLogs from './edit-seizure-logs';
 import LifeSkillsPage from './life-skills';
 import LifeSkillsLogsPage from './life-skills-logs';
