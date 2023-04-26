@@ -12,12 +12,13 @@ interface StaffWitnessPathType {
 
 const StaffWitnessInfo = (props: StaffWitnessPathType) => {
   const [loading, setLoading] = useState(true);
-  const [staffWitness, setStaffWitness] = useState<
-    IStaffWithnessModel | undefined
-  >(undefined);
+  const [staffWitness, setStaffWitness] = useState< IStaffWithnessModel | undefined>(undefined);
   const { id: clientId } = useContext(ClientContext);
 
   const { staffWitnessId } = props;
+ 
+  console.log("staffWitnessId",staffWitnessId    );
+  
   
   useEffect(() => {
     (async () => {

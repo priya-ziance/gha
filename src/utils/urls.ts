@@ -15,6 +15,7 @@ type OPTIONS_TYPE = {
   goalId?: string;
   subGoalId?: string;
   taskId?: string;
+  seizurelogId?: string;
 };
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -173,17 +174,17 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case "personal-support-notes-database":
       return `${dashboardBase}/logs/personal-support/notes-database`;
 
-      case "seizure-logs":
+    case "seizure-logs":
         return `${dashboardBase}/logs/seizure-logs`;
-      case "add-seizure-logs":
+    case "add-seizure-logs":
         return `${dashboardBase}/logs/seizure-logs/add`;
-      case "edit-seizure-logs":
-        return `${dashboardBase}/logs/seizure-logs/edit`;
-      case "seizure-logs-logs":
+    case "edit-seizure-logs":
+        return `${dashboardBase}/logs/seizure-logs/${options.clientContactId}/edit`;
+    case "seizure-logs-logs":
         return `${dashboardBase}/logs/seizure-logs/logs`;
-      case "seizure-logs-places-database":
+    case "seizure-logs-places-database":
         return `${dashboardBase}/logs/seizure-logs/places-database`;
-      case "seizure-logs-notes-database":
+    case "seizure-logs-notes-database":
         return `${dashboardBase}/logs/seizure-logs/notes-database`;
     case "reshab-logs":
       return `${dashboardBase}/logs/reshab-logs`;

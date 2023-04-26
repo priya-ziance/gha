@@ -33,7 +33,7 @@ const ClientContacts = () => {
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
 
-  const hasNextPage = clientContacts.length === PAGE_SIZE;
+  const hasNextPage = clientContacts.length >= PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   useEffect(() => {

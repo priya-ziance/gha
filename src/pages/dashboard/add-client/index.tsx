@@ -16,6 +16,7 @@ import Signature from './signature';
 import Services from './servicesDialog';
 import Witnesses from './witnessesDialog';
 import Trainers from './trainersDialog';
+import BehaviourDialog from './behaviourForm';
 
 import IClientModel from '../../../models/client';
 
@@ -110,6 +111,7 @@ const AddClient = (props: AddClientProps) => {
   const onServicesForm = () => setCurrentDialog(DIALOG_NAMES.services);
   const onWitnessesForm = () => setCurrentDialog(DIALOG_NAMES.witnesses);
   const onTrainersForm = () => setCurrentDialog(DIALOG_NAMES.trainers);
+  const onBehaviourForm = ()=> setCurrentDialog(DIALOG_NAMES.behaviour)
   const onClientWitnessForm = () => setCurrentDialog(DIALOG_NAMES.clientWitness);
   const onStaffWitnessForm = () => setCurrentDialog(DIALOG_NAMES.staffWitness);
   
@@ -304,6 +306,7 @@ const AddClient = (props: AddClientProps) => {
               const servicesDialogOpen = currentDialog === DIALOG_NAMES.services;
               const witnessesDialogOpen = currentDialog === DIALOG_NAMES.witnesses;
               const trainersDialogOpen = currentDialog === DIALOG_NAMES.trainers;
+              const behaviourDialogOpen = currentDialog === DIALOG_NAMES.behaviour;
               const clientWitnessesDialogOpen = currentDialog === DIALOG_NAMES.clientWitness;
               const staffWitnessesDialogOpen = currentDialog === DIALOG_NAMES.staffWitness;
 
@@ -366,14 +369,15 @@ const AddClient = (props: AddClientProps) => {
                           }
                         )
                       }
-                      {getInputFormGroup('address_line_2')}
+                      {/* {getInputFormGroup('address_line_2')}
                       {getInputFormGroup('city')}
-                      {getInputFormGroup('state')}
+                      // {getInputFormGroup('state')} */}
                       {getInputFormGroup('monthly_ssi_amount')}
                       {getInputFormGroup("special_equipments")}
                       {getInputFormGroup("bank_account_name")}
                       {getInputFormGroup("bank_routing_number")}
                       {getInputFormGroup("bank_account_number")}
+                      {getInputFormGroup("current_month_weight")}
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={get(FIELDS, 'funds_method', { name: '' }).name}
@@ -500,7 +504,7 @@ const AddClient = (props: AddClientProps) => {
                           <b>Add Witnessess ({witnesses.length})</b>
                         </Button>
                       </FormGroup>
-                      <FormGroup
+                      {/* <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Services provided by Group home Connect"}
                         labelFor="text-input"
@@ -508,7 +512,7 @@ const AddClient = (props: AddClientProps) => {
                         <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
                           <b>Services</b>
                         </Button>
-                      </FormGroup>
+                      </FormGroup> */}
 
                       <FormGroup
                         intent={Intent.PRIMARY}
@@ -528,7 +532,7 @@ const AddClient = (props: AddClientProps) => {
                         <Button intent={Intent.PRIMARY} 
                         onClick={onStaffWitnessForm}
                         >
-                          <b>Staff itness ({witnesses.length})</b>
+                          <b>Staff Witness ({witnesses.length})</b>
                         </Button>
                       </FormGroup>
                       <FormGroup
@@ -538,6 +542,15 @@ const AddClient = (props: AddClientProps) => {
                         <Button intent={Intent.PRIMARY} 
                         onClick={onTrainersForm}>
                           <b>Add Trainers ({trainers.length})</b>
+                        </Button>
+                      </FormGroup>
+                      <FormGroup
+                        intent={Intent.PRIMARY}
+                        label={"Behaviour"}
+                      >
+                        <Button intent={Intent.PRIMARY} 
+                        onClick={onBehaviourForm}>
+                          <b>behaviour ({trainers.length})</b>
                         </Button>
                       </FormGroup>
                     </Col>
@@ -620,6 +633,8 @@ const AddClient = (props: AddClientProps) => {
                   <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
 
                   <StaffWitnessDialog isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
+
+                  <BehaviourDialog isOpen={behaviourDialogOpen} handleClose={handleDialogClose} />
                 </form>
               )
             }, FIELDS)}

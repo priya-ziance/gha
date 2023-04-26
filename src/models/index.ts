@@ -25,6 +25,7 @@ import SubGoal from './subGoal';
 import Task from './task';
 import User from './user';
 import Question from './question';
+import SeizureLogs from './seizurelogs'
 
 const Exports = {
   Appointment,
@@ -38,6 +39,7 @@ const Exports = {
   ClientWitness,
   StaffWithness,
   AddTrainers,
+  SeizureLogs,
   Expense,
   ExpenseList,
   File,

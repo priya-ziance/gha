@@ -102,7 +102,7 @@ const StaffWitnessForm = (props: IDialog) => {
                   formikProps: { handleSubmit },
                 }) => {
                   return (
-                    <form onSubmit={handleSubmit}>
+                    <form onChange={handleSubmit}>
                       <Row>
                         <Col xs={12} md={6}>
                           {getInputFormGroup("search")}
@@ -120,6 +120,8 @@ const StaffWitnessForm = (props: IDialog) => {
             loading={loading}
             numRows={staffWitness.length}
             getCellClipboardData={(row: any, col: any) => {
+              console.log("click");
+              
               return staffWitness[row];
             }}
             columns={[

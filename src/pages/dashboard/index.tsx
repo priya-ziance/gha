@@ -230,7 +230,7 @@ function Dashboard() {
 
           <Route path="/dashboard/logs/seizure-logs" exact component={SeizureLogs} />
           <Route path="/dashboard/logs/seizure-logs/add" exact component={AddSeizureLogs} />
-          <Route path="/dashboard/logs/seizure-logs/edit" exact component={EditSeizureLogs} />
+          <Route path="/dashboard/logs/seizure-logs/:seizurelogId/edit" exact component={EditSeizureLogs} />
 
           <Route path="/dashboard/logs/respite-logs" exact component={RespiteLogsPage} />
           <Route path="/dashboard/logs/life-skills" exact component={LifeSkillsPage} />

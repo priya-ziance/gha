@@ -1,5 +1,5 @@
 import { Intent } from '@blueprintjs/core';
-import { AnchorButton } from '../../../components';
+import { AnchorButton, Button } from '../../../components';
 import { IStaffWithnessModel } from '../../../types';
 
 export const nameColumn = (data: IStaffWithnessModel) => {
@@ -26,7 +26,7 @@ export const addressColumn = (data: IStaffWithnessModel) => {
   )
 }
 
-export const actionColumn = (data: IStaffWithnessModel, { viewLink }: any) => {
+export const actionColumn = (data: IStaffWithnessModel, { viewLink,onDelete }: any) => {
   return (
     <>
       <AnchorButton
@@ -39,6 +39,17 @@ export const actionColumn = (data: IStaffWithnessModel, { viewLink }: any) => {
       >
         <b>view</b>
       </AnchorButton>
+      {" "}
+      {" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data)
+          }
+        }}
+        icon='trash'
+        intent={Intent.DANGER}
+      />
     </>
   )
 }

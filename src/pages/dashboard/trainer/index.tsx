@@ -13,40 +13,39 @@ import {
   nameColumn,
 } from "./helpers";
 import "./index.scss";
-import { IStaffWithnessModel } from "../../../types";
+import { IAddTrainerModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
+import ToastsContext from "../../../contexts/toasts";
 
 const PAGE_SIZE = 10;
 
 const Trainer = () => {
-  const [trainer, setTrainer] = useState<IStaffWithnessModel[] | []>(
+  const [trainer, setTrainer] = useState<IAddTrainerModel[] | []>(
     []
   );
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
-  const hasNextPage = trainer.length === PAGE_SIZE;
+  const { addToast } = useContext(ToastsContext);
+  const hasNextPage = trainer.length >= PAGE_SIZE;
   const hasPrevPage = page > 0;
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      setTrainer(
+        await api.Trainers.getTrainer(clientId, {
+          page,
+          pageSize: PAGE_SIZE,
+        })
+      );
+    } catch (e: any) { }
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  };
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-
-      try {
-        setTrainer(
-          await api.Trainers.getTrainer(clientId, {
-            page,
-            pageSize: PAGE_SIZE,
-          })
-        );
-      } catch (e: any) {}
-
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 200);
-    })();
+    fetchData()
   }, [clientId, page]);
 
   const onNextPage = () => {
@@ -60,7 +59,6 @@ const Trainer = () => {
       setPage((page) => page - 1);
     }
   };
-console.log("trianer data ",trainer);
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
@@ -97,7 +95,26 @@ console.log("trianer data ",trainer);
       </AnchorButton>
     );
   };
+  const deleteTrainer = async (data: IAddTrainerModel) => {
+    setLoading(true)
 
+    try {
+      await api.Trainers.deleteTrainer(data.trainer?._id || "")
+
+      await fetchData()
+      addToast({
+        message: 'Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setLoading(false)
+  }
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -145,13 +162,16 @@ console.log("trianer data ",trainer);
                             clientId,
                             clientContactId: data.id,
                           }),
+                          onDelete() {
+                            deleteTrainer(data)
+                          }
                         });
                       },
                       width: helpers.getTableWith(0.1),
                     },
                   ]}
                   data={trainer}
-                  enableRowHeader={false}
+                  enableRowHeader={true}
                   hasNextPage={hasNextPage}
                   hasPrevPage={hasPrevPage}
                   onNextPage={onNextPage}

@@ -36,7 +36,8 @@ export const DIALOG_NAMES = {
   witnesses: 'witnesses',
   trainers: 'trainers',
   clientWitness : "clientWitness",
-  staffWitness : "staffWitness"
+  staffWitness : "staffWitness",
+  behaviour: "behaviour"
 }
 
 // export const FUNDS_METHODS_OPTIONS = [
@@ -98,6 +99,11 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'Sex',
     default: SEX_OPTIONS[0],
     validation: yup.string(),
+  },
+  current_month_weight:{
+    name: 'Current Month Weight',
+    default: '',
+    validation: yup.string().label('Current Month Weight').required(),
   },
   address_line_1: {
     name: 'Address 1',

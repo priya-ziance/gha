@@ -53,6 +53,8 @@ import {
   IBehaviourAssignmentModel,
   IBehaviourAssignment,
   IStaffWithnessModel,
+  ISeizureLogsModel,
+  ISeizurelogs,
   IClientWithnessModel,
   IClientWithness,
   IStaffWithness,
@@ -271,10 +273,11 @@ class ClientContactApi {
 
   async getClientContacts(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
-
+    const pageSize = get(options, "pageSize", 0);
     const clientContactsResult = await client.get(`/client_contacts`, {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(clientContactsResult.data.contents);
@@ -356,8 +359,10 @@ class ClientWitnessApi {
 
   async getClientWitness(clientId?: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
     const clientWitnessResult = await client.get(`/client-witness`, {
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(clientWitnessResult.data.contents);
@@ -382,6 +387,10 @@ class ClientWitnessApi {
     );
     return this.normalizer.normalize(clientWitnessResult.data);
   }
+  async deleteClientWitness(clientWitnessId: String, body = {}) {
+    const deleteResult =  await client.delete(`/client-witness/${clientWitnessId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
 }
 
 //============================= CLIENT WITNESS API'S========================
@@ -396,9 +405,11 @@ class StaffWitnessApi {
 
   async getStaffWitness(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
     const staffWitnessResult = await client.get(`/staff-witness`, {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(staffWitnessResult.data.contents);
@@ -425,47 +436,50 @@ class StaffWitnessApi {
     );
     return this.normalizer.normalize(staffWitnessResult.data);
   }
+  async deleteStaffWitness(staffWitnessId: String, body = {}) {
+    const deleteResult =  await client.delete(`/staff-witness/${staffWitnessId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
 }
 //============================= Seizure Logs API'S========================
 class SeizureLogsApi {
   normalizer;
 
   constructor() {
-    this.normalizer = new Normalizer<IStaffWithnessModel, IStaffWithness>(
-      Models.StaffWithness
+    this.normalizer = new Normalizer<ISeizureLogsModel, ISeizurelogs>(
+      Models.SeizureLogs
     );
   }
 
   async getSeizureLogs(clientId: string, options?: OPTIONS_TYPE) {
-    const page = get(options, "page", 0);
+    const page = get(options, "page", 1);
+    const pageSize = get(options, "pageSize", 0);
     const SeizureLogsResult = await client.get(`/seizure-log`, {
       clientId,
       page,
+      pageSize
     });
-
     return this.normalizer.normalizeArray(SeizureLogsResult.data.contents);
   }
 
   async createSeizureLogs(body = {}) {
-    const clientStaffResult = await client.post("/staff-witness", body);
+    const clientStaffResult = await client.post("/seizure-log", body);
     return this.normalizer.normalize(clientStaffResult.data);
   }
-
-  async updateStaffWitness(staffWitnessId = "", body = {}) {
-    const clientWitnessResult = await client.patch(
-      `/staff-witness/${staffWitnessId}`,
+  async deleteSeizureLogs(seizurelogId: String, body = {}) {
+    const deleteResult =  await client.delete(`/seizure-log/${seizurelogId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateSeizureLogs(seizurelogId: String, body = {}) {
+    const clientWitnessResult = await client.patch(`/seizure-log/${seizurelogId}`,
       body
     );
-    console.log("client witness result", clientWitnessResult);
-    
     return this.normalizer.normalize(clientWitnessResult.data);
   }
 
-  async getStaffWitnessById(staffWitnessId: string) {
-    const staffWitnessResult = await client.get(
-      `/staff-witness/${staffWitnessId}`
-    );
-    return this.normalizer.normalize(staffWitnessResult.data);
+  async getSeizureLogsById(seizurelogId: string) {
+    const seizureLogByIdResult = await client.get(`/seizure-log/${seizurelogId}`);
+    return this.normalizer.normalize(seizureLogByIdResult.data);
   }
 }
 //============================= ADD TRAINERS API'S========================================
@@ -480,34 +494,30 @@ class AddTrainerApi {
 
   async getTrainer(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
     const addTrainerResult = await client.get(`/trainer`, {
       clientId,
       page,
+      pageSize
     });
     return this.normalizer.normalizeArray(addTrainerResult.data.contents);
   }
 
-
-  
   async createTrainer(body = {}) {
-    console.log("createAddTrainer : ", body);
     const addTrainerResult = await client.post("/trainer", body);
-    console.log("clientStaffResult",addTrainerResult);
-    
     return this.normalizer.normalize(addTrainerResult.data);
   }
-
+  async deleteTrainer(trainerId: String, body = {}) {
+    const deleteResult =  await client.delete(`/trainer/${trainerId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
   async updateTrainer(trainerId = String, body = {}) {
-    console.log("witness id",trainerId);
     const clientTrainerResult = await client.patch(
       `/trainer/${trainerId}`,
       body
     );
-    console.log("client trainer",clientTrainerResult);
-    
     return this.normalizer.normalize(clientTrainerResult.data);
   }
-
   async getTrainerById(clientId: string) {
     const addTrainersResult = await client.get(`/trainer/${clientId}`);
     return this.normalizer.normalize(addTrainersResult.data);
@@ -524,10 +534,11 @@ class GoalsApi {
 
   async getGoals(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
-
+    const pageSize = get(options, "pageSize", 0);
     const goalsResult = await client.get(`/goals`, {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(goalsResult.data.contents);
@@ -637,10 +648,11 @@ class LogTemplatesApi {
   async getLogTemplates(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const logTemplatesResult = await client.get(`/templates`, {
       clientId,
       page,
+      pageSize,
       ...params,
     });
 
@@ -700,9 +712,11 @@ class MedicationApi {
 
   async getMedications(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
     const medicationResult = await client.get("/medications", {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(medicationResult.data.contents);
@@ -714,9 +728,11 @@ class MedicationApi {
     options?: OPTIONS_TYPE
   ) {
     const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
     const medicationResult = await client.get(`/medication/${medicationID}`, {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalize(medicationResult.data);
@@ -886,10 +902,11 @@ class SpGoalsApi {
 
   async getSpGoals(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
-
+    const pageSize = get(options, "pageSize", 0);
     const goalsResult = await client.get(`/sp_goals`, {
       clientId,
       page,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(goalsResult.data.contents);
@@ -930,12 +947,12 @@ class BehavioursApi {
 
   async getBehaviours(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
-
+    const pageSize = get(options, "pageSize", 0);
     const behavioursResult = await client.get(`/behaviours`, {
       clientId,
       page,
+      pageSize
     });
-
     return this.normalizer.normalizeArray(behavioursResult.data.contents);
   }
 
@@ -1041,11 +1058,12 @@ class ExpensesApi {
   async getExpenses(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const expensesResult = await client.get(`/expenses`, {
       clientId,
       page,
       ...params,
+      pageSize
     });
 
     return this.normalizer.normalizeArray(expensesResult.data.contents);
@@ -1091,10 +1109,11 @@ class BankStatementsApi {
   async getBankStatements(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const bankStatementsResult = await client.get(`/bank_statements`, {
       clientId,
       page,
+      pageSize,
       ...params,
     });
 
@@ -1144,11 +1163,12 @@ class ExpensesListApi {
   async getExpenseLists(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const expensesResult = await client.get(`/expense_lists`, {
       clientId,
       page,
       ...params,
+      pageSize,
     });
 
     return this.normalizer.normalizeArray(expensesResult.data.contents);
@@ -1255,9 +1275,11 @@ class LogsApi {
   async getLogsForDate(log_date: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
+    const pageSize = get(options, "pageSize", 0);
     const logsResult = await client.get(`/`, {
       page,
       log_date,
+      pageSize,
       ...params,
     });
     console.log("log result ",logsResult);
@@ -1268,10 +1290,11 @@ class LogsApi {
   async getLogsByType(type: string, clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const logsResult = await client.get(`/logs/type`, {
       clientId,
       page,
+      pageSize,
       type,
       ...params,
     });
@@ -1294,7 +1317,9 @@ class LogsApi {
   //   return this.normalizer.normalize(createLogResult.data);
   // }
   async createLog(body = {}) {
-    const clientStaffResult = await client.post("/seizure-logs", body);
+    console.log("body",body);
+    
+    const clientStaffResult = await client.post("/seizure-log", body);
     console.log("result",clientStaffResult);
     
     return this.normalizer.normalize(clientStaffResult.data);
@@ -1319,11 +1344,12 @@ class PlaceDatabasesApi {
   async getPlaces(clientId: string, type: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
-
+    const pageSize = get(options, "pageSize", 0);
     const placesResult = await client.get(`/places`, {
       clientId,
       type,
       page,
+      pageSize,
       ...params,
     });
 

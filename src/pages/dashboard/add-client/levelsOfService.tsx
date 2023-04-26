@@ -279,7 +279,7 @@ const LevelsOfService = (props: IDialog) => {
                 intent: Intent.PRIMARY,
               }}
             >
-              Visit the Foundry website
+              Submit
             </AnchorButton>
           </div>
         </div>

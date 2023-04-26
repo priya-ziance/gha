@@ -15,6 +15,7 @@ import {
 import "./index.scss";
 import { IClientWithnessModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
+import ToastsContext from "../../../contexts/toasts";
 
 const PAGE_SIZE = 10;
 
@@ -25,13 +26,12 @@ const ClientWitness = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
+  const { addToast } = useContext(ToastsContext);
   const hasNextPage = clientWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
+  const fetchData = async () => {
+    setLoading(true);
 
       try {
         setClientWitness(
@@ -45,9 +45,12 @@ const ClientWitness = () => {
       setTimeout(() => {
         setLoading(false);
       }, 200);
-    })();
-  }, [clientId, page]);
+  }
 
+  useEffect(() => {
+    fetchData()
+  }, [clientId, page]);
+ 
   const onNextPage = () => {
     if (hasNextPage) {
       setPage((page) => page + 1);
@@ -94,7 +97,23 @@ const ClientWitness = () => {
       </AnchorButton>
     );
   };
-
+  const deleteStaffWitness = async (data: IClientWithnessModel) => {
+    setLoading(true)
+    try {
+      await api.clientWitness.deleteClientWitness(data.clientWitness._id|| "")
+      await fetchData()
+      addToast({
+        message: 'Client Witness Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+    setLoading(false)
+  }
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -142,6 +161,9 @@ const ClientWitness = () => {
                             clientId,
                             clientContactId: data.id,
                           }),
+                          onDelete() {
+                            deleteStaffWitness(data)
+                          }
                         });
                       },
                       width: helpers.getTableWith(0.1),

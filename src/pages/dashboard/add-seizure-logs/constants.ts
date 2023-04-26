@@ -44,9 +44,9 @@ export const FIELDS: SEIZURELOGS_FIELDS_FORM_TYPE = {
     default: "",
     validation: yup.string().label("patient_have_seizure").required(),
   },
-  emp_id: {
-    name: "emp id #",
-    default: "",
-    validation: yup.string().label("empId").required(),
-  },
+  // emp_id: {
+  //   name: "emp id #",
+  //   default: "",
+  //   validation: yup.string().label("empId").required(),
+  // },
 };

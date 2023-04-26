@@ -15,6 +15,7 @@ import {
 import "./index.scss";
 import { IStaffWithnessModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
+import ToastsContext from "../../../contexts/toasts";
 
 const PAGE_SIZE = 10;
 
@@ -25,14 +26,12 @@ const StaffWitness = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
+  const { addToast } = useContext(ToastsContext);
   const hasNextPage = staffWitness.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-
+  const fetchData = async () => {
+    setLoading(true);
       try {
         setStaffWitness(
           await api.staffWitness.getStaffWitness(clientId, {
@@ -44,9 +43,13 @@ const StaffWitness = () => {
 
       setTimeout(() => {
         setLoading(false);
-      }, 200);
-    })();
+      }, 100);
+  }
+
+  useEffect(() => {
+    fetchData()
   }, [clientId, page]);
+ 
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -94,7 +97,26 @@ const StaffWitness = () => {
       </AnchorButton>
     );
   };
+  const deleteStaffWitness = async (data: IStaffWithnessModel) => {
+    setLoading(true)
 
+    try {
+      await api.staffWitness.deleteStaffWitness(data?.staffWitness?._id|| "")
+
+      await fetchData()
+      addToast({
+        message: 'Staff Witness Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setLoading(false)
+  }
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -142,6 +164,9 @@ const StaffWitness = () => {
                             clientId,
                             clientContactId: data.id,
                           }),
+                          onDelete() {
+                            deleteStaffWitness(data)
+                          }
                         });
                       },
                       width: helpers.getTableWith(0.1),

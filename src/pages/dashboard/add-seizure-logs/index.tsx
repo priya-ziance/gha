@@ -30,6 +30,8 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
+  console.log("props seizure",props);
+  
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
       href: URLS.getPagePath("dashboard"),
@@ -58,9 +60,10 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
    * This assigns the client's info as the initial values if a client
    * is passed in
    */
-  if (props.SeizureLogs) {
-    console.log("props.staffWitness : ", props.SeizureLogs)
+  const seizurelogId:any =props?.SeizureLogs?.seizurelogs?._id;
 
+  if (props.SeizureLogs) {
+    console.log("props.staffWitness : ", props.SeizureLogs.seizurelogs?._id)
     initialValues = Object.assign(
       {},
       helpers.initialValues,
@@ -70,7 +73,6 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
 
   } else {
     console.log("not working");
-    
     initialValues = helpers.initialValues;
   }
 
@@ -79,24 +81,24 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
   };
 
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    console.log("valuesss",values);
-    
+    console.log("valuesss", values);
+
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    const seizureIdId = get(props, "staffWitness.id", "");
-    console.log("staff id", seizureIdId);
-    
+    // const seizureId:string = get(props, "seizureid.id", "");
+    // console.log("staff id", seizurelogId);
+
     try {
       if (props.update) {
-        await api.staffWitness.updateStaffWitness(seizureIdId, values);
+        await api.seizureLogs.updateSeizureLogs(seizurelogId, values);
         addToast({
           message: "seizure log Updated",
           intent: Intent.SUCCESS,
         });
       } else {
         // values.emp_id = staffWitnessId;
-        values.image = "dasd";
-        await api.logs.createLog(values);
+        // values.image = "dasd";
+        await api.seizureLogs.createSeizureLogs(values);
         addToast({
           message: "seizure logCreated",
           intent: Intent.SUCCESS,
@@ -129,7 +131,7 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
           <div className="add-seizure-log__container">
             <Formik
               initialValues={initialValues}
-              validationSchema={helpers.validationSchema}
+              // validationSchema={helpers.validationSchema}
               onSubmit={onSubmit}
             >
               {formikWrapper(
@@ -140,6 +142,7 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
                     getInputFormGroup,
                     getAutocompleteInputFormGroup,
                     getPhoneInputFormGroup,
+                    getSwitchInputFormGroup
                   },
                   formikProps: {
                     handleSubmit,
@@ -154,7 +157,7 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
                         isOpen={isOmniOpen}
                         onClose={handleSelectStaffWitnessClose}
                         onSelect={(SeizureLogs: ISeizureLogsModel) => {
-                          setFieldValue("emp_id",SeizureLogs.emp_id)
+                          setFieldValue("id", SeizureLogs._id)
                           setFieldValue("date", SeizureLogs.date);
                           setFieldValue("time", SeizureLogs.time);
                           setFieldValue("Injuries", SeizureLogs.Injuries);
@@ -169,23 +172,7 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
                         }}
                       />
 
-                      <Row>
-                      <Col xs={12} md={6}>
-                          {getInputFormGroup("emp_id", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("active", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("time", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                      </Row>
+                     
                       <Row>
                         <Col xs={12} md={6}>
                           {getInputFormGroup("duration", {
@@ -226,7 +213,22 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
                             childProps: { disabled: !!selectedMedical },
                           })}
                         </Col>
-                        
+
+                      </Row>
+                      <Row>
+                        {/* <Col xs={12} md={6}>
+                          {getInputFormGroup("emp_id", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col> */}
+                        <Col xs={12} md={6}>
+                             {getSwitchInputFormGroup('active')}
+                        </Col>
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("time", {
+                            childProps: { disabled: !!selectedMedical },
+                          })}
+                        </Col>
                       </Row>
 
                       {/* <Row>

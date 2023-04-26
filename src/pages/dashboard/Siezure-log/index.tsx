@@ -8,46 +8,50 @@ import * as helpers from "../../../utils/helpers";
 import LogEntry from "../_component-pages/log-entry";
 import {
   actionColumn,
-  addressColumn,
-  emailColumn,
-  mobileColumn,
-  nameColumn,
+  idColumn,
+  dateColumn,
+  timeColumn,
+  InjuriesColumn,
+  activeColumn
 } from "./helpers";
 import "./index.scss";
-import { ISeizureLogsModel } from "../../../types";
+import { ISeizureLogsModel, IDeleteModel, ISeizurelogs } from "../../../types";
 import ClientContext from "../../../contexts/client";
+import ToastsContext from "../../../contexts/toasts";
 
 const PAGE_SIZE = 10;
 
 const SeizureLogs = () => {
-  const [seizureLog, setSeizureLog] = useState<ISeizureLogsModel [] | []>(
+  const [seizureLog, setSeizureLog] = useState<ISeizureLogsModel[] | []>(
     []
   );
+  const [SeizureDelete, setSeizureDelete] = useState<IDeleteModel | undefined>(undefined);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
+  const { addToast } = useContext(ToastsContext);
   const hasNextPage = seizureLog.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setLoading(true);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      setSeizureLog(
+        await api.seizureLogs.getSeizureLogs(clientId, {
+          page,
+          pageSize: PAGE_SIZE,
+        })
+      );
+    } catch (e: any) { }
 
-  //     try {
-  //       setSeizureLog(
-  //         await api.seizureLogs.getSeizureLogs(clientId, {
-  //           page,
-  //           pageSize: PAGE_SIZE,
-  //         })
-  //       );
-  //     } catch (e: any) {}
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
+  }
 
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //     }, 200);
-  //   })();
-  // }, [clientId, page]);
+  useEffect(() => {
+    fetchData()
+  }, [clientId, page]);
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -92,6 +96,27 @@ const SeizureLogs = () => {
     );
   };
 
+  const deleteLog = async (data: ISeizureLogsModel) => {
+    setLoading(true)
+
+    try {
+      await api.seizureLogs.deleteSeizureLogs(data?.seizurelogs?._id || "")
+
+      await fetchData()
+      addToast({
+        message: 'Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setLoading(false)
+  }
+
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -112,23 +137,23 @@ const SeizureLogs = () => {
                   }}
                   columns={[
                     {
-                      title: "Name",
-                      cellRenderer: nameColumn,
+                      title: "Date",
+                      cellRenderer: dateColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
-                      title: "Email",
-                      cellRenderer: emailColumn,
-                      width: helpers.getTableWith(0.25),
-                    },
-                    {
-                      title: "Mobile",
-                      cellRenderer: mobileColumn,
+                      title: "Time",
+                      cellRenderer: timeColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
-                      title: "Address",
-                      cellRenderer: addressColumn,
+                      title: "Injuries",
+                      cellRenderer: InjuriesColumn,
+                      width: helpers.getTableWith(0.2),
+                    },
+                    {
+                      title: "Active",
+                      cellRenderer: activeColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
@@ -139,6 +164,9 @@ const SeizureLogs = () => {
                             clientId,
                             clientContactId: data.id,
                           }),
+                          onDelete() {
+                            deleteLog(data)
+                          }
                         });
                       },
                       width: helpers.getTableWith(0.1),

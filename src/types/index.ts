@@ -215,6 +215,7 @@ export type CLIENT_FIELDS_TYPE =
   | "address_line_2"
   | "city"
   | "state"
+  | "current_month_weight"
   | "monthly_ssi_amount"
   | "special_equipments"
   | "bank_account_name"
@@ -771,6 +772,13 @@ export interface IPlaceDatabaseModel {
   placeDatabase: IPlaceDatabase;
   createdAt: Moment;
 }
+export interface IDeleteModel {
+  id: string;
+  description: string;
+  active: boolean;
+  placeDatabase: IPlaceDatabase;
+  createdAt: Moment;
+}
 
 export interface ITaskModel {
   instructions: IInstructionModel[];
@@ -937,7 +945,7 @@ export interface IStaffWithnessModel {
 }
 
 export interface ISeizurelogs {
-  id?: string;
+  _id?: string;
   date?: Moment;
   notes?: string;
   time?: string;
@@ -949,7 +957,7 @@ export interface ISeizurelogs {
 }
 
 export interface ISeizureLogsModel {
-  emp_id?: string;
+  _id?: string;
   date?: Moment;
   notes?: string;
   time?: string;
@@ -1045,6 +1053,7 @@ export interface IClient {
   effective_date?: string;
   client_support_plan_starting_month?: string;
   bank_account_number?: string
+  current_month_weight?: string
   bank_account_name?: string
   bank_routing_number?: string
   funds_method?: string;

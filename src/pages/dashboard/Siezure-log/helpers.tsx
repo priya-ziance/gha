@@ -1,32 +1,37 @@
-import { Intent } from '@blueprintjs/core';
-import { AnchorButton } from '../../../components';
-import { IStaffWithnessModel } from '../../../types';
+import { Checkbox, Intent } from '@blueprintjs/core';
+import { AnchorButton,Button } from '../../../components';
+import { ISeizureLogsModel } from '../../../types';
 
-export const nameColumn = (data: IStaffWithnessModel) => {
+export const idColumn = (data: ISeizureLogsModel) => {
   return (
-    <>{data.firstName}&nbsp;{data.lastName}</>
+    <>{data.seizurelogs?._id}</>
+  )
+}
+export const dateColumn = (data: ISeizureLogsModel) => {
+  return (
+    <>{data.seizurelogs?.date}</>
   )
 }
 
-export const emailColumn = (data: IStaffWithnessModel) => {
+export const timeColumn = (data: ISeizureLogsModel) => {
   return (
-    <>{data.email}</>
+    <>{data.seizurelogs?.time}</>
   )
 }
 
-export const mobileColumn = (data: IStaffWithnessModel) => {
+export const InjuriesColumn = (data: ISeizureLogsModel) => {
   return (
-    <>{data.mobile}</>
+    <>{data.seizurelogs?.Injuries}</>
   )
 }
 
-export const addressColumn = (data: IStaffWithnessModel) => {
+export const activeColumn = (data: ISeizureLogsModel) => {
   return (
-    <>{data.address}</>
+    <Checkbox checked={data.seizurelogs?.active} disabled/>
   )
 }
 
-export const actionColumn = (data: IStaffWithnessModel, { viewLink }: any) => {
+export const actionColumn = (data: ISeizureLogsModel, { viewLink,onDelete }: any) => {
   return (
     <>
       <AnchorButton
@@ -39,6 +44,17 @@ export const actionColumn = (data: IStaffWithnessModel, { viewLink }: any) => {
       >
         <b>view</b>
       </AnchorButton>
+      {" "}
+      {" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data)
+          }
+        }}
+        icon='trash'
+        intent={Intent.DANGER}
+      />
     </>
   )
 }

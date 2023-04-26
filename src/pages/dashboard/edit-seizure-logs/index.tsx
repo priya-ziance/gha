@@ -16,18 +16,17 @@ const EditSeizureLogs = (props: seizurelogPathType) => {
   const { id: clientId } = useContext(ClientContext);
 
   const { seizurelogId } = props;
-  console.log("seizure id", seizurelogId);
-  
+  console.log("seizure id", props);
+  console.log("staff id main add ,",props.seizurelogId);
   
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
         const fetchedSeizurelog =
-         await api.logs.getLog(seizurelogId);
-        //  setSeizureLog(fetchedSeizurelog);
-       
-       
+         await api.seizureLogs.getSeizureLogsById(seizurelogId);
+         setSeizureLog(fetchedSeizurelog);
+ 
       } catch (e: any) {
         console.log(e);
       }
