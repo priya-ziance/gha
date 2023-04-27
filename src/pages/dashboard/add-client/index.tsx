@@ -97,8 +97,7 @@ const AddClient = (props: AddClientProps) => {
 
   useEffect(() => {
     if (props.client) {
-      console.log("client data",props );
-      
+      console.log("client data",props.client.trainers);
       setServices(props.client.services)
       setWitnesses(props.client.witnesses || [])
       setTrainers(props.client.trainers || [])

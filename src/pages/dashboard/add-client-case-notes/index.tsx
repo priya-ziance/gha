@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Intent, Checkbox } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Formik } from 'formik';
@@ -24,6 +24,7 @@ import * as helpers from './helpers';
 import { FIELDS } from './constants';
 
 import './index.scss';
+import { IClientModel } from '../../../types';
 
 
 interface CaseNoteProps {
@@ -32,10 +33,20 @@ interface CaseNoteProps {
 }
 
 const CaseNote = (props: CaseNoteProps) => {
+  const [clientNames, setClientNames] = useState<IClientModel[]>([])
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
+  useEffect(() => {
+    (async () => {
+      try {
+        setClientNames(
+          await api.clients.getClients()
+        )
+      } catch (e: any) { }
+    })()
+  })
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
@@ -54,13 +65,20 @@ const CaseNote = (props: CaseNoteProps) => {
    * is passed in
    */
   if (props.caseNote) {
+    const nameResult = clientNames.find((item) => item?.id === clientId)
     initialValues = Object.assign(
       {},
       helpers.initialValues,
       pick(props.caseNote.caseNote, Object.keys(helpers.initialValues))
+      
     );
+    initialValues = { ...initialValues, client_name: nameResult?.firstName || "" }
   } else {
-    initialValues = helpers.initialValues;
+    const nameResult = clientNames.find((item) => item?.id === clientId)
+    // initialValues = helpers.initialValues;
+    initialValues = { ...helpers.initialValues, client_name: nameResult?.firstName || "" }
+    // console.log("init",initialValues);
+    
   }
   
 
@@ -72,6 +90,7 @@ const CaseNote = (props: CaseNoteProps) => {
       />
       <div className='add-case-note__container'>
         <Formik
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
@@ -123,7 +142,7 @@ const CaseNote = (props: CaseNoteProps) => {
             }) => {
               return (
                 <form onSubmit={handleSubmit}>
-
+                  {getInputFormGroup('client_name', { childProps: { disabled:true } })}
                   {getInputFormGroup('title')}
                   {getDateInputFormGroup('date')}
                   {getTextAreaInputFormGroup('significant_event_notes')}

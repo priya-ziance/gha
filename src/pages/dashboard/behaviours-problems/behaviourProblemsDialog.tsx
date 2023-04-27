@@ -13,6 +13,7 @@ import api from "../../../api";
 
 import {
 	Button,
+	DateInput,
 	Dialog,
 	FormGroup,
 	FormItemSelect,
@@ -34,6 +35,7 @@ import { FIELDS, URI_OPTIONS } from "./constants";
 import "./index.scss";
 import useSWR from "swr";
 import Behaviour from "../../../models/behaviour";
+import { getDateTime } from "@blueprintjs/datetime/lib/esm/common/dateUtils";
 
 interface BehaviourProblemDialogProps {
 	isOpen: boolean;
@@ -45,11 +47,13 @@ const BehaviourProblemDialog = (props: BehaviourProblemDialogProps) => {
 	const { id: clientId } = useContext(ClientContext);
 	const { addToast } = useContext(ToastsContext);
 	const { clientBehaviour, isOpen, onClose } = props;
-  const [selectedBehaviour, setSelectedBehaviour] = useState(props.clientBehaviour?.behaviour);
+	const [selectedBehaviour, setSelectedBehaviour] = useState(props.clientBehaviour?.behaviour);
+	const [logDate, setLogDate] = useState<Date>(new Date());
+
 	let initialValues = {
 		frequency: clientBehaviour?.frequency,
 		uri: clientBehaviour?.uri,
-		notes: clientBehaviour?.notes,
+		notes: clientBehaviour?.notes
 	};
 	const { data: assignedBehaviours, isValidating: assignedBehavioursLoading } =
 		useSWR(`/api/assigned_behaviours?&clientId=${clientId}`, () =>
@@ -57,20 +61,26 @@ const BehaviourProblemDialog = (props: BehaviourProblemDialogProps) => {
 		);
 
 	const update = !!clientBehaviour;
-	const assignedBehavioursMapping: {[key: string]: Behaviour} = useMemo(() => {
+	const assignedBehavioursMapping: { [key: string]: Behaviour } = useMemo(() => {
 		if (assignedBehaviours) {
-      return Object.assign(
-        {},
-        ...assignedBehaviours.behaviours.map((behaviour) => {
-          return {
-            [behaviour.id]: behaviour,
-          };
-        })
-      );
-    }
+			return Object.assign(
+				{},
+				...assignedBehaviours.behaviours.map((behaviour) => {
+					return {
+						[behaviour.id]: behaviour,
+					};
+				})
+			);
+		}
 
-    return {};
+		return {};
 	}, [assignedBehaviours]);
+
+	const onLogDate = (date: Date | null) => {
+		if (date) {
+			setLogDate(date);
+		}
+	}
 
 	return (
 		<Dialog isOpen={isOpen} onClose={onClose}>
@@ -91,7 +101,7 @@ const BehaviourProblemDialog = (props: BehaviourProblemDialogProps) => {
 								if (update) {
 									await api.clientBehaviours.updateClientBehaviour(
 										clientBehaviour?.id,
-										values,
+										{ ...values, log_date : logDate },
 										{ clientId }
 									);
 
@@ -101,14 +111,15 @@ const BehaviourProblemDialog = (props: BehaviourProblemDialogProps) => {
 									});
 								} else {
 									await api.clientBehaviours.createClientBehaviour(
-                    {
-                      ...values,
-                      behaviour: selectedBehaviour?.id
-                    },
-                    {
-										  clientId,
-									  }
-                  );
+										{
+											...values,
+											log_date : logDate,
+											behaviour: selectedBehaviour?.id
+										},
+										{
+											clientId,
+										}
+									);
 
 									addToast({
 										message: "Client Behaviour Created",
@@ -175,18 +186,46 @@ const BehaviourProblemDialog = (props: BehaviourProblemDialogProps) => {
 								</FormGroup>
 							);
 
+							// const getDateFormGroup = (key: BEHAVIOUR_PROBLEMS_FIELDS_TYPE) => (
+							// 	<FormGroup
+							// 		intent={helpers.dateColumn(errors[key])}
+							// 		label={get(FIELDS, key, { name: "" }).name}
+							// 		labelFor={`text-input__${key}`}
+							// 		helperText={errors[key]}
+							// 	>
+							// 		<TextArea
+							// 			id={`text-area__${key}`}
+							// 			intent={helpers.dateColumn(errors[key])}
+							// 			onChange={handleChange(key)}
+							// 			value={get(values, key)}
+							// 		/>
+							// 	</FormGroup>
+							// );
 							return (
 								<form onSubmit={handleSubmit}>
-                  <FormItemSelect
-                    buttonText={selectedBehaviour?.behaviourType || ""}
-                    intent={Intent.PRIMARY}
-                    items={Object.keys(assignedBehavioursMapping)}
-                    label={"Behaviour Type"}
-                    menuRenderer={(item) => assignedBehavioursMapping[item].behaviourType}
-                    onFormSelectChange={(id) => setSelectedBehaviour(assignedBehavioursMapping[id])}
-                    disabled={update}
-                  />
+									<FormItemSelect
+										buttonText={selectedBehaviour?.behaviourType || ""}
+										intent={Intent.PRIMARY}
+										items={Object.keys(assignedBehavioursMapping)}
+										label={"Behaviour Type"}
+										menuRenderer={(item) => assignedBehavioursMapping[item].behaviourType}
+										onFormSelectChange={(id) => setSelectedBehaviour(assignedBehavioursMapping[id])}
+										disabled={update}
+									/>
+									{ }
 
+									<FormGroup
+										intent='primary'
+										label='Log Date'
+									>
+										<DateInput
+											onChange={onLogDate}
+											value={logDate}
+											{...helpers.getMomentFormatter('LL')}
+										/>
+									</FormGroup>
+
+									{/* {getDateFormGroup("logdate")} */}
 									{getNumericInput("frequency")}
 
 									{getTextAreaFormGroup("notes")}

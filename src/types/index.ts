@@ -127,7 +127,8 @@ export type CASE_NOTE_FIELDS_TYPE =
   | "title"
   | "notes"
   | "significant_event"
-  | "significant_event_notes";
+  | "significant_event_notes"
+  | "client_name"
 
 export type LOCATION_FIELDS_TYPE =
   | "phoneNumber"
@@ -148,7 +149,8 @@ export type CLIENT_CONTACT_FIELDS_TYPE =
   | "mobile"
   | "notes"
   | "phone"
-  | "medical_contact";
+  | "medical_contact"
+  | "client_name"
 
 export type CLIENT_WITNESS_FIELDS_TYPE =
   | "address"
@@ -286,7 +288,7 @@ export type INSTRUCTION_FIELDS_TYPE = "active" | "description" | "task";
 
 export type PLACES_FIELDS_TYPE = "active" | "description";
 
-export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE = "notes" | "uri" | "frequency";
+export type BEHAVIOUR_PROBLEMS_FIELDS_TYPE = "notes" | "uri" | "frequency" ;
 
 export type SP_GOALS_FIELDS_TYPE =
   | "active"
@@ -568,14 +570,15 @@ export interface IBehaviourModel {
 }
 
 export interface IClientBehaviourModel {
-  id: string;
-  behaviour: IBehaviourModel;
+  id?: string;
+  behaviour?: IBehaviourModel;
   frequency?: number;
-  uri: string;
+  uri?: string;
+  logdate?: string;
   clientsInvolved?: IClientModel[];
-  clientBehaviour: IClientBehaviour;
-  notes: string;
-  createdAt: Moment;
+  clientBehaviour?: IClientBehaviour;
+  notes?: string;
+  createdAt?: Moment;
 }
 
 export interface IClientModel {
@@ -621,6 +624,7 @@ export interface IClientContactModel {
   fax?: string;
   email?: string;
   notes?: string;
+  client?: string;
   clientContact: IClientContact;
 }
 

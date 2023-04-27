@@ -22,5 +22,10 @@ export const FIELDS : BEHAVIOUR_PROBLEMS_FIELDS_FORM_TYPE = {
     name: 'Notes',
     default: '',
     validation: yup.string(),
-  }
+  },
+  // logdate: {
+  //   name: 'Log Date',
+  //   default: '',
+  //   validation: yup.string(),
+  // }
 }

@@ -1442,7 +1442,6 @@ class UsersApi {
 
   async search(searchString: string) {
     const usersResult = await client.post(`/users/search`, { searchString });
-
     return this.normalizer.normalizeArray(usersResult.data);
   }
 }

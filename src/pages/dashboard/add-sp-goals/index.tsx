@@ -43,7 +43,7 @@ interface AddGoalProps {
 const Content = (props: AddGoalProps) => {
   const [client, setClient] = useState<Client | {}>({});
   const [goals, setGoals] = useState<Goal[] | []>([]);
-  const [subGoals, setSubGoals] = useState<SubGoal[] | []>([]);
+  const [subGoals, setSubGoals] = useState<any | []>([]);
   const [selectedSubGoals, setSelectedSubgoals] = useState<string[]>([]);
   const [loadingClient, setLoadingClient] = useState(false);
 
@@ -51,10 +51,11 @@ const Content = (props: AddGoalProps) => {
   const { id: clientId } = useContext(ClientContext);
 
   const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
+  const subGoalsObject: any = useMemo(() => groupBy(subGoals, g => g.id), [subGoals]);
   let initialValues;
 
   const BREADCRUMBS: BreadcrumbProps[] = [
-    { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard'},
+    { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard' },
     { href: URLS.getPagePath('clients'), icon: 'document', text: "Clients" },
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: 'Goals' },
@@ -69,7 +70,7 @@ const Content = (props: AddGoalProps) => {
       if (clientId) {
         try {
           setClient(await api.clients.getClient(clientId))
-        } catch(e: any) {}
+        } catch (e: any) { }
       }
 
       setLoadingClient(false);
@@ -95,20 +96,26 @@ const Content = (props: AddGoalProps) => {
      * component loads, it will attempt to load all the subgoals and we
      * don't want to overrite that.
      */
-    setSubGoals(subGoals => {
-      if (props.subGoals && Array.isArray(props.subGoals)) {
-        return [...subGoals, ...props.subGoals]
-      } else {
-        return subGoals;
-      }
-    })
+
+
   }, []);
 
+
+  const subgoalsData = [
+    {
+      id: 1,
+      label: "hello 1"
+    },
+    {
+      id: 2,
+      label: "hello 2"
+    },
+  ]
   useEffect(() => {
     (async () => {
       try {
         setGoals(await api.goals.getGoals(clientId))
-      } catch(e: any) {
+      } catch (e: any) {
         // TODO: Show error message
       }
     })()
@@ -118,29 +125,30 @@ const Content = (props: AddGoalProps) => {
   useEffect(() => {
     (async () => {
       try {
-        setSubGoals(await api.subgoals.getSubGoals(clientId))
-      } catch(e: any) {
+        setSubGoals(subgoalsData)
+      } catch (e: any) {
         // TODO: Show error message
       }
-    })()
+    })
+      ()
   }, [clientId]);
 
-    /**
-   * This assigns the goal's info as the initial values if a goal
-   * is passed in
-   */
-     if (props.spGoal) {
-      initialValues = Object.assign(
-        {},
-        helpers.initialValues,
-        pick(props.spGoal.spGoal, Object.keys(helpers.initialValues))
-      );
-      initialValues.goal = get(props, 'goal._id', '')
-      setSelectedSubgoals(props.subGoals?.map(item => item.id) || []);
-     
-    } else {
-      initialValues = helpers.initialValues;
-    }
+  /**
+ * This assigns the goal's info as the initial values if a goal
+ * is passed in
+ */
+  if (props.spGoal) {
+    initialValues = Object.assign(
+      {},
+      helpers.initialValues,
+      pick(props.spGoal.spGoal, Object.keys(helpers.initialValues))
+    );
+    initialValues.goal = get(props, 'goal._id', '')
+    setSelectedSubgoals(props.subGoals?.map(item => item.id) || []);
+
+  } else {
+    initialValues = helpers.initialValues;
+  }
 
   const SuccessToast = (
     <>
@@ -170,12 +178,12 @@ const Content = (props: AddGoalProps) => {
   return (
     <LoadingWrapper loading={loadingClient}>
       <div className='add-sp-goal'>
-      <PageHeading
-        title='Add SP Goal Detail'
-        breadCrumbs={BREADCRUMBS}
-      />
-      <div className='add-sp-goal__container'>
-        <Formik
+        <PageHeading
+          title='Add SP Goal Detail'
+          breadCrumbs={BREADCRUMBS}
+        />
+        <div className='add-sp-goal__container'>
+          <Formik
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
@@ -194,25 +202,25 @@ const Content = (props: AddGoalProps) => {
                   {
                     message: SuccessToast,
                     timeout: 5000,
-                    intent:  Intent.SUCCESS
+                    intent: Intent.SUCCESS
                   }
                 );
 
                 setSelectedSubgoals([]);
                 resetForm()
-              } catch(e: any) {
+              } catch (e: any) {
                 addToast(
                   {
                     message: getErrorToast(e.message),
                     timeout: 5000,
-                    intent:  Intent.DANGER
+                    intent: Intent.DANGER
                   }
                 );
               }
 
               setSubmitting(false);
             }}
-            >
+          >
 
             {({
               values,
@@ -311,11 +319,29 @@ const Content = (props: AddGoalProps) => {
                   {getDateInputFormGroup('start_date')}
                   {getDateInputFormGroup('end_date')}
 
+
+                  <FormItemSelect
+                    buttonText={subGoalsObject[values.sub_goals] ? subGoalsObject[values.sub_goals][0].label : subGoalsObject?.[0]?.label}
+                    intent={Intent.PRIMARY}
+                    items={subGoals}
+                    label={get(FIELDS, 'sub_goals', { name: '' }).name}
+                    menuRenderer={item => item.label}
+                    onFormSelectChange={onFormSelectChange('sub_goals')}
+                  />
+
+                  {/* <FormItemSelect
+                    buttonText={'jjjjjjj'}
+                    intent={Intent.PRIMARY}
+                    items={subGoals}
+                    label={get(FIELDS, 'sub_goals', { label: '' }).label}
+                    menuRenderer={item => item.label}
+                    onFormSelectChange={onFormSelectChange('sub_goals')}
+                  /> */}
                   <Checkbox label='Active' onChange={handleChange('active')} checked={values.active} />
 
                   {getTextAreaFormGroup('notes')}
 
-                  <div>
+                  {/* <div>
                     <H4>Subgoals</H4>
                     {subGoals.map(subGoal => {
                       const isSelected = selectedSubGoals.includes(subGoal.id);
@@ -340,7 +366,7 @@ const Content = (props: AddGoalProps) => {
                         <Checkbox label={subGoal.description} onChange={onChange} checked={isSelected} />
                       )
                     })}
-                  </div>
+                  </div> */}
 
                   <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
                     Submit
@@ -348,9 +374,9 @@ const Content = (props: AddGoalProps) => {
                 </form>
               )
             }}
-        </Formik>
+          </Formik>
+        </div>
       </div>
-    </div>
     </LoadingWrapper>
   );
 }

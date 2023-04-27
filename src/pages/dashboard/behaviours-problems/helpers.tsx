@@ -62,12 +62,19 @@ export const uriColumn = (data: IClientBehaviourModel) => {
 
 export const dateColumn = (data: IClientBehaviourModel) => {
   const date = get(data, 'createdAt');
+  // const logdate= get(data, 'logdate')
+  // console.log("date", logdate);
   
-  if (date) {
+    if (date) {
     return (
       <p>{date.format('MMMM Do YYYY')}</p>
     )
   }
+  // if(logdate){
+  //   return(
+  //     <p>{logdate.format("MMMM DD YYYY")}</p>
+  //   )
+  // }
 
   return (<p></p>)
 }

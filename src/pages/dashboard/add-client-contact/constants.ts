@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 import { CLIENT_CONTACT_FIELDS_FORM_TYPE } from '../../../types';
+import client from '../../../api/client';
 
 
 export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
@@ -61,6 +62,11 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
   },
   notes: {
     name: 'Notes',
+    default: '',
+    validation: yup.string(),
+  },
+  client_name: {
+    name: 'Client Name',
     default: '',
     validation: yup.string(),
   }

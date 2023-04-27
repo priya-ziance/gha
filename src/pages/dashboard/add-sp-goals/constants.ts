@@ -32,5 +32,10 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'Start Date',
     default: null,
     validation: yup.string().nullable().required().label('Start Date'),
+  },
+  sub_goals: {
+    name: 'Sub Goals',
+    default: null,
+    validation: yup.string().required().label('sub_goals'),
   }
 }
