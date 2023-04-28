@@ -79,7 +79,7 @@ export const dateColumn = (data: IClientBehaviourModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: IClientBehaviourModel, { onView }: any) => {
+export const actionColumn = (data: IClientBehaviourModel, { onView , onDelete}: any) => {
   return (
     <>
       <Button
@@ -90,6 +90,17 @@ export const actionColumn = (data: IClientBehaviourModel, { onView }: any) => {
       >
         <b>view</b>
       </Button>
+      {" "}
+      {" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data)
+          }
+        }}
+        icon='trash'
+        intent={Intent.DANGER}
+      />
     </>
   )
 }

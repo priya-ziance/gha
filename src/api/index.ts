@@ -59,6 +59,8 @@ import {
   IClientWithness,
   IStaffWithness,
   IAddTrainerModel,
+  IRelocateModel,
+  IRelocate,
   IAddTrainer,
 } from "../types";
 
@@ -524,6 +526,49 @@ class AddTrainerApi {
   }
 }
 
+//============================= Relocate /transfer API'S========================================
+class AddRelocateApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IRelocateModel, IRelocate>(
+      Models.Relocate
+    );
+  }
+
+  async getRelocate(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addTrainerResult = await client.get(`/transfer`, {
+      clientId,
+      page,
+      pageSize
+    });
+    console.log("relocate data",addTrainerResult);
+    
+    return this.normalizer.normalizeArray(addTrainerResult.data.contents);
+  }
+
+  async createRelocate(body = {}) {
+    const addTrainerResult = await client.post("/transfer", body);
+    return this.normalizer.normalize(addTrainerResult.data);
+  }
+  async deleteRelocate(relocateId: String, body = {}) {
+    const deleteResult =  await client.delete(`/transfer/${relocateId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateRelocate(relocateId = String, body = {}) {
+    const clientRelocateResult = await client.patch(
+      `/trainer/${relocateId}`,
+      body
+    );
+    return this.normalizer.normalize(clientRelocateResult.data);
+  }
+  async getRelocateyId(clientId: string) {
+    const addTrainersResult = await client.get(`/transfer/${clientId}`);
+    return this.normalizer.normalize(addTrainersResult.data);
+  }
+}
 //============================= GOAL API'S==================================
 class GoalsApi {
   normalizer;
@@ -1003,20 +1048,16 @@ class ClientBehavioursApi extends BaseApi {
     if (options?.fetchAll) {
       return this.normalizer.normalizeArray(await this.fetchAll(url, params));
     }
-
     const behavioursResult = await client.get(url, params);
-
     return this.normalizer.normalizeArray(behavioursResult.data.contents);
   }
 
   async getClientBehaviour(clientBehaviourId: string, options?: OPTIONS_TYPE) {
     const params = get(options, "params", {});
-
     const clientBehaviourResult = await client.get(
       `/client_behaviour/${clientBehaviourId}`,
       params
     );
-
     return this.normalizer.normalize(clientBehaviourResult.data);
   }
 
@@ -1024,8 +1065,12 @@ class ClientBehavioursApi extends BaseApi {
     const clientBehaviourResult = await client.post("/client_behaviour", body, {
       params,
     });
-
     return this.normalizer.normalize(clientBehaviourResult.data);
+  }
+
+  async deleteClientBehaviour(clientBehaviourId: String,clientId: string ,body: {}) {
+    const deleteResult =  await client.delete(`/client_behaviour/${clientBehaviourId}?clientId=${clientId}` ,body);
+    return this.normalizer.normalize(deleteResult.data);
   }
 
   async assignBehaviours(behaviours: string[], params = {}) {
@@ -1480,6 +1525,7 @@ export default (() => ({
   clientWitness: new ClientWitnessApi(),
   staffWitness: new StaffWitnessApi(),
   Trainers: new AddTrainerApi(),
+  Relocate: new AddRelocateApi(),
   caseNotes: new CaseNotesApi(),
   expenses: new ExpensesApi(),
   expensesList: new ExpensesListApi(),

@@ -27,6 +27,11 @@ import AddTrainersPage from './add-trainers';
 import Trainer from './trainer';
 import EditTrainers from './edit-trainers';
 
+import AddRelocatePage from './add-relocate-transfer';
+import Relocate from './relocate-transfer';
+import EditRelocate from './edit-relocate-transfer';
+
+
 import AddClientContactsPage from './add-client-contact';
 import ClientContactsPage from './client-contacts';
 import EditClientContactPage from './edit-client-contact';
@@ -169,6 +174,10 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/trainer/add" exact component={AddTrainersPage} />
       <Route path="/dashboard/clients/:clientId/trainer/:trainerId/edit" exact component={EditTrainers} />
 
+
+      <Route path="/dashboard/clients/:clientId/relocate" exact component={Relocate} />
+      <Route path="/dashboard/clients/:clientId/relocate/add" exact component={AddRelocatePage} />
+      <Route path="/dashboard/clients/:clientId/relocate/:relocateId/edit" exact component={EditRelocate} />
 
       <Route path="/dashboard/clients/:clientId/goals" exact component={GoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/data-collection" exact component={GoalsDataCollectionPage} />

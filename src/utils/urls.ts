@@ -15,7 +15,9 @@ type OPTIONS_TYPE = {
   goalId?: string;
   subGoalId?: string;
   taskId?: string;
+  relocateId?: String;
   seizurelogId?: string;
+ 
 };
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -45,6 +47,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
         return `${clientBase}/trainer/add`;
     case "add-database-behaviour":
       return `${clientBase}/behaviours/database/add`;
+      case "relocate":
+        return `${clientBase}/relocate`;
+      case "add-relocate":
+        return `${clientBase}/relocate/add`;
+      case "edit-relocate":
+        return `${clientBase}/relocate/${options.clientContactId}/edit`;
     case "add-database-goal":
       return `${clientBase}/goals/database/goals/add`;
     case "add-database-subgoal":
@@ -363,6 +371,10 @@ const getPagePathName = (page: PAGE_TYPES) => {
         return "Seizure Logs Places Database";
       case "seizure-logs-notes-database":
         return "Seizure Logs Notes Database";
+    case "add-relocate":
+      return "Add Relocate / Transfer"
+      case "relocate":
+        return "Relocate / Transfer"
     case "reshab-logs":
       return "Reshab Logs";
     case "respite-logs":

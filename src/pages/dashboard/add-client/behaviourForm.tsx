@@ -68,7 +68,7 @@ const BehaviourDialog = (props: IDialog) => {
     <Dialog
       icon="info-sign"
       onClose={handleClose}
-      title="Staff Witness"
+      title="Behaviour"
       isOpen={isOpen}
     >
       <>

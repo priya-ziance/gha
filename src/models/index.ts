@@ -26,6 +26,7 @@ import Task from './task';
 import User from './user';
 import Question from './question';
 import SeizureLogs from './seizurelogs'
+import Relocate from './relocate';
 
 const Exports = {
   Appointment,
@@ -39,6 +40,7 @@ const Exports = {
   ClientWitness,
   StaffWithness,
   AddTrainers,
+  Relocate,
   SeizureLogs,
   Expense,
   ExpenseList,

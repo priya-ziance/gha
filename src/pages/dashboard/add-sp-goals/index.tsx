@@ -104,11 +104,22 @@ const Content = (props: AddGoalProps) => {
   const subgoalsData = [
     {
       id: 1,
-      label: "hello 1"
+      label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"    },
+    {
+      id: 2,
+      label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"
+    },
+    {
+      id: 3,
+      label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"
+    },
+    {
+      id: 4,
+      label: "Decrease Negative Behaviors/No Collection of data/Do redirection"
     },
     {
       id: 2,
-      label: "hello 2"
+      label: "Make sure food is cut in small pieces and smaller amount is taken"
     },
   ]
   useEffect(() => {

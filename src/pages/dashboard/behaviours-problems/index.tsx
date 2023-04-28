@@ -26,6 +26,7 @@ import {
 import BehaviourProblemDialog from './behaviourProblemsDialog';
 
 import './index.scss';
+import ToastsContext from '../../../contexts/toasts';
 
 const PAGE_SIZE = 10;
 
@@ -34,11 +35,37 @@ const DatabaseBehavioursProblems = () => {
   const [selectedProblem, setSelectedProblem] = useState<IClientBehaviourModel | undefined>(undefined)
   const [page, setPage] = useState(0);
   const { id: clientId } = useContext(ClientContext);
+  const { addToast } = useContext(ToastsContext);
+
 
   const { data: clientBehaviours, isValidating } = useSWR('/api/client-behaviours', () => {
     return api.clientBehaviours.getClientBehaviours(clientId, { page, pageSize: PAGE_SIZE })
   }, { refreshInterval: 50 })
 
+  const deleteClientBehaviour = async (data: IClientBehaviourModel) => {
+    // setLoading(true)
+console.log("data");
+
+    // console.log("client id",data.clientsInvolved?.find((ele)=>ele.client));
+    console.log("client id",clientId);
+
+    console.log("behaviour id",data.clientBehaviour?._id);
+    
+    try {
+      await api.clientBehaviours.deleteClientBehaviour(data.clientBehaviour?._id || "",clientId,data)
+
+      // await fetchData()
+      addToast({
+        message: 'Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+  }
   const loading = isValidating && !clientBehaviours;
 
   const hasNextPage = clientBehaviours?.length === PAGE_SIZE;
@@ -86,6 +113,7 @@ const DatabaseBehavioursProblems = () => {
     { text: URLS.getPagePathName('behaviours-problems') },
   ];
 
+  
   return (
     <div>
       <div className='behaviours-problems'>
@@ -135,7 +163,10 @@ const DatabaseBehavioursProblems = () => {
                     return actionColumn(
                       data,
                       {
-                        onView: onViewClientProblem
+                        onView: onViewClientProblem,
+                        onDelete() {
+                          deleteClientBehaviour(data)
+                        }
                       }
                     )
                   },

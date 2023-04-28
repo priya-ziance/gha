@@ -1,7 +1,6 @@
 import IBaseModel from "./_baseModel";
 import moment, { Moment } from "moment";
 import { ISeizurelogs } from "../types";
-import { UnaryExpression } from "typescript";
 
 export default class SeizureLogs implements IBaseModel {
   id: string | undefined ;

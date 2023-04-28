@@ -22,6 +22,7 @@ export type PAGE_TYPES =
   | "add-medication"
   | "add-sp-goals"
   | "add-medical-contact"
+  | "add-relocate"
   | "apd"
   | "appointments"
   | "bank-statement"
@@ -39,6 +40,7 @@ export type PAGE_TYPES =
   | "staff-witness"
   | "trainer"
   | "add-trainer"
+  | "relocate"
   | "edit-appointment"
   | "edit-bank-statement"
   | "edit-case-note"
@@ -55,6 +57,7 @@ export type PAGE_TYPES =
   | "edit-location"
   | "edit-medication"
   | "edit-medical-contact"
+  | "edit-relocate"
   | "expenses"
   | "expenses-account"
   | "expenses-list"
@@ -194,6 +197,16 @@ export type STAFF_WITNESS_FIELDS_TYPE =
 //   // | "lastName"
 //   | "mobile"
 //   | "location";
+
+export type ADD_RELOCATE_FIELDS_TYPE =
+  | "id"
+  | "home_transfer_date"
+  | "client"
+  | "group_home_name"
+  | "phone"
+  | "contact_type"
+  | "location";
+
 
 export type ADD_SEIZURELOGS_FIELDS_TYPE =
   | "date"
@@ -468,6 +481,13 @@ export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
 };
 export type TRAINER_FIELDS_FORM_TYPE = {
   [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type RELOCATE_FIELDS_FORM_TYPE = {
+  [key in ADD_RELOCATE_FIELDS_TYPE]?: {
     name: string;
     default: any;
     validation: any;
@@ -1000,6 +1020,27 @@ export interface IAddTrainerModel {
   trainer?: IAddTrainer;
 }
 
+export interface IRelocate {
+  _id?: string;
+  home_transfer_date?: Moment;
+  client?: string;
+  group_home_name?: string;
+  location?: string;
+  phone?: string;
+  contact_type?:string;
+  relocate?: IRelocate;
+}
+
+export interface IRelocateModel {
+  id?:string,
+  home_transfer_date?: Moment;
+  client?: string;
+  group_home_name?: string;
+  location?: string;
+  phone?: string;
+  contact_type?:string;
+  relocate?: IRelocate;
+}
 export interface IClientContact {
   _id: string;
   client?: string;

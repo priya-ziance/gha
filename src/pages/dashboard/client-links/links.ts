@@ -132,6 +132,13 @@ export const getLinks = (clientId: string) => {
     },
     {
       description: '',
+      title: 'Relocate / Transfer',
+      image: ClientsImage,
+      path: URLS.getPagePath('relocate', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
       title: 'Client Witness',
       image: ClientsImage,
       path: URLS.getPagePath('client-witness', { clientId }),
