@@ -30,7 +30,8 @@ export const dateColumn = (data: ISpGoalModel) => {
   return (<p></p>)
 }
 
-export const actionColumn = (data: ISpGoalModel, { viewLink }: any) => {
+export const actionColumn = (data: ISpGoalModel, { viewLink ,onDelete}: any) => {
+ 
   return (
     <>
       <AnchorButton
@@ -43,6 +44,17 @@ export const actionColumn = (data: ISpGoalModel, { viewLink }: any) => {
       >
         <b>view</b>
       </AnchorButton>
+      {" "}
+      {" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data)
+          }
+        }}
+        icon='trash'
+        intent={Intent.DANGER}
+      />
     </>
   )
 }

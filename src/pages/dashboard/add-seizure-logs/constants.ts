@@ -17,7 +17,7 @@ export const FIELDS: SEIZURELOGS_FIELDS_FORM_TYPE = {
   activity_preceding: {
     name: "Activity Preceding #",
     default: "",
-    validation: yup.string().label("activity_preceding").required(),
+    validation: yup.string().label("activity preceding").required(),
   },
   duration: {
     name: "Duration #",
@@ -42,7 +42,7 @@ export const FIELDS: SEIZURELOGS_FIELDS_FORM_TYPE = {
   patient_have_seizure:{
     name: "Does Patient Have Seizure ? #",
     default: "",
-    validation: yup.string().label("patient_have_seizure").required(),
+    validation: yup.string().label("patient have seizure").required(),
   },
   // emp_id: {
   //   name: "emp id #",

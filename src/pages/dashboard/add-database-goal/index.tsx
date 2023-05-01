@@ -87,14 +87,14 @@ const Content = (props: AddGoalProps) => {
 
                   addToast({
                     message: 'Goal Updated',
-                    intent: 'primary'
+                    intent: 'success'
                   })
                 } else {
                   await api.goals.createGoal(values, { clientId });
 
                   addToast({
                     message: 'Goal Created',
-                    intent: 'primary'
+                    intent: 'success'
                   })
                 }
 

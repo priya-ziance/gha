@@ -57,6 +57,7 @@ import AddExpensesListPage from './add-expenses-list';
 import EditExpensesListPage from './edit-expenses-list';
 
 import AddSpGoalsPage from './add-sp-goals';
+import EditSpGoals from './edit-sp-goals';
 import AddDatabaseGoal from './add-database-goal';
 import AddDatabaseSubgoal from './add-database-subgoal';
 import AddDatabaseTask from './add-database-task';
@@ -191,8 +192,10 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/goals/database/goals/add" exact component={AddDatabaseGoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/subgoals/add" exact component={AddDatabaseSubgoal} />
       <Route path="/dashboard/clients/:clientId/goals/database/tasks/add" exact component={AddDatabaseTask} />
+
       <Route path="/dashboard/clients/:clientId/goals/sp-goals" exact component={SpGoalsPage} />
       <Route path="/dashboard/clients/:clientId/goals/sp-goals/add" exact component={AddSpGoalsPage} />
+      <Route path="/dashboard/clients/:clientId/goals/sp-goals/:spGoalId/edit" exact component={EditSpGoals} />
 
       <Route path="/dashboard/clients/:clientId/medication" exact component={MedicationPage} />
       <Route path="/dashboard/clients/:clientId/medication/med-pass" exact component={MedPassPage} />

@@ -60,51 +60,51 @@ const Content = (props: AddGoalProps) => {
     { href: URLS.getPagePath('client-links', { clientId }), icon: 'document', text: 'Links' },
     { href: URLS.getPagePath('goals', { clientId }), icon: 'document', text: 'Goals' },
     { href: URLS.getPagePath('sp-goals', { clientId }), icon: 'document', text: 'SP Goals' },
-    { text: 'Add SP Goals' }
+
   ];
+  if (props.update) {
+    BREADCRUMBS.push({ text: URLS.getPagePathName("edit-sp-goals") });
+  } else {
+    BREADCRUMBS.push({ text: URLS.getPagePathName("add-sp-goals") });
+  }
 
-  useEffect(() => {
-    (async () => {
-      setLoadingClient(true);
+  // useEffect(() => {
+  //   (async () => {
+  //     setLoadingClient(true);
 
-      if (clientId) {
-        try {
-          setClient(await api.clients.getClient(clientId))
-        } catch (e: any) { }
-      }
+  //     if (clientId) {
+  //       try {
+  //         setClient(await api.clients.getClient(clientId))
+  //       } catch (e: any) { }
+  //     }
 
-      setLoadingClient(false);
-    })()
-  }, [clientId])
+  //     setLoadingClient(false);
+  //   })()
+  // }, [clientId])
 
   /**
    * We are appending the goal into current goals because when this
    * component loads, it will attempt to load all the goals and we
    * don't want to overrite that.
    */
-  useEffect(() => {
-    setGoals(goals => {
-      if (props.goal) {
-        return [...goals, props.goal]
-      } else {
-        return goals;
-      }
-    })
-
-    /**
-     * We are appending the goal into current subgoals because when this
-     * component loads, it will attempt to load all the subgoals and we
-     * don't want to overrite that.
-     */
+  // useEffect(() => {
+  //   setGoals(goals => {
+  //     if (props.goal) {
+  //       return [...goals, props.goal]
+  //     } else {
+  //       return goals;
+  //     }
+  //   })
 
 
-  }, []);
+  // }, []);
 
 
   const subgoalsData = [
     {
       id: 1,
-      label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"    },
+      label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"
+    },
     {
       id: 2,
       label: "Make sure staff put away their personal belonging away from out of the client eyes and make sure he"
@@ -122,6 +122,7 @@ const Content = (props: AddGoalProps) => {
       label: "Make sure food is cut in small pieces and smaller amount is taken"
     },
   ]
+
   useEffect(() => {
     (async () => {
       try {
@@ -190,7 +191,11 @@ const Content = (props: AddGoalProps) => {
     <LoadingWrapper loading={loadingClient}>
       <div className='add-sp-goal'>
         <PageHeading
-          title='Add SP Goal Detail'
+          title={
+            props.update
+              ? "Update Sp Goal"
+              : "Add Sp Goal"
+          }
           breadCrumbs={BREADCRUMBS}
         />
         <div className='add-sp-goal__container'>
@@ -199,7 +204,6 @@ const Content = (props: AddGoalProps) => {
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
               setSubmitting(true);
-
               values.sub_goals = Object.keys(selectedSubGoals);
 
               try {
@@ -380,7 +384,7 @@ const Content = (props: AddGoalProps) => {
                   </div> */}
 
                   <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-                    Submit
+                    <b>{props.update ? "Update" : "Submit"}</b>
                   </Button>
                 </form>
               )

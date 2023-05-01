@@ -30,7 +30,6 @@ const GoalInfo = (props: GoalPathType) => {
       
       try {
         const fetchedGoal = await api.goals.getGoal(goalId, { params: { clientId } });
-
         setClient(fetchedGoal);
       } catch(e: any) {}
 

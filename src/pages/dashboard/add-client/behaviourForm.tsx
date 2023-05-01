@@ -138,7 +138,7 @@ const BehaviourDialog = (props: IDialog) => {
             onNextPage={onNextPage}
             onPrevPage={onPrevPage}
             page={page}
-            emptyTableMessage="No Staff Witness Found"
+            emptyTableMessage="No Behaviour Found"
           />
         </div>
       </>

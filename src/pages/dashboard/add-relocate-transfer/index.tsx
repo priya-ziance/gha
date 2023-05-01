@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
-import { Col,PageHeading, Row } from "../../../components";
+import { Col, PageHeading, Row } from "../../../components";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
 import api from "../../../api";
 import URLS from "../../../utils/urls";
@@ -16,21 +16,21 @@ import { IRelocateModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 
 interface RelocateProps {
-  relocate?: IRelocateModel | undefined;
+  relocate?: IRelocateModel;
   update?: boolean;
 }
 
 const AddRelocatePage = (props: RelocateProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedMedical, setSelectedMedical] = useState<
-  IRelocateModel | undefined
+    IRelocateModel | undefined
   >(undefined);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
 
-  console.log("propppppas",props);
   
+
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
       href: URLS.getPagePath("dashboard"),
@@ -60,50 +60,34 @@ const AddRelocatePage = (props: RelocateProps) => {
     BREADCRUMBS.push({ text: URLS.getPagePathName("add-relocate") });
   }
 
-  /**
-   * This assigns the client's info as the initial values if a client
-   * is passed in
-   */
-
-
   if (props.relocate) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
       pick(props.relocate.relocate, Object.keys(helpers.initialValues))
     );
-    console.log("helper.relocate", initialValues);    
   } else {
     initialValues = helpers.initialValues;
   }
-
-
 
   const handleSelectTrainersClose = () => {
     setIsOmniOpen(false);
   };
 
-  const relocateId = get(props, "relocate.id", "");
-  console.log("id", relocateId);
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    console.log("values", values);
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    console.log("idddd",props.relocate?.relocate?._id);
-    
-    
+    const relocateId: any = props.relocate?.relocate?._id
+
 
     try {
       if (props.update) {
-        // await api.Relocate.updateRelocate(props?.relocate?.id, values);
+        await api.Relocate.updateRelocate(relocateId, values);
         addToast({
           message: "Add relocate Updated",
           intent: Intent.SUCCESS,
         });
-      }else {
-        // values.emp_id = clientId;
-        // values.image = "new";
-        // await api.Trainers.createTrainer({values,image: values?.image});
+      } else {
         await api.Relocate.createRelocate({
           id: values.id,
           contact_type: values?.contact_type,
@@ -128,7 +112,7 @@ const AddRelocatePage = (props: RelocateProps) => {
       });
     }
 
-    setSubmitting(false); 
+    setSubmitting(false);
   };
   // const profilePictureUrl = get(props, 'addTrainer.image', '')
 
@@ -147,7 +131,7 @@ const AddRelocatePage = (props: RelocateProps) => {
           <div className="add-trainers__container">
             <Formik
               initialValues={initialValues}
-              // validationSchema={helpers.validationSchema}
+              validationSchema={helpers.validationSchema}
               onSubmit={onSubmit}
             >
               {formikWrapper(
@@ -223,7 +207,7 @@ const AddRelocatePage = (props: RelocateProps) => {
                           })}
                         </Col>
                         <Col xs={12} md={6}>
-                        {getDateInputFormGroup("home_transfer_date", {
+                          {getDateInputFormGroup("home_transfer_date", {
                             childProps: {
                               type: "date",
                               disabled: !!selectedMedical,

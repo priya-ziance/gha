@@ -90,7 +90,8 @@ export type PAGE_TYPES =
   | "seizure-logs-notes-database"
   | "reshab-logs"
   | "respite-logs"
-  | "sp-goals";
+  | "sp-goals"
+  | "edit-sp-goals";
 
 export type APD_FIELDS_TYPE =
   | "critical_incident"

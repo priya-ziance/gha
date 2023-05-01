@@ -13,6 +13,7 @@ type OPTIONS_TYPE = {
   medicationId?: string;
   medicalContactId?: string;
   goalId?: string;
+  spGoalId?: String;
   subGoalId?: string;
   taskId?: string;
   relocateId?: String;
@@ -133,6 +134,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/medication/medication-list/${options.medicationId}/edit`;
     case "edit-medical-contact":
       return `${dashboardBase}/admins/medical-contacts/${options.medicalContactId}/edit`;
+    case "edit-sp-goals":
+      return `${clientBase}/goals/sp-goals/${options.spGoalId}/edit`;
     case "expenses":
       return `${clientBase}/expenses`;
     case "expenses-account":
@@ -295,6 +298,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Edit Behaviour";
     case "edit-database-goal":
       return "Edit Goal";
+    case "edit-sp-goals":
+      return `Edit SP Goals`;
     case "edit-database-subgoal":
       return "Edit SubGoal";
     case "edit-database-task":

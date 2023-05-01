@@ -1,18 +1,12 @@
 import * as yup from "yup";
-import {RELOCATE_FIELDS_FORM_TYPE } from "../../../types";
+import { RELOCATE_FIELDS_FORM_TYPE } from "../../../types";
 
-
-export const FIELDS: RELOCATE_FIELDS_FORM_TYPE  = {
+export const FIELDS: RELOCATE_FIELDS_FORM_TYPE = {
   contact_type: {
     name: "Contact Type #",
     default: "",
-    validation: yup.string().label("contact_type").email().required(),
+    validation: yup.string().label("contact type").required(),
   },
-  // first_name: {
-  //   name: "First Name #",
-  //   default: "",
-  //   validation: yup.string().label("First Name").required(),
-  // },
   client: {
     name: "client #",
     default: "",
@@ -21,12 +15,12 @@ export const FIELDS: RELOCATE_FIELDS_FORM_TYPE  = {
   group_home_name: {
     name: "group_home_name #",
     default: "",
-    validation: yup.string().label("group_home_name").required(),
+    validation: yup.string().label("group home name").required(),
   },
   home_transfer_date: {
     name: "home_transfer_date#",
     default: null,
-    validation: yup.string().label("home_transfer_date").nullable().required(),
+    validation: yup.string().label("home transfer date").nullable().required(),
   },
   location: {
     name: "location #",

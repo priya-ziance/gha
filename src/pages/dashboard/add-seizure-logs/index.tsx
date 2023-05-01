@@ -131,7 +131,7 @@ const AddSeizureLogs = (props: AddSeizureLogsProps) => {
           <div className="add-seizure-log__container">
             <Formik
               initialValues={initialValues}
-              // validationSchema={helpers.validationSchema}
+              validationSchema={helpers.validationSchema}
               onSubmit={onSubmit}
             >
               {formikWrapper(

@@ -427,7 +427,7 @@ class StaffWitnessApi {
       `/staff-witness/${staffWitnessId}`,
       body
     );
-    console.log("client witness result", clientWitnessResult);
+
     
     return this.normalizer.normalize(clientWitnessResult.data);
   }
@@ -544,7 +544,7 @@ class AddRelocateApi {
       page,
       pageSize
     });
-    console.log("relocate data",addTrainerResult);
+
     
     return this.normalizer.normalizeArray(addTrainerResult.data.contents);
   }
@@ -559,7 +559,7 @@ class AddRelocateApi {
   }
   async updateRelocate(relocateId = String, body = {}) {
     const clientRelocateResult = await client.patch(
-      `/trainer/${relocateId}`,
+      `/transfer/${relocateId}`,
       body
     );
     return this.normalizer.normalize(clientRelocateResult.data);
@@ -953,22 +953,26 @@ class SpGoalsApi {
       page,
       pageSize
     });
-
+    
     return this.normalizer.normalizeArray(goalsResult.data.contents);
   }
 
-  async getSpGoal(goalId: string, options?: OPTIONS_TYPE) {
-    const params = get(options, "params", {});
+  async getSpGoal(goalId: string,  clientId:String) {
+    // const params = get(options, "params", {});
 
-    const goalResult = await client.get(`/sp_goal/${goalId}`, params);
-
+    const goalResult = await client.get(`/sp_goal/${goalId}?clientId=${clientId}`);
+    // console.log("result",goalResult);
+    
     return this.normalizer.normalize(goalResult.data);
   }
 
   async createSpGoal(body = {}, params = {}) {
     const goalResult = await client.post("/sp_goal", body, { params });
-
-    // return this.normalizer.normalize(goalResult.data);
+    return this.normalizer.normalize(goalResult.data);
+  }
+  async deleteSpGoal(spgoalId: String,clientId:string, body = {}) {
+    const deleteResult =  await client.delete(`/sp_goal/${spgoalId}?clientId=${clientId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
   }
 
   async updateSpGoal(goalId = "", body = {}, params = {}) {
@@ -976,7 +980,7 @@ class SpGoalsApi {
       params,
     });
 
-    // return this.normalizer.normalize(goalResult.data);
+    return this.normalizer.normalize(goalResult.data);
   }
 }
 
@@ -1296,18 +1300,15 @@ class QuestionsApi {
 //============================= TEMPLATES API'S====================================
 class LogsApi {
   normalizer;
-
    constructor() {
     this.normalizer = new Normalizer<ILogModel, ILog>(Models.Log);
   }
-
   async getLogsForPeriod(
     date_period: string,
     clientId: string,
     options?: OPTIONS_TYPE
   ) {
     const params = get(options, "params", {});
-
     const logsResult = await client.get(`/logs/client/month`, {
       clientId,
       date_period,
@@ -1327,8 +1328,6 @@ class LogsApi {
       pageSize,
       ...params,
     });
-    console.log("log result ",logsResult);
-
     return this.normalizer.normalizeArray(logsResult.data.contents);
   }
 
@@ -1343,35 +1342,20 @@ class LogsApi {
       type,
       ...params,
     });
-
     return this.normalizer.normalizeArray(logsResult.data.contents);
   }
 
   async getLog(logId: string, options?: OPTIONS_TYPE) {
     const params = get(options, "params", {});
-
     const logResult = await client.get(`/logs/${logId}`, params);
-
     return this.normalizer.normalize(logResult.data);
   }
-
-  // async createLog(logId: "", body = {}, params = {}) {
-  //   const createLogResult = await client.post(`/seizure-logs`, body);
-  //   console.log("create result", createLogResult);
-
-  //   return this.normalizer.normalize(createLogResult.data);
-  // }
   async createLog(body = {}) {
-    console.log("body",body);
-    
-    const clientStaffResult = await client.post("/seizure-log", body);
-    console.log("result",clientStaffResult);
-    
+    const clientStaffResult = await client.post("/seizure-log", body); 
     return this.normalizer.normalize(clientStaffResult.data);
   }
   async updateLog(logId = "", body = {}, params = {}) {
     const logResult = await client.patch(`/logs/${logId}`, body, { params });
-
     return this.normalizer.normalize(logResult.data);
   }
 }

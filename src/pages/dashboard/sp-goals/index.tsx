@@ -23,6 +23,8 @@ import {
 } from './helpers';
 
 import './index.scss';
+import { ISpGoalModel } from '../../../types';
+import ToastsContext from '../../../contexts/toasts';
 
 const PAGE_SIZE = 10;
 
@@ -32,26 +34,32 @@ const DatabaseGoals = () => {
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { id: selectedLocationId } = useContext(LocationContext)
-
+  const { addToast } = useContext(ToastsContext);
   const hasNextPage = spGoals.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
+  const fetchData = async () => {
+    setLoading(true);
+ 
+
+        try {
+          setSpGoals(
+            await api.spGoals.getSpGoals(clientId, { page, pageSize: PAGE_SIZE })
+          )
+        } catch(e: any){}
+  
+        setTimeout(() => {
+          setLoading(false);
+        }, 200)
+    
+  }
+
+
+
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-
-      try {
-        setSpGoals(
-          await api.spGoals.getSpGoals(clientId, { page, pageSize: PAGE_SIZE })
-        )
-      } catch(e: any){}
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
-    })()
-  }, [clientId, page, selectedLocationId]);
-
+    fetchData()
+  }, [clientId, page,selectedLocationId]);
+ 
   const onNextPage = () => {
     if (hasNextPage) {
       setPage(page => page + 1)
@@ -88,6 +96,26 @@ const DatabaseGoals = () => {
     );
   }
 
+  const deleteSpGoals = async (data: ISpGoalModel) => {
+    setLoading(true)
+
+    try {
+      await api.spGoals.deleteSpGoal(data.spGoal._id || "",clientId,data)
+
+      await fetchData()
+      addToast({
+        message: 'Sp Goal Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setLoading(false)
+  }
   return (
     <div>
       <div className='goals-database-goals'>
@@ -125,12 +153,20 @@ const DatabaseGoals = () => {
                 {
                   title: 'Actions',
                   cellRenderer: (data) => {
+                    console.log("data . id",data.id);
+                    
                     return actionColumn(
                       data,
                       {
                         viewLink: URLS.getPagePath(
-                          'edit-database-goal',
-                          { clientId, goalId: data.id })
+                          'edit-sp-goals',
+                          {
+                            spGoalId: data.spGoal._id,
+                            clientId,
+                           }),
+                          onDelete() {
+                            deleteSpGoals(data)
+                          }
                       }
                     )
                   },
