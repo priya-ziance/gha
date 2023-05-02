@@ -1,7 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import get from 'lodash/get';
 
-import { AnchorButton } from '../../../components';
+import { AnchorButton, Button } from '../../../components';
 
 import { IMedicationModel } from '../../../types';
 
@@ -54,7 +54,7 @@ export const expiryColumn = (data: IMedicationModel) => {
   return (<></>)
 }
 
-export const actionColumn = (data: IMedicationModel, { viewLink }: any) => {
+export const actionColumn = (data: IMedicationModel, { viewLink,onDelete }: any) => {
   return (
     <>
       <AnchorButton
@@ -67,6 +67,17 @@ export const actionColumn = (data: IMedicationModel, { viewLink }: any) => {
       >
         <b>view</b>
       </AnchorButton>
+      {" "}
+      {" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data)
+          }
+        }}
+        icon='trash'
+        intent={Intent.DANGER}
+      />
     </>
   )
 }

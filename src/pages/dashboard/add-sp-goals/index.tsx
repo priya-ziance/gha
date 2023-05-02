@@ -7,7 +7,7 @@ import pick from 'lodash/pick';
 
 import moment from 'moment';
 
-import { IGoalModel, ISpGoalModel, ISubGoalModel, SP_GOALS_FIELDS_TYPE } from '../../../types';
+import { IClientModel, IGoalModel, ISpGoalModel, ISubGoalModel, SP_GOALS_FIELDS_TYPE } from '../../../types';
 
 import api from '../../../api';
 
@@ -38,6 +38,7 @@ interface AddGoalProps {
   spGoal?: ISpGoalModel | undefined;
   subGoals?: ISubGoalModel[] | undefined;
   update?: boolean;
+  spGoalId: string;
 }
 
 const Content = (props: AddGoalProps) => {
@@ -52,7 +53,8 @@ const Content = (props: AddGoalProps) => {
 
   const goalsObject: any = useMemo(() => groupBy(goals, g => g.id), [goals]);
   const subGoalsObject: any = useMemo(() => groupBy(subGoals, g => g.id), [subGoals]);
-  let initialValues;
+  const [initialValues, setInitialValues]= useState( helpers.initialValues) ;
+  const [clientNames, setClientNames] = useState<IClientModel[]>([])
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: 'Dashboard' },
@@ -67,7 +69,20 @@ const Content = (props: AddGoalProps) => {
   } else {
     BREADCRUMBS.push({ text: URLS.getPagePathName("add-sp-goals") });
   }
-
+  const { spGoalId } = props;
+  console.log("newwwwww",clientId);
+  
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       setClientNames(
+  //         await api.clients.getClients()
+  //       )
+  //     } catch (e: any) { }
+  //   })()
+  // })
+  // console.log("client name",clientNames);
+  
   // useEffect(() => {
   //   (async () => {
   //     setLoadingClient(true);
@@ -143,26 +158,31 @@ const Content = (props: AddGoalProps) => {
       }
     })
       ()
-  }, [clientId]);
+  });
 
   /**
  * This assigns the goal's info as the initial values if a goal
  * is passed in
  */
+ useEffect(()=>{
+  console.log("propsss new",props.spGoalId);
+  
   if (props.spGoal) {
-    initialValues = Object.assign(
+    const initVal = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.spGoal.spGoal, Object.keys(helpers.initialValues))
+      pick(props.spGoal, Object.keys(helpers.initialValues))
     );
-    initialValues.goal = get(props, 'goal._id', '')
+    initialValues.goal = get(props, 'spGoal._id', '')
+    console.log("init.goal",initialValues.goal);
+    
     setSelectedSubgoals(props.subGoals?.map(item => item.id) || []);
-
-  } else {
-    initialValues = helpers.initialValues;
+      setInitialValues(initVal)
   }
+ },[props.spGoal])
 
-  const SuccessToast = (
+//  const spGoalId= props?.spGoal?._id
+  const SuccessToast = ()=>(
     <>
       <strong>Success</strong>
       <div>
@@ -200,6 +220,7 @@ const Content = (props: AddGoalProps) => {
         />
         <div className='add-sp-goal__container'>
           <Formik
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={helpers.validationSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
@@ -208,14 +229,16 @@ const Content = (props: AddGoalProps) => {
 
               try {
                 if (props.update) {
-                  await api.spGoals.updateSpGoal(get(props, 'client.id', ''), values);
+                  // console.log("props.id",props.spGoal?._id);
+                  
+                  await api.spGoals.updateSpGoal(spGoalId, values,clientId);
                 } else {
                   await api.spGoals.createSpGoal(values, { clientId });
                 }
 
                 addToast(
                   {
-                    message: SuccessToast,
+                    message: <>{SuccessToast()}</>,
                     timeout: 5000,
                     intent: Intent.SUCCESS
                   }
@@ -305,21 +328,25 @@ const Content = (props: AddGoalProps) => {
               return (
                 <form onSubmit={handleSubmit}>
 
-                  <FormGroup
-                    label={'Support Date'}
+
+                    {/* {getDateInputFormGroup('created_at')} */}
+                    {/* <FormGroup
+                    label={'Support Plan Date'}
                   >
                     <InputGroup
-                      value={'Support'}
+                      value={get(goals, 'created_at')}
+                      disabled
                     />
-                  </FormGroup>
+                  </FormGroup> */}
                   <FormGroup
                     label={'Client Name'}
                   >
                     <InputGroup
-                      value={get(client, 'name')}
+                      value="Howard"
                       disabled
                     />
                   </FormGroup>
+                  {/* {getInputFormGroup('client_name', { childProps: { disabled:true } })} */}
 
                   <FormItemSelect
                     buttonText={goalsObject[values.goal] ? goalsObject[values.goal][0].description : ''}

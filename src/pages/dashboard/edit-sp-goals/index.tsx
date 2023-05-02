@@ -12,7 +12,7 @@ interface SpGoalsPathType {
 
 const EditSpGoals = (props: SpGoalsPathType) => {
   const [loading, setLoading] = useState(false);
-  const [spGoal, setSpGoal] = useState<ISpGoalModel | undefined>(undefined);
+  const [spGoal, setSpGoal] = useState<any | undefined>(undefined);
   const { id: clientId } = useContext(ClientContext);
 
   const { spGoalId } = props;
@@ -24,8 +24,8 @@ console.log(" SP goal id",spGoalId);
       try {
         const fetchedStaffWitness =
           await api.spGoals.getSpGoal(spGoalId, clientId);
-        // setSpGoal(fetchedStaffWitness);
-
+        setSpGoal(fetchedStaffWitness.spGoal);
+        console.log("api rsssssss",fetchedStaffWitness.spGoal);
       } 
       catch (e: any) {
         // console.log(e);
@@ -38,7 +38,7 @@ console.log(" SP goal id",spGoalId);
     return <Spinner />;
   }
 
-  return <AddSpGoals spGoal={spGoal} update />;
+  return <AddSpGoals spGoal={spGoal} spGoalId={spGoalId} update />;
 };
 
 

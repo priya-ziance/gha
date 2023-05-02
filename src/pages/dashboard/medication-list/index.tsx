@@ -25,6 +25,7 @@ import {
 } from './helpers';
 
 import './index.scss';
+import ToastsContext from '../../../contexts/toasts';
 
 const PAGE_SIZE = 10;
 
@@ -33,25 +34,28 @@ const MedicationListPage = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
+  const { addToast } = useContext(ToastsContext);
 
   const hasNextPage = medications.length === PAGE_SIZE;
   const hasPrevPage = page > 0;
 
+  const fetchData = async () => {
+    setLoading(true);
+
+    try {
+      setMedications(
+        await api.medications.getMedications(clientId, { page, pageSize: PAGE_SIZE })
+      )
+    } catch(e: any){}
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 200)
+  };
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-
-      try {
-        setMedications(
-          await api.medications.getMedications(clientId, { page, pageSize: PAGE_SIZE })
-        )
-      } catch(e: any){}
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 200)
-    })()
+    fetchData()
   }, [clientId, page]);
+
 
   const onNextPage = () => {
     if (hasNextPage) {
@@ -89,7 +93,27 @@ const MedicationListPage = () => {
     );
   }
   
+  const deleteMedication = async (data: IMedicationModel) => {
+    setLoading(true)
+    console.log("fhsdikf",data);
+    
+    try {
+      await api.medications.deleteMedication(data.id|| "",clientId,data)
 
+      await fetchData()
+      addToast({
+        message: 'Deleted...',
+        intent: 'success'
+      })
+    } catch (e: any) {
+      addToast({
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
+    }
+
+    setLoading(false)
+  }
   return (
     <div>
       <div className='medication-list'>
@@ -137,7 +161,10 @@ const MedicationListPage = () => {
                       {
                         viewLink: URLS.getPagePath(
                           'edit-medication',
-                          { clientId, medicationId: data.id })
+                          { clientId, medicationId: data.id }),
+                          onDelete() {
+                            deleteMedication(data)
+                          }
                       }
                     )
                   },

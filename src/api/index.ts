@@ -62,6 +62,8 @@ import {
   IRelocateModel,
   IRelocate,
   IAddTrainer,
+  IDischargeModel,
+  IDischarge,
 } from "../types";
 
 import Normalizer from "./normalizer";
@@ -526,6 +528,48 @@ class AddTrainerApi {
   }
 }
 
+//============================= home Discharge API'S========================================
+class DischargerApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IDischargeModel, IDischarge>(
+      Models.AddTrainers
+    );
+  }
+
+  async getDischarges(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addTrainerResult = await client.get(`/trainer`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(addTrainerResult.data.contents);
+  }
+
+  async createDischarge(body = {}) {
+    const addTrainerResult = await client.post("/trainer", body);
+    return this.normalizer.normalize(addTrainerResult.data);
+  }
+  async deleteDischarge(dischargeId: String, body = {}) {
+    const deleteResult =  await client.delete(`/trainer/${dischargeId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateDischarge(dischargeId = String, body = {}) {
+    const clientTrainerResult = await client.patch(
+      `/trainer/${dischargeId}`,
+      body
+    );
+    return this.normalizer.normalize(clientTrainerResult.data);
+  }
+  async getDischargeId(clientId: string) {
+    const addTrainersResult = await client.get(`/trainer/${clientId}`);
+    return this.normalizer.normalize(addTrainersResult.data);
+  }
+}
+
 //============================= Relocate /transfer API'S========================================
 class AddRelocateApi {
   normalizer;
@@ -798,6 +842,10 @@ class MedicationApi {
 
     return this.normalizer.normalize(medicationResult.data);
   }
+  async deleteMedication(medicationId: String,clientId:string, body = {}) {
+    const deleteResult =  await client.delete(`/medication/${medicationId}?clientId=${clientId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
 }
 
 //============================= SUBGOAL API'S==================================
@@ -975,10 +1023,10 @@ class SpGoalsApi {
     return this.normalizer.normalize(deleteResult.data);
   }
 
-  async updateSpGoal(goalId = "", body = {}, params = {}) {
-    const goalResult = await client.patch(`/sp_goal/${goalId}`, body, {
-      params,
-    });
+  async updateSpGoal(spGoalId:string, body = {},clientId:string) {
+    console.log("goal id",spGoalId);
+    console.log("clientId id",clientId);
+    const goalResult = await client.patch(`/sp_goal/${spGoalId}?clientId=${clientId}`, body);
 
     return this.normalizer.normalize(goalResult.data);
   }
@@ -1509,6 +1557,7 @@ export default (() => ({
   clientWitness: new ClientWitnessApi(),
   staffWitness: new StaffWitnessApi(),
   Trainers: new AddTrainerApi(),
+  Discharge: new DischargerApi(),
   Relocate: new AddRelocateApi(),
   caseNotes: new CaseNotesApi(),
   expenses: new ExpensesApi(),

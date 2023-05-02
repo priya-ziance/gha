@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import { MEDICATION_FIELDS_FORM_TYPE } from '../../../types';
 
-export const TAKEN_DAYS = {
+export const STATUS = {
   daily: 'Daily',
   two_times_a_week: 'Two times a week',
   three_times_a_week: 'Three times a week',
@@ -51,6 +51,11 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: null,
     validation: yup.string().label('Script Date').nullable(),
   },
+  start_date: {
+    name: 'Start Date',
+    default: null,
+    validation: yup.string().label('Start Date').nullable(),
+  },
   directions: {
     name: 'Directions',
     default: '',
@@ -76,6 +81,11 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string(),
   },
+  taken_days: {
+    name: 'Taken Days',
+    default: '',
+    validation: yup.string(),
+  },
   notes: {
     name: 'Notes #',
     default: '',
@@ -86,14 +96,10 @@ export const FIELDS : MEDICATION_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string(),
   },
+  
   status: {
     name: 'Status',
-    default: '',
-    validation: yup.string()
-  },
-  taken_days: {
-    name: 'Taken Days',
-    default: Object.keys(TAKEN_DAYS)[0],
+    default: Object.keys(STATUS)[0],
     validation: yup.string()
   },
   prn_med: {

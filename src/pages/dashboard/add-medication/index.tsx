@@ -5,11 +5,8 @@ import get from "lodash/get";
 import pick from "lodash/pick";
 import omit from "lodash/omit";
 import moment from "moment";
-
 import { IMedicationModel, MEDICATION_FIELDS_TYPE } from "../../../types";
-
 import api from "../../../api";
-
 import URLS from "../../../utils/urls";
 import formikWrapper from "../../../wrappers/formik";
 
@@ -29,7 +26,7 @@ import ClientContext from "../../../contexts/client";
 import ToastsContext from "../../../contexts/toasts";
 import TimeInput from "./timeInput";
 import * as helpers from "./helpers";
-import { FIELDS, TAKEN_DAYS } from "./constants";
+import { FIELDS, STATUS } from "./constants";
 
 import "./index.scss";
 
@@ -122,7 +119,7 @@ const AddMedication = (props: AddMedicationProps) => {
 					validationSchema={helpers.validationSchema}
 					onSubmit={async (values, { resetForm, setSubmitting }) => {
 						const medicationId = get(props, "medication.id");
-
+						
 						const _values = omit(values, ["picture", "script"]);
 
 						setSubmitting(true);
@@ -275,6 +272,7 @@ const AddMedication = (props: AddMedicationProps) => {
 									{getTextAreaInputFormGroup("medication_reason")}
 
 									{getDateInputFormGroup("script_date")}
+									{getDateInputFormGroup("start_date")}
 
 									<FormGroup intent={Intent.PRIMARY} label={"Upload Script"}>
 										<FileInput
@@ -287,13 +285,13 @@ const AddMedication = (props: AddMedicationProps) => {
 									</FormGroup>
 
 									<FormItemSelect
-										buttonText={get(TAKEN_DAYS, values.taken_days, "")}
-										items={Object.keys(TAKEN_DAYS)}
-										label={get(FIELDS, "taken_days", { name: "" }).name}
-										menuRenderer={(item) => get(TAKEN_DAYS, item, "")}
-										onFormSelectChange={handleChange("taken_days")}
+										buttonText={get(STATUS, values.status, "")}
+										items={Object.keys(STATUS)}
+										label={get(FIELDS, "status", { name: "" }).name}
+										menuRenderer={(item) => get(STATUS, item, "")}
+										onFormSelectChange={handleChange("status")}
 									/>
-
+									{getNumericInputFormGroup("taken_days")}
 									<TimeInput onNewTimes={onNewTimes} times={values.med_time} />
 
 									<Switch

@@ -72,7 +72,7 @@ const TimeInput = (props: TimeInputProps) => {
   return (
     <FormMultiItemSelect
       intent={Intent.PRIMARY}
-      label={'Select Time'}
+      label={'Time Taken'}
       menuRenderer={menuRenderer}
       formSelectProps={{
         tagRenderer,

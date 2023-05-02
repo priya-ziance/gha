@@ -158,5 +158,12 @@ export const getLinks = (clientId: string) => {
       path: URLS.getPagePath('trainer', { clientId }),
       interactive: true
     },
+    {
+      description: '',
+      title: 'Home Discharge',
+      image: ClientsImage,
+      path: URLS.getPagePath('discharge', { clientId }),
+      interactive: true
+    },
   ]
 }

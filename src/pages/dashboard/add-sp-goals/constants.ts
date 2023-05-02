@@ -28,6 +28,7 @@ export const FIELDS : FIELDS_TYPE = {
     default: '',
     validation: yup.string(),
   },
+  
   start_date: {
     name: 'Start Date',
     default: null,
@@ -37,5 +38,16 @@ export const FIELDS : FIELDS_TYPE = {
     name: 'Sub Goals',
     default: null,
     validation: yup.string().required().label('sub_goals'),
-  }
+  },
+  // client_name: {
+  //   name: 'Client Name',
+  //   default: '',
+  //   validation: yup.string(),
+  // }
+
+  // created_at:{
+  //   name: 'Support Plan Date',
+  //   default: null,
+  //   validation: yup.string().nullable().required().label('Support Plan Date'),
+  // }
 }

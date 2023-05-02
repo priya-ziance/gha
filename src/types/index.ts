@@ -40,6 +40,9 @@ export type PAGE_TYPES =
   | "staff-witness"
   | "trainer"
   | "add-trainer"
+  | "discharge"
+  | "add-discharge"
+  | "edit-discharge"
   | "relocate"
   | "edit-appointment"
   | "edit-bank-statement"
@@ -177,27 +180,23 @@ export type STAFF_WITNESS_FIELDS_TYPE =
   | "location";
 
   export type ADD_TRAINERS_FIELDS_TYPE =
-  // | "image"
   | "address"
-  // | "trainer_id"
   | "hired_date"
   | "email"
   | "first_name"
   | "last_name"
   | "mobile"
   | "location";
-// export type ADD_TRAINERS_FIELDS_TYPE =
-//   | "address"
-//   | "trainer_id"
-//   // | "hired_date"
-//   | "hiredDate"
-//   | "email"
-//   | "first_name"
-//   | "last_name"
-//   // | "firstName"
-//   // | "lastName"
-//   | "mobile"
-//   | "location";
+
+  
+  export type ADD_DISCHARGE_FIELDS_TYPE =
+  | "address"
+  | "hired_date"
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "location";
 
 export type ADD_RELOCATE_FIELDS_TYPE =
   | "id"
@@ -311,7 +310,8 @@ export type SP_GOALS_FIELDS_TYPE =
   | "entries"
   | "notes"
   | "start_date"
-  | "sub_goals";
+  | "sub_goals"
+  // | "client_name"
 
 export type MEDICATION_FIELDS_TYPE =
   | "control_meds"
@@ -327,6 +327,7 @@ export type MEDICATION_FIELDS_TYPE =
   | "refills"
   | "route_name"
   | "script_date"
+  | "start_date"
   | "side_effect"
   | "status"
   | "taken_days"
@@ -482,6 +483,13 @@ export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
 };
 export type TRAINER_FIELDS_FORM_TYPE = {
   [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type DISCHARGE_FIELDS_FORM_TYPE = {
+  [key in ADD_DISCHARGE_FIELDS_TYPE]?: {
     name: string;
     default: any;
     validation: any;
@@ -727,6 +735,7 @@ export interface IMedicationModel {
   refills?: number;
   doctor?: string;
   scriptDate?: Moment;
+  startDate?: Moment;
   apiMedication: IMedication;
 }
 
@@ -1021,6 +1030,33 @@ export interface IAddTrainerModel {
   trainer?: IAddTrainer;
 }
 
+export interface IDischarge {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface IDischargeModel {
+  image?: string;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  trainer?: IAddTrainer;
+}
 export interface IRelocate {
   _id?: string;
   home_transfer_date?: Moment;
@@ -1201,6 +1237,7 @@ export interface IMedication {
   doctor?: string;
   drug_link?: string;
   script_date?: string;
+  start_date?: string;
 }
 
 export interface ISubGoal {

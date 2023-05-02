@@ -18,7 +18,6 @@ type OPTIONS_TYPE = {
   taskId?: string;
   relocateId?: String;
   seizurelogId?: string;
- 
 };
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -45,15 +44,19 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case "trainer":
       return `${clientBase}/trainer`;
     case "add-trainer":
-        return `${clientBase}/trainer/add`;
+      return `${clientBase}/trainer/add`;
+    case "discharge":
+      return `${clientBase}/discharge`;
+    case "add-discharge":
+      return `${clientBase}/discharge/add`;
     case "add-database-behaviour":
       return `${clientBase}/behaviours/database/add`;
-      case "relocate":
-        return `${clientBase}/relocate`;
-      case "add-relocate":
-        return `${clientBase}/relocate/add`;
-      case "edit-relocate":
-        return `${clientBase}/relocate/${options.clientContactId}/edit`;
+    case "relocate":
+      return `${clientBase}/relocate`;
+    case "add-relocate":
+      return `${clientBase}/relocate/add`;
+    case "edit-relocate":
+      return `${clientBase}/relocate/${options.clientContactId}/edit`;
     case "add-database-goal":
       return `${clientBase}/goals/database/goals/add`;
     case "add-database-subgoal":
@@ -116,6 +119,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/staff-witness/${options.clientContactId}/edit`;
     case "edit-trainer":
       return `${clientBase}/trainer/${options.clientContactId}/edit`;
+    case "edit-discharge":
+      return `${clientBase}/discharge/${options.clientContactId}/edit`;
     case "edit-database-behaviour":
       return `${clientBase}/behaviours/database/${options.behaviourId}/edit`;
     case "edit-database-goal":
@@ -186,17 +191,17 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs/personal-support/notes-database`;
 
     case "seizure-logs":
-        return `${dashboardBase}/logs/seizure-logs`;
+      return `${dashboardBase}/logs/seizure-logs`;
     case "add-seizure-logs":
-        return `${dashboardBase}/logs/seizure-logs/add`;
+      return `${dashboardBase}/logs/seizure-logs/add`;
     case "edit-seizure-logs":
-        return `${dashboardBase}/logs/seizure-logs/${options.clientContactId}/edit`;
+      return `${dashboardBase}/logs/seizure-logs/${options.clientContactId}/edit`;
     case "seizure-logs-logs":
-        return `${dashboardBase}/logs/seizure-logs/logs`;
+      return `${dashboardBase}/logs/seizure-logs/logs`;
     case "seizure-logs-places-database":
-        return `${dashboardBase}/logs/seizure-logs/places-database`;
+      return `${dashboardBase}/logs/seizure-logs/places-database`;
     case "seizure-logs-notes-database":
-        return `${dashboardBase}/logs/seizure-logs/notes-database`;
+      return `${dashboardBase}/logs/seizure-logs/notes-database`;
     case "reshab-logs":
       return `${dashboardBase}/logs/reshab-logs`;
     case "respite-logs":
@@ -229,7 +234,7 @@ const getPagePathName = (page: PAGE_TYPES) => {
     case "add-staff-witness":
       return `Add Staff Witness`;
     case "trainer":
-        return `Trainer`;
+      return `Trainer`;
     case "add-trainer":
       return `Add Trainer`;
     case "add-database-goal":
@@ -293,7 +298,7 @@ const getPagePathName = (page: PAGE_TYPES) => {
     case "edit-staff-witness":
       return "Edit Staff Witness";
     case "edit-trainer":
-        return "Edit Trainer";
+      return "Edit Trainer";
     case "edit-database-behaviour":
       return "Edit Behaviour";
     case "edit-database-goal":
@@ -314,6 +319,12 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Edit Location";
     case "edit-medical-contact":
       return "Edit Medical Contact";
+    case "discharge":
+      return "Discharge";
+    case "add-discharge":
+      return "Add Discharge";
+    case "edit-discharge":
+      return "edit Discharge";
     case "expenses":
       return "Expenses";
     case "expenses-account":
@@ -364,22 +375,22 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Personal Support Places Database";
     case "personal-support-notes-database":
       return "Personal Support Notes Database";
-      case "seizure-logs":
-        return "Seizure Logs";
-        case "add-seizure-logs":
-        return "Add Seizure Logs";
-        case "edit-seizure-logs":
-          return "Edit Seizure Logs"
-      case "seizure-logs-logs":
-        return "Seizure Logs Logs";
-      case "seizure-logs-places-database":
-        return "Seizure Logs Places Database";
-      case "seizure-logs-notes-database":
-        return "Seizure Logs Notes Database";
+    case "seizure-logs":
+      return "Seizure Logs";
+    case "add-seizure-logs":
+      return "Add Seizure Logs";
+    case "edit-seizure-logs":
+      return "Edit Seizure Logs";
+    case "seizure-logs-logs":
+      return "Seizure Logs Logs";
+    case "seizure-logs-places-database":
+      return "Seizure Logs Places Database";
+    case "seizure-logs-notes-database":
+      return "Seizure Logs Notes Database";
     case "add-relocate":
-      return "Add Relocate / Transfer"
-      case "relocate":
-        return "Relocate / Transfer"
+      return "Add Relocate / Transfer";
+    case "relocate":
+      return "Relocate / Transfer";
     case "reshab-logs":
       return "Reshab Logs";
     case "respite-logs":

@@ -1,5 +1,5 @@
-import { Classes } from "@blueprintjs/core";
-import { Col, Dialog, Table } from "../../../components";
+import { Classes,Icon,Intent } from "@blueprintjs/core";
+import { Col, Dialog, FormMultiItemSelect, Table } from "../../../components";
 import { IDialog } from "./types";
 import { useContext, useEffect, useState } from "react";
 import { IStaffWithnessModel } from "../../../types";
@@ -22,6 +22,8 @@ const BehaviourDialog = (props: IDialog) => {
   const [staffWitnessActual, setStaffWitnessActual] = useState<
     IStaffWithnessModel[] | []
   >([]);
+  const [selectedUsers, setSelectedUsers] = useState<any>({})
+
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
@@ -63,7 +65,18 @@ const BehaviourDialog = (props: IDialog) => {
   const initialValues = {
     search: "",
   };
-
+  const menuRenderer = (item: any) => {
+    if (selectedUsers[item.id]) {
+      return (
+        <span>
+          <Icon icon={'tick'} />
+          {' '}
+          {item.firstName}
+        </span>
+      )
+    }
+    return item.firstName
+  }
   return (
     <Dialog
       icon="info-sign"
@@ -105,8 +118,20 @@ const BehaviourDialog = (props: IDialog) => {
                     <form onChange={handleSubmit}>
                       <Row>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("search")}
-                        </Col>
+                        {/* <FormMultiItemSelect
+                          intent={Intent.PRIMARY}
+                          label={'Select Users'}
+                          menuRenderer={menuRenderer}
+                          formSelectProps={{
+                            tagRenderer,
+                            items: trainer,
+                            onItemSelect: handleItemChange,
+                            selectedItems: Object.keys(selectedUsers),
+                            onRemove: onRemoveUser,
+                            onQueryChange: onUserQueryChange
+                          }}
+                        />                     */}
+                            </Col>
                       </Row>
                     </form>
                   );
