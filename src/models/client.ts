@@ -19,6 +19,7 @@ export default class Client implements IBaseModel {
   services: object;
   witnesses?: IUserModel[];
   trainers?: IUserModel[]
+  behaviour?: IUserModel[]
 
   constructor(client: IClient) {
     this.id = client._id;

@@ -165,5 +165,40 @@ export const getLinks = (clientId: string) => {
       path: URLS.getPagePath('discharge', { clientId }),
       interactive: true
     },
+    {
+      description: '',
+      title: 'ADP',
+      image: ClientsImage,
+      path: URLS.getPagePath('adp', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
+      title: 'Personal Funds',
+      image: ClientsImage,
+      path: URLS.getPagePath('personal_funds', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
+      title: 'Personal Bank Statement',
+      image: ClientsImage,
+      path: URLS.getPagePath('personal_bank_statement', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
+      title: 'Community Activities',
+      image: ClientsImage,
+      path: URLS.getPagePath('community_activities', { clientId }),
+      interactive: true
+    },
+    {
+      description: '',
+      title: 'Inventory',
+      image: ClientsImage,
+      path: URLS.getPagePath('inventory', { clientId }),
+      interactive: true
+    },
   ]
 }

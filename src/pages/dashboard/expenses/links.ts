@@ -23,6 +23,13 @@ export const getLinks = (clientId: string) => {
       image: ClientsImage,
       path: URLS.getPagePath('expenses-list', { clientId }),
       interactive: true
+    },
+    {
+      description: '',
+      title: 'Recurring Expense',
+      image: ClientsImage,
+      path: URLS.getPagePath('recurring-expense', { clientId }),
+      interactive: true
     }
   ]
 }

@@ -47,7 +47,7 @@ const Content = (props: AddGoalProps) => {
   const [subGoals, setSubGoals] = useState<any | []>([]);
   const [selectedSubGoals, setSelectedSubgoals] = useState<string[]>([]);
   const [loadingClient, setLoadingClient] = useState(false);
-
+  const [page, setPage] = useState(0);
   const { addToast } = useContext(ToastsContext);
   const { id: clientId } = useContext(ClientContext);
 
@@ -70,10 +70,20 @@ const Content = (props: AddGoalProps) => {
     BREADCRUMBS.push({ text: URLS.getPagePathName("add-sp-goals") });
   }
   const { spGoalId } = props;
-  console.log("newwwwww",clientId);
   
   // useEffect(() => {
   //   (async () => {
+  //     try {
+  //       setClientNames(
+  //         await api.clients.getClients()
+  //       )
+  //     } catch (e: any) { }
+  //   })()
+  // })
+  // useEffect(() => {
+
+  //   (async () => {
+  //     setPage(1)
   //     try {
   //       setClientNames(
   //         await api.clients.getClients()
@@ -168,13 +178,16 @@ const Content = (props: AddGoalProps) => {
   console.log("propsss new",props.spGoalId);
   
   if (props.spGoal) {
-    const initVal = Object.assign(
+    const nameResult = clientNames.find((item) => item?.id === clientId)
+    let initVal = Object.assign(
       {},
       helpers.initialValues,
       pick(props.spGoal, Object.keys(helpers.initialValues))
     );
     initialValues.goal = get(props, 'spGoal._id', '')
     console.log("init.goal",initialValues.goal);
+    initVal = { ...initVal, client_name: nameResult?.firstName || "" }
+    console.log("init val ",clientNames);
     
     setSelectedSubgoals(props.subGoals?.map(item => item.id) || []);
       setInitialValues(initVal)
@@ -342,11 +355,11 @@ const Content = (props: AddGoalProps) => {
                     label={'Client Name'}
                   >
                     <InputGroup
-                      value="Howard"
+                      value={get(props.spGoal, "client_name")}
                       disabled
                     />
                   </FormGroup>
-                  {/* {getInputFormGroup('client_name', { childProps: { disabled:true } })} */}
+                  {getInputFormGroup('client_name', { childProps: { disabled:true } })}
 
                   <FormItemSelect
                     buttonText={goalsObject[values.goal] ? goalsObject[values.goal][0].description : ''}

@@ -24,8 +24,24 @@ export type PAGE_TYPES =
   | "add-medical-contact"
   | "add-relocate"
   | "apd"
+  | "add-add-inventorys"
+  | "recurring-expense"
+  | "add-recurring-expense"
+  | "edit-recurring-expense"
+  | "personal_bank_statement"
+  | "add-personal_bank_statement"
+  | "edit-personal_bank_statement"
+  | "community_activities"
+  | "add-community_activities"
+  | "edit-community_activities"
+  | "personal_funds"
+  | "add-personal_funds"
+  | "edit-personal_funds"
   | "appointments"
   | "bank-statement"
+  | "inventory"
+  | "add-inventory"
+  | "edit-inventory"
   | "behaviours"
   | "behaviours-problems"
   | "behaviours-assign"
@@ -44,6 +60,9 @@ export type PAGE_TYPES =
   | "add-discharge"
   | "edit-discharge"
   | "relocate"
+  | "adp"
+  | "add-adp"
+  | "edit-adp"
   | "edit-appointment"
   | "edit-bank-statement"
   | "edit-case-note"
@@ -97,6 +116,8 @@ export type PAGE_TYPES =
   | "edit-sp-goals";
 
 export type APD_FIELDS_TYPE =
+  | "client"
+  | "first_name"
   | "critical_incident"
   | "county"
   | "incident_date_time"
@@ -135,7 +156,7 @@ export type CASE_NOTE_FIELDS_TYPE =
   | "notes"
   | "significant_event"
   | "significant_event_notes"
-  | "client_name"
+  // | "client_name"
 
 export type LOCATION_FIELDS_TYPE =
   | "phoneNumber"
@@ -157,7 +178,7 @@ export type CLIENT_CONTACT_FIELDS_TYPE =
   | "notes"
   | "phone"
   | "medical_contact"
-  | "client_name"
+  // | "client_name"
 
 export type CLIENT_WITNESS_FIELDS_TYPE =
   | "address"
@@ -169,6 +190,12 @@ export type CLIENT_WITNESS_FIELDS_TYPE =
   | "mobile"
   | "location";
 
+  export type ADD_INVENTORY_FIELDS_TYPE =
+  | "item"
+  | "quantity"
+  | "description"
+  | "notes"
+  | "purchase_date"
 export type STAFF_WITNESS_FIELDS_TYPE =
   | "address"
   | "trainer_id"
@@ -180,6 +207,14 @@ export type STAFF_WITNESS_FIELDS_TYPE =
   | "location";
 
   export type ADD_TRAINERS_FIELDS_TYPE =
+  | "address"
+  | "hired_date"
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "mobile"
+  | "location";
+  export type PERSONAL_BANK_STATEMENT_FIELDS_TYPE =
   | "address"
   | "hired_date"
   | "email"
@@ -311,7 +346,7 @@ export type SP_GOALS_FIELDS_TYPE =
   | "notes"
   | "start_date"
   | "sub_goals"
-  // | "client_name"
+  | "client_name"
 
 export type MEDICATION_FIELDS_TYPE =
   | "control_meds"
@@ -343,6 +378,12 @@ export type EXPENSES_LIST_FIELDS_TYPE =
   | "active"
   | "type";
 
+  export type RECURRING_EXPENSES_FIELDS_TYPE =
+  | "expense_description"
+  | "expense_type"
+  | "active"
+
+
 export type DeviceType = "sm" | "xs" | "md" | "lg";
 
 export type JOINED_FIELDS_TYPE =
@@ -352,7 +393,34 @@ export type JOINED_FIELDS_TYPE =
   | CASE_NOTE_FIELDS_TYPE
   | SP_GOALS_FIELDS_TYPE
   | GOAL_FIELDS_TYPE
-  | SUBGOAL_FIELDS_TYPE;
+  | SUBGOAL_FIELDS_TYPE
+  | JOINED_FIELDS_TYPE_ADP;
+
+  export type JOINED_FIELDS_TYPE_ADP =
+  | "client"
+  | "first_name"
+  | "last_name"
+  | "clients_involved"
+  | "employee_involved"
+  | "incident_date"
+  | "incident_time"
+  | "contry"
+  | "notified"
+  | "critical_incident"
+  | "critical_incident_type"
+  | "reportable_incident"
+  | "reportable_incident_type"
+  | "name_of_facility"
+  | "address"
+  | "telephone"
+  | "report_date"
+  | "event_description"
+  | "person_report"
+  | "reported_person_phone"
+  | "review_supervisor"
+  | "review_supervisor_phone"
+  // | "waiver_support_cordinator"
+  // | "waiver_support_cordinator_phone";
 
 export type FIELDS_TYPE = {
   [key in JOINED_FIELDS_TYPE]?: {
@@ -473,6 +541,13 @@ export type CLIENT_WITNESS_FIELDS_FORM_TYPE = {
     validation: any;
   };
 };
+export type INVENTORY_FIELDS_FORM_TYPE = {
+  [key in ADD_INVENTORY_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
 
 export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
   [key in STAFF_WITNESS_FIELDS_TYPE]?: {
@@ -483,6 +558,13 @@ export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
 };
 export type TRAINER_FIELDS_FORM_TYPE = {
   [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type PERSONAL_BANK_STATEMENT_FIELDS_FORM_TYPE = {
+  [key in PERSONAL_BANK_STATEMENT_FIELDS_TYPE]?: {
     name: string;
     default: any;
     validation: any;
@@ -609,7 +691,23 @@ export interface IClientBehaviourModel {
   notes?: string;
   createdAt?: Moment;
 }
-
+export interface IAddInventory {
+  _id: string;
+  notes?: string;
+  item?: string;
+  quantity?: number;
+  description?: string;
+  purchase_date?: string;
+}
+export interface IAddInventoryModel {
+  id?: string;
+  notes?: string;
+  item?: string;
+  quantity?: number;
+  description?: string;
+  purchase_date?: string;
+  inventory?: IAddInventory;
+}
 export interface IClientModel {
   id: string;
   name: string;
@@ -686,6 +784,18 @@ export interface IExpenseListModel {
   expenseList: IExpenseList;
 }
 
+
+export interface IRecurringExpenseModel {
+  id: string;
+  client: IClientModel;
+  expenseDescription: string;
+  expenseType: string;
+  expense: number;
+  active: boolean;
+  type: string;
+  createdAt: Moment;
+  recurringExpense: IRecurringExpense;
+}
 export interface IFileModel {
   createdAt?: string;
   id: string;
@@ -1002,6 +1112,19 @@ export interface ISeizureLogsModel {
   patient_have_seizure?: string;
   seizurelogs?: ISeizurelogs;
 }
+
+export interface IAddTrainerModel {
+  image?: string;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  trainer?: IAddTrainer;
+}
 export interface IAddTrainer {
   _id: string;
   emp_id?: string;
@@ -1017,7 +1140,7 @@ export interface IAddTrainer {
   updated_at?: string;
 }
 
-export interface IAddTrainerModel {
+export interface ICommunityActivitiesModel {
   image?: string;
   id?: string;
   email?: string;
@@ -1027,9 +1150,75 @@ export interface IAddTrainerModel {
   mobile?: string;
   location?: string;
   hiredDate?: Moment;
-  trainer?: IAddTrainer;
+  communityActivities?: ICommunityActivities;
+}
+export interface ICommunityActivities {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
+export interface IPersonalBankStatementModel {
+  image?: string;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  PersonalBankStatement?: IPersonalBankStatement;
+}
+export interface IPersonalBankStatement {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+export interface IPersonalFundsModel {
+  image?: string;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hiredDate?: Moment;
+  personalFunds?: IPersonalFunds;
+}
+export interface IPersonalFunds {
+  _id: string;
+  emp_id?: string;
+  image?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  mobile?: string;
+  location?: string;
+  hired_date?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 export interface IDischarge {
   _id: string;
   emp_id?: string;
@@ -1077,6 +1266,64 @@ export interface IRelocateModel {
   phone?: string;
   contact_type?:string;
   relocate?: IRelocate;
+}
+export interface IAddAdp {
+  _id: string;
+  client?: string;
+  first_name?: string;
+  last_name?: string;
+  clients_involved?: string[];
+  employee_involved?: string[];
+  incident_date?: Moment;
+  incident_time?: Moment;
+  contry?: string;
+  notified?: boolean;
+  critical_incident?: boolean;
+  critical_incident_type?: string;
+  reportable_incident?: boolean;
+  reportable_incident_type?: string;
+  name_of_facility?: string;
+  address?: string;
+  telephone?: string;
+  report_date?: Moment;
+  event_description?: string;
+  person_report?: string;
+  reported_person_phone?: string;
+  review_supervisor?: string;
+  review_supervisor_phone?: string;
+  waiver_support_cordinator?: string;
+  waiver_support_cordinator_phone?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface IAddAdpModel {
+  id?: string;
+  client?: string;
+  firstName?: string;
+  lastName?: string;
+  clientsInvolved?: string[];
+  employeeInvolved?: string[];
+  incidentDate?: Moment;
+  incidentTime?: Moment;
+  contry?: string;
+  notified?: boolean;
+  criticalIncident?: boolean;
+  criticalIncidentType?: string;
+  reportableIncident?: boolean;
+  reportableIncidentType?: string;
+  nameOfFacility?: string;
+  address?: string;
+  telephone?: string;
+  reportDate?: Moment;
+  eventDescription?: string;
+  personReport?: string;
+  reportedPersonPhone?: string;
+  reviewSupervisor?: string;
+  reviewSupervisorPhone?: string;
+  waiverSupportCordinator?: string;
+  waiverSupportCordinatorPhone?: string;
+  adp?: IAddAdp;
 }
 export interface IClientContact {
   _id: string;
@@ -1186,6 +1433,16 @@ export interface IExpenseList {
   created_at: string;
 }
 
+export interface IRecurringExpense {
+  _id: string;
+  client: IClient;
+  expense_description: string;
+  expense_type: string;
+  expense: number;
+  active: boolean;
+  type: string;
+  created_at: string;
+}
 export interface IFile {
   _id: string;
   client?: string;

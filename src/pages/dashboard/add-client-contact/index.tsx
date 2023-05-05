@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { ReactChild, ReactFragment, ReactPortal, useContext, useEffect, useState } from 'react';
 import { BreadcrumbProps, Button, Intent } from '@blueprintjs/core';
 import { Formik, FormikHelpers } from 'formik';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 
-import { Col, PageHeading, Row } from '../../../components';
+import { Col, FormGroup, InputGroup, PageHeading, Row } from '../../../components';
 import OmniContactsInput from '../../../controlled-components/OmniContactInput';
 
 import { IClientContactModel, IClientModel } from '../../../types';
@@ -17,7 +17,6 @@ import formikWrapper from '../../../wrappers/formik';
 import { FIELDS } from './constants';
 import { FAMILY_CONTACT_LIST, MEDICAL_CONTACT_LIST } from '../../../utils/constants';
 import './index.scss';
-import Client from '../../../models/client';
 
 
 interface AddClientContactProps {
@@ -29,9 +28,12 @@ const AddClientContact = (props: AddClientContactProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedMedical, setSelectedMedical] = useState<IClientContactModel | undefined>(undefined)
   const [clientNames, setClientNames] = useState<IClientModel[]>([])
+  // const [name, setName] = useState<IClient[]>([])
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+  let name: any;
+  //  { client_name: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; };
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard') },
@@ -55,15 +57,18 @@ const AddClientContact = (props: AddClientContactProps) => {
 
   if (props.clientContact) {
     const nameResult = clientNames.find((item) => item?.id === clientId)
+    name = nameResult?.firstName
     initialValues = Object.assign(
       {},
       helpers.initialValues,
       pick(props.clientContact.clientContact, Object.keys(helpers.initialValues))
     );
-    initialValues = { ...initialValues, client_name: nameResult?.firstName || "" }
+    initialValues = { ...initialValues}
   } else {
     const nameResult = clientNames.find((item) => item?.id === clientId)
-    initialValues = { ...helpers.initialValues, client_name: nameResult?.firstName || "" }
+    // setName(nameResult.address)
+    name = nameResult?.firstName
+    initialValues = helpers.initialValues 
   }
 
   const handleSelectMedicalContactClick = () => {
@@ -81,11 +86,12 @@ const AddClientContact = (props: AddClientContactProps) => {
         )
       } catch (e: any) { }
     })()
-  })
+  },[])
 
+  
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
     const { resetForm, setSubmitting } = options;
-
+      console.log("val",values)
 
     setSubmitting(true);
 
@@ -132,7 +138,7 @@ const AddClientContact = (props: AddClientContactProps) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={helpers.validationSchema}
+          // validationSchema={helpers.validationSchema}
           onSubmit={onSubmit}
         >
           {formikWrapper(({
@@ -218,8 +224,16 @@ const AddClientContact = (props: AddClientContactProps) => {
                       </div>
                     </>
                   }
-                  {getInputFormGroup('client_name', { childProps: { disabled:true } })}
                 </div>
+                <FormGroup
+                    label={'Client Name'}
+                  >
+                    <InputGroup
+                      value={name}
+                      disabled
+                    />
+                  </FormGroup>
+                
                 <Row>
                   <Col xs={12} md={6}>
                     {getInputFormGroup('first_name', { childProps: { disabled: !!selectedMedical } })}

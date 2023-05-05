@@ -37,7 +37,7 @@ const CaseNote = (props: CaseNoteProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
-
+  let name: any;
   useEffect(() => {
     (async () => {
       try {
@@ -46,7 +46,8 @@ const CaseNote = (props: CaseNoteProps) => {
         )
       } catch (e: any) { }
     })()
-  })
+  },[])
+  
   const BREADCRUMBS: BreadcrumbProps[] = [
     { href: URLS.getPagePath('dashboard'), icon: 'document', text: URLS.getPagePathName('dashboard')},
     { href: URLS.getPagePath('clients'), icon: 'document', text: URLS.getPagePathName('clients') },
@@ -66,21 +67,23 @@ const CaseNote = (props: CaseNoteProps) => {
    */
   if (props.caseNote) {
     const nameResult = clientNames.find((item) => item?.id === clientId)
+    name = nameResult?.firstName
     initialValues = Object.assign(
       {},
       helpers.initialValues,
       pick(props.caseNote.caseNote, Object.keys(helpers.initialValues))
       
     );
-    initialValues = { ...initialValues, client_name: nameResult?.firstName || "" }
+ 
+    initialValues = { ...initialValues}
   } else {
     const nameResult = clientNames.find((item) => item?.id === clientId)
+    name = nameResult?.firstName
     // initialValues = helpers.initialValues;
-    initialValues = { ...helpers.initialValues, client_name: nameResult?.firstName || "" }
+    initialValues = { ...helpers.initialValues }
     // console.log("init",initialValues);
     
   }
-  
 
   return (
     <div className='add-case-note'>
@@ -142,7 +145,15 @@ const CaseNote = (props: CaseNoteProps) => {
             }) => {
               return (
                 <form onSubmit={handleSubmit}>
-                  {getInputFormGroup('client_name', { childProps: { disabled:true } })}
+                   <FormGroup
+                    label={'Client Name'}
+                  >
+                    <InputGroup
+                      value={name}
+                      disabled
+                    />
+                  </FormGroup>
+                  {/* {getInputFormGroup('client_name', { childProps: { disabled:true } })} */}
                   {getInputFormGroup('title')}
                   {getDateInputFormGroup('date')}
                   {getTextAreaInputFormGroup('significant_event_notes')}

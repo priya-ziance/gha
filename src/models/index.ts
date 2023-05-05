@@ -27,6 +27,10 @@ import User from './user';
 import Question from './question';
 import SeizureLogs from './seizurelogs'
 import Relocate from './relocate';
+import AddAdp from './addAdp';
+import Personalfunds from './personalFunds'
+import RecurringExpense from './recurringExpense';
+import Addinventory from './addInventory'
 
 const Exports = {
   Appointment,
@@ -40,10 +44,13 @@ const Exports = {
   ClientWitness,
   StaffWithness,
   AddTrainers,
+  Personalfunds,
+  Addinventory,
   Relocate,
   SeizureLogs,
   Expense,
   ExpenseList,
+  RecurringExpense,
   File,
   Goal,
   Instruction,
@@ -57,7 +64,8 @@ const Exports = {
   SpGoal,
   SubGoal,
   Task,
-  User
+  User,
+  AddAdp,
 }
 
 export default Exports;

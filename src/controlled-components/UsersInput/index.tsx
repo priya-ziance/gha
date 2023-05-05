@@ -116,7 +116,7 @@ const UsersInput = (props: UsersInputProps) => {
     <div className='gha__users-input'>
       <FormMultiItemSelect
         intent={Intent.PRIMARY}
-        label={'Select Users'}
+        label={'Selectrs'}
         menuRenderer={menuRenderer}
         formSelectProps={{
           tagRenderer,

@@ -27,6 +27,17 @@ import AddTrainersPage from './add-trainers';
 import Trainer from './trainer';
 import EditTrainers from './edit-trainers';
 
+import AddComunityActivities from './add-community-activities';
+import ComunityActivities from './community-activities';
+import EditComunityActivities from './edit-community-activities';
+
+import AddPersonalBankStatement from './add-personal_bank_statement';
+import PersonalBankStatement from './personal_bank_statement';
+import EditPersonalBankStatement from './edit-personal-bank-statement';
+
+import ADP from './adp';
+import AddAdpPage from './add-adp';
+import EditAdp from './edit-adp';
 
 import AddDischargePage from './add-discharge';
 import Discharge from './discharge';
@@ -40,6 +51,11 @@ import EditRelocate from './edit-relocate-transfer';
 import AddClientContactsPage from './add-client-contact';
 import ClientContactsPage from './client-contacts';
 import EditClientContactPage from './edit-client-contact';
+
+import AddPersonalFundsPage from './add-personal-funds';
+import PersonalFunds from './personal-funds';
+import EditPersonalFunds from './edit-personal-funds';
+
 
 import ClientInfo from './client-info';
 
@@ -60,6 +76,10 @@ import EditBankStatementPage from './edit-bank-statement';
 import ExpensesListPage from './expenses-list';
 import AddExpensesListPage from './add-expenses-list';
 import EditExpensesListPage from './edit-expenses-list';
+
+import RecurringExpensePage from './recurring-expense';
+import AddRecurringExpensePage from './add-recurring-expense';
+import EditRecurringExpensePage from './edit-recurring-expense';
 
 import AddSpGoalsPage from './add-sp-goals';
 import EditSpGoals from './edit-sp-goals';
@@ -86,6 +106,10 @@ import MedicationPage from './medication';
 import MedPassPage from './med-pass';
 import MedDestructionPage from './med-destruction';
 import MedicationListPage from './medication-list';
+
+import AddInventoryPage from './add-inventorys';
+import Inventory from './inventory';
+import EditInventorys from './edit-inventorys';
 
 import AddAppointment from './add-appointment';
 import AppointmentsPage from './appointments';
@@ -160,8 +184,16 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/expenses/expenses-list" exact component={ExpensesListPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expenses-list/add" exact component={AddExpensesListPage} />
       <Route path="/dashboard/clients/:clientId/expenses/expenses-list/:expenseListId/edit" exact component={EditExpensesListPage} />
+
+      <Route path="/dashboard/clients/:clientId/expenses/recurring-expense" exact component={RecurringExpensePage} />
+      <Route path="/dashboard/clients/:clientId/expenses/recurring-expense/add" exact component={AddRecurringExpensePage} />
+      <Route path="/dashboard/clients/:clientId/expenses/recurring-expense/:recurringExpenseId/edit" exact component={EditRecurringExpensePage} />
       
       <Route path="/dashboard/clients/:clientId/client-info" exact component={ClientInfo} />
+
+      <Route path="/dashboard/clients/:clientId/inventory" exact component={Inventory} />
+      <Route path="/dashboard/clients/:clientId/inventory/add" exact component={AddInventoryPage} />
+      <Route path="/dashboard/clients/:clientId/inventory/:inventoryId/edit" exact component={EditInventorys} />
 
       <Route path="/dashboard/clients/:clientId/client-contacts" exact component={ClientContactsPage} />
       <Route path="/dashboard/clients/:clientId/client-contacts/add" exact component={AddClientContactsPage} />
@@ -179,6 +211,22 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/trainer" exact component={Trainer} />
       <Route path="/dashboard/clients/:clientId/trainer/add" exact component={AddTrainersPage} />
       <Route path="/dashboard/clients/:clientId/trainer/:trainerId/edit" exact component={EditTrainers} />
+
+      <Route path="/dashboard/clients/:clientId/community_activities" exact component={ComunityActivities} />
+      <Route path="/dashboard/clients/:clientId/community_activities/add" exact component={AddComunityActivities} />
+      <Route path="/dashboard/clients/:clientId/community_activities/:communityActivitiesId/edit" exact component={EditComunityActivities} />
+      
+      <Route path="/dashboard/clients/:clientId/personal_bank_statement" exact component={PersonalBankStatement} />
+      <Route path="/dashboard/clients/:clientId/personal_bank_statement/add" exact component={AddPersonalBankStatement} />
+      <Route path="/dashboard/clients/:clientId/personal_bank_statement/:personalBankStatementId/edit" exact component={EditPersonalBankStatement} />
+
+      <Route path="/dashboard/clients/:clientId/personal_funds" exact component={PersonalFunds} />
+      <Route path="/dashboard/clients/:clientId/personal_funds/add" exact component={AddPersonalFundsPage} />
+      <Route path="/dashboard/clients/:clientId/personal_funds/:personalFundId/edit" exact component={EditPersonalFunds} />
+
+      <Route path="/dashboard/clients/:clientId/adp" exact component={ADP} />
+      <Route path="/dashboard/clients/:clientId/adp/add" exact component={AddAdpPage} />
+      <Route path="/dashboard/clients/:clientId/adp/:adpId/edit" exact component={EditAdp} />
 
       <Route path="/dashboard/clients/:clientId/discharge" exact component={Discharge} />
       <Route path="/dashboard/clients/:clientId/discharge/add" exact component={AddDischargePage} />

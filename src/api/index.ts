@@ -59,11 +59,19 @@ import {
   IClientWithness,
   IStaffWithness,
   IAddTrainerModel,
+  IPersonalFundsModel,
   IRelocateModel,
   IRelocate,
   IAddTrainer,
+  IAddAdpModel,
+  IAddAdp,
   IDischargeModel,
   IDischarge,
+  IPersonalFunds,
+  IRecurringExpenseModel,
+  IRecurringExpense,
+  IAddInventoryModel,
+  IAddInventory,
 } from "../types";
 
 import Normalizer from "./normalizer";
@@ -159,9 +167,7 @@ class ClientsApi {
 
   async getClients(options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
-
     const clientsResult = await client.get(`/clients?page=${page}`);
-
     return this.normalizer.normalizeArray(clientsResult.data.contents);
   }
 
@@ -528,6 +534,95 @@ class AddTrainerApi {
   }
 }
 
+
+
+//============================= Personal bank api API'S========================================
+class PersonalBankStatementApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IAddTrainerModel, IAddTrainer>(
+      Models.AddTrainers
+    );
+  }
+
+  async getPersonalBankStatement(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const personalBankStatementrResult = await client.get(`/trainer`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(personalBankStatementrResult.data.contents);
+  }
+
+  async createPersonalBankStatement(body = {}) {
+    const addTrainerResult = await client.post("/trainer", body);
+    return this.normalizer.normalize(addTrainerResult.data);
+  }
+  async deletePersonalBankStatement(trainerId: String, body = {}) {
+    const deleteResult =  await client.delete(`/trainer/${trainerId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updatePersonalBankStatement(trainerId : String, body = {}) {
+    const clientTrainerResult = await client.patch(
+      `/trainer/${trainerId}`,
+      body
+    );
+    return this.normalizer.normalize(clientTrainerResult.data);
+  }
+  async getPersonalBankStatementId(clientId: string) {
+    const addTrainersResult = await client.get(`/trainer/${clientId}`);
+    return this.normalizer.normalize(addTrainersResult.data);
+  }
+}
+
+
+//============================= Personal Funds API'S========================================
+class AddPersonalFundsApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IPersonalFundsModel, IPersonalFunds>(
+      Models.Personalfunds
+    );
+  }
+
+  async getPersonalFunds(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const personalFundsResult = await client.get(`/trainer`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(personalFundsResult.data.contents);
+  }
+
+  async createPersonalFund(body = {}) {
+    const addTrainerResult = await client.post("/trainer", body);
+    return this.normalizer.normalize(addTrainerResult.data);
+  }
+  async deltePersonalFund(PersonalFundsId: String, body = {}) {
+    const deleteResult =  await client.delete(`/trainer/${PersonalFundsId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateTrainer(PersonalFundsId = String, body = {}) {
+    const updateResult = await client.patch(
+      `/trainer/${PersonalFundsId}`,
+      body
+    );
+    return this.normalizer.normalize(updateResult.data);
+  }
+  async getPersonalFundById(clientId: string) {
+    const PersonalFundById = await client.get(`/trainer/${clientId}`);
+    console.log("funnnnndddddd by id", PersonalFundById);
+    
+    return this.normalizer.normalize(PersonalFundById.data);
+  }
+}
+
 //============================= home Discharge API'S========================================
 class DischargerApi {
   normalizer;
@@ -613,6 +708,50 @@ class AddRelocateApi {
     return this.normalizer.normalize(addTrainersResult.data);
   }
 }
+
+//============================= ADD ADP API'S========================================
+class AddAdpApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IAddAdpModel, IAddAdp>(
+      Models.AddAdp
+    );
+  }
+
+  async getAdp(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addAdpResult = await client.get(`/adp-uir`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(addAdpResult.data.contents);
+  }
+
+  async createAdp(body = {}) {
+    const addAdpResult = await client.post("/adp-uir", body);
+    return this.normalizer.normalize(addAdpResult.data);
+  }
+  async deleteAdp(adpId: String, body = {}) {
+    const deleteResult =  await client.delete(`/adp-uir/${adpId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateAdp(adpId = String, body = {}) {
+    const clientAdpResult = await client.patch(
+      `/adp-uir/${adpId}`,
+      body
+    );
+    return this.normalizer.normalize(clientAdpResult.data);
+  }
+  async getAdpById(clientId: string) {
+    const addAdpResult = await client.get(`/adp/${clientId}`);
+    return this.normalizer.normalize(addAdpResult.data);
+  }
+}
+
+
 //============================= GOAL API'S==================================
 class GoalsApi {
   normalizer;
@@ -1006,11 +1145,7 @@ class SpGoalsApi {
   }
 
   async getSpGoal(goalId: string,  clientId:String) {
-    // const params = get(options, "params", {});
-
-    const goalResult = await client.get(`/sp_goal/${goalId}?clientId=${clientId}`);
-    // console.log("result",goalResult);
-    
+    const goalResult = await client.get(`/sp_goal/${goalId}?clientId=${clientId}`);    
     return this.normalizer.normalize(goalResult.data);
   }
 
@@ -1053,13 +1188,14 @@ class BehavioursApi {
     return this.normalizer.normalizeArray(behavioursResult.data.contents);
   }
 
-  async getBehaviour(behaviourId: string, options?: OPTIONS_TYPE) {
+  async getBehaviour(clientId: string, options?: OPTIONS_TYPE) {
     const params = get(options, "params", {});
 
     const behaviourResult = await client.get(
-      `/behaviour/${behaviourId}`,
+      `/behaviour/${clientId}`,
       params
     );
+console.log("behaviour",this.getBehaviour);
 
     return this.normalizer.normalize(behaviourResult.data);
   }
@@ -1299,6 +1435,57 @@ class ExpensesListApi {
   }
 }
 
+//=============================Recurring EXPENSES  API'S===============================
+class RecurringExpenseApi {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<IRecurringExpenseModel, IRecurringExpense>(
+      Models.RecurringExpense
+    );
+  }
+
+  async geRecurringtExpense(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const params = get(options, "params", {});
+    const pageSize = get(options, "pageSize", 0);
+    const expensesResult = await client.get(`/expense_lists`, {
+      clientId,
+      page,
+      ...params,
+      pageSize,
+    });
+
+    return this.normalizer.normalizeArray(expensesResult.data.contents);
+  }
+
+  async getRecurringtExpenseById(expenseListId: string, options?: OPTIONS_TYPE) {
+    const params = get(options, "params", {});
+
+    const expenseResult = await client.get(
+      `/expense_list/${expenseListId}`,
+      params
+    );
+
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async createRecurringtExpense(body = {}, params = {}) {
+    const expenseResult = await client.post("/expense_list", body, { params });
+
+    return this.normalizer.normalize(expenseResult.data);
+  }
+
+  async updateRecurringtExpense(expenseListId = "", body = {}, params = {}) {
+    const expenseResult = await client.patch(
+      `/expense_list/${expenseListId}`,
+      body,
+      { params }
+    );
+
+    return this.normalizer.normalize(expenseResult.data);
+  }
+}
 //============================= QUESTIONS API'S====================================
 class QuestionsApi {
   normalizer;
@@ -1460,6 +1647,46 @@ class PlaceDatabasesApi {
   }
 }
 
+//============================= ADD INVENTORYS API'S========================================
+class AddInventoryApi {
+  normalizer;
+  constructor() {
+    this.normalizer = new Normalizer<IAddInventoryModel, IAddInventory>(
+      Models.Addinventory
+    );
+  }
+  async getInventory(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addInventoryResult = await client.get(`/client-inventory`, {
+      // clientId,
+      page,
+      pageSize
+    });
+    console.log("invent ",addInventoryResult);
+    
+    return this.normalizer.normalizeArray(addInventoryResult.data.contents);
+  }
+  async createInventory(body = {}) {
+    const addInventoryResult = await client.post("/client-inventory", body);
+    return this.normalizer.normalize(addInventoryResult.data);
+  }
+  async deleteInventory(InventoryId: String, body = {}) {
+    const deleteResult =  await client.delete(`/client-inventory/${InventoryId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateInventory(InventoryId = String, body = {}) {
+    const clientInventoryResult = await client.patch(
+      `/client-inventory/${InventoryId}`,
+      body
+    );
+    return this.normalizer.normalize(clientInventoryResult.data);
+  }
+  async getInventoryById(InventoryId: string) {
+    const addInventorysResult = await client.get(`/client-inventory/${InventoryId}`);
+    return this.normalizer.normalize(addInventorysResult.data);
+  }
+}
 //============================= PLACE DATABASE API'S==============================
 class NoteDatabasesApi {
   normalizer;
@@ -1557,17 +1784,22 @@ export default (() => ({
   clientWitness: new ClientWitnessApi(),
   staffWitness: new StaffWitnessApi(),
   Trainers: new AddTrainerApi(),
+  PersonalFunds: new AddPersonalFundsApi(),
   Discharge: new DischargerApi(),
   Relocate: new AddRelocateApi(),
   caseNotes: new CaseNotesApi(),
   expenses: new ExpensesApi(),
   expensesList: new ExpensesListApi(),
+  recurringExpense: new RecurringExpenseApi(),
   files: new FileApi(),
   goals: new GoalsApi(),
   instructions: new InstructionsApi(),
   locations: new LocationApi(),
   logTemplates: new LogTemplatesApi(),
   logs: new LogsApi(),
+  ADP: new AddAdpApi(),
+  Inventorys: new AddInventoryApi(),
+  personalBankStatement: new PersonalBankStatementApi(),
   seizureLogs: new  SeizureLogsApi(),
   medications: new MedicationApi(),
   notes: new NoteDatabasesApi(),

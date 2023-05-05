@@ -33,9 +33,9 @@ export const FIELDS : CASE_NOTE_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string().label('Notes').required(),
   },
-  client_name: {
-    name: 'Client Name',
-    default: '',
-    validation: yup.string(),
-  }
+  // client_name: {
+  //   name: 'Client Name',
+  //   default: '',
+  //   validation: yup.string(),
+  // }
 }

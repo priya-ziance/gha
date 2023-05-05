@@ -1,0 +1,23 @@
+.add-trianers {
+    .add-trianers__container {
+      .add-trianers__submit-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+      }
+  
+      textarea {
+        width: 100%;
+      }
+  
+      .row {
+        display: flex;
+      }
+  
+      .row--center {
+        justify-content: center;
+      }
+    }
+  }
+  

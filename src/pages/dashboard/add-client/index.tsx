@@ -75,6 +75,8 @@ const AddClient = (props: AddClientProps) => {
   const [services, setServices] = useState<any>({})
   const [witnesses, setWitnesses] = useState<IUserModel[] | []>([])
   const [trainers, setTrainers] = useState<any[] | []>([])
+  const [staffWitness, setStaffWintess] = useState<any[] | []>([])
+  const [behaviour, setBehaviour] = useState<any[] | []>([])
   const { addToast } = useContext(ToastsContext);
   const { location, locations } = useContext(LocationContext);
   let initialValues;
@@ -97,11 +99,14 @@ const AddClient = (props: AddClientProps) => {
 
   useEffect(() => {
     if (props.client) {
-      console.log("client data",props.client.trainers);
+      console.log("client data",props);
       setServices(props.client.services)
       setWitnesses(props.client.witnesses || [])
       setTrainers(props.client.trainers || [])
+      setBehaviour(props.client.behaviour || [])
     }
+    console.log("staff length",staffWitness.length);
+    
   }, [props.client])
 
   const handleDialogClose = () => setCurrentDialog('');
@@ -114,6 +119,7 @@ const AddClient = (props: AddClientProps) => {
   const onClientWitnessForm = () => setCurrentDialog(DIALOG_NAMES.clientWitness);
   const onStaffWitnessForm = () => setCurrentDialog(DIALOG_NAMES.staffWitness);
   
+console.log("behaviour", behaviour);
 
 
   const uploadFile = async (file: File) => {
@@ -184,6 +190,7 @@ const AddClient = (props: AddClientProps) => {
       helpers.initialValues,
       pick(props.client.client, Object.keys(helpers.initialValues))
     );
+    
   } else {
     initialValues = helpers.initialValues;
     initialValues.phone = location?.phoneNumber
@@ -192,11 +199,19 @@ const AddClient = (props: AddClientProps) => {
 
   const handleWitnessesChange = (users: { [key: string]: IUserModel }) => {
     setWitnesses(Object.values(users))
+    console.log("witnesssssss",witnesses);
+    
   }
 
   const handleTrainersChange = (users: { [key: string]: IUserModel }) => {
     setTrainers(Object.values(users))
   }
+  const handleBehaviourChange = (users: { [key: string]: IUserModel }) => {
+    setTrainers(Object.values(users))
+  }
+const handleStaffWitnessChange = (users: { [key: string]: IUserModel }) => {
+  setStaffWintess(Object.values(users))
+}
 
   return (
     <LoadingView loading={loading}>
@@ -233,6 +248,9 @@ const AddClient = (props: AddClientProps) => {
 
               if (trainers && Array.isArray(trainers)) {
                 values.trainers = trainers.map(w => w.id)
+              }
+              if (behaviour && Array.isArray(behaviour)) {
+                values.behaviour = behaviour.map(w => w.id)
               }
 
               /**
@@ -531,7 +549,7 @@ const AddClient = (props: AddClientProps) => {
                         <Button intent={Intent.PRIMARY} 
                         onClick={onStaffWitnessForm}
                         >
-                          <b>Staff Witness ({witnesses.length})</b>
+                          <b>Staff Witness ({staffWitness.length})</b>
                         </Button>
                       </FormGroup>
                       <FormGroup
@@ -549,7 +567,7 @@ const AddClient = (props: AddClientProps) => {
                       >
                         <Button intent={Intent.PRIMARY} 
                         onClick={onBehaviourForm}>
-                          <b>behaviour ({trainers.length})</b>
+                          <b>behaviour ({behaviour.length})</b>
                         </Button>
                       </FormGroup>
                     </Col>
@@ -631,9 +649,9 @@ const AddClient = (props: AddClientProps) => {
 
                   <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
 
-                  <StaffWitnessDialog isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
+                  <StaffWitnessDialog  handleStaffWitnessChange={handleStaffWitnessChange} staffWitness={staffWitness} isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
 
-                  <BehaviourDialog isOpen={behaviourDialogOpen} handleClose={handleDialogClose} />
+                  <BehaviourDialog handleBehaviourChange={handleBehaviourChange}  isOpen={behaviourDialogOpen} behaviour={behaviour} handleClose={handleDialogClose} />
                 </form>
               )
             }, FIELDS)}

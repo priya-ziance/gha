@@ -1,0 +1,22 @@
+.personalFunds {
+  .personalFunds__container {
+    display: flex;
+    align-items: center;
+
+    .personalFunds__table__cell {
+      height: 100%; 
+    }
+  
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+  
+    .gha__modulecard {
+      margin: 55px;
+    }
+  }
+}

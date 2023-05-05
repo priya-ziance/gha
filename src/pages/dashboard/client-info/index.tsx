@@ -22,6 +22,7 @@ const ClientInfo = () => {
       
       try {
         const fetchedClient = await api.clients.getClient(clientId);
+        console.log("fetch",fetchedClient);
         
         if (fetchedClient.profilePicture) {
           await fetchedClient.profilePicture.loadFile();

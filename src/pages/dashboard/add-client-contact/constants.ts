@@ -65,9 +65,9 @@ export const FIELDS : CLIENT_CONTACT_FIELDS_FORM_TYPE = {
     default: '',
     validation: yup.string(),
   },
-  client_name: {
-    name: 'Client Name',
-    default: '',
-    validation: yup.string(),
-  }
+  // client_name: {
+  //   name: 'Client Name',
+  //   default: '',
+  //   validation: yup.string(),
+  // }
 }

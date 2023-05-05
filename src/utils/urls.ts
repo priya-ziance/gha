@@ -43,8 +43,33 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/staff-witness/add`;
     case "trainer":
       return `${clientBase}/trainer`;
+    case "personal_funds":
+      return `${clientBase}/personal_funds`;
+    case "add-personal_funds":
+      return `${clientBase}/personal_funds/add`;
+    case "edit-personal_funds":
+      return `${clientBase}/personal_funds/${options.clientContactId}/edit`;
+
+    case "community_activities":
+      return `${clientBase}/community_activities`;
+    case "add-community_activities":
+      return `${clientBase}/community_activities/add`;
+    case "edit-community_activities":
+      return `${clientBase}/community_activities/${options.clientContactId}/edit`;
+
+    case "personal_bank_statement":
+      return `${clientBase}/personal_bank_statement`;
+    case "add-personal_bank_statement":
+      return `${clientBase}/personal_bank_statement/add`;
+    case "edit-personal_bank_statement":
+      return `${clientBase}/personal_bank_statement/${options.clientContactId}/edit`;
     case "add-trainer":
       return `${clientBase}/trainer/add`;
+      case "inventory":
+      return `${clientBase}/inventory`;
+    case "add-inventory":
+      return `${clientBase}/inventory/add`;
+      
     case "discharge":
       return `${clientBase}/discharge`;
     case "add-discharge":
@@ -67,6 +92,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/expense-account/add`;
     case "add-expenses-list":
       return `${clientBase}/expenses/expenses-list/add`;
+    case "add-recurring-expense":
+      return `${clientBase}/expenses/recurring-expense/add`;
     case "add-location":
       return `${dashboardBase}/locations/add`;
     case "add-medication":
@@ -119,6 +146,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/staff-witness/${options.clientContactId}/edit`;
     case "edit-trainer":
       return `${clientBase}/trainer/${options.clientContactId}/edit`;
+      case "edit-inventory":
+        return `${clientBase}/inventory/${options.clientContactId}/edit`;
+    case "edit-adp":
+      return `${clientBase}/adp/${options.clientContactId}/edit`;
     case "edit-discharge":
       return `${clientBase}/discharge/${options.clientContactId}/edit`;
     case "edit-database-behaviour":
@@ -133,6 +164,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/${options.expenseId}/edit`;
     case "edit-expenses-list":
       return `${clientBase}/expenses/expenses-list/${options.expensesListId}/edit`;
+    case "edit-recurring-expense":
+      return `${clientBase}/expenses/recurring-expense/${options.expensesListId}/edit`;
     case "edit-location":
       return `${dashboardBase}/locations/${options.locationId}/edit`;
     case "edit-medication":
@@ -147,6 +180,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/expenses/expense-account`;
     case "expenses-list":
       return `${clientBase}/expenses/expenses-list`;
+    case "recurring-expense":
+      return `${clientBase}/expenses/recurring-expense`;
     case "goals":
       return `${clientBase}/goals`;
     case "goals-data-collection":
@@ -189,7 +224,10 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs/personal-support/places-database`;
     case "personal-support-notes-database":
       return `${dashboardBase}/logs/personal-support/notes-database`;
-
+    case "adp":
+      return `${clientBase}/adp`;
+    case "add-adp":
+      return `${clientBase}/adp/add`;
     case "seizure-logs":
       return `${dashboardBase}/logs/seizure-logs`;
     case "add-seizure-logs":
@@ -208,6 +246,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs/respite-logs`;
     case "sp-goals":
       return `${clientBase}/goals/sp-goals`;
+    case "inventory":
+      return `${clientBase}/inventory`;
+    case "add-inventory":
+      return `${clientBase}/inventory/add`;
+    case "edit-inventory":
+      return `${clientBase}/inventory/${options.clientContactId}/edit`;
     default:
       return "";
   }
@@ -247,6 +291,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Add Main Account Expense";
     case "add-expenses-list":
       return "Add Expenses List";
+    case "add-recurring-expense":
+      return "Add Recurring Expense";
     case "add-medication":
       return "Add Client Medication";
     case "add-medical-contact":
@@ -263,6 +309,18 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Bank Statements";
     case "behaviours":
       return "Behaviours";
+    case "adp":
+      return `ADP`;
+    case "add-adp":
+      return `Add ADP`;
+    case "edit-adp":
+      return "Edit ADP";
+    case "inventory":
+      return `Inventory`;
+    case "add-inventory":
+      return `Add Inventory`;
+    case "edit-inventory":
+      return "Edit Inventory";
     case "behaviours-assign":
       return "Behaviours Assign";
     case "behaviours-database":
@@ -315,6 +373,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Edit Expense";
     case "edit-expenses-list":
       return "Edit Expense List";
+    case "edit-recurring-expense":
+      return "Edit Recurring Expense";
     case "edit-location":
       return "Edit Location";
     case "edit-medical-contact":
@@ -397,6 +457,23 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Respite Logs";
     case "sp-goals":
       return `Client SP Goals`;
+    case "personal_funds":
+      return " Personal Funds";
+    case "add-personal_funds":
+      return "Add Personal Funds";
+    case "edit-personal_funds":
+    case "personal_bank_statement":
+      return " Personal Bank Statement";
+    case "add-personal_bank_statement":
+      return "Add Personal Bank Statement";
+    case "edit-personal_bank_statement":
+      return "Edit Personal Bank Statement";
+    case "community_activities":
+      return " Community Activities";
+    case "add-community_activities":
+      return "Add Community Activities";
+    case "edit-community_activities":
+      return "Edit Community Activities";
     default:
       return "";
   }
