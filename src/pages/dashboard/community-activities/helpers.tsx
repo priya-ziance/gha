@@ -1,32 +1,32 @@
 import { Intent } from '@blueprintjs/core';
 import { AnchorButton, Button } from '../../../components';
-import { IStaffWithnessModel } from '../../../types';
+import { ICommunityActivitiesModel } from '../../../types';
 
-export const nameColumn = (data: IStaffWithnessModel) => {
+export const nameColumn = (data: ICommunityActivitiesModel) => {
   return (
-    <>{data.firstName}&nbsp;{data.lastName}</>
+    <>{data.id}</>
   )
 }
 
-export const emailColumn = (data: IStaffWithnessModel) => {
+export const emailColumn = (data: ICommunityActivitiesModel) => {
   return (
-    <>{data.email}</>
+    <>{data.place_1}</>
   )
 }
 
-export const mobileColumn = (data: IStaffWithnessModel) => {
+export const mobileColumn = (data: ICommunityActivitiesModel) => {
   return (
-    <>{data.mobile}</>
+    <>{data.place_2}</>
   )
 }
 
-export const addressColumn = (data: IStaffWithnessModel) => {
+export const addressColumn = (data: ICommunityActivitiesModel) => {
   return (
-    <>{data.address}</>
+    <>{data.notes}</>
   )
 }
 
-export const actionColumn = (data: IStaffWithnessModel, { onDelete,viewLink }: any) => {
+export const actionColumn = (data: ICommunityActivitiesModel, { onDelete,viewLink }: any) => {
   return (
     <>
       <AnchorButton

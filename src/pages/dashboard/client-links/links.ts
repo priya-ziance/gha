@@ -200,5 +200,12 @@ export const getLinks = (clientId: string) => {
       path: URLS.getPagePath('inventory', { clientId }),
       interactive: true
     },
+    {
+      description: '',
+      title: 'Main Account Bank Statement',
+      image: ClientsImage,
+      path: URLS.getPagePath('main-bank-statement', { clientId }),
+      interactive: true
+    },
   ]
 }

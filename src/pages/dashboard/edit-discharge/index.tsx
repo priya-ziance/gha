@@ -6,27 +6,27 @@ import { IDischargeModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 import AddDischarge from "../add-discharge";
 
-interface TrainersPathType {
+interface IEditDischargeProps {
   dischargeId: string;
 }
 
-const EditDischarge = (props: TrainersPathType) => {
+const EditDischarge = (props: IEditDischargeProps) => {
   const [loading, setLoading] = useState(true);
-  const [addDischarge, setAddDischarge] = useState<
-  IDischargeModel | undefined
-  >(undefined);
+  const [addDischarge, setAddDischarge] = useState<IDischargeModel | undefined>(
+    undefined
+  );
   const { id: clientId } = useContext(ClientContext);
 
   const { dischargeId } = props;
-    
+
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
-        const fetchedDischarge = await api.Trainers.getTrainerById(dischargeId);
-          setAddDischarge(fetchedDischarge);
-          console.log("add",fetchedDischarge);
-          
+        const fetchedDischarge = await api.Discharge.getDischargeId(
+          dischargeId
+        );
+        setAddDischarge(fetchedDischarge);
       } catch (e: any) {
         console.log(e);
       }
@@ -40,6 +40,4 @@ const EditDischarge = (props: TrainersPathType) => {
   return <AddDischarge discharges={addDischarge} update />;
 };
 
-export default withPathId({ pathSlugs: ["dischargeId"] })(
-  EditDischarge
-);
+export default withPathId({ pathSlugs: ["dischargeId"] })(EditDischarge);

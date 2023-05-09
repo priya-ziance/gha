@@ -77,6 +77,12 @@ const AddClient = (props: AddClientProps) => {
   const [trainers, setTrainers] = useState<any[] | []>([])
   const [staffWitness, setStaffWintess] = useState<any[] | []>([])
   const [behaviour, setBehaviour] = useState<any[] | []>([])
+  const [clientWitnessCount, setClientWitnessCount] = useState(0);
+  const [witnessessCount, setWitnessessCount] = useState(0);
+  const [staffWitnessCount, setStaffWitnessCount] = useState(0);
+  const [trainerCount, setTrainerCount] = useState(0);
+  const [behaviourCount, setBehaviourCount] = useState(0);
+
   const { addToast } = useContext(ToastsContext);
   const { location, locations } = useContext(LocationContext);
   let initialValues;
@@ -416,7 +422,7 @@ const handleStaffWitnessChange = (users: { [key: string]: IUserModel }) => {
                       {getInputFormGroup('mobile')}
                       {getNumericInputFormGroup('ssn', { childProps: { max: 999999999 } })}
                       
-                      {getTextAreaInputFormGroup('behaviours')}
+                      {/* {getTextAreaInputFormGroup('behaviours')} */}
 
                       <FormGroup
                         intent={Intent.PRIMARY} 
@@ -518,26 +524,17 @@ const handleStaffWitnessChange = (users: { [key: string]: IUserModel }) => {
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY} onClick={onWitnessesForm}>
-                          <b>Add Witnessess ({witnesses.length})</b>
+                          <b>Add Witnessess {`(${witnessessCount})`}</b>
                         </Button>
                       </FormGroup>
-                      {/* <FormGroup
-                        intent={Intent.PRIMARY}
-                        label={"Services provided by Group home Connect"}
-                        labelFor="text-input"
-                      >
-                        <Button intent={Intent.PRIMARY} onClick={onServicesForm}>
-                          <b>Services</b>
-                        </Button>
-                      </FormGroup> */}
-
+                      
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Client Witness"}
                         labelFor="text-input"
                       >
                         <Button intent={Intent.PRIMARY} onClick={onClientWitnessForm}>
-                          <b>Client Witness</b>
+                          <b>Client Witness {`(${clientWitnessCount})`}</b>
                         </Button>
                       </FormGroup>
 
@@ -549,25 +546,27 @@ const handleStaffWitnessChange = (users: { [key: string]: IUserModel }) => {
                         <Button intent={Intent.PRIMARY} 
                         onClick={onStaffWitnessForm}
                         >
-                          <b>Staff Witness ({staffWitness.length})</b>
+                          <b>Staff Witness {`(${staffWitnessCount})`}</b>
                         </Button>
                       </FormGroup>
+
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Staff that can be called Trainers"}
                       >
                         <Button intent={Intent.PRIMARY} 
                         onClick={onTrainersForm}>
-                          <b>Add Trainers ({trainers.length})</b>
+                          <b>Add Trainers {`(${trainerCount})`}</b>
                         </Button>
                       </FormGroup>
+                     
                       <FormGroup
                         intent={Intent.PRIMARY}
                         label={"Behaviour"}
                       >
                         <Button intent={Intent.PRIMARY} 
                         onClick={onBehaviourForm}>
-                          <b>behaviour ({behaviour.length})</b>
+                          <b>behaviour {`(${behaviourCount})`}</b>
                         </Button>
                       </FormGroup>
                     </Col>
@@ -643,15 +642,15 @@ const handleStaffWitnessChange = (users: { [key: string]: IUserModel }) => {
 
                   <Signature isOpen={signatureOpen} onClose={onCloseSignature} onSave={setSignatureDataURL} />
 
-                  <Witnesses handleWitnessesChange={handleWitnessesChange} witnesses={witnesses} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
+                  <Witnesses getSelectedWitnesses={(data: any) => setWitnessessCount(data?.length)} witnesses={witnesses as any} isOpen={witnessesDialogOpen} handleClose={handleDialogClose} />
                   
-                  <Trainers handleTrainerChange={handleTrainersChange} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
+                  <Trainers handleTrainerChange={handleTrainersChange} getSelectedTrainer={(data: any) => setTrainerCount(data?.length)} trainers={trainers} isOpen={trainersDialogOpen} handleClose={handleDialogClose} />
 
-                  <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} />
+                  <ClientWitnessDialog isOpen={clientWitnessesDialogOpen} handleClose={handleDialogClose} getSelectedClientWitness={(data: any) => setClientWitnessCount(data.length)} />
 
-                  <StaffWitnessDialog  handleStaffWitnessChange={handleStaffWitnessChange} staffWitness={staffWitness} isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
+                  <StaffWitnessDialog  handleStaffWitnessChange={handleStaffWitnessChange} getSelectedStaff={(data: any) => setStaffWitnessCount(data?.length)} staffWitness={staffWitness} isOpen={staffWitnessesDialogOpen} handleClose={handleDialogClose} />
 
-                  <BehaviourDialog handleBehaviourChange={handleBehaviourChange}  isOpen={behaviourDialogOpen} behaviour={behaviour} handleClose={handleDialogClose} />
+                  <BehaviourDialog getSelectedBehaviour={(data: any) => setBehaviourCount(data?.length)}  isOpen={behaviourDialogOpen} behaviour={behaviour} handleClose={handleDialogClose} />
                 </form>
               )
             }, FIELDS)}

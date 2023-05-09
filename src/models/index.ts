@@ -31,6 +31,10 @@ import AddAdp from './addAdp';
 import Personalfunds from './personalFunds'
 import RecurringExpense from './recurringExpense';
 import Addinventory from './addInventory'
+import Discharge from './discharge'
+import CommunityActivities from './communityAtivities';
+import PersonalBankStatement from './personal_bank_statement'
+import MainAccountBankStatement from './mainAccountBankStatement'
 
 const Exports = {
   Appointment,
@@ -44,9 +48,11 @@ const Exports = {
   ClientWitness,
   StaffWithness,
   AddTrainers,
+  CommunityActivities,
   Personalfunds,
   Addinventory,
   Relocate,
+  Discharge,
   SeizureLogs,
   Expense,
   ExpenseList,
@@ -66,6 +72,8 @@ const Exports = {
   Task,
   User,
   AddAdp,
+  PersonalBankStatement,
+  MainAccountBankStatement,
 }
 
 export default Exports;

@@ -1,68 +1,46 @@
-import { Checkbox, Intent } from '@blueprintjs/core';
-import get from 'lodash/get';
+import { Checkbox, Intent } from "@blueprintjs/core";
+import { AnchorButton, Button } from "../../../components";
+import { IRecurringExpenseModel } from "../../../types";
 
-import { AnchorButton } from '../../../components';
-
-import { IExpenseListModel } from '../../../types';
-
-import { formatCurrency } from '../../../utils/formatters';
-
-
-export const expenseTypeColumn = (data: IExpenseListModel) => {
-  return (
-    <p className='bp3-table-truncated-cell'>{data.expenseType}</p>
-  )
-}
-
-export const expenseColumn = (data: IExpenseListModel) => {
-  return (
-    <p className='bp3-table-truncated-cell'>{formatCurrency(get(data, 'expense', 0) * 100)}</p>
-  )
-}
-
-export const descriptionColumn = (data: IExpenseListModel) => {
-  return (
-    <p className='bp3-table-truncated-cell'>{data.expenseDescription}</p>
-  )
-}
-
-export const expenseListColumn = (data: IExpenseListModel) => {
-  return (
-    <p className='bp3-table-truncated-cell'>{data.type}</p>
-  )
-}
-
-export const activeColumn = (data: IExpenseListModel) => {
-  return (
-    <Checkbox checked={data.active} disabled/>
-  )
-}
-
-export const dateColumn = (data: IExpenseListModel) => {
-  const date = get(data, 'createdAt');
+export const expenseTypeColumn = (data: IRecurringExpenseModel) => {
+  console.log("data",data);
   
-  if (date) {
-    return (
-      <p>{date.format('MMMM Do YYYY')}</p>
-    )
-  }
+  return <p className="bp3-table-truncated-cell">{data.expenseType}</p>;
+};
 
-  return (<p></p>)
-}
+export const descriptionColumn = (data: IRecurringExpenseModel) => {
+  return <p className="bp3-table-truncated-cell">{data.expenseDescription}</p>;
+};
 
-export const actionColumn = (data: IExpenseListModel, { viewLink }: any) => {
+export const activeColumn = (data: IRecurringExpenseModel) => {
+  return <Checkbox checked={data.active} disabled />;
+};
+
+export const actionColumn = (
+  data: IRecurringExpenseModel,
+  { viewLink, onDelete }: any
+) => {
   return (
     <>
       <AnchorButton
         linkProps={{
-          to: viewLink
+          to: viewLink,
         }}
         buttonProps={{
-          intent: Intent.PRIMARY
+          intent: Intent.PRIMARY,
         }}
       >
         <b>view</b>
-      </AnchorButton>
+      </AnchorButton>{" "}
+      <Button
+        onClick={() => {
+          if (onDelete) {
+            onDelete(data);
+          }
+        }}
+        icon="trash"
+        intent={Intent.DANGER}
+      />
     </>
-  )
-}
+  );
+};

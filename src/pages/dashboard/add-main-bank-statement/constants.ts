@@ -1,7 +1,9 @@
 import * as yup from "yup";
-import { PERSONAL_BANK_STATEMENT_FIELDS_FORM_TYPE } from "../../../types";
+import {MAIN_ACCOUNT_FIELDS_FORM_TYPE } from "../../../types";
 
-export const FIELDS: PERSONAL_BANK_STATEMENT_FIELDS_FORM_TYPE = {
+
+export const FIELDS: MAIN_ACCOUNT_FIELDS_FORM_TYPE  = {
+
   client: {
     name: "Client #",
     default: "",
@@ -27,9 +29,14 @@ export const FIELDS: PERSONAL_BANK_STATEMENT_FIELDS_FORM_TYPE = {
     default: null,
     validation: yup.string().label("To Date").nullable().required(),
   },
+  document: {
+    name: "Document #",
+    default: "",
+    validation: yup.string().label("Document").required(),
+  },
   active: {
     name: "Active #",
-    default: null,
+    default: "",
     validation: yup.boolean().label("Active").required(),
   },
 };

@@ -1,30 +1,31 @@
-import { Intent } from '@blueprintjs/core';
+import { Checkbox, Intent } from '@blueprintjs/core';
 import { AnchorButton, Button } from '../../../components';
 import { IPersonalBankStatementModel } from '../../../types';
 
-export const nameColumn = (data: IPersonalBankStatementModel) => {
-  return (
-    <>{data.firstName}&nbsp;{data.lastName}</>
-  )
-}
+export const clientNameColumn = (data: IPersonalBankStatementModel) => {
+  return <>{data?.clientName ? data.clientName : "-"}</>;
+};
 
-export const emailColumn = (data: IPersonalBankStatementModel) => {
-  return (
-    <>{data.email}</>
-  )
-}
+export const statementNameColumn = (data: IPersonalBankStatementModel) => {
+  return <>{data?.statementName ? data.statementName : "-"}</>;
+};
 
-export const mobileColumn = (data: IPersonalBankStatementModel) => {
-  return (
-    <>{data.mobile}</>
-  )
-}
+export const statementDescriptionColumn = (data: IPersonalBankStatementModel) => {
+  return <>{data?.statementDescription ? data.statementDescription : "-"}</>;
+};
 
-export const addressColumn = (data: IPersonalBankStatementModel) => {
-  return (
-    <>{data.address}</>
-  )
-}
+export const documentColumn = (data: IPersonalBankStatementModel) => {
+  return <>{data?.document ? data.document : "-"}</>;
+};
+
+export const activeColumn = (data: IPersonalBankStatementModel) => {
+  return <Checkbox checked={data?.active} />
+};
+
+export const dateColumn = (data: IPersonalBankStatementModel) => {
+  return <>{data?.fromDate ? data.fromDate.format("DD-MM-YYYY") : "-"}</>;
+};
+
 
 export const actionColumn = (data: IPersonalBankStatementModel, { onDelete,viewLink }: any) => {
   return (

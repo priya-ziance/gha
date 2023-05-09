@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Intent } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
@@ -9,56 +8,49 @@ import * as helpers from "../../../utils/helpers";
 import {
   actionColumn,
   activeColumn,
-  clientNameColumn,
-  dateColumn,
-  documentColumn,
-  statementDescriptionColumn,
-  statementNameColumn,
+  clientColumn,
+  DocuementColumn,
+  FromDateColumn,
+  StatementDescColumn,
+  StatementNameColumn,
+  ToDateColumn,
 } from "./helpers";
 import "./index.scss";
-import { IPersonalBankStatementModel } from "../../../types";
+import { IMainBankStatementModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 import ToastsContext from "../../../contexts/toasts";
 
 const PAGE_SIZE = 10;
 
-const PersonalBankStatement = () => {
-  const [PersonalBankStatement, setPersonalBankStatement] = useState<
-    IPersonalBankStatementModel[] | []
-  >([]);
+const MainBankAccountStatement = () => {
+  const [mainAccountData, setMainAccountData] = useState<IMainBankStatementModel[] | []>(
+    []
+  );
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
-  const hasNextPage = PersonalBankStatement.length >= PAGE_SIZE;
+  const hasNextPage = mainAccountData.length >= PAGE_SIZE;
   const hasPrevPage = page > 0;
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const data = await api.personalBankStatement.getPersonalBankStatement(
-        clientId,
-        {
+      setMainAccountData(
+        await api.mainAccount.getMainAccount(clientId, {
           page,
           pageSize: PAGE_SIZE,
-        }
+        })
       );
-      const totalClients = await api.clients.getClients();
-      const newData = data?.map((item) => {
-        const cloneItem = item;
-        const clientData = totalClients?.find((clientDetails) => clientDetails?.id === item?.client);
-        cloneItem["clientName"] = clientData && `${clientData?.firstName} ${clientData?.lastName}` || "";
-        return cloneItem;
-      });
-
-      setPersonalBankStatement(newData);
-    } catch (e: any) {}
+      console.log("mAIN ACC ",mainAccountData);
+      
+    } catch (e: any) { }
     setTimeout(() => {
       setLoading(false);
     }, 200);
   };
   useEffect(() => {
-    fetchData();
+    fetchData()
   }, [clientId, page]);
 
   const onNextPage = () => {
@@ -89,8 +81,9 @@ const PersonalBankStatement = () => {
       icon: "document",
       text: URLS.getPagePathName("client-links"),
     },
-    { text: URLS.getPagePathName("personal_bank_statement") },
+    { text: URLS.getPagePathName("main-bank-statement") },
   ];
+
 
   const getAddButton = () => {
     return (
@@ -100,82 +93,80 @@ const PersonalBankStatement = () => {
           icon: IconNames.ADD,
         }}
         linkProps={{
-          to: URLS.getPagePath("add-personal_bank_statement", { clientId }),
+          to: URLS.getPagePath("add-main-bank-statement", { clientId }),
         }}
       >
-        {URLS.getPagePathName("add-personal_bank_statement")}
+        {URLS.getPagePathName("add-main-bank-statement")}
       </AnchorButton>
     );
   };
-  const deleteTrainer = async (data: IPersonalBankStatementModel) => {
-    setLoading(true);
+  const deleteTrainer = async (data: IMainBankStatementModel) => {
+    setLoading(true)
 
     try {
-      await api.personalBankStatement.deletePersonalBankStatement(
-        data.PersonalBankStatement?._id || ""
-      );
+      await api.mainAccount.deleteMainAccount(data.MainBankStatement?._id || "")
 
-      await fetchData();
+      await fetchData()
       addToast({
-        message: "Deleted...",
-        intent: "success",
-      });
+        message: 'Deleted...',
+        intent: 'success'
+      })
     } catch (e: any) {
       addToast({
-        message: "Something went wrong",
-        intent: "danger",
-      });
+        message: 'Something went wrong',
+        intent: 'danger'
+      })
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
   return (
     <div className="dashboard">
       <div className="dashboard__container">
         <div>
-          <div className="PersonalBankStatement">
+          <div className="mainAccountData">
             <PageHeading
-              title="Personal Bank Statement"
+              title="Main Account Bank Statement"
               breadCrumbs={BREADCRUMBS}
               renderRight={getAddButton}
             />
-            <div className="PersonalBankStatement__container">
+            <div className="mainBankStatement__container">
               <Col>
                 <Table
                   loading={loading}
-                  numRows={PersonalBankStatement.length}
+                  numRows={mainAccountData.length}
                   getCellClipboardData={(row: any, col: any) => {
-                    return PersonalBankStatement[row];
+                    return mainAccountData[row];
                   }}
                   columns={[
                     {
-                      title: "Client Name",
-                      cellRenderer: clientNameColumn,
+                      title: "Client",
+                      cellRenderer: clientColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
                       title: "Statement Name",
-                      cellRenderer: statementNameColumn,
+                      cellRenderer: StatementNameColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
                       title: "Statement Description",
-                      cellRenderer: statementDescriptionColumn,
+                      cellRenderer: StatementDescColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
                       title: "From Date",
-                      cellRenderer: dateColumn,
+                      cellRenderer: FromDateColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
                       title: "To Date",
-                      cellRenderer: dateColumn,
+                      cellRenderer: ToDateColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
                       title: "Document",
-                      cellRenderer: documentColumn,
+                      cellRenderer: DocuementColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
@@ -187,29 +178,26 @@ const PersonalBankStatement = () => {
                       title: "Actions",
                       cellRenderer: (data: any) => {
                         return actionColumn(data, {
-                          viewLink: URLS.getPagePath(
-                            "edit-personal_bank_statement",
-                            {
-                              clientId,
-                              clientContactId: data.id,
-                            }
-                          ),
+                          viewLink: URLS.getPagePath("edit-main-bank-statement", {
+                            clientId,
+                            clientContactId: data.id,
+                          }),
                           onDelete() {
-                            deleteTrainer(data);
-                          },
+                            deleteTrainer(data)
+                          }
                         });
                       },
                       width: helpers.getTableWith(0.1),
                     },
                   ]}
-                  data={PersonalBankStatement}
+                  data={mainAccountData}
                   enableRowHeader={true}
                   hasNextPage={hasNextPage}
                   hasPrevPage={hasPrevPage}
                   onNextPage={onNextPage}
                   onPrevPage={onPrevPage}
                   page={page}
-                  emptyTableMessage="No Personal Bank Statement Found"
+                  emptyTableMessage="No record found"
                 />
               </Col>
             </div>
@@ -220,4 +208,4 @@ const PersonalBankStatement = () => {
   );
 };
 
-export default PersonalBankStatement;
+export default MainBankAccountStatement;

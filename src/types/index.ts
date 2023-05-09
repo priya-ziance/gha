@@ -113,7 +113,10 @@ export type PAGE_TYPES =
   | "reshab-logs"
   | "respite-logs"
   | "sp-goals"
-  | "edit-sp-goals";
+  | "edit-sp-goals"
+  | "main-bank-statement"
+  | "add-main-bank-statement"
+  | "edit-main-bank-statement";
 
 export type APD_FIELDS_TYPE =
   | "client"
@@ -122,6 +125,12 @@ export type APD_FIELDS_TYPE =
   | "county"
   | "incident_date_time"
   | "reportable_incident";
+
+  export type RECURRING_EXPENSES_FIELDS_TYPE =
+  | "expense_description"
+  | "expense_type"
+  | "active";
+
 
 export type APPOINTMENT_FIELDS_TYPE =
   | "appointment_date"
@@ -214,24 +223,57 @@ export type STAFF_WITNESS_FIELDS_TYPE =
   | "last_name"
   | "mobile"
   | "location";
-  export type PERSONAL_BANK_STATEMENT_FIELDS_TYPE =
-  | "address"
-  | "hired_date"
-  | "email"
-  | "first_name"
-  | "last_name"
-  | "mobile"
+  export type PERSONAL_FUNDS_FIELDS_TYPE =
+  | "active"
+  | "expense_date"
+  | "expense"
+  | "expense_description"
+  | "expense_type"
+  | "inventory_save"
   | "location";
+
+  export type COMMUNITY_ACTIVITIES_FIELDS_TYPE =
+  | "place_1"
+  | "place_2"
+  | "place_3"
+  | "place_4"
+  | "place_5"
+  | "date"
+  | "significant_event"
+  | "created_at"
+  | "updated_at"
+  | "active"
+  | "notes"
+  | "updated_date";
+
+  export type MAIN_ACCOUNT_FIELDS_TYPE =
+  | "client"
+  | "statement_name"
+  | "statement_description"
+  | "document"
+  | "to_date"
+  | "from_date"
+  | "active";
+
+
+
+  export type PERSONAL_BANK_STATEMENT_FIELDS_TYPE =
+  | "client"
+  | "document"
+  | "from_date"
+  | "to_date"
+  | "active"
+  | "statement_name"
+  | "statement_description";
 
   
   export type ADD_DISCHARGE_FIELDS_TYPE =
-  | "address"
-  | "hired_date"
-  | "email"
-  | "first_name"
-  | "last_name"
-  | "mobile"
-  | "location";
+  | "home_discharge_date"
+  | "client"
+  | "organization_name"
+  | "organization_location"
+  | "organization_phone"
+  | "organization_main_contact"
 
 export type ADD_RELOCATE_FIELDS_TYPE =
   | "id"
@@ -378,10 +420,10 @@ export type EXPENSES_LIST_FIELDS_TYPE =
   | "active"
   | "type";
 
-  export type RECURRING_EXPENSES_FIELDS_TYPE =
-  | "expense_description"
-  | "expense_type"
-  | "active"
+  // export type RECURRING_EXPENSES_FIELDS_TYPE =
+  // | "expense_description"
+  // | "expense_type"
+  // | "active"
 
 
 export type DeviceType = "sm" | "xs" | "md" | "lg";
@@ -453,6 +495,7 @@ export type BANK_STATEMENT_FIELDS_FORM_TYPE = {
     validation: any;
   };
 };
+
 
 export type BEHAVIOUR_FIELDS_FORM_TYPE = {
   [key in BEHAVIOUR_FIELDS_TYPE]?: {
@@ -534,6 +577,14 @@ export type GOAL_FIELDS_FORM_TYPE = {
   };
 };
 
+export type MAIN_ACCOUNT_FIELDS_FORM_TYPE = {
+  [key in MAIN_ACCOUNT_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+
 export type CLIENT_WITNESS_FIELDS_FORM_TYPE = {
   [key in CLIENT_WITNESS_FIELDS_TYPE]?: {
     name: string;
@@ -558,6 +609,20 @@ export type STAFF_WITNESS_FIELDS_FORM_TYPE = {
 };
 export type TRAINER_FIELDS_FORM_TYPE = {
   [key in ADD_TRAINERS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type PERSONAL_FUNDS_FIELDS_FORM_TYPE = {
+  [key in PERSONAL_FUNDS_FIELDS_TYPE]?: {
+    name: string;
+    default: any;
+    validation: any;
+  };
+};
+export type COMMUNITY_ACTIVITIES_FIELDS_FORM_TYPE = {
+  [key in COMMUNITY_ACTIVITIES_FIELDS_TYPE]?: {
     name: string;
     default: any;
     validation: any;
@@ -691,6 +756,23 @@ export interface IClientBehaviourModel {
   notes?: string;
   createdAt?: Moment;
 }
+export interface IRecurringExpenseModel {
+  id: string;
+  expenseDescription: string;
+  active: boolean;
+  expenseType: string;
+  recurringExpense: IRecurringExpense;
+}
+
+export interface IRecurringExpense {
+  _id: string;
+  expense_description: string;
+  expense_type: string;
+  active: boolean;
+  // created_at: string;
+  // updated_at: string;
+}
+
 export interface IAddInventory {
   _id: string;
   notes?: string;
@@ -785,17 +867,17 @@ export interface IExpenseListModel {
 }
 
 
-export interface IRecurringExpenseModel {
-  id: string;
-  client: IClientModel;
-  expenseDescription: string;
-  expenseType: string;
-  expense: number;
-  active: boolean;
-  type: string;
-  createdAt: Moment;
-  recurringExpense: IRecurringExpense;
-}
+// export interface IRecurringExpenseModel {
+//   id: string;
+//   client: IClientModel;
+//   expenseDescription: string;
+//   expenseType: string;
+//   expense: number;
+//   active: boolean;
+//   type: string;
+//   createdAt: Moment;
+//   recurringExpense: IRecurringExpense;
+// }
 export interface IFileModel {
   createdAt?: string;
   id: string;
@@ -823,6 +905,28 @@ export interface ILogTemplateModel {
   logTemplate: ILogTemplate;
 }
 
+export interface IDischarge {
+  _id: string;
+  home_discharge_date?: Moment;
+  client?: string;
+  organization_name?: string;
+  organization_location?: string;
+  organization_phone?: string;
+  organization_main_contact?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface IDischargeModel {
+  id?: string;
+  homeDischargeDate?: Moment;
+  client?: string;
+  organizationName?: string;
+  organizationLocation?: string;
+  organizationPhone?: string;
+  organizationMainContact?: string;
+  homeDischarge?: IDischarge;
+}
 export interface IMedicationModel {
   id: string;
   client: string;
@@ -1141,83 +1245,141 @@ export interface IAddTrainer {
 }
 
 export interface ICommunityActivitiesModel {
-  image?: string;
+  place_1?: string;
   id?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: string;
-  mobile?: string;
-  location?: string;
-  hiredDate?: Moment;
+  place_2?: string;
+  place_3?: string;
+  place_4?: string;
+  place_5?: string;
+  notes?: string;
+  significant_event?: string;
+  date?: Moment;
+  updated_date?: Moment;
+  created_at?: Moment;
+  updated_at?: Moment;
+  active?: boolean;
   communityActivities?: ICommunityActivities;
 }
 export interface ICommunityActivities {
   _id: string;
   emp_id?: string;
-  image?: string;
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  address?: string;
-  mobile?: string;
-  location?: string;
-  hired_date?: string;
+  place_1?: string;
+  place_2?: string;
+  place_3?: string;
+  place_4?: string;
+  place_5?: string;
+  notes?: string;
+  significant_event?: string;
+  date?: string;
   created_at?: string;
   updated_at?: string;
+  updated_date?:string;
+  active?: boolean;
 }
 
-export interface IPersonalBankStatementModel {
-  image?: string;
+
+export interface IMainBankStatementModel {
   id?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: string;
-  mobile?: string;
-  location?: string;
-  hiredDate?: Moment;
+  client?: string;
+  statementName?: string;
+  statementDescription?: string;
+  fromDate?: Moment;
+  toDate?: Moment;
+  document?: string;
+  MainBankStatement?: IMainBankStatement;
+  active?:boolean;
+}
+
+export interface IMainBankStatement {
+  _id: string;
+  client?: string;
+  statement_name?: string;
+  statement_description?: string;
+  from_date?: string;
+  to_date?: string;
+  document?: string;
+  created_at?: string;
+  updated_at?: string;
+  active?:boolean;
+}
+// export interface ICommunityActivitiesModel {
+//   image?: string;
+//   id?: string;
+//   email?: string;
+//   firstName?: string;
+//   lastName?: string;
+//   address?: string;
+//   mobile?: string;
+//   location?: string;
+//   hiredDate?: Moment;
+//   communityActivities?: ICommunityActivities;
+// }
+// export interface ICommunityActivities {
+//   _id: string;
+//   emp_id?: string;
+//   image?: string;
+//   email?: string;
+//   first_name?: string;
+//   last_name?: string;
+//   address?: string;
+//   mobile?: string;
+//   location?: string;
+//   hired_date?: string;
+//   created_at?: string;
+//   updated_at?: string;
+// }
+
+export interface IPersonalBankStatementModel {
+  id?: string;
+  client?: string;
+  clientName?: string;
+  statementName?: string;
+  statementDescription?: string;
+  fromDate?: Moment;
+  toDate?: Moment;
+  document?: string;
+  active?: boolean;
   PersonalBankStatement?: IPersonalBankStatement;
 }
 export interface IPersonalBankStatement {
   _id: string;
-  emp_id?: string;
-  image?: string;
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  address?: string;
-  mobile?: string;
-  location?: string;
-  hired_date?: string;
+  client?: string;
+  statement_name?: string;
+  statement_description?: string;
+  from_date?: Moment;
+  to_date?: Moment;
+  document?: string;
+  active?: boolean;
   created_at?: string;
   updated_at?: string;
 }
 export interface IPersonalFundsModel {
-  image?: string;
-  id?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  address?: string;
-  mobile?: string;
+  expense_description?: string;
+  _id?: string;
+  expense_type?: string;
+  expense?: number;
+  // document?: IFileModel;
+  document?: string;
+  active?: boolean;
   location?: string;
-  hiredDate?: Moment;
+  expense_date?: Moment;
+  inventory_save?: boolean;
+  community_activity_save?: boolean;
   personalFunds?: IPersonalFunds;
 }
 export interface IPersonalFunds {
   _id: string;
-  emp_id?: string;
-  image?: string;
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-  address?: string;
-  mobile?: string;
+  expense_description?: string;
+  expense_type?: string;
+  expense?: number;
+  document?: string;
+  active?: boolean;
   location?: string;
-  hired_date?: string;
+  inventory_save?: boolean;
+  expense_date?: string;
   created_at?: string;
   updated_at?: string;
+  community_activity_save?: Boolean
 }
 export interface IDischarge {
   _id: string;
@@ -1433,16 +1595,16 @@ export interface IExpenseList {
   created_at: string;
 }
 
-export interface IRecurringExpense {
-  _id: string;
-  client: IClient;
-  expense_description: string;
-  expense_type: string;
-  expense: number;
-  active: boolean;
-  type: string;
-  created_at: string;
-}
+// export interface IRecurringExpense {
+//   _id: string;
+//   client: IClient;
+//   expense_description: string;
+//   expense_type: string;
+//   expense: number;
+//   active: boolean;
+//   type: string;
+//   created_at: string;
+// }
 export interface IFile {
   _id: string;
   client?: string;

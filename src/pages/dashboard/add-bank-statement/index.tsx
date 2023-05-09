@@ -69,6 +69,8 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
 
   const uploadDocument = async () => {
     if (documentFile) {
+      console.log("doc file",documentFile);
+      
       return api.files.uploadFile(clientId, 'image', documentFile);
     }
   }
@@ -101,6 +103,8 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
 
   const onDocumentChange = (e: any) => {
     setDocumentFile(get(e, 'target.files', [])[0])
+    console.log("doce name",documentFile);
+    
   }
 
   const getDocumentText = () => {
@@ -139,7 +143,9 @@ const BankStatementsMainAccount = (props: BankStatementsMainAccountProps) => {
             onSubmit={async (values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
 
+              
               values.client = clientId;
+              
 
               // TODO: Change this to use a real employee
               // values.employee = 'Employee'

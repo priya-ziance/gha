@@ -4,49 +4,34 @@ import {DISCHARGE_FIELDS_FORM_TYPE} from "../../../types";
 
 export const FIELDS: DISCHARGE_FIELDS_FORM_TYPE  = {
 
-  // image: {
-  //   name: "Image #",
-  //   default: "",
-  //   validation: yup.string().label("Image").required(),
-  // },
-  email: {
-    name: "Email #",
+  client: {
+    name: "Client #",
     default: "",
-    validation: yup.string().label("Email").email().required(),
+    validation: yup.string().label("Client").email().required(),
   },
-  // first_name: {
-  //   name: "First Name #",
-  //   default: "",
-  //   validation: yup.string().label("First Name").required(),
-  // },
-  first_name: {
-    name: "First Name #",
+  home_discharge_date: {
+    name: "Home Discharge Date #",
     default: "",
-    validation: yup.string().label("First Name").required(),
+    validation: yup.string().label("Home Discharge Date").required(),
   },
-  last_name: {
-    name: "Last Name #",
+  organization_name: {
+    name: "Organization Name #",
     default: "",
-    validation: yup.string().label("Last Name").required(),
+    validation: yup.string().label("Organization Name").required(),
   },
-  mobile: {
-    name: "Mobile #",
+  organization_location: {
+    name: "Organization Location #",
     default: "",
-    validation: yup.string().label("Mobile").required(),
+    validation: yup.string().label("Organization Location").required(),
   },
-  hired_date: {
-    name: "Hired Date #",
-    default: null,
-    validation: yup.string().label("Hired Date").nullable().required(),
-  },
-  location: {
-    name: "location #",
+  organization_phone: {
+    name: "Organization Phone #",
     default: "",
-    validation: yup.string().label("Location").required(),
+    validation: yup.string().label("Organization Phone").required(),
   },
-  address: {
-    name: "Address #",
+  organization_main_contact: {
+    name: "Organization Main Contact #",
     default: "",
-    validation: yup.string().label("Address").required(),
+    validation: yup.string().label("Organization Main Contact").required(),
   },
 };

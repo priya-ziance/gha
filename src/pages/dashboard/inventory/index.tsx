@@ -12,8 +12,6 @@ import {
   itemColumn,
   nameColumn,
   quantityColumn,
-
-  
 } from "./helpers";
 import "./index.scss";
 import {IAddInventoryModel } from "../../../types";

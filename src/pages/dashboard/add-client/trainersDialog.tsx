@@ -5,39 +5,31 @@ import { Col, Dialog, FormMultiItemSelect, Table } from "../../../components";
 import TrainersUsersInput from "../../../controlled-components/TrainerUserinput";
 import { Formik } from "formik";
 import api from "../../../api";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ClientContext from "../../../contexts/client";
 import formikWrapper from "../../../wrappers/formik";
-import { Row } from "reactstrap";
+import { Row, Spinner } from "reactstrap";
 import * as helpers from "../../../utils/helpers";
 import { FIELDS } from "./constants";
 import { nameColumn } from "../trainer/helpers";
 import { debounce } from "lodash";
+import MultiSelectComponent, {
+  ISelectedOptionProps,
+} from "../add-adp/multiSelectComponent";
 
 interface TrainerProps {
   trainers: IUserModel[];
-  handleTrainerChange: (values: { [key: string]: IUserModel }) => void
+  handleTrainerChange: (values: { [key: string]: IUserModel }) => void;
+  getSelectedTrainer?: (data: ISelectedOptionProps) => void;
 }
 const PAGE_SIZE = 10;
 const Trainers = (props: IDialog & TrainerProps) => {
-  const { isOpen, handleClose, trainers, handleTrainerChange } = props;
-  // const { isOpen, handleClose } = props;
-
-  const [trainer, setTrainer] = useState<IAddTrainerModel[] | []>(
-    []
-  );
-  const [trainerActual, setTrainerActual] = useState<
-    IAddTrainerModel[] | []
-  >([]);
-  const [userQuery, setUserQuery] = useState('')
-  const [selectedUsers, setSelectedUsers] = useState<any>({})
-  const [userResults, setUserResults] = useState<IUserModel[] | []>([])
-  const [page, setPage] = useState(0);
+  const { isOpen, handleClose, getSelectedTrainer } = props;
+  const trainerRef = useRef(null);
+  const [trainer, setTrainer] = useState<IAddTrainerModel[] | []>([]);
+  const [page] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
-
-  const hasNextPage = trainer.length === PAGE_SIZE;
-  const hasPrevPage = page > 0;
 
   useEffect(() => {
     (async () => {
@@ -48,8 +40,7 @@ const Trainers = (props: IDialog & TrainerProps) => {
           pageSize: PAGE_SIZE,
         });
         setTrainer(results);
-        setTrainerActual(results);
-      } catch (e: any) { }
+      } catch (e: any) {}
 
       setTimeout(() => {
         setLoading(false);
@@ -57,176 +48,33 @@ const Trainers = (props: IDialog & TrainerProps) => {
     })();
   }, [clientId, page]);
 
+  const optionArr: any =
+    trainer.length > 0
+      ? trainer.map((d) => {
+          return {
+            id: d.id,
+            name: `${d.firstName} ${d.lastName}`,
+          };
+        })
+      : [];
 
-  // const debouncedCallback = useMemo(() => {
-  //   const debounced = debounce(async () => {
-  //     if (userQuery) {
-  //       try {
-  //         const results = await api.users.search(userQuery)
-  //         setUserResults(results)
-  //       } catch (e: any) { }
-  //     } else {
-  //       setUserResults([])
-  //       debounced.cancel()
-  //     }
-  //   }, 200, { leading: true, trailing: false })
-
-  //   return debounced
-  // }, [userQuery])
-
-  const onRemoveUser = (val: any) => {
-    setSelectedUsers((users: any) => {
-      delete users[val];
-
-      return { ...users }
-    })
-  }
-
-  const onNextPage = () => {
-    if (hasNextPage) {
-      setPage((page) => page + 1);
-    }
-  };
-
-  const onPrevPage = () => {
-    if (hasPrevPage) {
-      setPage((page) => page - 1);
-    }
-  };
-
-  const initialValues = {
-    search: "",
-  };
-
-  const menuRenderer = (item: any) => {
-    if (selectedUsers[item.id]) {
-      return (
-        <span>
-          <Icon icon={'tick'} />
-          {' '}
-          {item.firstName}
-        </span>
-      )
-    }
-    return item.firstName
-  }
-
-  const handleItemChange = (e: IUserModel) => {
-    const id = e.id;
-
-    if (!selectedUsers[id]) {
-      setSelectedUsers((users: any) => {
-        users[id] = e;
-
-        return { ...users }
-      })
-    }
-  }
-
-  const onUserQueryChange = (q: string) => {
-    setUserQuery(q)
-  }
-
-  const tagRenderer = (item: any) => {
-    if (item && trainer[item]) {
-      return "resss"
-    }
-
-    return ''
-  }
+  if (loading) return <Spinner />;
   return (
     <Dialog
-      icon='info-sign'
+      icon="info-sign"
       onClose={handleClose}
-      title='Add Trainer'
+      title="Add Trainer"
       isOpen={isOpen}
     >
-
       <div className={`${Classes.DIALOG_BODY} add-client__levelsOfService`}>
-        <div className="gha__users-input">
-          <Formik
-            initialValues={initialValues}
-            onSubmit={async (values, { setSubmitting }) => {
-              if (values.search) {
-                const filteredtrainer = [...trainerActual].filter(
-                  (item) => {
-                    return (
-                      item?.firstName
-                        ?.toLowerCase()
-                        .includes(values.search.toLowerCase()) ||
-                      item?.lastName
-                        ?.toLowerCase()
-                        .includes(values.search.toLowerCase())
-                    );
-                  }
-                );
-                setTrainer(filteredtrainer);
-              } else {
-                setTrainer(trainerActual);
-              }
-            }}
-          >
-            {formikWrapper(
-              ({
-                wrapperProps: { getInputFormGroup },
-                formikProps: { handleSubmit },
-              }) => {
-                return (
-                  <form onSubmit={handleSubmit}>
-                    <Row>
-                      <Col xs={12} md={6}>
-                        <FormMultiItemSelect
-                          intent={Intent.PRIMARY}
-                          label={'Select Users'}
-                          menuRenderer={menuRenderer}
-                          formSelectProps={{
-                            tagRenderer,
-                            items: trainer,
-                            onItemSelect: handleItemChange,
-                            selectedItems: Object.keys(selectedUsers),
-                            onRemove: onRemoveUser,
-                            onQueryChange: onUserQueryChange
-                          }}
-                        />
-                        {/* <TrainersUsersInput users={trainers} onNewUsers={handleTrainerChange} /> */}
-                      </Col>
-                    </Row>
-                  </form>
-                );
-              },
-              FIELDS
-            )}
-          </Formik>
-        </div>
-
-        {/* <Table
-          loading={loading}
-          numRows={trainer.length}
-          getCellClipboardData={(row: any, col: any) => {
-            console.log("click");
-
-            return trainer[row];
-          }}
-          columns={[
-            {
-              title: "Name",
-              cellRenderer: nameColumn,
-              width: helpers.getTableWith(0.5),
-            },
-          ]}
-          data={trainer}
-          enableRowHeader={false}
-          hasNextPage={hasNextPage}
-          hasPrevPage={hasPrevPage}
-          onNextPage={onNextPage}
-          onPrevPage={onPrevPage}
-          page={page}
-          emptyTableMessage="No Staff Witness Found"
-        /> */}
+        <MultiSelectComponent
+          selectRef={trainerRef}
+          options={optionArr}
+          getSeletcedData={(data: any) => getSelectedTrainer?.(data) || []}
+        />
       </div>
     </Dialog>
   );
 };
 
 export default Trainers;
-

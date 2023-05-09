@@ -115,6 +115,10 @@ import AddAppointment from './add-appointment';
 import AppointmentsPage from './appointments';
 import EditAppointmentPage from './edit-appointment';
 
+import MainBankAccountPage from './main-bank-statement';
+import AddMainBankAccountPage from './add-main-bank-statement';
+import EditMainBankAccountPage from './edit-main-bank-statement';
+
 import api from '../../api';
 
 
@@ -259,6 +263,10 @@ function Clients(props: ClientPathsType & RouteComponentProps ) {
       <Route path="/dashboard/clients/:clientId/medication/medication-list" exact component={MedicationListPage} />
       <Route path="/dashboard/clients/:clientId/medication/medication-list/add" exact component={AddMedication} />
       <Route path="/dashboard/clients/:clientId/medication/medication-list/:medicationId/edit" exact component={EditMedicationPage} />
+
+      <Route path="/dashboard/clients/:clientId/main-bank-statement" exact component={MainBankAccountPage} />
+      <Route path="/dashboard/clients/:clientId/main-bank-statement/add" exact component={AddMainBankAccountPage} />
+      <Route path="/dashboard/clients/:clientId/main-bank-statement/:mainBankStatementId/edit" exact component={EditMainBankAccountPage} />
 
 
     </Switch>

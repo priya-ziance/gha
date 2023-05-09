@@ -1,31 +1,39 @@
-import { Intent } from '@blueprintjs/core';
+import { Checkbox, Intent } from '@blueprintjs/core';
 import { AnchorButton, Button } from '../../../components';
 import {IPersonalFundsModel } from '../../../types';
 
-export const nameColumn = (data: IPersonalFundsModel) => {
+export const idColumn = (data: IPersonalFundsModel) => {
+  console.log("data",data);
+  
   return (
-    <>{data.firstName}&nbsp;{data.lastName}</>
+    <>{data.personalFunds?._id}</>
   )
 }
 
-export const emailColumn = (data: IPersonalFundsModel) => {
+export const expenseTypeColumn = (data: IPersonalFundsModel) => {
   return (
-    <>{data.email}</>
+    <>{data.expense_type}</>
   )
 }
 
-export const mobileColumn = (data: IPersonalFundsModel) => {
+export const expenseDateColumn = (data: IPersonalFundsModel) => {
   return (
-    <>{data.mobile}</>
+    <>{data.expense_date?.format("DD-MM-YYYY")}</>
   )
 }
 
-export const addressColumn = (data: IPersonalFundsModel) => {
+export const activeColumn = (data: IPersonalFundsModel) => {
   return (
-    <>{data.address}</>
+    // <>{data.active}</>
+    <Checkbox checked={data.active} disabled/>
   )
 }
 
+export const expenseColumn = (data: IPersonalFundsModel) => {
+  return (
+    <>{data.personalFunds?.expense}</>
+  )
+}
 export const actionColumn = (data: IPersonalFundsModel, { onDelete,viewLink }: any) => {
   return (
     <>

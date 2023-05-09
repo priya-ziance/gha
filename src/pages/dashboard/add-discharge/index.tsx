@@ -1,8 +1,17 @@
-import { useContext, useState } from "react";
+// @ts-nocheck
+import { useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
-import { Col, FileDropzone, FormGroup, ImageDropzone, PageHeading, Row } from "../../../components";
+import {
+  Col,
+  FileDropzone,
+  FormGroup,
+  FormItemSelect,
+  ImageDropzone,
+  PageHeading,
+  Row,
+} from "../../../components";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
 import api from "../../../api";
 import URLS from "../../../utils/urls";
@@ -14,6 +23,8 @@ import "./index.scss";
 import { pick } from "lodash";
 import { IDischargeModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
+import { IOptionProps } from "../add-adp/multiSelectComponent";
+import Client from "../../../models/client";
 
 interface AddDichargeProps {
   discharges?: IDischargeModel;
@@ -22,13 +33,40 @@ interface AddDichargeProps {
 
 const AddDischarge = (props: AddDichargeProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
-  const [selectedMedical, setSelectedMedical] = useState<
+  const [selectedDischarge, setSelectedDischarge] = useState<
     IDischargeModel | undefined
   >(undefined);
-  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
+  const [selectedClientData, setSelectedClientData] =
+    useState<IOptionProps | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setClients(await api.clients.getClients());
+      } catch (e: any) {}
+    })();
+  }, []);
+
+  useEffect(
+    async() => {
+      if (props?.discharges?.discharge?.client) {
+        const clientData = clients?.find(
+          (clientDetails) =>
+            clientDetails?.id === props?.discharges?.discharge?.client
+        );
+        if (clientData)
+       setSelectedClientData({
+            name: `${clientData?.firstName} ${clientData?.lastName}` || "",
+            id: clientData.id,
+          });
+      }
+    },
+    [props?.discharges?.discharge?.client]
+  );
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
@@ -64,67 +102,39 @@ const AddDischarge = (props: AddDichargeProps) => {
    * is passed in
    */
 
-
   if (props.discharges) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
-      pick(props.discharges.trainer, Object.keys(helpers.initialValues))
+      pick(props.discharges.discharge, Object.keys(helpers.initialValues))
     );
-    console.log("helper.addTrainer", initialValues);    
   } else {
     initialValues = helpers.initialValues;
   }
 
-
-
-  const handleSelectTrainersClose = () => {
+  const handleSelectDischargeClose = () => {
     setIsOmniOpen(false);
   };
-
-  const uploadFile = async (file: any) => {
-    if (file) {
-      return api.files.uploadFile("h9YwkW4gyE", 'image', file);
-    }
-  }
-  const setProfilePicture = (files: File[]) => {
-    setProfilePictureFile(files[0]);
-  };
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    console.log("values", values);
-    if (profilePictureFile) {
-      console.log("profilePictureFile : " , profilePictureFile)
-      let file: any = await uploadFile(profilePictureFile);
-      console.log("upload profilePictureFile : ", JSON.stringify(file));
-      values.image = file?.id;
-    }
-
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    const dischargeId :any= get(props, "discharges.id", "");
-    console.log("id", dischargeId);
-
+    const dischargeId: any = get(props, "discharges.id", "");
     try {
       if (props.update) {
         await api.Discharge.updateDischarge(dischargeId, values);
         addToast({
-          message: "Add Trainer Updated",
+          message: "Add Home Discharge Updated",
           intent: Intent.SUCCESS,
         });
-      }else {
-        // values.emp_id = clientId;
-        // values.image = "new";
-        // await api.Trainers.createTrainer({values,image: values?.image});
+      } else {
         await api.Discharge.createDischarge({
           id: values.id,
-          image: values?.image,
-          email: values?.email,
-          first_name: values?.first_name,
-          last_name: values?.last_name,
-          address: values?.address,
-          mobile: values?.mobile,
-          location: values?.location,
-          hired_date: values?.hired_date,
+          home_discharge_date: values?.home_discharge_date,
+          client: values?.client,
+          organization_name: values?.organization_name,
+          organization_location: values?.organization_location,
+          organization_phone: values?.organization_phone,
+          organization_main_contact: values?.organization_main_contact,
         });
         addToast({
           message: "Home Discharge Created",
@@ -141,9 +151,8 @@ const AddDischarge = (props: AddDichargeProps) => {
       });
     }
 
-    setSubmitting(false); 
+    setSubmitting(false);
   };
-  // const profilePictureUrl = get(props, 'addTrainer.image', '')
 
   return (
     <div className="dashboard">
@@ -158,18 +167,12 @@ const AddDischarge = (props: AddDichargeProps) => {
             breadCrumbs={BREADCRUMBS}
           />
           <div className="add-discharge__container">
-            <Formik
-              initialValues={initialValues}
-              validationSchema={helpers.validationSchema}
-              onSubmit={onSubmit}
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit}>
               {formikWrapper(
                 ({
                   wrapperProps: {
                     getDateInputFormGroup,
-                    getSelectFieldInputFormGroup,
                     getInputFormGroup,
-                    getAutocompleteInputFormGroup,
                     getPhoneInputFormGroup,
                   },
                   formikProps: {
@@ -179,103 +182,86 @@ const AddDischarge = (props: AddDichargeProps) => {
                     validateForm,
                   },
                 }) => {
-                  const profilePictureUrl = get(
-                    props,
-                    "client.profilePicture.publicUrl",
-                    ""
-                  );
                   return (
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
                         isOpen={isOmniOpen}
-                        onClose={handleSelectTrainersClose}
-                        onSelect={(addTrainer: IDischargeModel) => {
-                          setFieldValue("first_name", addTrainer.firstName);
-                          setFieldValue("last_name", addTrainer.lastName);
-                          setFieldValue("address", addTrainer.address);
-                          setFieldValue("mobile", addTrainer.mobile);
-                          setFieldValue("email", addTrainer.email);
-                          setFieldValue("hired_date", addTrainer.hiredDate);
-                          setFieldValue("location", addTrainer.location);
+                        onClose={handleSelectDischargeClose}
+                        onSelect={(addDischarge: IDischargeModel) => {
+                          setFieldValue(
+                            "home_discharge_date",
+                            addDischarge.homeDischargeDate
+                          );
+                          setFieldValue(
+                            "organization_name",
+                            addDischarge.organizationName
+                          );
+                          setFieldValue(
+                            "organization_location",
+                            addDischarge.organizationLocation
+                          );
+                          setFieldValue(
+                            "organization_phone",
+                            addDischarge.organizationPhone
+                          );
+                          setFieldValue(
+                            "organization_main_contact",
+                            addDischarge.organizationMainContact
+                          );
                           validateForm();
                           setIsOmniOpen(false);
-                          setSelectedMedical(addTrainer);
+                          setSelectedDischarge(addDischarge);
                         }}
                       />
 
                       <Row>
-                        <Col xs={12} md={12}>
-                        <FormGroup
-                            intent={Intent.PRIMARY}
-                            label={"User Image"}
-                          >
-                            <ImageDropzone
-                              files={
-                                profilePictureFile ? [profilePictureFile] : []
-                              }
-                              setFiles={setProfilePicture}
-                              imagesUrls={
-                                profilePictureUrl ? [profilePictureUrl] : []
-                              }
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      {/* <Row>
-                        <Col xs={12} md={12}>
-                          {getInputFormGroup("trainer_id", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                      </Row> */}
-                      <Row>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("first_name", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
+                          <FormItemSelect
+                            buttonText={
+                              selectedClientData?.name ?? "Select Client"
+                            }
+                            items={clients?.map((client: Client) => {
+                              return { name: client.name, id: client.id };
+                            })}
+                            menuRenderer={(item) => item.name}
+                            onFormSelectChange={(field) => {
+                              setFieldValue("client", field.id);
+                              setSelectedClientData(field);
+                            }}
+                          />
                         </Col>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("last_name", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("email", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-
-                        <Col xs={12} md={6}>
-                          {getPhoneInputFormGroup("mobile", {
-                            childProps: {
-                              type: "tel",
-                              disabled: !!selectedMedical,
-                            },
-                          })}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs={12} md={6}>
-                          {getInputFormGroup("location", {
-                            childProps: { disabled: !!selectedMedical },
-                          })}
-                        </Col>
-                        <Col xs={12} md={6}>
-                        {getDateInputFormGroup("hired_date", {
-                            childProps: {
-                              type: "date",
-                              disabled: !!selectedMedical,
-                            },
+                          {getDateInputFormGroup("home_discharge_date", {
+                            childProps: { disabled: !!selectedDischarge },
                           })}
                         </Col>
                       </Row>
 
                       <Row>
-                        <Col xs={12} md={12}>
-                          {getAutocompleteInputFormGroup("address", {
-                            childProps: { disabled: !!selectedMedical },
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("organization_name", {
+                            childProps: { disabled: !!selectedDischarge },
+                          })}
+                        </Col>
+                        <Col xs={12} md={6}>
+                          {getInputFormGroup("organization_location", {
+                            childProps: { disabled: !!selectedDischarge },
+                          })}
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col xs={12} md={6}>
+                          {getPhoneInputFormGroup("organization_phone", {
+                            childProps: { disabled: !!selectedDischarge },
+                          })}
+                        </Col>
+
+                        <Col xs={12} md={6}>
+                          {getPhoneInputFormGroup("organization_main_contact", {
+                            childProps: {
+                              disabled: !!selectedDischarge,
+                            },
                           })}
                         </Col>
                       </Row>

@@ -4,7 +4,6 @@ import api from "../../../api";
 import withPathId from "../../../hoc/withPathId";
 import {  IPersonalBankStatementModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
-import AddTrainers from "../add-trainers";
 import AddPersonalBankStatement from "../add-personal_bank_statement";
 
 interface TrainersPathType {

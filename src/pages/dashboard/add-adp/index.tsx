@@ -472,9 +472,9 @@ const AddAdp = (props: AddAdpProps) => {
 
                       <Row>
                         <Col xs={12} md={6}>
-                          {getInputFormGroup("Waiver_support_cordinator", {
+                          {/* {getInputFormGroup("Waiver_support_cordinator", {
                             childProps: { disabled: !!selectedAdp },
-                          })}
+                          })} */}
                         </Col>
 
                         <Col xs={12} md={6}>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
 import { Formik, FormikHelpers } from "formik";
 import get from "lodash/get";
@@ -20,28 +20,59 @@ import formikWrapper from "../../../wrappers/formik";
 import { FIELDS } from "./constants";
 import "./index.scss";
 import { pick } from "lodash";
-import { IPersonalBankStatementModel } from "../../../types";
+import { IMainBankStatementModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 import Client from "../../../models/client";
-import { IOptionProps } from "../add-adp/multiSelectComponent";
+import {
+  IOptionProps,
+  ISelectedOptionProps,
+} from "../add-adp/multiSelectComponent";
 
-interface PersonalBankStatementProps {
-  PersonalBankStatement?: IPersonalBankStatementModel;
+interface MainBankStatementProps {
+  MainBankStatement?: IMainBankStatementModel;
   update?: boolean;
 }
 
-const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
+const AddMainBankStatement = (props: MainBankStatementProps) => {
   const [isOmniOpen, setIsOmniOpen] = useState(false);
   const [selectedClientData, setSelectedClientData] =
     useState<IOptionProps | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
-  const [selectedMedical, setSelectedMedical] = useState<
-    IPersonalBankStatementModel | undefined
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const [selectedMainBankData, setSelectedMainBankData] = useState<
+    IMainBankStatementModel | undefined
   >(undefined);
-  const [documentImageFile, setDocumentImage] = useState<File | null>(null);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setClients(await api.clients.getClients());
+      } catch (e: any) {}
+    })();
+  }, []);
+
+  useEffect(() => {
+    handleClientData();
+  }, [props.MainBankStatement?.MainBankStatement?.client, clients]);
+
+  const handleClientData = () => {
+    if (props.MainBankStatement?.MainBankStatement?.client) {
+      const clientDetails: any =
+        clients.find(
+          (cl) => cl.id === props.MainBankStatement?.MainBankStatement?.client
+        ) || [];
+      if (clientDetails)
+        setSelectedClientData({
+          id: clientDetails?.id ?? "",
+          name: `${clientDetails?.firstName ?? ""} ${
+            clientDetails?.lastName ?? ""
+          }`,
+        });
+    }
+  };
 
   const BREADCRUMBS: BreadcrumbProps[] = [
     {
@@ -60,28 +91,18 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
       text: URLS.getPagePathName("client-links"),
     },
     {
-      href: URLS.getPagePath("personal_bank_statement", { clientId }),
+      href: URLS.getPagePath("main-bank-statement", { clientId }),
       icon: "document",
-      text: URLS.getPagePathName("personal_bank_statement"),
+      text: URLS.getPagePathName("main-bank-statement"),
     },
   ];
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setClients(await api.clients.getClients());
-      } catch (e: any) {}
-    })();
-  }, []);
-
   if (props.update) {
     BREADCRUMBS.push({
-      text: URLS.getPagePathName("edit-personal_bank_statement"),
+      text: URLS.getPagePathName("edit-main-bank-statement"),
     });
   } else {
-    BREADCRUMBS.push({
-      text: URLS.getPagePathName("add-personal_bank_statement"),
-    });
+    BREADCRUMBS.push({ text: URLS.getPagePathName("add-main-bank-statement") });
   }
 
   /**
@@ -89,12 +110,12 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
    * is passed in
    */
 
-  if (props.PersonalBankStatement) {
+  if (props.MainBankStatement) {
     initialValues = Object.assign(
       {},
       helpers.initialValues,
       pick(
-        props.PersonalBankStatement.PersonalBankStatement,
+        props.MainBankStatement.MainBankStatement,
         Object.keys(helpers.initialValues)
       )
     );
@@ -102,7 +123,7 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
     initialValues = helpers.initialValues;
   }
 
-  const handleClose = () => {
+  const handleSelectTrainersClose = () => {
     setIsOmniOpen(false);
   };
 
@@ -111,46 +132,39 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
       return api.files.uploadFile(clientId, "image", file);
     }
   };
-  const setDocImage = (files: File[]) => {
-    setDocumentImage(files[0]);
+  const setProfilePicture = (files: File[]) => {
+    setDocumentFile(files[0]);
   };
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    if (documentImageFile) {
-      let file: any = await uploadFile(documentImageFile);
+    if (documentFile) {
+      let file: any = await uploadFile(documentFile);
       values.document = file?.id;
     }
 
     const { resetForm, setSubmitting } = options;
     setSubmitting(true);
-    const personalBankStatementId: any = get(
-      props,
-      "PersonalBankStatement.id",
-      ""
-    );
+    const mainAccountId: any = get(props, "MainBankStatement.id", "");
 
     try {
       if (props.update) {
-        await api.personalBankStatement.updatePersonalBankStatement(
-          personalBankStatementId,
-          values
-        );
+        await api.mainAccount.updateMainAccount(mainAccountId, values);
         addToast({
-          message: "Personal Bank Statement Updated",
+          message: "Main Bank Statement Updated",
           intent: Intent.SUCCESS,
         });
       } else {
-        await api.personalBankStatement.createPersonalBankStatement({
+        await api.mainAccount.createMainAccount({
           id: values.id,
-          active: values?.active,
           document: values?.document,
-          to_date: values?.to_date,
-          from_date: values?.from_date,
-          statement_description: values?.statement_description,
-          statement_name: values?.statement_name,
           client: values?.client,
+          statement_name: values?.statement_name,
+          statement_description: values?.statement_description,
+          from_date: values?.from_date,
+          to_date: values?.to_date,
+          active: values?.active,
         });
         addToast({
-          message: "Personal Bank Statement Created",
+          message: "Main Bank Statement Created",
           intent: Intent.SUCCESS,
         });
 
@@ -170,19 +184,18 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
   return (
     <div className="dashboard">
       <div className="dashboard_container">
-        <div className="PersonalBankStatement">
+        <div className="MainBankStatement">
           <PageHeading
             title={
               props.update
-                ? "Update Personal Bank Statement Detail"
-                : "Add Personal Bank Statement Detail"
+                ? "Update Main Bank Statement Detail"
+                : "Add Main Bank Statement Detail"
             }
             breadCrumbs={BREADCRUMBS}
           />
-          <div className="PersonalBankStatement__container">
+          <div className="MainBankStatement__container">
             <Formik
               initialValues={initialValues}
-              validationSchema={helpers.validationSchema}
               onSubmit={onSubmit}
             >
               {formikWrapper(
@@ -199,46 +212,51 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
                     validateForm,
                   },
                 }) => {
-                  const documentUrl = get(
+                  const documentUploaded = get(
                     props,
-                    "client.profilePicture.publicUrl",
+                    "MainBankStatement.document.publicUrl",
                     ""
                   );
                   return (
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
                         isOpen={isOmniOpen}
-                        onClose={handleClose}
-                        onSelect={(
-                          addPersonalBankStatement: IPersonalBankStatementModel
-                        ) => {
+                        onClose={handleSelectTrainersClose}
+                        onSelect={(addMainAccount: IMainBankStatementModel) => {
+                          setFieldValue("active", addMainAccount.active);
                           setFieldValue(
                             "statement_name",
-                            addPersonalBankStatement.statementName
+                            addMainAccount.statementName
                           );
                           setFieldValue(
                             "statement_description",
-                            addPersonalBankStatement.statementDescription
+                            addMainAccount.statementDescription
                           );
-                          setFieldValue(
-                            "from_date",
-                            addPersonalBankStatement.fromDate
-                          );
-                          setFieldValue(
-                            "to_date",
-                            addPersonalBankStatement.toDate
-                          );
-                          setFieldValue(
-                            "active",
-                            addPersonalBankStatement.active
-                          );
+                          // setFieldValue("document", addMainAccount.document);
+                          setFieldValue("to_date", addMainAccount.toDate);
+                          setFieldValue("from_date", addMainAccount.fromDate);
                           validateForm();
                           setIsOmniOpen(false);
-                          setSelectedMedical(addPersonalBankStatement);
+                          setSelectedMainBankData(addMainAccount);
                         }}
                       />
 
                       <Row>
+                        <Col xs={12} md={6}>
+                          <FormGroup
+                            intent={Intent.PRIMARY}
+                            label={"Upload Document"}
+                          >
+                            <ImageDropzone
+                              files={documentFile ? [documentFile] : []}
+                              setFiles={setProfilePicture}
+                              imagesUrls={
+                                documentUploaded ? [documentUploaded] : []
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+
                         <Col xs={12} md={6}>
                           <FormItemSelect
                             buttonText={
@@ -254,62 +272,45 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
                             }}
                           />
                         </Col>
+                      </Row>
+
+                      <Row>
                         <Col xs={12} md={6}>
                           {getInputFormGroup("statement_name", {
-                            childProps: { disabled: !!selectedMedical },
+                            childProps: { disabled: !!selectedMainBankData },
                           })}
                         </Col>
-                      </Row>
 
-                      <Row>
                         <Col xs={12} md={6}>
                           {getInputFormGroup("statement_description", {
-                            childProps: { disabled: !!selectedMedical },
+                            childProps: { disabled: !!selectedMainBankData },
                           })}
                         </Col>
+                      </Row>
 
+                      <Row>
                         <Col xs={12} md={6}>
                           {getDateInputFormGroup("from_date", {
-                            childProps: {
-                              disabled: !!selectedMedical,
-                            },
+                            childProps: { disabled: !!selectedMainBankData },
                           })}
                         </Col>
-                      </Row>
 
-                      <Row>
                         <Col xs={12} md={6}>
                           {getDateInputFormGroup("to_date", {
-                            childProps: {
-                              disabled: !!selectedMedical,
-                            },
-                          })}
-                        </Col>
-                        <Col xs={12} md={6}>
-                          {getSwitchInputFormGroup("active", {
-                            childProps: { disabled: !!selectedMedical },
+                            childProps: { disabled: !!selectedMainBankData },
                           })}
                         </Col>
                       </Row>
 
                       <Row>
                         <Col xs={12} md={6}>
-                          <FormGroup
-                            intent={Intent.PRIMARY}
-                            label={"Document Image"}
-                          >
-                            <ImageDropzone
-                              files={
-                                documentImageFile ? [documentImageFile] : []
-                              }
-                              setFiles={setDocImage}
-                              imagesUrls={documentUrl ? [documentUrl] : []}
-                            />
-                          </FormGroup>
+                          {getSwitchInputFormGroup("active", {
+                            childProps: { disabled: !!selectedMainBankData },
+                          })}
                         </Col>
                       </Row>
 
-                      <div className="PersonalBankStatement__submit-container">
+                      <div className="MainBankStatement__submit-container">
                         <Button
                           type="submit"
                           disabled={isSubmitting}
@@ -333,4 +334,4 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
   );
 };
 
-export default AddPersonalBankStatement;
+export default AddMainBankStatement;

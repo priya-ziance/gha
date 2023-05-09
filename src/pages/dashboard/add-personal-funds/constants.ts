@@ -1,52 +1,54 @@
 import * as yup from "yup";
-import {TRAINER_FIELDS_FORM_TYPE } from "../../../types";
+import {PERSONAL_FUNDS_FIELDS_FORM_TYPE } from "../../../types";
 
+export const EXPENSE_TYPES = [
+  'Credit',
+  'Debit',
+  'Withdrawal'
+];
 
-export const FIELDS: TRAINER_FIELDS_FORM_TYPE  = {
+export const FIELDS: PERSONAL_FUNDS_FIELDS_FORM_TYPE  = {
 
   // image: {
   //   name: "Image #",
   //   default: "",
   //   validation: yup.string().label("Image").required(),
   // },
-  email: {
-    name: "Email #",
-    default: "",
-    validation: yup.string().label("Email").email().required(),
-  },
   // first_name: {
   //   name: "First Name #",
   //   default: "",
   //   validation: yup.string().label("First Name").required(),
   // },
-  first_name: {
-    name: "First Name #",
+ 
+  expense: {
+    name: "Expense #",
     default: "",
-    validation: yup.string().label("First Name").required(),
+    validation: yup.string().label("expense").required(),
   },
-  last_name: {
-    name: "Last Name #",
-    default: "",
-    validation: yup.string().label("Last Name").required(),
-  },
-  mobile: {
-    name: "Mobile #",
-    default: "",
-    validation: yup.string().label("Mobile").required(),
-  },
-  hired_date: {
-    name: "Hired Date #",
+  expense_date: {
+    name: "Expense date #",
     default: null,
-    validation: yup.string().label("Hired Date").nullable().required(),
+    validation: yup.string().label("expense date").nullable().required(),
   },
   location: {
-    name: "location #",
+    name: "Location #",
     default: "",
     validation: yup.string().label("Location").required(),
   },
-  address: {
-    name: "Address #",
+  expense_description: {
+    name: "Expense Description #",
     default: "",
-    validation: yup.string().label("Address").required(),
+    validation: yup.string().label("Expense Description").required(),
   },
+  expense_type: {
+    name: "Expense Type #",
+    default: "",
+    validation: yup.string().label("Expense Type").required(),
+  },
+  // inventory_save: {
+  //   name: "Inventory Save #",
+  //   default: "",
+  //   validation: yup.string().label("Inventory Save").required(),
+  // },
+
 };

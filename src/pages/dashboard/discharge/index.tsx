@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { useContext, useEffect, useState } from "react";
-import { BreadcrumbProps, Intent } from "@blueprintjs/core";
+import { Intent } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { AnchorButton, Col, PageHeading, Table } from "../../../components";
 import URLS from "../../../utils/urls";
@@ -7,10 +8,12 @@ import api from "../../../api";
 import * as helpers from "../../../utils/helpers";
 import {
   actionColumn,
-  addressColumn,
-  emailColumn,
-  mobileColumn,
-  nameColumn,
+  ClientColumn,
+  dischargeDateColumn,
+  orgLocationColumn,
+  orgMainContactColumn,
+  orgNameColumn,
+  orgPhoneColumn,
 } from "./helpers";
 import "./index.scss";
 import { IDischargeModel } from "../../../types";
@@ -20,9 +23,7 @@ import ToastsContext from "../../../contexts/toasts";
 const PAGE_SIZE = 10;
 
 const Discharge = () => {
-  const [discharge, setDischarge] = useState<IDischargeModel[] | []>(
-    []
-  );
+  const [discharge, setDischarge] = useState<IDischargeModel[] | []>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
@@ -33,19 +34,27 @@ const Discharge = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      setDischarge(
-        await api.Trainers.getTrainer(clientId, {
-          page,
-          pageSize: PAGE_SIZE,
-        })
-      );
-    } catch (e: any) { }
+      const dischargeData = await api.Discharge.getDischarges(clientId, {
+        page,
+        pageSize: PAGE_SIZE,
+      });
+      const totalClients = await api.clients.getClients();
+      const newData = dischargeData?.map((item) => {
+        const cloneItem = item;
+        const clientData = totalClients?.find((clientDetails) => clientDetails?.id === item?.client);
+        cloneItem["clientName"] = clientData && `${clientData?.firstName} ${clientData?.lastName}` || "";
+        return cloneItem;
+      });
+
+      setDischarge(newData);
+    } catch (e: any) {}
     setTimeout(() => {
       setLoading(false);
     }, 200);
   };
+
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [clientId, page]);
 
   const onNextPage = () => {
@@ -79,7 +88,6 @@ const Discharge = () => {
     { text: URLS.getPagePathName("discharge") },
   ];
 
-
   const getAddButton = () => {
     return (
       <AnchorButton
@@ -95,26 +103,29 @@ const Discharge = () => {
       </AnchorButton>
     );
   };
-  const deleteTrainer = async (data: IDischargeModel) => {
-    setLoading(true)
+  const deleteDischarge = async (data: IDischargeModel) => {
+
+    setLoading(true);
 
     try {
-      await api.Trainers.deleteTrainer(data.trainer?._id || "")
+      console.log("data id ",data.id);
+      
+      await api.Discharge.deleteDischarge(data?.id || "");
 
-      await fetchData()
+      await fetchData();
       addToast({
-        message: 'Deleted...',
-        intent: 'success'
-      })
+        message: "Deleted...",
+        intent: "success",
+      });
     } catch (e: any) {
       addToast({
-        message: 'Something went wrong',
-        intent: 'danger'
-      })
+        message: "Something went wrong",
+        intent: "danger",
+      });
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -135,23 +146,33 @@ const Discharge = () => {
                   }}
                   columns={[
                     {
-                      title: "Name",
-                      cellRenderer: nameColumn,
+                      title: "Client",
+                      cellRenderer: ClientColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
-                      title: "Email",
-                      cellRenderer: emailColumn,
+                      title: "Organization Name",
+                      cellRenderer: orgNameColumn,
                       width: helpers.getTableWith(0.25),
                     },
                     {
-                      title: "Mobile",
-                      cellRenderer: mobileColumn,
+                      title: "Organization Location",
+                      cellRenderer: orgLocationColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
-                      title: "Address",
-                      cellRenderer: addressColumn,
+                      title: "Organization Phone",
+                      cellRenderer: orgPhoneColumn,
+                      width: helpers.getTableWith(0.2),
+                    },
+                    {
+                      title: "Organization Main Contact",
+                      cellRenderer: orgMainContactColumn,
+                      width: helpers.getTableWith(0.2),
+                    },
+                    {
+                      title: "Home Discharge Date",
+                      cellRenderer: dischargeDateColumn,
                       width: helpers.getTableWith(0.2),
                     },
                     {
@@ -163,8 +184,8 @@ const Discharge = () => {
                             clientContactId: data.id,
                           }),
                           onDelete() {
-                            deleteTrainer(data)
-                          }
+                            deleteDischarge(data);
+                          },
                         });
                       },
                       width: helpers.getTableWith(0.1),

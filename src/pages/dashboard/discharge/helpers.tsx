@@ -1,28 +1,41 @@
+// @ts-nocheck
 import { Intent } from '@blueprintjs/core';
 import { AnchorButton, Button } from '../../../components';
 import { IDischargeModel} from '../../../types';
 
-export const nameColumn = (data: IDischargeModel) => {
+export const ClientColumn = (data: IDischargeModel) => {
   return (
-    <>{data.firstName}&nbsp;{data.lastName}</>
+    <>{data.clientName}</>
   )
 }
 
-export const emailColumn = (data: IDischargeModel) => {
+export const dischargeDateColumn = (data: IDischargeModel) => {
   return (
-    <>{data.email}</>
+    <>{data?.homeDischargeDate?.format("DD MM YYYY")}</>
   )
 }
 
-export const mobileColumn = (data: IDischargeModel) => {
+export const orgNameColumn = (data: IDischargeModel) => {
   return (
-    <>{data.mobile}</>
+    <>{data.organizationName}</>
   )
 }
 
-export const addressColumn = (data: IDischargeModel) => {
+export const orgLocationColumn = (data: IDischargeModel) => {
   return (
-    <>{data.address}</>
+    <>{data.organizationLocation}</>
+  )
+}
+
+export const orgPhoneColumn = (data: IDischargeModel) => {
+  return (
+    <>{data.organizationPhone}</>
+  )
+}
+
+export const orgMainContactColumn = (data: IDischargeModel) => {
+  return (
+    <>{data.organizationMainContact}</>
   )
 }
 

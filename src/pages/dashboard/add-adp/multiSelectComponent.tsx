@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./index.scss";
 
 export interface ISelectedOptionProps {
   id: string;

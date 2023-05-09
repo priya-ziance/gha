@@ -18,6 +18,8 @@ type OPTIONS_TYPE = {
   taskId?: string;
   relocateId?: String;
   seizurelogId?: string;
+  communityActivityId?: string;
+  personalFundsId?: string
 };
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -48,7 +50,7 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case "add-personal_funds":
       return `${clientBase}/personal_funds/add`;
     case "edit-personal_funds":
-      return `${clientBase}/personal_funds/${options.clientContactId}/edit`;
+      return `${clientBase}/personal_funds/${options.personalFundsId}/edit`;
 
     case "community_activities":
       return `${clientBase}/community_activities`;
@@ -165,7 +167,7 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
     case "edit-expenses-list":
       return `${clientBase}/expenses/expenses-list/${options.expensesListId}/edit`;
     case "edit-recurring-expense":
-      return `${clientBase}/expenses/recurring-expense/${options.expensesListId}/edit`;
+      return `${clientBase}/expenses/recurring-expense/${options.clientContactId}/edit`;
     case "edit-location":
       return `${dashboardBase}/locations/${options.locationId}/edit`;
     case "edit-medication":
@@ -252,6 +254,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/inventory/add`;
     case "edit-inventory":
       return `${clientBase}/inventory/${options.clientContactId}/edit`;
+      case "main-bank-statement":
+        return `${clientBase}/main-bank-statement`;
+      case "add-main-bank-statement":
+        return `${clientBase}/main-bank-statement/add`;
+      case "edit-main-bank-statement":
+        return `${clientBase}/main-bank-statement/${options.clientContactId}/edit`;
     default:
       return "";
   }
@@ -474,6 +482,12 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Add Community Activities";
     case "edit-community_activities":
       return "Edit Community Activities";
+      case "main-bank-statement":
+      return `Main Account Bank Statement`;
+    case "add-main-bank-statement":
+      return "Add Main Account Bank Statement";
+    case "edit-main-bank-statement":
+      return "Edit Main Account Bank Statement";
     default:
       return "";
   }

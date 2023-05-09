@@ -72,6 +72,12 @@ import {
   IRecurringExpense,
   IAddInventoryModel,
   IAddInventory,
+  ICommunityActivitiesModel,
+  ICommunityActivities,
+  IPersonalBankStatement,
+  IPersonalBankStatementModel,
+  IMainBankStatementModel,
+  IMainBankStatement,
 } from "../types";
 
 import Normalizer from "./normalizer";
@@ -535,51 +541,95 @@ class AddTrainerApi {
 }
 
 
+//=============================COMMUNITY ACTIVITIES API'S========================================
+class CommunityActivities {
+  normalizer;
+
+  constructor() {
+    this.normalizer = new Normalizer<ICommunityActivitiesModel, ICommunityActivities>(
+      Models.CommunityActivities
+    );
+  }
+
+  async getCommunityActivities(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addTrainerResult = await client.get(`/community-activities`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(addTrainerResult.data.contents);
+  }
+
+  async createCommunityActivities(body = {}) {
+    const addTrainerResult = await client.post("/community-activities", body);
+    return this.normalizer.normalize(addTrainerResult.data);
+  }
+  async deleteCommunityActivities(CommunityActivityId: String, body = {}) {
+    const deleteResult =  await client.delete(`/community-activities/${CommunityActivityId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateCommunityActivities(trainerId = String, body = {}) {
+    const clientTrainerResult = await client.patch(
+      `/community-activities/${trainerId}`,
+      body
+    );
+    return this.normalizer.normalize(clientTrainerResult.data);
+  }
+  async getCommunityActivityById(clientId: string) {
+    const addTrainersResult = await client.get(`/community-activities/${clientId}`);
+    return this.normalizer.normalize(addTrainersResult.data);
+  }
+}
 
 //============================= Personal bank api API'S========================================
 class PersonalBankStatementApi {
   normalizer;
 
   constructor() {
-    this.normalizer = new Normalizer<IAddTrainerModel, IAddTrainer>(
-      Models.AddTrainers
+    this.normalizer = new Normalizer<IPersonalBankStatementModel, IPersonalBankStatement>(
+      Models.PersonalBankStatement
     );
   }
 
   async getPersonalBankStatement(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const pageSize = get(options, "pageSize", 0);
-    const personalBankStatementrResult = await client.get(`/trainer`, {
+    const personalBankStatementrResult = await client.get(`/personal-bank-statement`, {
       clientId,
       page,
-      pageSize
+      pageSize,
     });
-    return this.normalizer.normalizeArray(personalBankStatementrResult.data.contents);
+    return this.normalizer.normalizeArray(
+      personalBankStatementrResult.data.contents
+    );
   }
 
   async createPersonalBankStatement(body = {}) {
-    const addTrainerResult = await client.post("/trainer", body);
-    return this.normalizer.normalize(addTrainerResult.data);
+    const result = await client.post("/personal-bank-statement", body);
+    return this.normalizer.normalize(result.data);
   }
-  async deletePersonalBankStatement(trainerId: String, body = {}) {
-    const deleteResult =  await client.delete(`/trainer/${trainerId}`, body);
+  async deletePersonalBankStatement(personalBankStatementId: String, body = {}) {
+    const deleteResult = await client.delete(`/personal-bank-statement/${personalBankStatementId}`, body);
     return this.normalizer.normalize(deleteResult.data);
   }
-  async updatePersonalBankStatement(trainerId : String, body = {}) {
-    const clientTrainerResult = await client.patch(
-      `/trainer/${trainerId}`,
+  async updatePersonalBankStatement(personalBankStatementId: String, body = {}) {
+    const result = await client.patch(
+      `/personal-bank-statement/${personalBankStatementId}`,
       body
     );
-    return this.normalizer.normalize(clientTrainerResult.data);
+    return this.normalizer.normalize(result.data);
   }
   async getPersonalBankStatementId(clientId: string) {
-    const addTrainersResult = await client.get(`/trainer/${clientId}`);
-    return this.normalizer.normalize(addTrainersResult.data);
+    const result = await client.get(`/personal-bank-statement/${clientId}`);
+    return this.normalizer.normalize(result.data);
   }
 }
 
 
 //============================= Personal Funds API'S========================================
+
 class AddPersonalFundsApi {
   normalizer;
 
@@ -592,7 +642,7 @@ class AddPersonalFundsApi {
   async getPersonalFunds(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const pageSize = get(options, "pageSize", 0);
-    const personalFundsResult = await client.get(`/trainer`, {
+    const personalFundsResult = await client.get(`/personal-funds`, {
       clientId,
       page,
       pageSize
@@ -601,27 +651,71 @@ class AddPersonalFundsApi {
   }
 
   async createPersonalFund(body = {}) {
-    const addTrainerResult = await client.post("/trainer", body);
+    const addTrainerResult = await client.post("/personal-funds", body);
     return this.normalizer.normalize(addTrainerResult.data);
   }
   async deltePersonalFund(PersonalFundsId: String, body = {}) {
-    const deleteResult =  await client.delete(`/trainer/${PersonalFundsId}`, body);
+    const deleteResult =  await client.delete(`/personal-funds/${PersonalFundsId}`, body);
     return this.normalizer.normalize(deleteResult.data);
   }
-  async updateTrainer(PersonalFundsId = String, body = {}) {
+  async updatePersonalFund(PersonalFundsId = String, body = {}) {
     const updateResult = await client.patch(
-      `/trainer/${PersonalFundsId}`,
+      `/personal-funds/${PersonalFundsId}`,
       body
     );
     return this.normalizer.normalize(updateResult.data);
   }
-  async getPersonalFundById(clientId: string) {
-    const PersonalFundById = await client.get(`/trainer/${clientId}`);
+  async getPersonalFundById(PersonalFundsId: string) {
+    const PersonalFundById = await client.get(`/personal-funds/${PersonalFundsId}`);
     console.log("funnnnndddddd by id", PersonalFundById);
     
     return this.normalizer.normalize(PersonalFundById.data);
   }
 }
+// class AddPersonalFundsApi {
+//   normalizer;
+
+//   constructor() {
+//     this.normalizer = new Normalizer<IPersonalFundsModel, IPersonalFunds>(
+//       Models.Personalfunds
+//     );
+//   }
+
+//   async getPersonalFunds(clientId: string, options?: OPTIONS_TYPE) {
+//     const page = get(options, "page", 0);
+//     const pageSize = get(options, "pageSize", 0);
+//     const personalFundsResult = await client.get(`/personal-funds`, {
+//       clientId,
+//       page,
+//       pageSize
+//     });
+//     return this.normalizer.normalizeArray(personalFundsResult.data.contents);
+//   }
+
+//   async createPersonalFund(body = {}) {
+//     const addTrainerResult = await client.post("/personal-funds", body);
+//     return this.normalizer.normalize(addTrainerResult.data);
+//   }
+//   async deltePersonalFund(PersonalFundsId: String, body = {}) {
+//     console.log("personal fund id ==>",PersonalFundsId);
+    
+//     const deleteResult =  await client.delete(`/personal-funds/${PersonalFundsId}`, body);
+//     return this.normalizer.normalize(deleteResult.data);
+//   }
+//   async updatePersonalFund(PersonalFundsId = String, body = {}) {
+//     const updateResult = await client.patch(
+//       `/personal-funds/${PersonalFundsId}`,
+//       body
+//     );
+//     return this.normalizer.normalize(updateResult.data);
+//   }
+//   async getPersonalFundById(PersonalFundsId: string) {
+//     const PersonalFundById = await client.get(`/personal-funds/${PersonalFundsId}`);
+//     console.log("funnnnndddddd by id", PersonalFundById);
+    
+//     return this.normalizer.normalize(PersonalFundById.data);
+//   }
+// }
 
 //============================= home Discharge API'S========================================
 class DischargerApi {
@@ -629,42 +723,83 @@ class DischargerApi {
 
   constructor() {
     this.normalizer = new Normalizer<IDischargeModel, IDischarge>(
-      Models.AddTrainers
+      Models.Discharge
     );
   }
 
   async getDischarges(clientId: string, options?: OPTIONS_TYPE) {
     const page = get(options, "page", 0);
     const pageSize = get(options, "pageSize", 0);
-    const addTrainerResult = await client.get(`/trainer`, {
+    const result = await client.get(`/home-discharge`, {
       clientId,
       page,
       pageSize
     });
-    return this.normalizer.normalizeArray(addTrainerResult.data.contents);
+    return this.normalizer.normalizeArray(result.data.contents);
   }
 
   async createDischarge(body = {}) {
-    const addTrainerResult = await client.post("/trainer", body);
-    return this.normalizer.normalize(addTrainerResult.data);
+    const result = await client.post("/home-discharge", body);
+    return this.normalizer.normalize(result.data);
   }
+  
   async deleteDischarge(dischargeId: String, body = {}) {
-    const deleteResult =  await client.delete(`/trainer/${dischargeId}`, body);
+    const deleteResult =  await client.delete(`/home-discharge/${dischargeId}`, body);
     return this.normalizer.normalize(deleteResult.data);
   }
   async updateDischarge(dischargeId = String, body = {}) {
-    const clientTrainerResult = await client.patch(
-      `/trainer/${dischargeId}`,
+    const result = await client.patch(
+      `/home-discharge/${dischargeId}`,
       body
     );
-    return this.normalizer.normalize(clientTrainerResult.data);
+    return this.normalizer.normalize(result.data);
   }
   async getDischargeId(clientId: string) {
-    const addTrainersResult = await client.get(`/trainer/${clientId}`);
-    return this.normalizer.normalize(addTrainersResult.data);
+    const result = await client.get(`/home-discharge/${clientId}`);
+    return this.normalizer.normalize(result.data);
   }
 }
+//============================= ADD MAIN ACCOUNT BANK STATEMENT API'S========================================
+class MainAccountApi {
+  normalizer;
 
+  constructor() {
+    this.normalizer = new Normalizer<IMainBankStatementModel, IMainBankStatement>(
+      Models.MainAccountBankStatement
+    );
+  }
+
+  async getMainAccount(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addMainAccountResult = await client.get(`/main-account-bank-statement`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.normalizer.normalizeArray(addMainAccountResult.data.contents);
+  }
+
+  async createMainAccount(body = {}) {
+    const addMainAccountResult = await client.post("/main-account-bank-statement", body);
+    return this.normalizer.normalize(addMainAccountResult.data);
+  }
+  async deleteMainAccount(mainBankStatementId: String, body = {}) {
+    const deleteResult =  await client.delete(`/main-account-bank-statement/${mainBankStatementId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
+  async updateMainAccount(mainBankStatementId = String, body = {}) {
+    const clientMainAccountResult = await client.patch(
+      `/main-account-bank-statement/${mainBankStatementId}`,
+      body
+    );
+    return this.normalizer.normalize(clientMainAccountResult.data);
+  }
+  async getMainAccountById(mainBankStatementId: string) {
+    const addMainAccountResult = await client.get(`/main-account-bank-statement/${mainBankStatementId}`);
+    return this.normalizer.normalize(addMainAccountResult.data);
+  }
+}
 //============================= Relocate /transfer API'S========================================
 class AddRelocateApi {
   normalizer;
@@ -1449,12 +1584,13 @@ class RecurringExpenseApi {
     const page = get(options, "page", 0);
     const params = get(options, "params", {});
     const pageSize = get(options, "pageSize", 0);
-    const expensesResult = await client.get(`/expense_lists`, {
+    const expensesResult = await client.get(`/recurring-expense`, {
       clientId,
       page,
       ...params,
       pageSize,
     });
+console.log("res data: => ",expensesResult);
 
     return this.normalizer.normalizeArray(expensesResult.data.contents);
   }
@@ -1463,7 +1599,7 @@ class RecurringExpenseApi {
     const params = get(options, "params", {});
 
     const expenseResult = await client.get(
-      `/expense_list/${expenseListId}`,
+      `/recurring-expense/${expenseListId}`,
       params
     );
 
@@ -1471,14 +1607,17 @@ class RecurringExpenseApi {
   }
 
   async createRecurringtExpense(body = {}, params = {}) {
-    const expenseResult = await client.post("/expense_list", body, { params });
+    const expenseResult = await client.post("/recurring-expense", body, { params });
 
     return this.normalizer.normalize(expenseResult.data);
   }
-
+  async deleteRecurringtExpense(expenseListId: String,clientId:string, body = {}) {
+    const deleteResult =  await client.delete(`/recurring-expense/${expenseListId}?clientId=${clientId}`, body);
+    return this.normalizer.normalize(deleteResult.data);
+  }
   async updateRecurringtExpense(expenseListId = "", body = {}, params = {}) {
     const expenseResult = await client.patch(
-      `/expense_list/${expenseListId}`,
+      `/recurring-expense/${expenseListId}`,
       body,
       { params }
     );
@@ -1784,7 +1923,9 @@ export default (() => ({
   clientWitness: new ClientWitnessApi(),
   staffWitness: new StaffWitnessApi(),
   Trainers: new AddTrainerApi(),
+  CommunityActivities: new CommunityActivities(),
   PersonalFunds: new AddPersonalFundsApi(),
+  mainAccount: new MainAccountApi(),
   Discharge: new DischargerApi(),
   Relocate: new AddRelocateApi(),
   caseNotes: new CaseNotesApi(),

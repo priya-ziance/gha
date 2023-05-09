@@ -18,6 +18,8 @@ const EditInventorys = (props: TrainersPathType) => {
   const { id: clientId } = useContext(ClientContext);
 
   const { inventoryId } = props;
+  console.log("prospsss inventory",props);
+  
     console.log("idddd invemt",inventoryId);
     
   useEffect(() => {
