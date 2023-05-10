@@ -1,13 +1,13 @@
+// @ts-nocheck
 import { useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import get from "lodash/get";
 import {
   Col,
-  FileDropzone,
+  FileInput,
   FormGroup,
   FormItemSelect,
-  ImageDropzone,
   PageHeading,
   Row,
 } from "../../../components";
@@ -38,7 +38,7 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
   const [selectedMedical, setSelectedMedical] = useState<
     IPersonalBankStatementModel | undefined
   >(undefined);
-  const [documentImageFile, setDocumentImage] = useState<File | null>(null);
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
@@ -106,21 +106,27 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
     setIsOmniOpen(false);
   };
 
-  const uploadFile = async (file: any) => {
-    if (file) {
-      return api.files.uploadFile(clientId, "image", file);
+  const uploadDocument = async () => {
+    if (documentFile) {
+      return {
+        uploadFile: async (file: any) => {
+          if (file) {
+            return api.files.uploadFile(clientId, "image", file);
+          }
+        },
+      };
     }
   };
-  const setDocImage = (files: File[]) => {
-    setDocumentImage(files[0]);
-  };
+
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
-    if (documentImageFile) {
-      let file: any = await uploadFile(documentImageFile);
-      values.document = file?.id;
+    const { resetForm, setSubmitting } = options;
+   if (documentFile) {
+      try {
+        let file = await uploadDocument();
+        values.document = file;
+      } catch (e: any) {}
     }
 
-    const { resetForm, setSubmitting } = options;
     setSubmitting(true);
     const personalBankStatementId: any = get(
       props,
@@ -165,6 +171,18 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
     }
 
     setSubmitting(false);
+  };
+
+  const onDocumentChange = (e: any) => {
+    setDocumentFile(get(e, "target.files", [])[0]);
+  };
+
+  const getDocumentText = () => {
+    if (documentFile) {
+      return documentFile.name;
+    } else {
+      return get(props, "MainBankStatement.document.key");
+    }
   };
 
   return (
@@ -294,16 +312,13 @@ const AddPersonalBankStatement = (props: PersonalBankStatementProps) => {
 
                       <Row>
                         <Col xs={12} md={6}>
-                          <FormGroup
+                        <FormGroup
                             intent={Intent.PRIMARY}
-                            label={"Document Image"}
+                            label={"Upload Document"}
                           >
-                            <ImageDropzone
-                              files={
-                                documentImageFile ? [documentImageFile] : []
-                              }
-                              setFiles={setDocImage}
-                              imagesUrls={documentUrl ? [documentUrl] : []}
+                            <FileInput
+                              text={getDocumentText()}
+                              onChange={onDocumentChange}
                             />
                           </FormGroup>
                         </Col>

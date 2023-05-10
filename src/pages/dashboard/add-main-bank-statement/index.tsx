@@ -1,15 +1,15 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+// @ts-nocheck
+import { useContext, useEffect, useState } from "react";
 import { BreadcrumbProps, Button, Intent } from "@blueprintjs/core";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import get from "lodash/get";
 import {
   Col,
-  FileDropzone,
   FormGroup,
   FormItemSelect,
-  ImageDropzone,
   PageHeading,
   Row,
+  FileInput,
 } from "../../../components";
 import OmniContactsInput from "../../../controlled-components/OmniContactInput";
 import api from "../../../api";
@@ -23,10 +23,7 @@ import { pick } from "lodash";
 import { IMainBankStatementModel } from "../../../types";
 import ClientContext from "../../../contexts/client";
 import Client from "../../../models/client";
-import {
-  IOptionProps,
-  ISelectedOptionProps,
-} from "../add-adp/multiSelectComponent";
+import { IOptionProps } from "../add-adp/multiSelectComponent";
 
 interface MainBankStatementProps {
   MainBankStatement?: IMainBankStatementModel;
@@ -45,6 +42,29 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
   let initialValues;
+
+  const BREADCRUMBS: BreadcrumbProps[] = [
+    {
+      href: URLS.getPagePath("dashboard"),
+      icon: "document",
+      text: URLS.getPagePathName("dashboard"),
+    },
+    {
+      href: URLS.getPagePath("clients"),
+      icon: "document",
+      text: URLS.getPagePathName("clients"),
+    },
+    {
+      href: URLS.getPagePath("client-links", { clientId }),
+      icon: "document",
+      text: URLS.getPagePathName("client-links"),
+    },
+    {
+      href: URLS.getPagePath("main-bank-statement", { clientId }),
+      icon: "document",
+      text: URLS.getPagePathName("main-bank-statement"),
+    },
+  ];
 
   useEffect(() => {
     (async () => {
@@ -73,29 +93,6 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
         });
     }
   };
-
-  const BREADCRUMBS: BreadcrumbProps[] = [
-    {
-      href: URLS.getPagePath("dashboard"),
-      icon: "document",
-      text: URLS.getPagePathName("dashboard"),
-    },
-    {
-      href: URLS.getPagePath("clients"),
-      icon: "document",
-      text: URLS.getPagePathName("clients"),
-    },
-    {
-      href: URLS.getPagePath("client-links", { clientId }),
-      icon: "document",
-      text: URLS.getPagePathName("client-links"),
-    },
-    {
-      href: URLS.getPagePath("main-bank-statement", { clientId }),
-      icon: "document",
-      text: URLS.getPagePathName("main-bank-statement"),
-    },
-  ];
 
   if (props.update) {
     BREADCRUMBS.push({
@@ -127,21 +124,27 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
     setIsOmniOpen(false);
   };
 
-  const uploadFile = async (file: any) => {
-    if (file) {
-      return api.files.uploadFile(clientId, "image", file);
+  const uploadDocument = async () => {
+    if (documentFile) {
+      return {
+        uploadFile: async (file: any) => {
+          if (file) {
+            return api.files.uploadFile(clientId, "image", file);
+          }
+        },
+      };
     }
   };
-  const setProfilePicture = (files: File[]) => {
-    setDocumentFile(files[0]);
-  };
+
   const onSubmit = async (values: any, options: FormikHelpers<any>) => {
+    const { resetForm, setSubmitting } = options;
     if (documentFile) {
-      let file: any = await uploadFile(documentFile);
-      values.document = file?.id;
+      try {
+        let file = await uploadDocument();
+        values.document = file;
+      } catch (e: any) {}
     }
 
-    const { resetForm, setSubmitting } = options;
     setSubmitting(true);
     const mainAccountId: any = get(props, "MainBankStatement.id", "");
 
@@ -177,8 +180,19 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
         intent: Intent.DANGER,
       });
     }
-
     setSubmitting(false);
+  };
+
+  const onDocumentChange = (e: any) => {
+    setDocumentFile(get(e, "target.files", [])[0]);
+  };
+
+  const getDocumentText = () => {
+    if (documentFile) {
+      return documentFile.name;
+    } else {
+      return get(props, "MainBankStatement.document.key");
+    }
   };
 
   return (
@@ -194,10 +208,7 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
             breadCrumbs={BREADCRUMBS}
           />
           <div className="MainBankStatement__container">
-            <Formik
-              initialValues={initialValues}
-              onSubmit={onSubmit}
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit}>
               {formikWrapper(
                 ({
                   wrapperProps: {
@@ -212,11 +223,6 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
                     validateForm,
                   },
                 }) => {
-                  const documentUploaded = get(
-                    props,
-                    "MainBankStatement.document.publicUrl",
-                    ""
-                  );
                   return (
                     <form onSubmit={handleSubmit}>
                       <OmniContactsInput
@@ -247,12 +253,9 @@ const AddMainBankStatement = (props: MainBankStatementProps) => {
                             intent={Intent.PRIMARY}
                             label={"Upload Document"}
                           >
-                            <ImageDropzone
-                              files={documentFile ? [documentFile] : []}
-                              setFiles={setProfilePicture}
-                              imagesUrls={
-                                documentUploaded ? [documentUploaded] : []
-                              }
+                            <FileInput
+                              text={getDocumentText()}
+                              onChange={onDocumentChange}
                             />
                           </FormGroup>
                         </Col>

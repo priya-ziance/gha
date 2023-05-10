@@ -762,11 +762,13 @@ class DischargerApi {
 //============================= ADD MAIN ACCOUNT BANK STATEMENT API'S========================================
 class MainAccountApi {
   normalizer;
+  hasNext;
 
   constructor() {
     this.normalizer = new Normalizer<IMainBankStatementModel, IMainBankStatement>(
       Models.MainAccountBankStatement
     );
+    this.hasNext = false
   }
 
   async getMainAccount(clientId: string, options?: OPTIONS_TYPE) {
@@ -777,7 +779,22 @@ class MainAccountApi {
       page,
       pageSize
     });
-    return this.normalizer.normalizeArray(addMainAccountResult.data.contents);
+    this.hasNext = addMainAccountResult.data.hasNext;
+    return {
+      data: this.normalizer.normalizeArray(addMainAccountResult.data.contents),
+      hasNext: this.hasNext
+    }
+  }
+
+  async haveMoreRecords(clientId: string, options?: OPTIONS_TYPE) {
+    const page = get(options, "page", 0);
+    const pageSize = get(options, "pageSize", 0);
+    const addMainAccountResult = await client.get(`/main-account-bank-statement`, {
+      clientId,
+      page,
+      pageSize
+    });
+    return this.hasNext = addMainAccountResult.data.hasNext;
   }
 
   async createMainAccount(body = {}) {

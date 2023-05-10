@@ -23,34 +23,34 @@ import ToastsContext from "../../../contexts/toasts";
 const PAGE_SIZE = 10;
 
 const MainBankAccountStatement = () => {
-  const [mainAccountData, setMainAccountData] = useState<IMainBankStatementModel[] | []>(
-    []
-  );
+  const [mainAccountData, setMainAccountData] = useState<
+    IMainBankStatementModel[] | []
+  >([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id: clientId } = useContext(ClientContext);
   const { addToast } = useContext(ToastsContext);
-  const hasNextPage = mainAccountData.length >= PAGE_SIZE;
-  const hasPrevPage = page > 0;
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPrevPage, setPrevNextPage] = useState(page > 0);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      setMainAccountData(
-        await api.mainAccount.getMainAccount(clientId, {
-          page,
-          pageSize: PAGE_SIZE,
-        })
-      );
-      console.log("mAIN ACC ",mainAccountData);
-      
-    } catch (e: any) { }
+      const res = await api.mainAccount.getMainAccount(clientId, {
+        page,
+        pageSize: PAGE_SIZE,
+      });
+      setMainAccountData(res.data);
+      setHasNextPage(res.hasNext);
+      setPrevNextPage(page > 0);
+    } catch (e: any) {}
     setTimeout(() => {
       setLoading(false);
     }, 200);
   };
+
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [clientId, page]);
 
   const onNextPage = () => {
@@ -84,7 +84,6 @@ const MainBankAccountStatement = () => {
     { text: URLS.getPagePathName("main-bank-statement") },
   ];
 
-
   const getAddButton = () => {
     return (
       <AnchorButton
@@ -101,25 +100,28 @@ const MainBankAccountStatement = () => {
     );
   };
   const deleteTrainer = async (data: IMainBankStatementModel) => {
-    setLoading(true)
+    setLoading(true);
 
     try {
-      await api.mainAccount.deleteMainAccount(data.MainBankStatement?._id || "")
+      await api.mainAccount.deleteMainAccount(
+        data.MainBankStatement?._id || ""
+      );
 
-      await fetchData()
+      await fetchData();
+      if (!hasNextPage && page === 1) setPage((page) => page - 1);
       addToast({
-        message: 'Deleted...',
-        intent: 'success'
-      })
+        message: "Deleted...",
+        intent: "success",
+      });
     } catch (e: any) {
       addToast({
-        message: 'Something went wrong',
-        intent: 'danger'
-      })
+        message: "Something went wrong",
+        intent: "danger",
+      });
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
   return (
     <div className="dashboard">
       <div className="dashboard__container">
@@ -178,13 +180,16 @@ const MainBankAccountStatement = () => {
                       title: "Actions",
                       cellRenderer: (data: any) => {
                         return actionColumn(data, {
-                          viewLink: URLS.getPagePath("edit-main-bank-statement", {
-                            clientId,
-                            clientContactId: data.id,
-                          }),
+                          viewLink: URLS.getPagePath(
+                            "edit-main-bank-statement",
+                            {
+                              clientId,
+                              clientContactId: data.id,
+                            }
+                          ),
                           onDelete() {
-                            deleteTrainer(data)
-                          }
+                            deleteTrainer(data);
+                          },
                         });
                       },
                       width: helpers.getTableWith(0.1),
