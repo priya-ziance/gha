@@ -24,6 +24,7 @@ import ContentPage from './content';
 import ClientsPage from './clients';
 
 import LocationsPage from './locations';
+import PaymentPage from './payment';
 import AddLocationPage from './add-location';
 import EditLocationPage from './edit-location';
 
@@ -250,6 +251,8 @@ function Dashboard() {
           <Route path="/dashboard/admins/medical-contacts" exact component={MedicalContactsPage} />
           <Route path="/dashboard/admins/medical-contacts/add-medical-contact" exact component={AddMedicalContactPage} />
           <Route path="/dashboard/admins/medical-contacts/:medicalContactId/edit" exact component={EditMedicalContactPage} />
+
+          <Route path="/dashboard/payment" exact component={PaymentPage} />
         </Switch>
       </div>
     </div>

@@ -19,7 +19,7 @@ type OPTIONS_TYPE = {
   relocateId?: String;
   seizurelogId?: string;
   communityActivityId?: string;
-  personalFundsId?: string
+  personalFundsId?: string;
 };
 
 const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
@@ -67,11 +67,11 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/personal_bank_statement/${options.clientContactId}/edit`;
     case "add-trainer":
       return `${clientBase}/trainer/add`;
-      case "inventory":
+    case "inventory":
       return `${clientBase}/inventory`;
     case "add-inventory":
       return `${clientBase}/inventory/add`;
-      
+
     case "discharge":
       return `${clientBase}/discharge`;
     case "add-discharge":
@@ -148,8 +148,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/staff-witness/${options.clientContactId}/edit`;
     case "edit-trainer":
       return `${clientBase}/trainer/${options.clientContactId}/edit`;
-      case "edit-inventory":
-        return `${clientBase}/inventory/${options.clientContactId}/edit`;
+    case "edit-inventory":
+      return `${clientBase}/inventory/${options.clientContactId}/edit`;
     case "edit-adp":
       return `${clientBase}/adp/${options.clientContactId}/edit`;
     case "edit-discharge":
@@ -208,6 +208,8 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${dashboardBase}/logs`;
     case "locations":
       return `${dashboardBase}/locations`;
+    case "payment":
+      return `${dashboardBase}/payment`;
     case "medical-contacts":
       return `${dashboardBase}/admins/medical-contacts`;
     case "med-destruction":
@@ -254,12 +256,12 @@ const getPagePath = (page: PAGE_TYPES, options: OPTIONS_TYPE = {}) => {
       return `${clientBase}/inventory/add`;
     case "edit-inventory":
       return `${clientBase}/inventory/${options.clientContactId}/edit`;
-      case "main-bank-statement":
-        return `${clientBase}/main-bank-statement`;
-      case "add-main-bank-statement":
-        return `${clientBase}/main-bank-statement/add`;
-      case "edit-main-bank-statement":
-        return `${clientBase}/main-bank-statement/${options.clientContactId}/edit`;
+    case "main-bank-statement":
+      return `${clientBase}/main-bank-statement`;
+    case "add-main-bank-statement":
+      return `${clientBase}/main-bank-statement/add`;
+    case "edit-main-bank-statement":
+      return `${clientBase}/main-bank-statement/${options.clientContactId}/edit`;
     default:
       return "";
   }
@@ -423,6 +425,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Life Skills Notes Database";
     case "locations":
       return "Locations";
+    case "payment":
+      return "Payment";
     case "logs":
       return "Logs";
     case "medical-contacts":
@@ -459,6 +463,8 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Add Relocate / Transfer";
     case "relocate":
       return "Relocate / Transfer";
+    case "recurring-expense":
+      return " Recurrng Expense";
     case "reshab-logs":
       return "Reshab Logs";
     case "respite-logs":
@@ -482,7 +488,7 @@ const getPagePathName = (page: PAGE_TYPES) => {
       return "Add Community Activities";
     case "edit-community_activities":
       return "Edit Community Activities";
-      case "main-bank-statement":
+    case "main-bank-statement":
       return `Main Account Bank Statement`;
     case "add-main-bank-statement":
       return "Add Main Account Bank Statement";

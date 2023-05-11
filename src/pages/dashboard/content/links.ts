@@ -28,6 +28,12 @@ export const getLinks = () => {
       title: 'Locations',
       image: LocationImage,
       path: URLS.getPagePath('locations')
+    },
+    {
+      description: '',
+      title: 'Payment',
+      image: LocationImage,
+      path: URLS.getPagePath('payment')
     }
   ]
 }

@@ -116,7 +116,8 @@ export type PAGE_TYPES =
   | "edit-sp-goals"
   | "main-bank-statement"
   | "add-main-bank-statement"
-  | "edit-main-bank-statement";
+  | "edit-main-bank-statement"
+  | "payment";
 
 export type APD_FIELDS_TYPE =
   | "client"

@@ -1,0 +1,53 @@
+.payment {
+  .payment__container {
+    display: flex;
+    flex-direction: column;
+
+    .btn__submit-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+      
+    .gha__modulecard {
+      margin: 15px;
+    }
+
+    input {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 16px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      margin: 3px 10px;
+    }
+    
+    input:focus {
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 2px #0070f3;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .row--center {
+      justify-content: center;
+    }
+
+    .payment-switch {
+      margin: 0px 47px;
+    }
+
+    .one-time-pay-class {
+      display: flex;
+      flex-direction: row;
+      margin: 3px 0px;
+    }
+
+    .card-payment {
+
+    }
+  }
+}
