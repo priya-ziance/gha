@@ -2,6 +2,7 @@ import URLS from '../../../utils/urls';
 import ClientsImage from '../../../assets/svg/man-woman.svg';
 import ListImage from '../../../assets/svg/list.svg';
 import LocationImage from '../../../assets/svg/location.svg';
+import PaymentImage from '../../../assets/svg/payment.svg';
 
 export const getLinks = () => {
   return [
@@ -32,7 +33,7 @@ export const getLinks = () => {
     {
       description: '',
       title: 'Payment',
-      image: LocationImage,
+      image: PaymentImage,
       path: URLS.getPagePath('payment')
     }
   ]
